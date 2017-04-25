@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.6\LagoVista.IoT.Pipeline.Admin.Rest.xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.6\LagoVista.IoT.Pipeline.Admin.Rest.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LagoVista.Core" Version="0.8.144-alpha00856" />
+    <PackageReference Include="LagoVista.IoT.Web.Common" Version="0.8.144-alpha00967" />
+    <PackageReference Include="LagoVista.UserAdmin" Version="0.8.144-alpha00892" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LagoVista.IoT.Pipeline.Admin\LagoVista.IoT.Pipeline.Admin.csproj" />
+    <ProjectReference Include="..\LagoVista.IoT.Pipeline.CloudRepos\LagoVista.IoT.Pipeline.CloudRepos.csproj" />
+  </ItemGroup>
+
+</Project>

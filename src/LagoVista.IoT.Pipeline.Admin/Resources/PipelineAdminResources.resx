@@ -1,0 +1,574 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common_Description" xml:space="preserve">
+    <value>Descrption</value>
+  </data>
+  <data name="Common_IsPublic" xml:space="preserve">
+    <value>Is Public</value>
+  </data>
+  <data name="Common_Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="Common_Key_Help" xml:space="preserve">
+    <value>The key is used to identify this item in scripts and must be unique with respect to it's parent. One a key has been assigned, it can not be changed.</value>
+  </data>
+  <data name="Common_Key_Validation" xml:space="preserve">
+    <value>The key must use only letters and numbers, and must be lowercase and must be between 3 and 20 characters.</value>
+  </data>
+  <data name="Common_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Common_Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="Common_Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="Connection_Select_Type" xml:space="preserve">
+    <value>-select connection type-</value>
+  </data>
+  <data name="Connection_Type_AMQP" xml:space="preserve">
+    <value>AMQP</value>
+  </data>
+  <data name="Connection_Type_AzureEventHub" xml:space="preserve">
+    <value>Azure Event Hub</value>
+  </data>
+  <data name="Connection_Type_AzureIoTHub" xml:space="preserve">
+    <value>Azure IoT Hub</value>
+  </data>
+  <data name="Connection_Type_AzureServiceBus" xml:space="preserve">
+    <value>Azure Service Bus</value>
+  </data>
+  <data name="Connection_Type_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Connection_Type_MQTT" xml:space="preserve">
+    <value>MQTT</value>
+  </data>
+  <data name="Connection_Type_POP3Server" xml:space="preserve">
+    <value>POP3 Server</value>
+  </data>
+  <data name="Connection_Type_Rest" xml:space="preserve">
+    <value>REST</value>
+  </data>
+  <data name="Connection_Type_Soap" xml:space="preserve">
+    <value>SOAP</value>
+  </data>
+  <data name="Connection_Type_TCP" xml:space="preserve">
+    <value>TCP</value>
+  </data>
+  <data name="Connection_Type_UDP" xml:space="preserve">
+    <value>UDP</value>
+  </data>
+  <data name="CustomModule_Description" xml:space="preserve">
+    <value>A Custom Module is Pipeline Execution Module that can be developed in any language that supports .NET and uploaded to the system</value>
+  </data>
+  <data name="CustomModule_Help" xml:space="preserve">
+    <value>A Custom Module is Pipeline Execution Module that can be developed in any language that supports .NET and uploaded to the system</value>
+  </data>
+  <data name="CustomModule_Title" xml:space="preserve">
+    <value>Custom Module</value>
+  </data>
+  <data name="InputTranslator_DelimiterSquence_Help" xml:space="preserve">
+    <value>The Delimiter is the Character that is used to delimit your text base file this may be something like a comma, tab or a space.</value>
+  </data>
+  <data name="InputTranslator_DelimterSequence" xml:space="preserve">
+    <value>Delimiter</value>
+  </data>
+  <data name="InputTranslator_Description" xml:space="preserve">
+    <value>The Input Translator is used to Transform the Raw Message received from the device to a set of key value pairs that can be used within your device workflow</value>
+  </data>
+  <data name="InputTranslator_Help" xml:space="preserve">
+    <value>The Input Translator is used to Transform the Raw Message received from the device to a set of key value pairs that can be used within your device workflow</value>
+  </data>
+  <data name="InputTranslator_Title" xml:space="preserve">
+    <value>Input Translator</value>
+  </data>
+  <data name="InputTranslator_TranslatorType" xml:space="preserve">
+    <value>Translator Type</value>
+  </data>
+  <data name="InputTranslator_TranslatorType_Select" xml:space="preserve">
+    <value>-select translator type-</value>
+  </data>
+  <data name="Listener_Description" xml:space="preserve">
+    <value>Listeners are used to Monitor a Port, Protocol or Service for Messages from your Devices</value>
+  </data>
+  <data name="Listener_EndMessageSequence" xml:space="preserve">
+    <value>End Message Sequence</value>
+  </data>
+  <data name="Listener_EndMessageSequence_Help" xml:space="preserve">
+    <value>The character or characters that will make up the end of your message</value>
+  </data>
+  <data name="Listener_Endpoint" xml:space="preserve">
+    <value>Endpoint</value>
+  </data>
+  <data name="Listener_Help" xml:space="preserve">
+    <value>Listeners are used to Monitor a Port, Protocol or Service for Messages from your Devices</value>
+  </data>
+  <data name="Listener_KeepAliveToSendReply" xml:space="preserve">
+    <value>Keep Alive to Send Reply</value>
+  </data>
+  <data name="Listener_KeepAliveToSendReplyTimeout" xml:space="preserve">
+    <value>The amount of time to keep the Incoming Connection alive to send a reply.  If the Pipeline never sends a messages within this time frame, the connection will be Closed.</value>
+  </data>
+  <data name="Listener_ListenerType" xml:space="preserve">
+    <value>Listener Type</value>
+  </data>
+  <data name="Listener_MaxMessageSize" xml:space="preserve">
+    <value>Max Message Size</value>
+  </data>
+  <data name="Listener_MaxMessageSize_Help" xml:space="preserve">
+    <value>The Maximum Size in Bytes of your Message, this is used to allocate memory and check for buffer overflows.</value>
+  </data>
+  <data name="Listener_MessageReceivedTimeout" xml:space="preserve">
+    <value>Message Received Timeout (MS)</value>
+  </data>
+  <data name="Listener_MessageReceivedTimeout_Help" xml:space="preserve">
+    <value>Number of Millieseconds from when the First Byte of your Message Arives until it is expected that the entire message will be received.  If the entire message is not received within this time period, the receive function will be aborted.</value>
+  </data>
+  <data name="Listener_Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="Listener_Port_Help" xml:space="preserve">
+    <value>If your listener will listen on a Socket Provide the port it wil listen on.</value>
+  </data>
+  <data name="Listener_StartMessageSequence" xml:space="preserve">
+    <value>Start Message Sequence</value>
+  </data>
+  <data name="Listener_StartMessageSequence_Help" xml:space="preserve">
+    <value>The character or characters that will make up the beginning of your message.</value>
+  </data>
+  <data name="Listener_Title" xml:space="preserve">
+    <value>Listener</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType" xml:space="preserve">
+    <value>Binary Data Type</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Boolean" xml:space="preserve">
+    <value>Boolean (8 bit, zero = false, non-zero = true)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Char" xml:space="preserve">
+    <value>Char</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_DoublePrecisionFloatingPoint" xml:space="preserve">
+    <value>Double Precision Floating Point</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int16BigEndian" xml:space="preserve">
+    <value>Signed 16 Bit Integer (Big Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int16LittleEndian" xml:space="preserve">
+    <value>Signed 16 Bit Integer (Little Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int32BigEndian" xml:space="preserve">
+    <value>Signed 32 Bit Integer Bit Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int32LittleEndian" xml:space="preserve">
+    <value>Signed 32 Bit Integer (Little Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int64BigEndian" xml:space="preserve">
+    <value>Signed 64 Bit Integer (Big Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int64LittleEndian" xml:space="preserve">
+    <value>Signed 64 Bit Integer (Little Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int8" xml:space="preserve">
+    <value>Signed 8 Bit Integer (byte)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_SelectDataType" xml:space="preserve">
+    <value>-select binary data format-</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_SelectDataType_Help" xml:space="preserve">
+    <value>Select the exact format that the parser should use to extract the data from the binary message</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_SinglePrecisionFloatingPoint" xml:space="preserve">
+    <value>Single Precision Floating Point</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt16BigEndian" xml:space="preserve">
+    <value>Unsigned 16 Bit Integer (Big Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt16LittleEndian" xml:space="preserve">
+    <value>Unsinged 16 Bit Integer (Little Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt32BigEndian" xml:space="preserve">
+    <value>Unsigned 32 Bit Integer (Big Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt32LittleEndian" xml:space="preserve">
+    <value>Unsigned 32 Bit Integer (Little Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt64BigEndian" xml:space="preserve">
+    <value>Unsigned 64 Bit Integer (Big Endian) </value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt64LittleEndian" xml:space="preserve">
+    <value>Unsigned 64 Bit Integer (Little Endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt8" xml:space="preserve">
+    <value>Unsigned 8 Bit Integer (char)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_DelimitedColumnIndex" xml:space="preserve">
+    <value>Delimited Column Index</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_DelimitedColumnIndex_Help" xml:space="preserve">
+    <value>If you are working with a Delimited string, you can specify the index into the delimted values where the value shoudl be extracted.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_Delimiter" xml:space="preserve">
+    <value>Delimiter</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_Delimitor_Help" xml:space="preserve">
+    <value>This is the character that will be used to Delimit your text, this will usually be something like , for a CSV or sometimes a Tab (\t).  The Delimiter will only except a single character unless you are escaping your character such as \t.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_Description" xml:space="preserve">
+    <value>Allows for Parsing the Message or Message Envelope to Extract a Field or Fields</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_Help" xml:space="preserve">
+    <value>Allows for Parsing the Message or Message Envelope to Extract a Field or Fields</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_KeyName" xml:space="preserve">
+    <value>Key Name</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_KeyName_Help" xml:space="preserve">
+    <value>The Key Name is used to extract values from headers, JSON or XML input.  For example if the name of your header is "DeviceID", the Key Name to extract that value will be "DeviceID" if your JSON contains a property such as {'value1':{'subvalue1':5}}  The key name value1.subvalue1 will extract the value 5.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_OutputType" xml:space="preserve">
+    <value>Output Data Type</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_OutputType_Boolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_OutputType_FloatingPoint" xml:space="preserve">
+    <value>Floating Point</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_OutputType_Integer" xml:space="preserve">
+    <value>Integer</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_OutputType_SelectDataType" xml:space="preserve">
+    <value>-select output data type-</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_OutputType_SelectDataType_Help" xml:space="preserve">
+    <value>Select the data type that the parsed value will be stored.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_OutputType_String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy" xml:space="preserve">
+    <value>Parser Strategy</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_Delimited" xml:space="preserve">
+    <value>Delimited</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_Header" xml:space="preserve">
+    <value>Value in Header</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_Help" xml:space="preserve">
+    <value>You have differnt options as to how you can extract values from your message, please choose one of these options.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_JsonProperty" xml:space="preserve">
+    <value>JSON Property</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_RegEx" xml:space="preserve">
+    <value>Regular Expression</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_RegExHeader" xml:space="preserve">
+    <value>Header Value with Regular Expression</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_RegExHeader_Help" xml:space="preserve">
+    <value>This option will allow you to use a Regular Expression extract a value from the Message Envelope Property Bag</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_Select" xml:space="preserve">
+    <value>-select parser strategy-</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_Substring" xml:space="preserve">
+    <value>Substring</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_XMLProperty" xml:space="preserve">
+    <value>XML Property</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_QuotedText" xml:space="preserve">
+    <value>Quoted Text</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_QuotedText_Help" xml:space="preserve">
+    <value>Sets the parser to expect that the string contained in your delimited input has quote around strings.  If so the parser will look for strings enclosed in " (quotes) or ' (ticks) and escape those characters within the string if appropriate. If this is not set, any quotes in your delimited input will be included in the returned value.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_RegExGroupName" xml:space="preserve">
+    <value>Regular Expression Group Name</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_RegExGroupName_Help" xml:space="preserve">
+    <value>When you add a Regular Expression Locator you need to specify a Group Name as part of the Regular Expression.  To locate that result in your Regular Expression Match, add the Group Name Here.  For Example with the Regular expression [^\\$(?'DeviceId'[\\w]{3,10}),]  the grouop name that will be extracted with be DeviceId.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_RegExLocator" xml:space="preserve">
+    <value>Regular Expression Locator</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_RegExLocator_Help" xml:space="preserve">
+    <value>Add a Regular Expression with a Group Identifier to Locate your Field.  You will also need to add the Group Identifier that you specified</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_RegExValidation" xml:space="preserve">
+    <value>Regular Expression Validation</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_RegExValidation_Help" xml:space="preserve">
+    <value>For any of the Parser Types, you can add a second check in the form of a Regular Expression to validate the field that was found was indeed the correct value you were looking for</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_StartIndex" xml:space="preserve">
+    <value>Start Index (1 Index)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_StringParserType" xml:space="preserve">
+    <value>String Parsing Type</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_StringParserType_Help" xml:space="preserve">
+    <value>Select the strategy for parsing a string from your message, you can select a null terminated string or a the string length will be the first characters of your string.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_StringParserType_LeadingLength" xml:space="preserve">
+    <value>Prefixed with Length</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_StringParserType_NullTerminated" xml:space="preserve">
+    <value>Null Terminated</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_StringParserType_Select" xml:space="preserve">
+    <value>-select string parsing type-</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_StringParser_NumberBytes" xml:space="preserve">
+    <value>String Parsing Length Bytes</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_StringParser_NumberBytes_Help" xml:space="preserve">
+    <value>Specify the number of Bytes that will be used to describe the length of your string.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_SubString_Help" xml:space="preserve">
+    <value>If the value you are looking for is always in the same location within your string you can extract it by providing the Start Index and an Length. Note that the start index is 1 Indexed, that is to say if you want the first character the start index will be 1, You should never enter 0 in this field.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_Title" xml:space="preserve">
+    <value>Message Field Parser</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ValueName" xml:space="preserve">
+    <value>Value Name</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ValueName_Help" xml:space="preserve">
+    <value>If you are building up a list of parsed properties from your message, you can provide the Value Name that will be associated with the value here.  For Example if you are parsing a value within your message that is associated with a Speed that is measured your Value Name might make sense to be Speed</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_XPath" xml:space="preserve">
+    <value>XPath</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_XPath_Help" xml:space="preserve">
+    <value>You can define and XPath Expression to Extra a value from an XML Document</value>
+  </data>
+  <data name="OutputTranslator_Description" xml:space="preserve">
+    <value>The Output Translator is used to Transform the Key Value Pairs that are created as part of the Workflow to the format the device is expecting so they can be sent down to the device.</value>
+  </data>
+  <data name="OutputTranslator_Help" xml:space="preserve">
+    <value>The Output Translator is used to Transform the Key Value Pairs that are created as part of the Workflow to the format the device is expecting so they can be sent down to the device.</value>
+  </data>
+  <data name="OutputTranslator_Title" xml:space="preserve">
+    <value>Output Translator</value>
+  </data>
+  <data name="OutputTranslator_TranslatorType" xml:space="preserve">
+    <value>Translator Type</value>
+  </data>
+  <data name="OutputTranslator_TranslatorType_Select" xml:space="preserve">
+    <value>-select output translator-</value>
+  </data>
+  <data name="Planner_Description" xml:space="preserve">
+    <value>The Planner is used to map an Incoming Message to a Device Configuration then based on that Incoming Message it will create the an execution plan for the remaining Pipeline Modules to complete processing the data.</value>
+  </data>
+  <data name="Planner_DeviceIDParsers" xml:space="preserve">
+    <value>Device ID Parsers</value>
+  </data>
+  <data name="Planner_DeviceIDParsers_Help" xml:space="preserve">
+    <value>Your Planner will be Provided the raw message information as well as the message envlope headers.  It is the Planners Job to Extract the Device ID and Optionally a Message Type Id so it can be mapped to a Device Configuration. 
+
+This is a list of parsers that are executed in the order they appear, if a match is not found with one parser, the next one is executed.  Once the first value response is identified, it will no longer search for additional matches.</value>
+  </data>
+  <data name="Planner_Help" xml:space="preserve">
+    <value>The Planner is used to map an Incoming Message to a Device Configuration then based on that Incoming Message it will create the an execution plan for the remaining Pipeline Modules to complete processing the data.</value>
+  </data>
+  <data name="Planner_MessageTypeIDParsers" xml:space="preserve">
+    <value>Message Type ID Parsers</value>
+  </data>
+  <data name="Planner_MessageTypeIDParsers_Help" xml:space="preserve">
+    <value>Your Planner will be Provided the raw message information as well as the message envlope headers.  It is the Planners Job to Extract the Device ID and Optionally a Message Type Id so it can be mapped to a Device Configuration.
+
+This is a list of parsers that are executed in the order they appear, if a match is not found with one parser, the next one is executed.  Once the first value response is identified, it will no longer search for additional matches.</value>
+  </data>
+  <data name="Planner_PipelineModules" xml:space="preserve">
+    <value>Work Plan</value>
+  </data>
+  <data name="Planner_Title" xml:space="preserve">
+    <value>Planner</value>
+  </data>
+  <data name="Sentinel_Description" xml:space="preserve">
+    <value>The Sential Module provides security for your Device.  It will authenticate that the device is valid,</value>
+  </data>
+  <data name="Sentinel_Help" xml:space="preserve">
+    <value>The Sential Module provides security for your Device.  It will authenticate that the device is valid,</value>
+  </data>
+  <data name="Sentinel_Title" xml:space="preserve">
+    <value>Sentinel</value>
+  </data>
+  <data name="Translator_Type_Binary" xml:space="preserve">
+    <value>Binary</value>
+  </data>
+  <data name="Translator_Type_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Translator_Type_Delimited" xml:space="preserve">
+    <value>Delimited</value>
+  </data>
+  <data name="Translator_Type_JSON" xml:space="preserve">
+    <value>JSON</value>
+  </data>
+  <data name="Translator_Type_String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="Translator_Type_XML" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="Transmitter_Description" xml:space="preserve">
+    <value>The Transmitter is used to send messages back to the device.</value>
+  </data>
+  <data name="Transmitter_Help" xml:space="preserve">
+    <value>The Transmitter is used to send messages back to the device.</value>
+  </data>
+  <data name="Transmitter_Title" xml:space="preserve">
+    <value>Transmitter</value>
+  </data>
+  <data name="Transmitter_TransmitterType" xml:space="preserve">
+    <value>Transmitter Type</value>
+  </data>
+  <data name="Transmitter_TransmitterType_OriginalListener" xml:space="preserve">
+    <value>Original Listener</value>
+  </data>
+  <data name="Transmitter_TransmitterType_Outbox" xml:space="preserve">
+    <value>Outbox</value>
+  </data>
+  <data name="Transmitter_TransmitterType_SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="Transmitter_TransmitterType_SMTP" xml:space="preserve">
+    <value>SMTP</value>
+  </data>
+</root>
