@@ -14,9 +14,6 @@
     <tags>HomeAutomation IoT Cloud</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="10.0.1" />
-      <dependency id="LagoVista.Core" version="0.8.112-alpha00944" />
-      <dependency id="LagoVista.Core.Authentication" version="0.8.112-alpha00944" />
-      <dependency id="LagoVista.IoT.DeviceAdmin" version="0.8.112-alpha00944" />      
     </dependencies>
   </metadata>
   <files>
