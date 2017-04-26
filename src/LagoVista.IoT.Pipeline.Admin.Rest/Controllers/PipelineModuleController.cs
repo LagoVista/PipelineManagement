@@ -49,7 +49,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         public Task<InvokeResult> UpdateTransmitterConfigurationAsync([FromBody] ListenerConfiguration listenerConfiguration)
         {
             SetUpdatedProperties(listenerConfiguration);
-            return _pipelineModuleManager.UpdateListenerConfigurationAsync(listenerConfiguration, UserEntityHeader);
+            return _pipelineModuleManager.UpdateListenerConfigurationAsync(listenerConfiguration, OrgEntityHeader, UserEntityHeader);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         [HttpPut("/api/pipeline/admin/inputtranslator")]
         public Task<InvokeResult> UpdateInputTranslatorConfigurationAsync([FromBody] InputTranslatorConfiguration inputTranslatorConfiguration)
         {
-            return _pipelineModuleManager.UpdatedInputTranslatorConfigurationAsync(inputTranslatorConfiguration, UserEntityHeader);
+            return _pipelineModuleManager.UpdateInputTranslatorConfigurationAsync(inputTranslatorConfiguration, OrgEntityHeader, UserEntityHeader);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         [HttpPut("/api/pipeline/admin/sentinel")]
         public Task<InvokeResult> UpdateSentinelConfigurationAsync([FromBody] SentinelConfiguration sentinelConfiguration)
         {
-            return _pipelineModuleManager.UpdatedSentinelConfigurationAsync(sentinelConfiguration, UserEntityHeader);
+            return _pipelineModuleManager.UpdateSentinelConfigurationAsync(sentinelConfiguration, OrgEntityHeader, UserEntityHeader);
         }
 
         /// <summary>
@@ -336,7 +336,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         [HttpPut("/api/pipeline/admin/outputtranslator")]
         public Task<InvokeResult> UpdateOutputTranslatorConfigurationAsync([FromBody] OutputTranslatorConfiguration outputTranslatorConfiguration)
         {
-            return _pipelineModuleManager.UpdateOutputTranslatorConfigurationAsync(outputTranslatorConfiguration, UserEntityHeader);
+            return _pipelineModuleManager.UpdateOutputTranslatorConfigurationAsync(outputTranslatorConfiguration, OrgEntityHeader, UserEntityHeader);
         }
 
         /// <summary>
@@ -431,7 +431,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         [HttpPut("/api/pipeline/admin/transmitter")]
         public Task<InvokeResult> UpdateTransmitterConfigurationAsync([FromBody] TransmitterConfiguration transmitterConfiguration)
         {
-            return _pipelineModuleManager.UpdatedTransmitterConfigurationAsync(transmitterConfiguration, UserEntityHeader);
+            return _pipelineModuleManager.UpdateTransmitterConfigurationAsync(transmitterConfiguration, OrgEntityHeader, UserEntityHeader);
         }
 
         /// <summary>
@@ -527,7 +527,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         [HttpPut("/api/pipeline/admin/planner")]
         public Task<InvokeResult> UpdatePlannerConfigurationAsync([FromBody] PlannerConfiguration transmitterConfiguration)
         {
-            return _pipelineModuleManager.UpdatePlannerConfigurationAsync(transmitterConfiguration, UserEntityHeader);
+            return _pipelineModuleManager.UpdatePlannerConfigurationAsync(transmitterConfiguration, OrgEntityHeader, UserEntityHeader);
         }
 
         /// <summary>
@@ -636,7 +636,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         [HttpPut("/api/pipeline/admin/custommodule")]
         public Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync([FromBody] CustomPipelineModuleConfiguration customPipelineModuleConfiguration)
         {
-            return _pipelineModuleManager.UpdateCustomPipelineModuleConfigurationAsync(customPipelineModuleConfiguration, UserEntityHeader);
+            return _pipelineModuleManager.UpdateCustomPipelineModuleConfigurationAsync(customPipelineModuleConfiguration, OrgEntityHeader, UserEntityHeader);
         }
 
         /// <summary>

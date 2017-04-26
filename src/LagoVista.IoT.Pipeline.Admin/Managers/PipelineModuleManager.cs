@@ -97,57 +97,57 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         #endregion
 
         #region Update Methods
-        public async Task<InvokeResult> UpdateListenerConfigurationAsync(ListenerConfiguration listenerConfiguration, EntityHeader user)
+        public async Task<InvokeResult> UpdateListenerConfigurationAsync(ListenerConfiguration listenerConfiguration, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeAsync(listenerConfiguration, AuthorizeActions.Update, user);
+            await AuthorizeAsync(listenerConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(listenerConfiguration, Actions.Update);
             await _listenerConfigurationRepo.UpdateListenerConfigurationAsync(listenerConfiguration);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdatedInputTranslatorConfigurationAsync(InputTranslatorConfiguration inputTranslatorConfiguration, EntityHeader user)
+        public async Task<InvokeResult> UpdateInputTranslatorConfigurationAsync(InputTranslatorConfiguration inputTranslatorConfiguration, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeAsync(inputTranslatorConfiguration, AuthorizeActions.Update, user);
+            await AuthorizeAsync(inputTranslatorConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(inputTranslatorConfiguration, Actions.Update);
             await _inputTranslatorConfigurationRepo.UpdateInputTranslatorConfigurationAsync(inputTranslatorConfiguration);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdatePlannerConfigurationAsync(PlannerConfiguration plannerConfiguration, EntityHeader user)
+        public async Task<InvokeResult> UpdatePlannerConfigurationAsync(PlannerConfiguration plannerConfiguration, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeAsync(plannerConfiguration, AuthorizeActions.Update, user);
+            await AuthorizeAsync(plannerConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(plannerConfiguration, Actions.Update);
             await _plannerConfigurationRepo.UpdatePlannerConfigurationAsync(plannerConfiguration);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdatedSentinelConfigurationAsync(SentinelConfiguration sentinalConfiguration, EntityHeader user)
+        public async Task<InvokeResult> UpdateSentinelConfigurationAsync(SentinelConfiguration sentinalConfiguration, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeAsync(sentinalConfiguration, AuthorizeActions.Update, user);
+            await AuthorizeAsync(sentinalConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(sentinalConfiguration, Actions.Update);
             await _sentinalConfigurationRepo.UpdateSentinelConfigurationAsync(sentinalConfiguration);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdateOutputTranslatorConfigurationAsync(OutputTranslatorConfiguration outputTranslatorConfiguration, EntityHeader user)
+        public async Task<InvokeResult> UpdateOutputTranslatorConfigurationAsync(OutputTranslatorConfiguration outputTranslatorConfiguration, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeAsync(outputTranslatorConfiguration, AuthorizeActions.Update, user);
+            await AuthorizeAsync(outputTranslatorConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(outputTranslatorConfiguration, Actions.Update);
             await _outputTranslatorConfigurationRepo.UpdateOutputTranslatorConfigurationAsync(outputTranslatorConfiguration);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdatedTransmitterConfigurationAsync(TransmitterConfiguration transmitterConfiguration, EntityHeader user)
+        public async Task<InvokeResult> UpdateTransmitterConfigurationAsync(TransmitterConfiguration transmitterConfiguration, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeAsync(transmitterConfiguration, AuthorizeActions.Update, user);
+            await AuthorizeAsync(transmitterConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(transmitterConfiguration, Actions.Update);
             await _transmitterConfigurationRepo.UpdateTransmitterConfigurationAsync(transmitterConfiguration);
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration, EntityHeader user)
+        public async Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user)
         {
-            await AuthorizeAsync(pipelineModuleConfiguration, AuthorizeActions.Update, user);
+            await AuthorizeAsync(pipelineModuleConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(pipelineModuleConfiguration, Actions.Update);
             await _customPipelineConfigurationRepo.UpdateCustomPipelineModuleConfigurationAsync(pipelineModuleConfiguration);
             return InvokeResult.Success;

@@ -44,13 +44,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         Task<TransmitterConfiguration> LoadFullTransmitterConfigurationAsync(string id);
         Task<IEnumerable<PipelineModuleConfigurationSummary>> GetTransmitterConfiugrationsForOrgAsync(string orgId, EntityHeader user);
         
-        Task<InvokeResult> UpdatedInputTranslatorConfigurationAsync(InputTranslatorConfiguration inputTranslatorConfiguration, EntityHeader user);
-        Task<InvokeResult> UpdatedSentinelConfigurationAsync(SentinelConfiguration sentinalConfiguration, EntityHeader user);
-        Task<InvokeResult> UpdatedTransmitterConfigurationAsync(TransmitterConfiguration transmitterConfiguration, EntityHeader user);
-        Task<InvokeResult> UpdateListenerConfigurationAsync(ListenerConfiguration listenerConfiguration, EntityHeader user);
-        Task<InvokeResult> UpdateOutputTranslatorConfigurationAsync(OutputTranslatorConfiguration outputTranslatorConfiguration, EntityHeader user);
-        Task<InvokeResult> UpdatePlannerConfigurationAsync(PlannerConfiguration plannerConfiguration, EntityHeader user);
-        Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration, EntityHeader user);
+        Task<InvokeResult> UpdateInputTranslatorConfigurationAsync(InputTranslatorConfiguration inputTranslatorConfiguration, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateSentinelConfigurationAsync(SentinelConfiguration sentinalConfiguration, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateTransmitterConfigurationAsync(TransmitterConfiguration transmitterConfiguration, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateListenerConfigurationAsync(ListenerConfiguration listenerConfiguration, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateOutputTranslatorConfigurationAsync(OutputTranslatorConfiguration outputTranslatorConfiguration, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdatePlannerConfigurationAsync(PlannerConfiguration plannerConfiguration, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user);
         Task<bool> QueryKeyInUsePlannerConfigurationAsync(string key, EntityHeader org);
         Task<bool> QueryKeyInUseListenerConfigurationAsync(string key, EntityHeader org);
         Task<bool> QueryKeyInUseInputTranslatorConfigurationAsync(string key, EntityHeader org);

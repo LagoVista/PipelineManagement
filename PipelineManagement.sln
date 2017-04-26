@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.Pipeline.Admi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.Pipeline.CloudRepos", "src\LagoVista.IoT.Pipeline.CloudRepos\LagoVista.IoT.Pipeline.CloudRepos.csproj", "{EAD32CBC-4BC5-490D-BBB2-9F21811C63D8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1D7E5971-7C39-418F-956D-E7A2748B9C1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A0BE4A43-6277-48AC-B29B-6A61D8DC55BF} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
+		{DDEDFFCD-0FD0-487A-9027-9BF424D1C453} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
+		{EAD32CBC-4BC5-490D-BBB2-9F21811C63D8} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
 	EndGlobalSection
 EndGlobal
