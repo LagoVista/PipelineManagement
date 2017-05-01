@@ -689,7 +689,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("/api/pipeline/admin/planner/{id}/inuse")]
+        [HttpGet("/api/pipeline/admin/custommodule/{id}/inuse")]
         public Task<DependentObjectCheckResult> CustomModelInUseCheck(string id)
         {
             return _pipelineModuleManager.CheckInUseCustom(id, OrgEntityHeader, UserEntityHeader);
