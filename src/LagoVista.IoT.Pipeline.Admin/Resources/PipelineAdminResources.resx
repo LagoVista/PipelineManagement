@@ -261,69 +261,6 @@
   <data name="MessageFieldParserConfiguration_BinaryType" xml:space="preserve">
     <value>Binary Data Type</value>
   </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_Boolean" xml:space="preserve">
-    <value>Boolean (8 bit, zero = false, non-zero = true)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_Char" xml:space="preserve">
-    <value>Char</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_DoublePrecisionFloatingPoint" xml:space="preserve">
-    <value>Double Precision Floating Point</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_Int16BigEndian" xml:space="preserve">
-    <value>Signed 16 Bit Integer (Big Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_Int16LittleEndian" xml:space="preserve">
-    <value>Signed 16 Bit Integer (Little Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_Int32BigEndian" xml:space="preserve">
-    <value>Signed 32 Bit Integer Bit Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_Int32LittleEndian" xml:space="preserve">
-    <value>Signed 32 Bit Integer (Little Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_Int64BigEndian" xml:space="preserve">
-    <value>Signed 64 Bit Integer (Big Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_Int64LittleEndian" xml:space="preserve">
-    <value>Signed 64 Bit Integer (Little Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_Int8" xml:space="preserve">
-    <value>Signed 8 Bit Integer (byte)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_SelectDataType" xml:space="preserve">
-    <value>-select binary data format-</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_SelectDataType_Help" xml:space="preserve">
-    <value>Select the exact format that the parser should use to extract the data from the binary message</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_SinglePrecisionFloatingPoint" xml:space="preserve">
-    <value>Single Precision Floating Point</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_String" xml:space="preserve">
-    <value>String</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_UInt16BigEndian" xml:space="preserve">
-    <value>Unsigned 16 Bit Integer (Big Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_UInt16LittleEndian" xml:space="preserve">
-    <value>Unsinged 16 Bit Integer (Little Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_UInt32BigEndian" xml:space="preserve">
-    <value>Unsigned 32 Bit Integer (Big Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_UInt32LittleEndian" xml:space="preserve">
-    <value>Unsigned 32 Bit Integer (Little Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_UInt64BigEndian" xml:space="preserve">
-    <value>Unsigned 64 Bit Integer (Big Endian) </value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_UInt64LittleEndian" xml:space="preserve">
-    <value>Unsigned 64 Bit Integer (Little Endian)</value>
-  </data>
-  <data name="MessageFieldParserConfiguration_BinaryType_UInt8" xml:space="preserve">
-    <value>Unsigned 8 Bit Integer (char)</value>
-  </data>
   <data name="MessageFieldParserConfiguration_DelimitedColumnIndex" xml:space="preserve">
     <value>Delimited Column Index</value>
   </data>
