@@ -323,9 +323,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_JsonProperty
 
 		public static string MessageFieldParserConfiguration_ParserStrategy_JsonProperty { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_JsonProperty"); } }
+//Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_PathLocator
+
+		public static string MessageFieldParserConfiguration_ParserStrategy_PathLocator { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_PathLocator"); } }
+//Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help
+
+		public static string MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help( string messageid) { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help", "{messageid}", messageid); }
 //Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_Position
 
 		public static string MessageFieldParserConfiguration_ParserStrategy_Position { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_Position"); } }
+//Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_QueryString
+
+		public static string MessageFieldParserConfiguration_ParserStrategy_QueryString { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_QueryString"); } }
 //Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_RegEx
 
 		public static string MessageFieldParserConfiguration_ParserStrategy_RegEx { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_RegEx"); } }
@@ -344,6 +353,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_Substring
 
 		public static string MessageFieldParserConfiguration_ParserStrategy_Substring { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_Substring"); } }
+//Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_URIPath
+
+		public static string MessageFieldParserConfiguration_ParserStrategy_URIPath { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_URIPath"); } }
 //Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_XMLProperty
 
 		public static string MessageFieldParserConfiguration_ParserStrategy_XMLProperty { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_XMLProperty"); } }
@@ -596,13 +608,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string MessageFieldParserConfiguration_ParserStrategy_Header = "MessageFieldParserConfiguration_ParserStrategy_Header";
 			public const string MessageFieldParserConfiguration_ParserStrategy_Help = "MessageFieldParserConfiguration_ParserStrategy_Help";
 			public const string MessageFieldParserConfiguration_ParserStrategy_JsonProperty = "MessageFieldParserConfiguration_ParserStrategy_JsonProperty";
+			public const string MessageFieldParserConfiguration_ParserStrategy_PathLocator = "MessageFieldParserConfiguration_ParserStrategy_PathLocator";
+			public const string MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help = "MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help";
 			public const string MessageFieldParserConfiguration_ParserStrategy_Position = "MessageFieldParserConfiguration_ParserStrategy_Position";
+			public const string MessageFieldParserConfiguration_ParserStrategy_QueryString = "MessageFieldParserConfiguration_ParserStrategy_QueryString";
 			public const string MessageFieldParserConfiguration_ParserStrategy_RegEx = "MessageFieldParserConfiguration_ParserStrategy_RegEx";
 			public const string MessageFieldParserConfiguration_ParserStrategy_RegExHeader = "MessageFieldParserConfiguration_ParserStrategy_RegExHeader";
 			public const string MessageFieldParserConfiguration_ParserStrategy_RegExHeader_Help = "MessageFieldParserConfiguration_ParserStrategy_RegExHeader_Help";
 			public const string MessageFieldParserConfiguration_ParserStrategy_Script = "MessageFieldParserConfiguration_ParserStrategy_Script";
 			public const string MessageFieldParserConfiguration_ParserStrategy_Select = "MessageFieldParserConfiguration_ParserStrategy_Select";
 			public const string MessageFieldParserConfiguration_ParserStrategy_Substring = "MessageFieldParserConfiguration_ParserStrategy_Substring";
+			public const string MessageFieldParserConfiguration_ParserStrategy_URIPath = "MessageFieldParserConfiguration_ParserStrategy_URIPath";
 			public const string MessageFieldParserConfiguration_ParserStrategy_XMLProperty = "MessageFieldParserConfiguration_ParserStrategy_XMLProperty";
 			public const string MessageFieldParserConfiguration_QuotedText = "MessageFieldParserConfiguration_QuotedText";
 			public const string MessageFieldParserConfiguration_QuotedText_Help = "MessageFieldParserConfiguration_QuotedText_Help";

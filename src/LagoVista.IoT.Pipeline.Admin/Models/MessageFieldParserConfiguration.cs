@@ -22,6 +22,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         HeaderWithRegEx,
         [EnumLabel(MessageFieldParserConfiguration.ParserTypeScript, PipelineAdminResources.Names.MessageFieldParserConfiguration_ParserStrategy_Script, typeof(PipelineAdminResources))]
         Script,
+        [EnumLabel(MessageFieldParserConfiguration.ParserTypeUriPath, PipelineAdminResources.Names.MessageFieldParserConfiguration_ParserStrategy_URIPath, typeof(PipelineAdminResources))]
+        UriPath,
+        [EnumLabel(MessageFieldParserConfiguration.ParserTypeUriQueryString, PipelineAdminResources.Names.MessageFieldParserConfiguration_ParserStrategy_QueryString, typeof(PipelineAdminResources))]
+        QueryString,
     }
 
     public enum ParseBinaryValueType
@@ -103,6 +107,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ParserTypeHeader = "header";
         public const string ParserTypeHeaderWithRegEx = "headerwithregex";
         public const string ParserTypeScript = "script";
+        public const string ParserTypeUriPath = "uripath";
+        public const string ParserTypeUriQueryString = "querystring";
 
         public const string ParserBinaryType_String = "string";
         public const string ParserBinaryType_Boolean = "boolean";
@@ -178,6 +184,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string RegExLocator { get; set; }
         [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_RegExGroupName, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_RegExGroupName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string RegExGroupName { get; set; }
+
+        [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_ParserStrategy_PathLocator, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string PathLocator { get; set; }
+
 
 
         [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_QuotedText, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_QuotedText_Help, FieldType: FieldTypes.Bool, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]

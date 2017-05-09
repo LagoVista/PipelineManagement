@@ -14,7 +14,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         int StartIndex { get; }
         int Length { get; }
 
-
+        string PathLocator { get; }
 
         string RegExLocator { get; }
         string RegExGroupName { get; }

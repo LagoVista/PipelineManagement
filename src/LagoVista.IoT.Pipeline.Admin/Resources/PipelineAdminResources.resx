@@ -261,6 +261,69 @@
   <data name="MessageFieldParserConfiguration_BinaryType" xml:space="preserve">
     <value>Binary Data Type</value>
   </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Boolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Char" xml:space="preserve">
+    <value>Char</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_DoublePrecisionFloatingPoint" xml:space="preserve">
+    <value>Double Precision Floating Point</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int16BigEndian" xml:space="preserve">
+    <value>Signed 16 Bit Integer (big endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int16LittleEndian" xml:space="preserve">
+    <value>Signed 16 Bit Integer (little endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int32BigEndian" xml:space="preserve">
+    <value>Signed 32 Bit Integer (big endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int32LittleEndian" xml:space="preserve">
+    <value>Signed 32 Bit Integer (little endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int64BigEndian" xml:space="preserve">
+    <value>Signed 64 Bit Integer (big endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int64LittleEndian" xml:space="preserve">
+    <value>Signed 64 Bit Integer (little endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_Int8" xml:space="preserve">
+    <value>Signed 8 Bit Integer</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_SelectDataType" xml:space="preserve">
+    <value>-select data type-</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_SelectDataType_Help" xml:space="preserve">
+    <value>Select the data type that represents the value to be extracted from the field</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_SinglePrecisionFloatingPoint" xml:space="preserve">
+    <value>Single Precision Floating Point</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt16BigEndian" xml:space="preserve">
+    <value>Unsigned 16 Bit Integer (big endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt16LittleEndian" xml:space="preserve">
+    <value>Unsigned 16 Bit Integer (little endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt32BigEndian" xml:space="preserve">
+    <value>Unsigned 32 Bit Integer (big endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt32LittleEndian" xml:space="preserve">
+    <value>Unsigned 32 Bit Integer (little endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt64BigEndian" xml:space="preserve">
+    <value>Unsigned 64 Bit Integer (big endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt64LittleEndian" xml:space="preserve">
+    <value>Unsigned 64 Bit Integer (little endian)</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryType_UInt8" xml:space="preserve">
+    <value>Unsigned 8 Bit Integer</value>
+  </data>
   <data name="MessageFieldParserConfiguration_DelimitedColumnIndex" xml:space="preserve">
     <value>Delimited Column Index</value>
   </data>
@@ -324,8 +387,17 @@
   <data name="MessageFieldParserConfiguration_ParserStrategy_JsonProperty" xml:space="preserve">
     <value>JSON Property</value>
   </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_PathLocator" xml:space="preserve">
+    <value>Path Locator</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help" xml:space="preserve">
+    <value>If the Device ID or Message Type Id Arrives in the path it can be extract using the syntax /api/{messageid}/*.  This will extract msg001 from /api/msg001/52345.  The value messageid is specified in the Key Name and can be used to extract either a Message Type Id or a Device Id.</value>
+  </data>
   <data name="MessageFieldParserConfiguration_ParserStrategy_Position" xml:space="preserve">
     <value>Position</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_QueryString" xml:space="preserve">
+    <value>Query String</value>
   </data>
   <data name="MessageFieldParserConfiguration_ParserStrategy_RegEx" xml:space="preserve">
     <value>Regular Expression</value>
@@ -344,6 +416,9 @@
   </data>
   <data name="MessageFieldParserConfiguration_ParserStrategy_Substring" xml:space="preserve">
     <value>Substring</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_ParserStrategy_URIPath" xml:space="preserve">
+    <value>URI Path</value>
   </data>
   <data name="MessageFieldParserConfiguration_ParserStrategy_XMLProperty" xml:space="preserve">
     <value>XML Property</value>
