@@ -21,5 +21,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         string RegExValidation { get; }
         string Delimiter { get; }
         bool QuotedText { get; }
+        string QueryStringField { get; }
     }
 }

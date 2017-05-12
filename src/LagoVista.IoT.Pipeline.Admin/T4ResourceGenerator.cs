@@ -335,6 +335,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_QueryString
 
 		public static string MessageFieldParserConfiguration_ParserStrategy_QueryString { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_QueryString"); } }
+//Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_QueryStringField
+
+		public static string MessageFieldParserConfiguration_ParserStrategy_QueryStringField { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_QueryStringField"); } }
+//Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_QueryStringField_Help
+
+		public static string MessageFieldParserConfiguration_ParserStrategy_QueryStringField_Help { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_QueryStringField_Help"); } }
 //Resources:PipelineAdminResources:MessageFieldParserConfiguration_ParserStrategy_RegEx
 
 		public static string MessageFieldParserConfiguration_ParserStrategy_RegEx { get { return GetResourceString("MessageFieldParserConfiguration_ParserStrategy_RegEx"); } }
@@ -612,6 +618,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help = "MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help";
 			public const string MessageFieldParserConfiguration_ParserStrategy_Position = "MessageFieldParserConfiguration_ParserStrategy_Position";
 			public const string MessageFieldParserConfiguration_ParserStrategy_QueryString = "MessageFieldParserConfiguration_ParserStrategy_QueryString";
+			public const string MessageFieldParserConfiguration_ParserStrategy_QueryStringField = "MessageFieldParserConfiguration_ParserStrategy_QueryStringField";
+			public const string MessageFieldParserConfiguration_ParserStrategy_QueryStringField_Help = "MessageFieldParserConfiguration_ParserStrategy_QueryStringField_Help";
 			public const string MessageFieldParserConfiguration_ParserStrategy_RegEx = "MessageFieldParserConfiguration_ParserStrategy_RegEx";
 			public const string MessageFieldParserConfiguration_ParserStrategy_RegExHeader = "MessageFieldParserConfiguration_ParserStrategy_RegExHeader";
 			public const string MessageFieldParserConfiguration_ParserStrategy_RegExHeader_Help = "MessageFieldParserConfiguration_ParserStrategy_RegExHeader_Help";

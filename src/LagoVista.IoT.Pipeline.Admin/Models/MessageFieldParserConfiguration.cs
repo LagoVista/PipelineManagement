@@ -188,6 +188,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_ParserStrategy_PathLocator, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_ParserStrategy_PathLocator_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string PathLocator { get; set; }
 
+        [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_ParserStrategy_QueryStringField, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_ParserStrategy_QueryStringField_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string QueryStringField { get; set; }
+
 
 
         [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_QuotedText, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_QuotedText_Help, FieldType: FieldTypes.Bool, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
