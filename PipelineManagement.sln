@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.Pipeline.Clou
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1D7E5971-7C39-418F-956D-E7A2748B9C1F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{112D9574-A439-43AA-96C6-792FAFCA0B7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.IoT.PipelineAdmin.tests", "tests\LagoVista.IoT.PipelineAdmin.tests\LagoVista.IoT.PipelineAdmin.tests.csproj", "{0566B777-DFEF-498C-BE80-AC04CBD60F14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +33,10 @@ Global
 		{EAD32CBC-4BC5-490D-BBB2-9F21811C63D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAD32CBC-4BC5-490D-BBB2-9F21811C63D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAD32CBC-4BC5-490D-BBB2-9F21811C63D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0566B777-DFEF-498C-BE80-AC04CBD60F14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0566B777-DFEF-498C-BE80-AC04CBD60F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0566B777-DFEF-498C-BE80-AC04CBD60F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0566B777-DFEF-498C-BE80-AC04CBD60F14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,5 +45,6 @@ Global
 		{A0BE4A43-6277-48AC-B29B-6A61D8DC55BF} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
 		{DDEDFFCD-0FD0-487A-9027-9BF424D1C453} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
 		{EAD32CBC-4BC5-490D-BBB2-9F21811C63D8} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
+		{0566B777-DFEF-498C-BE80-AC04CBD60F14} = {112D9574-A439-43AA-96C6-792FAFCA0B7C}
 	EndGlobalSection
 EndGlobal
