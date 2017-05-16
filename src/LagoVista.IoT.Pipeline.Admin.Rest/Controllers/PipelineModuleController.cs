@@ -601,19 +601,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
 
             return planner;
         }
-
-        /// <summary>
-        /// Field Parser - Create New
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("/api/pipeline/admin/fieldparser/factory")]
-        public DetailResponse<MessageFieldParserConfiguration> CreateFieldParser()
-        {
-            var fieldParser = DetailResponse<MessageFieldParserConfiguration>.Create();
-            fieldParser.Model.Id = Guid.NewGuid().ToId();
-
-            return fieldParser;
-        }
         #endregion
 
         #region Custom Module Configuration CRUD and Company...

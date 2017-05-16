@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParserConfigTests\BinaryConfigTests.cs" />
     <Compile Include="ParserConfigTests\DelimitedColumnTests.cs" />
     <Compile Include="ParserConfigTests\HeaderTests.cs" />
     <Compile Include="ParserConfigTests\HeaderWithRegExTests.cs" />

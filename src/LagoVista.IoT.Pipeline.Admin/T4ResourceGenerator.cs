@@ -194,6 +194,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_Title
 
 		public static string Listener_Title { get { return GetResourceString("Listener_Title"); } }
+//Resources:PipelineAdminResources:MessageFieldParseConfiguration_BinaryOffset_Help
+
+		public static string MessageFieldParseConfiguration_BinaryOffset_Help { get { return GetResourceString("MessageFieldParseConfiguration_BinaryOffset_Help"); } }
+//Resources:PipelineAdminResources:MessageFieldParserConfiguration_BinaryOffset
+
+		public static string MessageFieldParserConfiguration_BinaryOffset { get { return GetResourceString("MessageFieldParserConfiguration_BinaryOffset"); } }
 //Resources:PipelineAdminResources:MessageFieldParserConfiguration_BinaryType
 
 		public static string MessageFieldParserConfiguration_BinaryType { get { return GetResourceString("MessageFieldParserConfiguration_BinaryType"); } }
@@ -571,6 +577,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_StartMessageSequence = "Listener_StartMessageSequence";
 			public const string Listener_StartMessageSequence_Help = "Listener_StartMessageSequence_Help";
 			public const string Listener_Title = "Listener_Title";
+			public const string MessageFieldParseConfiguration_BinaryOffset_Help = "MessageFieldParseConfiguration_BinaryOffset_Help";
+			public const string MessageFieldParserConfiguration_BinaryOffset = "MessageFieldParserConfiguration_BinaryOffset";
 			public const string MessageFieldParserConfiguration_BinaryType = "MessageFieldParserConfiguration_BinaryType";
 			public const string MessageFieldParserConfiguration_BinaryType_Boolean = "MessageFieldParserConfiguration_BinaryType_Boolean";
 			public const string MessageFieldParserConfiguration_BinaryType_Char = "MessageFieldParserConfiguration_BinaryType_Char";

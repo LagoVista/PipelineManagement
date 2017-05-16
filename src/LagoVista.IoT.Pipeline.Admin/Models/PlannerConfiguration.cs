@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.IoT.DeviceMessaging.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Resources;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     {
         public PlannerConfiguration()
         {
-            DeviceIdParsers = new List<MessageFieldParserConfiguration>();
-            MessageTypeIdParsers = new List<MessageFieldParserConfiguration>();
+            DeviceIdParsers = new List<DeviceMessageDefinitionField>();
+            MessageTypeIdParsers = new List<DeviceMessageDefinitionField>();
         }
 
 
@@ -23,10 +24,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Planner_DeviceIDParsers, HelpResource: PipelineAdminResources.Names.Planner_DeviceIDParsers_Help, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
-        public List<MessageFieldParserConfiguration> DeviceIdParsers { get; set; }
+        public List<DeviceMessageDefinitionField> DeviceIdParsers { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Planner_MessageTypeIDParsers, HelpResource:PipelineAdminResources.Names.Planner_MessageTypeIDParsers_Help, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
-        public List<MessageFieldParserConfiguration> MessageTypeIdParsers { get; set; }
+        public List<DeviceMessageDefinitionField> MessageTypeIdParsers { get; set; }
     }
 }

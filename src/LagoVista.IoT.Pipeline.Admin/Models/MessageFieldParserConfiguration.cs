@@ -173,9 +173,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public int DelimitedColumnIndex { get; set; }
 
         [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_StartIndex, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_SubString_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public int StartIndex { get; set; }
+        public int? StartIndex { get; set; }
         [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_Length, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_SubString_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public int Length { get; set; }
+        public int? Length { get; set; }
+
+        [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_BinaryOffset, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParseConfiguration_BinaryOffset_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public int? ByteArrayOffset { get; set; }
 
         [FormField(LabelResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_Delimiter, HelpResource: Resources.PipelineAdminResources.Names.MessageFieldParserConfiguration_Delimitor_Help, FieldType: FieldTypes.Text, MaxLength: 2, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string Delimiter { get; set; }

@@ -11,8 +11,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         string XPath { get; }
         string ValueName { get; }
         int DelimitedColumnIndex { get; }
-        int StartIndex { get; }
-        int Length { get; }
+        int? StartIndex { get; }
+        int? Length { get; }
+
+        int? ByteArrayOffset { get; } 
 
         string PathLocator { get; }
 

@@ -258,6 +258,12 @@
   <data name="Listener_Title" xml:space="preserve">
     <value>Listener</value>
   </data>
+  <data name="MessageFieldParseConfiguration_BinaryOffset_Help" xml:space="preserve">
+    <value>Enter the start location in the byte array that contains the value you wish to extract.</value>
+  </data>
+  <data name="MessageFieldParserConfiguration_BinaryOffset" xml:space="preserve">
+    <value>Offset</value>
+  </data>
   <data name="MessageFieldParserConfiguration_BinaryType" xml:space="preserve">
     <value>Binary Data Type</value>
   </data>
