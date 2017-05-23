@@ -1,6 +1,8 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.IoT.DeviceMessaging.Admin.Models;
+using LagoVista.IoT.DeviceMessaging.Admin.Resources;
 using LagoVista.IoT.Pipeline.Admin.Resources;
 using System;
 
@@ -45,6 +47,28 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public int Port { get; set; }    
         
         public bool DelimitedWithSOHEOT { get; set; }
+
+        [FormField(LabelResource: DeviceMessagingAdminResources.Names.DeviceMessage_ContentType, HelpResource: DeviceMessagingAdminResources.Names.DeviceMessage_ContentType_Help, FieldType: FieldTypes.Picker, WaterMark: DeviceMessagingAdminResources.Names.DeviceMessage_ContentType_Select, EnumType: typeof(MessageContentTypes), ResourceType: typeof(DeviceMessagingAdminResources), IsRequired: true)]
+        public EntityHeader<MessageContentTypes> ContentType { get; set; }
+
+
+        public int? MessageLengthLocation { get; set; }
+
+        public int? MesageLengthByteCount { get; set; }
+
+        public EntityHeader<EndianTypes> MessageLengthByteCountEndiness { get; set; }
+
+        
+
+        public string UserName { get; set; }
+
+        public string Password { get; set; }
+
+        public string AccessToken { get; set; }
+
+        public string Subscription { get; set; }
+
+        public string Topic { get; set; }
 
         public string Endpoint { get; set; }
 
