@@ -143,6 +143,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:InputTranslator_TranslatorType_Select
 
 		public static string InputTranslator_TranslatorType_Select { get { return GetResourceString("InputTranslator_TranslatorType_Select"); } }
+//Resources:PipelineAdminResources:Listener_AccessToken
+
+		public static string Listener_AccessToken { get { return GetResourceString("Listener_AccessToken"); } }
+//Resources:PipelineAdminResources:Listener_ConnectToPort
+
+		public static string Listener_ConnectToPort { get { return GetResourceString("Listener_ConnectToPort"); } }
+//Resources:PipelineAdminResources:Listener_DelimitedWithSOH_EOT
+
+		public static string Listener_DelimitedWithSOH_EOT { get { return GetResourceString("Listener_DelimitedWithSOH_EOT"); } }
+//Resources:PipelineAdminResources:Listener_DelimitedWithSOH_EOT_Help
+
+		public static string Listener_DelimitedWithSOH_EOT_Help { get { return GetResourceString("Listener_DelimitedWithSOH_EOT_Help"); } }
 //Resources:PipelineAdminResources:Listener_Description
 
 		public static string Listener_Description { get { return GetResourceString("Listener_Description"); } }
@@ -161,27 +173,72 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_KeepAliveToSendReply
 
 		public static string Listener_KeepAliveToSendReply { get { return GetResourceString("Listener_KeepAliveToSendReply"); } }
-//Resources:PipelineAdminResources:Listener_KeepAliveToSendReplyTimeout
+//Resources:PipelineAdminResources:Listener_KeepAliveToSendReply_Timeout
 
-		public static string Listener_KeepAliveToSendReplyTimeout { get { return GetResourceString("Listener_KeepAliveToSendReplyTimeout"); } }
+		public static string Listener_KeepAliveToSendReply_Timeout { get { return GetResourceString("Listener_KeepAliveToSendReply_Timeout"); } }
+//Resources:PipelineAdminResources:Listener_KeepAliveToSendReplyTimeout_Help
+
+		public static string Listener_KeepAliveToSendReplyTimeout_Help { get { return GetResourceString("Listener_KeepAliveToSendReplyTimeout_Help"); } }
+//Resources:PipelineAdminResources:Listener_Length_Endiness
+
+		public static string Listener_Length_Endiness { get { return GetResourceString("Listener_Length_Endiness"); } }
+//Resources:PipelineAdminResources:Listener_Length_Endiness_Help
+
+		public static string Listener_Length_Endiness_Help { get { return GetResourceString("Listener_Length_Endiness_Help"); } }
+//Resources:PipelineAdminResources:Listener_Length_Endiness_Select
+
+		public static string Listener_Length_Endiness_Select { get { return GetResourceString("Listener_Length_Endiness_Select"); } }
+//Resources:PipelineAdminResources:Listener_Length_Location
+
+		public static string Listener_Length_Location { get { return GetResourceString("Listener_Length_Location"); } }
+//Resources:PipelineAdminResources:Listener_Length_Location_Help
+
+		public static string Listener_Length_Location_Help { get { return GetResourceString("Listener_Length_Location_Help"); } }
+//Resources:PipelineAdminResources:Listener_Length_LocationByteLength
+
+		public static string Listener_Length_LocationByteLength { get { return GetResourceString("Listener_Length_LocationByteLength"); } }
+//Resources:PipelineAdminResources:Listener_Length_LocationByteLength_Help
+
+		public static string Listener_Length_LocationByteLength_Help { get { return GetResourceString("Listener_Length_LocationByteLength_Help"); } }
 //Resources:PipelineAdminResources:Listener_ListenerType
 
 		public static string Listener_ListenerType { get { return GetResourceString("Listener_ListenerType"); } }
+//Resources:PipelineAdminResources:Listener_ListenOnPort
+
+		public static string Listener_ListenOnPort { get { return GetResourceString("Listener_ListenOnPort"); } }
 //Resources:PipelineAdminResources:Listener_MaxMessageSize
 
 		public static string Listener_MaxMessageSize { get { return GetResourceString("Listener_MaxMessageSize"); } }
 //Resources:PipelineAdminResources:Listener_MaxMessageSize_Help
 
 		public static string Listener_MaxMessageSize_Help { get { return GetResourceString("Listener_MaxMessageSize_Help"); } }
+//Resources:PipelineAdminResources:Listener_MessageContainsLength
+
+		public static string Listener_MessageContainsLength { get { return GetResourceString("Listener_MessageContainsLength"); } }
+//Resources:PipelineAdminResources:Listener_MessageContainsLength_Help
+
+		public static string Listener_MessageContainsLength_Help { get { return GetResourceString("Listener_MessageContainsLength_Help"); } }
+//Resources:PipelineAdminResources:Listener_MessageLength_1_Byte
+
+		public static string Listener_MessageLength_1_Byte { get { return GetResourceString("Listener_MessageLength_1_Byte"); } }
+//Resources:PipelineAdminResources:Listener_MessageLength_2_Bytes
+
+		public static string Listener_MessageLength_2_Bytes { get { return GetResourceString("Listener_MessageLength_2_Bytes"); } }
+//Resources:PipelineAdminResources:Listener_MessageLength_4_Bytes
+
+		public static string Listener_MessageLength_4_Bytes { get { return GetResourceString("Listener_MessageLength_4_Bytes"); } }
+//Resources:PipelineAdminResources:Listener_MessageLength_Select
+
+		public static string Listener_MessageLength_Select { get { return GetResourceString("Listener_MessageLength_Select"); } }
 //Resources:PipelineAdminResources:Listener_MessageReceivedTimeout
 
 		public static string Listener_MessageReceivedTimeout { get { return GetResourceString("Listener_MessageReceivedTimeout"); } }
 //Resources:PipelineAdminResources:Listener_MessageReceivedTimeout_Help
 
 		public static string Listener_MessageReceivedTimeout_Help { get { return GetResourceString("Listener_MessageReceivedTimeout_Help"); } }
-//Resources:PipelineAdminResources:Listener_Port
+//Resources:PipelineAdminResources:Listener_Password
 
-		public static string Listener_Port { get { return GetResourceString("Listener_Port"); } }
+		public static string Listener_Password { get { return GetResourceString("Listener_Password"); } }
 //Resources:PipelineAdminResources:Listener_Port_Help
 
 		public static string Listener_Port_Help { get { return GetResourceString("Listener_Port_Help"); } }
@@ -191,9 +248,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_StartMessageSequence_Help
 
 		public static string Listener_StartMessageSequence_Help { get { return GetResourceString("Listener_StartMessageSequence_Help"); } }
+//Resources:PipelineAdminResources:Listener_Subscription
+
+		public static string Listener_Subscription { get { return GetResourceString("Listener_Subscription"); } }
 //Resources:PipelineAdminResources:Listener_Title
 
 		public static string Listener_Title { get { return GetResourceString("Listener_Title"); } }
+//Resources:PipelineAdminResources:Listener_Topic
+
+		public static string Listener_Topic { get { return GetResourceString("Listener_Topic"); } }
+//Resources:PipelineAdminResources:Listener_UserName
+
+		public static string Listener_UserName { get { return GetResourceString("Listener_UserName"); } }
 //Resources:PipelineAdminResources:MessageFieldParseConfiguration_BinaryOffset_Help
 
 		public static string MessageFieldParseConfiguration_BinaryOffset_Help { get { return GetResourceString("MessageFieldParseConfiguration_BinaryOffset_Help"); } }
@@ -560,23 +626,45 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string InputTranslator_Title = "InputTranslator_Title";
 			public const string InputTranslator_TranslatorType = "InputTranslator_TranslatorType";
 			public const string InputTranslator_TranslatorType_Select = "InputTranslator_TranslatorType_Select";
+			public const string Listener_AccessToken = "Listener_AccessToken";
+			public const string Listener_ConnectToPort = "Listener_ConnectToPort";
+			public const string Listener_DelimitedWithSOH_EOT = "Listener_DelimitedWithSOH_EOT";
+			public const string Listener_DelimitedWithSOH_EOT_Help = "Listener_DelimitedWithSOH_EOT_Help";
 			public const string Listener_Description = "Listener_Description";
 			public const string Listener_EndMessageSequence = "Listener_EndMessageSequence";
 			public const string Listener_EndMessageSequence_Help = "Listener_EndMessageSequence_Help";
 			public const string Listener_Endpoint = "Listener_Endpoint";
 			public const string Listener_Help = "Listener_Help";
 			public const string Listener_KeepAliveToSendReply = "Listener_KeepAliveToSendReply";
-			public const string Listener_KeepAliveToSendReplyTimeout = "Listener_KeepAliveToSendReplyTimeout";
+			public const string Listener_KeepAliveToSendReply_Timeout = "Listener_KeepAliveToSendReply_Timeout";
+			public const string Listener_KeepAliveToSendReplyTimeout_Help = "Listener_KeepAliveToSendReplyTimeout_Help";
+			public const string Listener_Length_Endiness = "Listener_Length_Endiness";
+			public const string Listener_Length_Endiness_Help = "Listener_Length_Endiness_Help";
+			public const string Listener_Length_Endiness_Select = "Listener_Length_Endiness_Select";
+			public const string Listener_Length_Location = "Listener_Length_Location";
+			public const string Listener_Length_Location_Help = "Listener_Length_Location_Help";
+			public const string Listener_Length_LocationByteLength = "Listener_Length_LocationByteLength";
+			public const string Listener_Length_LocationByteLength_Help = "Listener_Length_LocationByteLength_Help";
 			public const string Listener_ListenerType = "Listener_ListenerType";
+			public const string Listener_ListenOnPort = "Listener_ListenOnPort";
 			public const string Listener_MaxMessageSize = "Listener_MaxMessageSize";
 			public const string Listener_MaxMessageSize_Help = "Listener_MaxMessageSize_Help";
+			public const string Listener_MessageContainsLength = "Listener_MessageContainsLength";
+			public const string Listener_MessageContainsLength_Help = "Listener_MessageContainsLength_Help";
+			public const string Listener_MessageLength_1_Byte = "Listener_MessageLength_1_Byte";
+			public const string Listener_MessageLength_2_Bytes = "Listener_MessageLength_2_Bytes";
+			public const string Listener_MessageLength_4_Bytes = "Listener_MessageLength_4_Bytes";
+			public const string Listener_MessageLength_Select = "Listener_MessageLength_Select";
 			public const string Listener_MessageReceivedTimeout = "Listener_MessageReceivedTimeout";
 			public const string Listener_MessageReceivedTimeout_Help = "Listener_MessageReceivedTimeout_Help";
-			public const string Listener_Port = "Listener_Port";
+			public const string Listener_Password = "Listener_Password";
 			public const string Listener_Port_Help = "Listener_Port_Help";
 			public const string Listener_StartMessageSequence = "Listener_StartMessageSequence";
 			public const string Listener_StartMessageSequence_Help = "Listener_StartMessageSequence_Help";
+			public const string Listener_Subscription = "Listener_Subscription";
 			public const string Listener_Title = "Listener_Title";
+			public const string Listener_Topic = "Listener_Topic";
+			public const string Listener_UserName = "Listener_UserName";
 			public const string MessageFieldParseConfiguration_BinaryOffset_Help = "MessageFieldParseConfiguration_BinaryOffset_Help";
 			public const string MessageFieldParserConfiguration_BinaryOffset = "MessageFieldParserConfiguration_BinaryOffset";
 			public const string MessageFieldParserConfiguration_BinaryType = "MessageFieldParserConfiguration_BinaryType";

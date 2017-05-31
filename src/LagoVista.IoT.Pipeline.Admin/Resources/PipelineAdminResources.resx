@@ -207,6 +207,18 @@
   <data name="InputTranslator_TranslatorType_Select" xml:space="preserve">
     <value>-select translator type-</value>
   </data>
+  <data name="Listener_AccessToken" xml:space="preserve">
+    <value>Access Token</value>
+  </data>
+  <data name="Listener_ConnectToPort" xml:space="preserve">
+    <value>Connect to Port</value>
+  </data>
+  <data name="Listener_DelimitedWithSOH_EOT" xml:space="preserve">
+    <value>Delimited with &lt;SOH&gt; and &lt;EOT&gt;</value>
+  </data>
+  <data name="Listener_DelimitedWithSOH_EOT_Help" xml:space="preserve">
+    <value>Select this option if the first character of the messages you are receiving start with SOH (ascii 0x01)and ended with EOT (ascii 0x04)</value>
+  </data>
   <data name="Listener_Description" xml:space="preserve">
     <value>Listeners are used to Monitor a Port, Protocol or Service for Messages from your Devices</value>
   </data>
@@ -225,11 +237,38 @@
   <data name="Listener_KeepAliveToSendReply" xml:space="preserve">
     <value>Keep Alive to Send Reply</value>
   </data>
-  <data name="Listener_KeepAliveToSendReplyTimeout" xml:space="preserve">
+  <data name="Listener_KeepAliveToSendReplyTimeout_Help" xml:space="preserve">
     <value>The amount of time to keep the Incoming Connection alive to send a reply.  If the Pipeline never sends a messages within this time frame, the connection will be Closed.</value>
+  </data>
+  <data name="Listener_KeepAliveToSendReply_Timeout" xml:space="preserve">
+    <value>Keep Alive Timeout (MS)</value>
+  </data>
+  <data name="Listener_Length_Endiness" xml:space="preserve">
+    <value>Message Length Endiness</value>
+  </data>
+  <data name="Listener_Length_Endiness_Help" xml:space="preserve">
+    <value>What is the Endiness of the bytes that make up the lengh of the message.</value>
+  </data>
+  <data name="Listener_Length_Endiness_Select" xml:space="preserve">
+    <value>-select message length endiness-</value>
+  </data>
+  <data name="Listener_Length_Location" xml:space="preserve">
+    <value>Length Location</value>
+  </data>
+  <data name="Listener_Length_LocationByteLength" xml:space="preserve">
+    <value>Message Length Bytes</value>
+  </data>
+  <data name="Listener_Length_LocationByteLength_Help" xml:space="preserve">
+    <value>How many bytes make up the length of the message.</value>
+  </data>
+  <data name="Listener_Length_Location_Help" xml:space="preserve">
+    <value>If your message has a byte or set of bytes that contain the length of the message, where are they with respect to the zero indexed first byte.</value>
   </data>
   <data name="Listener_ListenerType" xml:space="preserve">
     <value>Listener Type</value>
+  </data>
+  <data name="Listener_ListenOnPort" xml:space="preserve">
+    <value>Listen on Port</value>
   </data>
   <data name="Listener_MaxMessageSize" xml:space="preserve">
     <value>Max Message Size</value>
@@ -237,14 +276,32 @@
   <data name="Listener_MaxMessageSize_Help" xml:space="preserve">
     <value>The Maximum Size in Bytes of your Message, this is used to allocate memory and check for buffer overflows.</value>
   </data>
+  <data name="Listener_MessageContainsLength" xml:space="preserve">
+    <value>Messge Contains Length Information</value>
+  </data>
+  <data name="Listener_MessageContainsLength_Help" xml:space="preserve">
+    <value>The message it self contains a byte or series of bytes that contains the length of the entire message.</value>
+  </data>
+  <data name="Listener_MessageLength_1_Byte" xml:space="preserve">
+    <value>1 Byte</value>
+  </data>
+  <data name="Listener_MessageLength_2_Bytes" xml:space="preserve">
+    <value>2 Bytes</value>
+  </data>
+  <data name="Listener_MessageLength_4_Bytes" xml:space="preserve">
+    <value>4 Bytes</value>
+  </data>
+  <data name="Listener_MessageLength_Select" xml:space="preserve">
+    <value>-select message length byte count-</value>
+  </data>
   <data name="Listener_MessageReceivedTimeout" xml:space="preserve">
     <value>Message Received Timeout (MS)</value>
   </data>
   <data name="Listener_MessageReceivedTimeout_Help" xml:space="preserve">
     <value>Number of Millieseconds from when the First Byte of your Message Arives until it is expected that the entire message will be received.  If the entire message is not received within this time period, the receive function will be aborted.</value>
   </data>
-  <data name="Listener_Port" xml:space="preserve">
-    <value>Port</value>
+  <data name="Listener_Password" xml:space="preserve">
+    <value>Password</value>
   </data>
   <data name="Listener_Port_Help" xml:space="preserve">
     <value>If your listener will listen on a Socket Provide the port it wil listen on.</value>
@@ -255,8 +312,17 @@
   <data name="Listener_StartMessageSequence_Help" xml:space="preserve">
     <value>The character or characters that will make up the beginning of your message.</value>
   </data>
+  <data name="Listener_Subscription" xml:space="preserve">
+    <value>Subscription</value>
+  </data>
   <data name="Listener_Title" xml:space="preserve">
     <value>Listener</value>
+  </data>
+  <data name="Listener_Topic" xml:space="preserve">
+    <value>Topic</value>
+  </data>
+  <data name="Listener_UserName" xml:space="preserve">
+    <value>User Name</value>
   </data>
   <data name="MessageFieldParseConfiguration_BinaryOffset_Help" xml:space="preserve">
     <value>Enter the start location in the byte array that contains the value you wish to extract.</value>
