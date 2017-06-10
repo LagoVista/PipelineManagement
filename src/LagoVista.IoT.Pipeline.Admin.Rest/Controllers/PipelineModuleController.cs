@@ -14,6 +14,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.UserAdmin.Models.Account;
 using LagoVista.Core.Models;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
 {
@@ -23,7 +24,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
     {
 
         IPipelineModuleManager _pipelineModuleManager;
-        public PipelineModuleController(IPipelineModuleManager pipelineModuleManager, UserManager<AppUser> userManager, ILogger logger) : base(userManager, logger)
+        public PipelineModuleController(IPipelineModuleManager pipelineModuleManager, UserManager<AppUser> userManager, IAdminLogger logger) : base(userManager, logger)
         {
             _pipelineModuleManager = pipelineModuleManager;
         }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using LagoVista.IoT.Pipeline.CloudRepos;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Models;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
@@ -15,7 +16,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
     {
         private bool _shouldConsolidateCollections;
 
-        public TransmitterConfigurationRepo(IPipelineAdminRepoSettings settings, ILogger logger) : base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, logger)
+        public TransmitterConfigurationRepo(IPipelineAdminRepoSettings settings, IAdminLogger logger) : base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, logger)
         {
             _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }

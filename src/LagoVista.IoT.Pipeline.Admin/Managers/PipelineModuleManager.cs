@@ -11,6 +11,7 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Interfaces;
 using static LagoVista.Core.Models.AuthorizeResult;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.IoT.Pipeline.Admin.Managers
 {
@@ -25,7 +26,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         ICustomPipelineConfigurationRepo _customPipelineConfigurationRepo;
 
         public PipelineModuleManager(IListenerConfigurationRepo listenerConfigurationRep, IInputTranslatorConfigurationRepo inputConfigurationRepo, ISentinelConfigurationRepo sentinalConfigurationRepo, IPlannerConfigurationRepo plannerConfigurationRepo,
-               IOutputTranslatorConfigurationRepo outputConfigurationRepo, ITransmitterConfigurationRepo translatorConfigurationRepo, ICustomPipelineConfigurationRepo pipelineConfigrationRepo, ILogger logger, IAppConfig appConfig,
+               IOutputTranslatorConfigurationRepo outputConfigurationRepo, ITransmitterConfigurationRepo translatorConfigurationRepo, ICustomPipelineConfigurationRepo pipelineConfigrationRepo, IAdminLogger logger, IAppConfig appConfig,
                IDependencyManager depManager, ISecurity security) : base(logger, appConfig, depManager, security)
         {
             _listenerConfigurationRepo = listenerConfigurationRep;
