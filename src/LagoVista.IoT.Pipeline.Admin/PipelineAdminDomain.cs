@@ -4,6 +4,7 @@ using System;
 
 namespace LagoVista.IoT.Pipeline.Admin
 {
+    [DomainDescriptor]
     public class PipelineAdminDomain
     {
         public const string PipelineAdmin = "Pipeline Execution Modules";
