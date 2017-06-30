@@ -10,6 +10,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     {        
         public enum InputTranslatorTypes
         {
+            [EnumLabel("message", PipelineAdminResources.Names.Translator_Type_Message, typeof(PipelineAdminResources))]
+            MessageBased,
             [EnumLabel("binary", PipelineAdminResources.Names.Translator_Type_Binary, typeof(PipelineAdminResources))]
             Binary,
             [EnumLabel("string", PipelineAdminResources.Names.Translator_Type_String, typeof(PipelineAdminResources))]

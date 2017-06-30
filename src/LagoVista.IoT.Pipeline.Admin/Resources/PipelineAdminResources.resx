@@ -661,4 +661,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Transmitter_TransmitterType_SMTP" xml:space="preserve">
     <value>SMTP</value>
   </data>
+  <data name="Translator_Type_Message" xml:space="preserve">
+    <value>Message Based</value>
+  </data>
 </root>

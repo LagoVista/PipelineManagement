@@ -563,6 +563,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Translator_Type_JSON
 
 		public static string Translator_Type_JSON { get { return GetResourceString("Translator_Type_JSON"); } }
+//Resources:PipelineAdminResources:Translator_Type_Message
+
+		public static string Translator_Type_Message { get { return GetResourceString("Translator_Type_Message"); } }
 //Resources:PipelineAdminResources:Translator_Type_String
 
 		public static string Translator_Type_String { get { return GetResourceString("Translator_Type_String"); } }
@@ -766,6 +769,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Translator_Type_Custom = "Translator_Type_Custom";
 			public const string Translator_Type_Delimited = "Translator_Type_Delimited";
 			public const string Translator_Type_JSON = "Translator_Type_JSON";
+			public const string Translator_Type_Message = "Translator_Type_Message";
 			public const string Translator_Type_String = "Translator_Type_String";
 			public const string Translator_Type_XML = "Translator_Type_XML";
 			public const string Transmitter_Description = "Transmitter_Description";
