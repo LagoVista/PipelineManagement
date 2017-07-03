@@ -261,41 +261,41 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         #region Get For Org
         public async Task<IEnumerable<PipelineModuleConfigurationSummary>> GetListenerConfiugrationsForOrgAsync(String orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(ListenerConfiguration));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(ListenerConfiguration));
             return await _listenerConfigurationRepo.GetListenerConfigurationsForOrgsAsync(orgId);
         }
         public async Task<IEnumerable<PipelineModuleConfigurationSummary>> GetInputTranslatorConfiugrationsForOrgAsync(String orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(InputTranslatorConfiguration));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(InputTranslatorConfiguration));
             return await _inputTranslatorConfigurationRepo.GetInputTranslatorConfigurationsForOrgsAsync(orgId);
         }
         public async Task<IEnumerable<PipelineModuleConfigurationSummary>> GetSentinelConfiugrationsForOrgAsync(String orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(SentinelConfiguration));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(SentinelConfiguration));
             return await _sentinalConfigurationRepo.GetSentinelConfigurationsForOrgsAsync(orgId);
         }
 
         public async Task<IEnumerable<PipelineModuleConfigurationSummary>> GetPlannerConfiugrationsForOrgAsync(String orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(SentinelConfiguration));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(SentinelConfiguration));
             return await _plannerConfigurationRepo.GetPlannerConfigurationsForOrgsAsync(orgId);
         }
 
 
         public async Task<IEnumerable<PipelineModuleConfigurationSummary>> GetOutputTranslatorConfiugrationsForOrgAsync(String orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(OutputTranslatorConfiguration));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(OutputTranslatorConfiguration));
             return await _outputTranslatorConfigurationRepo.GetOutputTranslatorConfigurationsForOrgsAsync(orgId);
         }
 
         public async Task<IEnumerable<PipelineModuleConfigurationSummary>> GetTransmitterConfiugrationsForOrgAsync(String orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(TransmitterConfiguration));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(TransmitterConfiguration));
             return await _transmitterConfigurationRepo.GetTransmitterConfigurationsForOrgsAsync(orgId);
         }
         public async Task<IEnumerable<PipelineModuleConfigurationSummary>> GetCustomPipelineModuleConfiugrationsForOrgAsync(String orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccess(user, orgId, typeof(CustomPipelineModuleConfiguration));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(CustomPipelineModuleConfiguration));
             return await _customPipelineConfigurationRepo.GetCustomPipelineModuleConfigurationsForOrgsAsync(orgId);
         }
         #endregion
