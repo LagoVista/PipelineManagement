@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
-using LagoVista.UserAdmin.Models.Account;
 using LagoVista.Core.Models;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.UserAdmin.Models.Users;
 
 namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
 {
