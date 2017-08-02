@@ -36,7 +36,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// <param name="listenerConfiguration"></param>
         /// <returns></returns>
         [HttpPost("/api/pipeline/admin/listener")]
-        public Task<InvokeResult> AddTransmitterConfigurationAsync([FromBody] ListenerConfiguration listenerConfiguration)
+        public Task<InvokeResult> AddListenerConfigurationAsync([FromBody] ListenerConfiguration listenerConfiguration)
         {
             return _pipelineModuleManager.AddListenerConfigurationAsync(listenerConfiguration, OrgEntityHeader, UserEntityHeader);
         }
@@ -47,7 +47,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// <param name="listenerConfiguration"></param>
         /// <returns></returns>
         [HttpPut("/api/pipeline/admin/listener")]
-        public Task<InvokeResult> UpdateTransmitterConfigurationAsync([FromBody] ListenerConfiguration listenerConfiguration)
+        public Task<InvokeResult> UpdateListenerConfigurationAsync([FromBody] ListenerConfiguration listenerConfiguration)
         {
             SetUpdatedProperties(listenerConfiguration);
             return _pipelineModuleManager.UpdateListenerConfigurationAsync(listenerConfiguration, OrgEntityHeader, UserEntityHeader);
