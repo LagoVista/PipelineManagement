@@ -18,7 +18,7 @@ namespace LagoVista.IoT.Pipeline.Admin
                 {
                     Description = "A set of classes that contains meta data for managing IoT Deployments.",
                     DomainType = DomainDescription.DomainTypes.BusinessObject,
-                    Name = "Deployment Admin",
+                    Name = "Pipeline Management",
                     CurrentVersion = new Core.Models.VersionInfo()
                     {
                         Major = 0,
