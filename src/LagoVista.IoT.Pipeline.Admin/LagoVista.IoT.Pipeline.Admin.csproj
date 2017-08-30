@@ -7,11 +7,11 @@
     <Compile Remove="Models\MessageFieldParserConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="1.2.91-alpha0813" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="1.2.91-alpha0813" />
-    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="1.2.91-alpha0813" />
-    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="1.2.91-alpha0813" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.91-alpha0813" />
+    <PackageReference Include="LagoVista.Core" Version="1.2.105-alpha0832" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="1.2.105-alpha0832" />
+    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="1.2.105-alpha0832" />
+    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="1.2.105-alpha0832" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.105-alpha0832" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
