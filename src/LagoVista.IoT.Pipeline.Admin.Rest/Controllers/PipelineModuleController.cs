@@ -66,14 +66,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         }
 
         /// <summary>
-        /// Listener - Get For Org
+        /// Listener - Get For Current Org
         /// </summary>
-        /// <param name="orgid"></param>
         /// <returns></returns>
-        [HttpGet("/api/org/{orgid}/pipeline/admin/listeners")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetListenerConfigurationsForOrgAsync(String orgid)
+        [HttpGet("/api/pipeline/admin/listeners")]
+        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetListenerConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetListenerConfiugrationsForOrgAsync(orgid, UserEntityHeader);
+            var configs = await _pipelineModuleManager.GetListenerConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
             return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
         }
 
@@ -161,14 +160,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         }
 
         /// <summary>
-        /// Input Translator - Get For Org
+        /// Input Translator - Get For Current Org
         /// </summary>
-        /// <param name="orgid"></param>
         /// <returns></returns>
-        [HttpGet("/api/org/{orgid}/pipeline/admin/inputtranslators")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetInputTranslatorConfigurationsForOrgAsync(String orgid)
+        [HttpGet("/api/pipeline/admin/inputtranslators")]
+        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetInputTranslatorConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetInputTranslatorConfiugrationsForOrgAsync(orgid, UserEntityHeader);
+            var configs = await _pipelineModuleManager.GetInputTranslatorConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
             return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
         }
 
@@ -257,14 +255,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         }
 
         /// <summary>
-        /// Sentinel - Get For Org
+        /// Sentinel - Get For Current Org
         /// </summary>
-        /// <param name="orgid"></param>
         /// <returns></returns>
-        [HttpGet("/api/org/{orgid}/pipeline/admin/sentinels")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetSentinelConfigurationsForOrgAsync(String orgid)
+        [HttpGet("/api/admin/sentinels")]
+        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetSentinelConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetSentinelConfiugrationsForOrgAsync(orgid, UserEntityHeader);
+            var configs = await _pipelineModuleManager.GetSentinelConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
             return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
         }
 
@@ -357,7 +354,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <param name="orgid"></param>
         /// <returns></returns>
-        [HttpGet("/api/org/{orgid}/pipeline/admin/outputtranslators")]
+        [HttpGet("/api/pipeline/admin/outputtranslators")]
         public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetOutputTranslatorConfigurationsForOrgAsync(String orgid)
         {
             var configs = await _pipelineModuleManager.GetOutputTranslatorConfiugrationsForOrgAsync(orgid, UserEntityHeader);
@@ -451,12 +448,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// <summary>
         /// Transmitter - Get For Org
         /// </summary>
-        /// <param name="orgid"></param>
         /// <returns></returns>
-        [HttpGet("/api/org/{orgid}/pipeline/admin/transmitters")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetTransmitterConfigurationsForOrgAsync(String orgid)
+        [HttpGet("/api/pipeline/admin/transmitters")]
+        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetTransmitterConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetTransmitterConfiugrationsForOrgAsync(orgid, UserEntityHeader);
+            var configs = await _pipelineModuleManager.GetTransmitterConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
             return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
         }
 
@@ -545,14 +541,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         }
 
         /// <summary>
-        /// Planner - Get For Org
+        /// Planner - Get For Current Org
         /// </summary>
-        /// <param name="orgid"></param>
         /// <returns></returns>
-        [HttpGet("/api/org/{orgid}/pipeline/admin/planners")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetPlannerConfigurationsForOrgAsync(String orgid)
+        [HttpGet("/api/pipeline/admin/planners")]
+        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetPlannerConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetPlannerConfiugrationsForOrgAsync(orgid, UserEntityHeader);
+            var configs = await _pipelineModuleManager.GetPlannerConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
             return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
         }
 
