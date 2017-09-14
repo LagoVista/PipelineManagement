@@ -664,4 +664,28 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Translator_Type_Message" xml:space="preserve">
     <value>Message Based</value>
   </data>
+  <data name="PipelineModuleType_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="PipelineModuleType_InputTranslator" xml:space="preserve">
+    <value>Input Translator</value>
+  </data>
+  <data name="PipelineModuleType_Listener" xml:space="preserve">
+    <value>Listener</value>
+  </data>
+  <data name="PipelineModuleType_OutputTranslator" xml:space="preserve">
+    <value>Output Translator</value>
+  </data>
+  <data name="PipelineModuleType_Planner" xml:space="preserve">
+    <value>Planner</value>
+  </data>
+  <data name="PipelineModuleType_Sentinel" xml:space="preserve">
+    <value>Sentinel</value>
+  </data>
+  <data name="PipelineModuleType_Transmitter" xml:space="preserve">
+    <value>Transmitter</value>
+  </data>
+  <data name="PipelineModuleType_Workflow" xml:space="preserve">
+    <value>Workflow</value>
+  </data>
 </root>

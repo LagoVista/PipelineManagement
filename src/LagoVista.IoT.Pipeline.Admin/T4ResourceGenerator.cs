@@ -518,6 +518,30 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:OutputTranslator_TranslatorType_Select
 
 		public static string OutputTranslator_TranslatorType_Select { get { return GetResourceString("OutputTranslator_TranslatorType_Select"); } }
+//Resources:PipelineAdminResources:PipelineModuleType_Custom
+
+		public static string PipelineModuleType_Custom { get { return GetResourceString("PipelineModuleType_Custom"); } }
+//Resources:PipelineAdminResources:PipelineModuleType_InputTranslator
+
+		public static string PipelineModuleType_InputTranslator { get { return GetResourceString("PipelineModuleType_InputTranslator"); } }
+//Resources:PipelineAdminResources:PipelineModuleType_Listener
+
+		public static string PipelineModuleType_Listener { get { return GetResourceString("PipelineModuleType_Listener"); } }
+//Resources:PipelineAdminResources:PipelineModuleType_OutputTranslator
+
+		public static string PipelineModuleType_OutputTranslator { get { return GetResourceString("PipelineModuleType_OutputTranslator"); } }
+//Resources:PipelineAdminResources:PipelineModuleType_Planner
+
+		public static string PipelineModuleType_Planner { get { return GetResourceString("PipelineModuleType_Planner"); } }
+//Resources:PipelineAdminResources:PipelineModuleType_Sentinel
+
+		public static string PipelineModuleType_Sentinel { get { return GetResourceString("PipelineModuleType_Sentinel"); } }
+//Resources:PipelineAdminResources:PipelineModuleType_Transmitter
+
+		public static string PipelineModuleType_Transmitter { get { return GetResourceString("PipelineModuleType_Transmitter"); } }
+//Resources:PipelineAdminResources:PipelineModuleType_Workflow
+
+		public static string PipelineModuleType_Workflow { get { return GetResourceString("PipelineModuleType_Workflow"); } }
 //Resources:PipelineAdminResources:Planner_Description
 
 		public static string Planner_Description { get { return GetResourceString("Planner_Description"); } }
@@ -754,6 +778,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string OutputTranslator_Title = "OutputTranslator_Title";
 			public const string OutputTranslator_TranslatorType = "OutputTranslator_TranslatorType";
 			public const string OutputTranslator_TranslatorType_Select = "OutputTranslator_TranslatorType_Select";
+			public const string PipelineModuleType_Custom = "PipelineModuleType_Custom";
+			public const string PipelineModuleType_InputTranslator = "PipelineModuleType_InputTranslator";
+			public const string PipelineModuleType_Listener = "PipelineModuleType_Listener";
+			public const string PipelineModuleType_OutputTranslator = "PipelineModuleType_OutputTranslator";
+			public const string PipelineModuleType_Planner = "PipelineModuleType_Planner";
+			public const string PipelineModuleType_Sentinel = "PipelineModuleType_Sentinel";
+			public const string PipelineModuleType_Transmitter = "PipelineModuleType_Transmitter";
+			public const string PipelineModuleType_Workflow = "PipelineModuleType_Workflow";
 			public const string Planner_Description = "Planner_Description";
 			public const string Planner_DeviceIDParsers = "Planner_DeviceIDParsers";
 			public const string Planner_DeviceIDParsers_Help = "Planner_DeviceIDParsers_Help";
