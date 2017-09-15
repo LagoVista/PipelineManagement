@@ -258,7 +258,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// Sentinel - Get For Current Org
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/api/admin/sentinels")]
+        [HttpGet("/api/pipeline/admin/sentinels")]
         public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetSentinelConfigurationsForOrgAsync()
         {
             var configs = await _pipelineModuleManager.GetSentinelConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
@@ -352,12 +352,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// <summary>
         /// Output Translator - Get For Org
         /// </summary>
-        /// <param name="orgid"></param>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/outputtranslators")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetOutputTranslatorConfigurationsForOrgAsync(String orgid)
+        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetOutputTranslatorConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetOutputTranslatorConfiugrationsForOrgAsync(orgid, UserEntityHeader);
+            var configs = await _pipelineModuleManager.GetOutputTranslatorConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
             return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
         }
 
