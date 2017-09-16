@@ -28,7 +28,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         Custom,
     }
 
-    public class PipelineModuleConfiguration : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity
+    public abstract class PipelineModuleConfiguration : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity
     {
         public const string PipelineModuleType_Listener = "listener";
         public const string PipelineModuleType_Planner = "planner";
@@ -50,6 +50,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
+
+        public abstract string ModuleType { get; }
 
         public PipelineModuleConfigurationSummary CreateSummary()
         {

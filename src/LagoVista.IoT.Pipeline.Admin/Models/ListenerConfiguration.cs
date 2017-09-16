@@ -63,6 +63,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ListenerTypes_POP3Server = "pop3server";
         public const string ListenerTypes_Custom = "custom";
 
+        public override string ModuleType => PipelineModuleType_Listener;
+
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenerType, EnumType: (typeof(ListenerTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.Connection_Select_Type, IsRequired: true, IsUserEditable: true)]
         public EntityHeader<ListenerTypes> ListenerType { get; set; }

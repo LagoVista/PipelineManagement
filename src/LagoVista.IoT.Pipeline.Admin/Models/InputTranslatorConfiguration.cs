@@ -33,6 +33,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string DelimiterSequence { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, HelpResource: PipelineAdminResources.Names.InputTranslator_DelimiterSquence_Help, FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public String Script { get; set; }        
+        public String Script { get; set; }
+
+
+        public override string ModuleType => PipelineModuleType_InputTranslator;
     }
 }

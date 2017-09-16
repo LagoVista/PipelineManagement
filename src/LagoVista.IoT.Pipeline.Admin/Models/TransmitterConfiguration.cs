@@ -47,6 +47,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public EntityHeader<TransmitterTypes> TransmitterType { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, HelpResource: PipelineAdminResources.Names.InputTranslator_DelimiterSquence_Help, FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources))]
-        public String Script { get; set; }    
+        public String Script { get; set; }
+
+        public override string ModuleType => PipelineModuleType_Transmitter;
     }
 }

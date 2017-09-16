@@ -25,6 +25,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             Custom
         }
 
+        public override string ModuleType => PipelineModuleType_OutputTranslator;
+
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_TranslatorType, EnumType: (typeof(OutputTranslatorTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_TranslatorType_Select, IsRequired: true, IsUserEditable: true)]
         public EntityHeader<OutputTranslatorTypes> OutputTranslatorType { get; set; }
 

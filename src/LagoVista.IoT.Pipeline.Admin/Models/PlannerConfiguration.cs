@@ -29,5 +29,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Planner_MessageTypeIDParsers, HelpResource:PipelineAdminResources.Names.Planner_MessageTypeIDParsers_Help, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<DeviceMessageDefinitionField> MessageTypeIdParsers { get; set; }
+
+        public override string ModuleType => PipelineModuleType_Planner;
     }
 }
