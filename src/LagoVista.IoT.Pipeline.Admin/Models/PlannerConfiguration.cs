@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Resources;
 using System;
@@ -31,5 +32,20 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public List<DeviceMessageDefinitionField> MessageTypeIdParsers { get; set; }
 
         public override string ModuleType => PipelineModuleType_Planner;
+
+
+        [CustomValidator]
+        public void Validate(ValidationResult result)
+        {
+            foreach(var fld in DeviceIdParsers)
+            {
+                result.Concat(fld.Validate());
+            }
+
+            foreach (var fld in MessageTypeIdParsers)
+            {
+                result.Concat(fld.Validate());
+            }
+        }
     }
 }
