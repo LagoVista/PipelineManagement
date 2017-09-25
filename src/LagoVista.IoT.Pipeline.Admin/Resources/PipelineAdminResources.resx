@@ -688,4 +688,25 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="PipelineModuleType_Workflow" xml:space="preserve">
     <value>Workflow</value>
   </data>
+  <data name="Err_CouldNotLoadInputTranslator" xml:space="preserve">
+    <value>Could Not Find Input Translator</value>
+  </data>
+  <data name="Err_CouldNotLoadListener" xml:space="preserve">
+    <value>Could Not Find Listener</value>
+  </data>
+  <data name="Err_CouldNotLoadOutputTranslator" xml:space="preserve">
+    <value>Could Not Load Output Translator</value>
+  </data>
+  <data name="Err_CouldNotLoadPlanner" xml:space="preserve">
+    <value>Could Not Load Planner</value>
+  </data>
+  <data name="Err_CouldNotLoadSentinel" xml:space="preserve">
+    <value>Could Not Load Sentinel</value>
+  </data>
+  <data name="Err_CouldNotLoadTransmitter" xml:space="preserve">
+    <value>Could Not Load Transmitter</value>
+  </data>
+  <data name="Err_CouldNotLoadCustomModule" xml:space="preserve">
+    <value>Could Not Find Custom Module</value>
+  </data>
 </root>

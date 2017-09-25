@@ -12,6 +12,8 @@ using LagoVista.Core.Interfaces;
 using static LagoVista.Core.Models.AuthorizeResult;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.Core.Exceptions;
+using LagoVista.IoT.Pipeline.Admin.Resources;
 
 namespace LagoVista.IoT.Pipeline.Admin.Managers
 {
@@ -206,55 +208,89 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         #endregion
 
         #region Load Methods
-        public async Task<ListenerConfiguration> LoadFullListenerConfigurationAsync(String id)
+        public async Task<InvokeResult<ListenerConfiguration>> LoadFullListenerConfigurationAsync(String id)
         {
-            var listenerConfiguration = await _listenerConfigurationRepo.GetListenerConfigurationAsync(id);
-
-            return listenerConfiguration;
+            try
+            {
+                return InvokeResult<ListenerConfiguration>.Create(await _listenerConfigurationRepo.GetListenerConfigurationAsync(id));
+            }
+            catch (RecordNotFoundException)
+            {
+                return InvokeResult<ListenerConfiguration>.FromErrors(ErrorCodes.CouldNotLoadListenerConfig.ToErrorMessage($"ModuleId={id}"));
+            }
         }
 
-        public async Task<InputTranslatorConfiguration> LoadFullInputTranslatorConfigurationAsync(String id)
+        public async Task<InvokeResult<InputTranslatorConfiguration>> LoadFullInputTranslatorConfigurationAsync(String id)
         {
-            var inputTranslatorConfiguration = await _inputTranslatorConfigurationRepo.GetInputTranslatorConfigurationAsync(id);
-
-            return inputTranslatorConfiguration;
+            try
+            {
+                return InvokeResult<InputTranslatorConfiguration>.Create(await _inputTranslatorConfigurationRepo.GetInputTranslatorConfigurationAsync(id));
+            }
+            catch (RecordNotFoundException)
+            {
+                return InvokeResult<InputTranslatorConfiguration>.FromErrors(ErrorCodes.CouldNotLoadInputTranslator.ToErrorMessage($"ModuleId={id}"));
+            }
         }
 
-        public async Task<PlannerConfiguration> LoadFullPlannerConfigurationAsync(String id)
+        public async Task<InvokeResult<PlannerConfiguration>> LoadFullPlannerConfigurationAsync(String id)
         {
-            var plannerConfiguration = await _plannerConfigurationRepo.GetPlannerConfigurationAsync(id);
-
-            return plannerConfiguration;
+            try
+            {
+                return InvokeResult<PlannerConfiguration>.Create(await _plannerConfigurationRepo.GetPlannerConfigurationAsync(id));
+            }
+            catch (RecordNotFoundException)
+            {
+                return InvokeResult<PlannerConfiguration>.FromErrors(ErrorCodes.CouldNotLoadPlanner.ToErrorMessage($"ModuleId={id}"));
+            }
         }
 
-
-        public async Task<SentinelConfiguration> LoadFullSentinelConfigurationAsync(String id)
+        public async Task<InvokeResult<SentinelConfiguration>> LoadFullSentinelConfigurationAsync(String id)
         {
-            var sentinalConfiguration = await _sentinalConfigurationRepo.GetSentinelConfigurationAsync(id);
-
-            return sentinalConfiguration;
+            try
+            {
+                return InvokeResult<SentinelConfiguration>.Create(await _sentinalConfigurationRepo.GetSentinelConfigurationAsync(id));
+            }
+            catch (RecordNotFoundException)
+            {
+                return InvokeResult<SentinelConfiguration>.FromErrors(ErrorCodes.CouldNotLoadSentinel.ToErrorMessage($"ModuleId={id}"));
+            }
         }
 
-        public async Task<OutputTranslatorConfiguration> LoadFullOutputTranslatorConfigurationAsync(String id)
+        public async Task<InvokeResult<OutputTranslatorConfiguration>> LoadFullOutputTranslatorConfigurationAsync(String id)
         {
-            var outputTranslator = await _outputTranslatorConfigurationRepo.GetOutputTranslatorConfigurationAsync(id);
-
-            return outputTranslator;
+            try
+            {
+                return InvokeResult<OutputTranslatorConfiguration>.Create(await _outputTranslatorConfigurationRepo.GetOutputTranslatorConfigurationAsync(id));
+            }
+            catch (RecordNotFoundException)
+            {
+                return InvokeResult<OutputTranslatorConfiguration>.FromErrors(ErrorCodes.CouldNotLoadOutputTranslator.ToErrorMessage($"ModuleId={id}"));
+            }
         }
 
-        public async Task<TransmitterConfiguration> LoadFullTransmitterConfigurationAsync(String id)
+        public async Task<InvokeResult<TransmitterConfiguration>> LoadFullTransmitterConfigurationAsync(String id)
         {
-            var transmitterConfiguration = await _transmitterConfigurationRepo.GetTransmitterConfigurationAsync(id);
-
-            return transmitterConfiguration;
+            try
+            {
+                return InvokeResult<TransmitterConfiguration>.Create(await _transmitterConfigurationRepo.GetTransmitterConfigurationAsync(id));
+            }
+            catch (RecordNotFoundException)
+            {
+                return InvokeResult<TransmitterConfiguration>.FromErrors(ErrorCodes.CouldNotLoadTransmitter.ToErrorMessage($"ModuleId={id}"));
+            }
         }
 
-        public async Task<CustomPipelineModuleConfiguration> LoadFullCustomPipelineModuleConfigurationAsync(String id)
+        public async Task<InvokeResult<CustomPipelineModuleConfiguration>> LoadFullCustomPipelineModuleConfigurationAsync(String id)
         {
-            var pipelineModuleConfiguration = await _customPipelineConfigurationRepo.GetCustomPipelineModuleConfigurationAsync(id);
+            try
+            {
+                return InvokeResult<CustomPipelineModuleConfiguration>.Create(await _customPipelineConfigurationRepo.GetCustomPipelineModuleConfigurationAsync(id));
+            }
+            catch (RecordNotFoundException)
+            {
+                return InvokeResult<CustomPipelineModuleConfiguration>.FromErrors(ErrorCodes.CouldNotLoadCustomModule.ToErrorMessage($"ModuleId={id}"));
+            }
 
-
-            return pipelineModuleConfiguration;
         }
         #endregion
 

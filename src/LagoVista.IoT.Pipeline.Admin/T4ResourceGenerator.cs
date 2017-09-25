@@ -122,6 +122,27 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:CustomModule_Title
 
 		public static string CustomModule_Title { get { return GetResourceString("CustomModule_Title"); } }
+//Resources:PipelineAdminResources:Err_CouldNotLoadCustomModule
+
+		public static string Err_CouldNotLoadCustomModule { get { return GetResourceString("Err_CouldNotLoadCustomModule"); } }
+//Resources:PipelineAdminResources:Err_CouldNotLoadInputTranslator
+
+		public static string Err_CouldNotLoadInputTranslator { get { return GetResourceString("Err_CouldNotLoadInputTranslator"); } }
+//Resources:PipelineAdminResources:Err_CouldNotLoadListener
+
+		public static string Err_CouldNotLoadListener { get { return GetResourceString("Err_CouldNotLoadListener"); } }
+//Resources:PipelineAdminResources:Err_CouldNotLoadOutputTranslator
+
+		public static string Err_CouldNotLoadOutputTranslator { get { return GetResourceString("Err_CouldNotLoadOutputTranslator"); } }
+//Resources:PipelineAdminResources:Err_CouldNotLoadPlanner
+
+		public static string Err_CouldNotLoadPlanner { get { return GetResourceString("Err_CouldNotLoadPlanner"); } }
+//Resources:PipelineAdminResources:Err_CouldNotLoadSentinel
+
+		public static string Err_CouldNotLoadSentinel { get { return GetResourceString("Err_CouldNotLoadSentinel"); } }
+//Resources:PipelineAdminResources:Err_CouldNotLoadTransmitter
+
+		public static string Err_CouldNotLoadTransmitter { get { return GetResourceString("Err_CouldNotLoadTransmitter"); } }
 //Resources:PipelineAdminResources:InputTranslator_DelimiterSquence_Help
 
 		public static string InputTranslator_DelimiterSquence_Help { get { return GetResourceString("InputTranslator_DelimiterSquence_Help"); } }
@@ -646,6 +667,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string CustomModule_Description = "CustomModule_Description";
 			public const string CustomModule_Help = "CustomModule_Help";
 			public const string CustomModule_Title = "CustomModule_Title";
+			public const string Err_CouldNotLoadCustomModule = "Err_CouldNotLoadCustomModule";
+			public const string Err_CouldNotLoadInputTranslator = "Err_CouldNotLoadInputTranslator";
+			public const string Err_CouldNotLoadListener = "Err_CouldNotLoadListener";
+			public const string Err_CouldNotLoadOutputTranslator = "Err_CouldNotLoadOutputTranslator";
+			public const string Err_CouldNotLoadPlanner = "Err_CouldNotLoadPlanner";
+			public const string Err_CouldNotLoadSentinel = "Err_CouldNotLoadSentinel";
+			public const string Err_CouldNotLoadTransmitter = "Err_CouldNotLoadTransmitter";
 			public const string InputTranslator_DelimiterSquence_Help = "InputTranslator_DelimiterSquence_Help";
 			public const string InputTranslator_DelimterSequence = "InputTranslator_DelimterSequence";
 			public const string InputTranslator_Description = "InputTranslator_Description";

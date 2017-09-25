@@ -1,4 +1,5 @@
-﻿using LagoVista.IoT.Pipeline.Admin.Managers;
+﻿using LagoVista.IoT.Logging;
+using LagoVista.IoT.Pipeline.Admin.Managers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace LagoVista.IoT.Pipeline.Admin
     {
         public static void ConfigureServices(IServiceCollection services)
         {
+            ErrorCodes.Register(typeof(Resources.ErrorCodes));
+
             services.AddTransient<IPipelineModuleManager, PipelineModuleManager>();
         }
     }
