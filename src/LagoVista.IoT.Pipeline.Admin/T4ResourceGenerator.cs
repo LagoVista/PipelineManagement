@@ -98,6 +98,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Connection_Type_MQTT
 
 		public static string Connection_Type_MQTT { get { return GetResourceString("Connection_Type_MQTT"); } }
+//Resources:PipelineAdminResources:Connection_Type_MQTT_Client
+
+		public static string Connection_Type_MQTT_Client { get { return GetResourceString("Connection_Type_MQTT_Client"); } }
 //Resources:PipelineAdminResources:Connection_Type_POP3Server
 
 		public static string Connection_Type_POP3Server { get { return GetResourceString("Connection_Type_POP3Server"); } }
@@ -659,6 +662,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Connection_Type_AzureServiceBus = "Connection_Type_AzureServiceBus";
 			public const string Connection_Type_Custom = "Connection_Type_Custom";
 			public const string Connection_Type_MQTT = "Connection_Type_MQTT";
+			public const string Connection_Type_MQTT_Client = "Connection_Type_MQTT_Client";
 			public const string Connection_Type_POP3Server = "Connection_Type_POP3Server";
 			public const string Connection_Type_Rest = "Connection_Type_Rest";
 			public const string Connection_Type_Soap = "Connection_Type_Soap";

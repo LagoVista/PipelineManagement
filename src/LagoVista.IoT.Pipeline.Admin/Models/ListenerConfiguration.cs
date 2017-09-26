@@ -16,8 +16,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AzureIoTHub,
         [EnumLabel(ListenerConfiguration.ListenerTypes_REST, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
         Rest,
-        [EnumLabel(ListenerConfiguration.ListenerTypes_SOAP, PipelineAdminResources.Names.Connection_Type_Soap, typeof(PipelineAdminResources))]
-        Soap,
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawTCP, PipelineAdminResources.Names.Connection_Type_TCP, typeof(PipelineAdminResources))]
         RawTCP,
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawUdp, PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
@@ -26,10 +24,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AMQP,
         [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT, PipelineAdminResources.Names.Connection_Type_MQTT, typeof(PipelineAdminResources))]
         MQTT,
-        [EnumLabel(ListenerConfiguration.ListenerTypes_POP3Server, PipelineAdminResources.Names.Connection_Type_POP3Server, typeof(PipelineAdminResources))]
-        POP3Server,
-        [EnumLabel(ListenerConfiguration.ListenerTypes_Custom, PipelineAdminResources.Names.Connection_Type_Custom, typeof(PipelineAdminResources))]
-        Custom
+        [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Client, PipelineAdminResources.Names.Connection_Type_MQTT_Client, typeof(PipelineAdminResources))]
+        MQTTHosted,
+        /*
+            Soap,
+        
+        [EnumLabel(ListenerConfiguration.ListenerTypes_SOAP, PipelineAdminResources.Names.Connection_Type_Soap, typeof(PipelineAdminResources))]
+        
+         * [EnumLabel(ListenerConfiguration.ListenerTypes_POP3Server, PipelineAdminResources.Names.Connection_Type_POP3Server, typeof(PipelineAdminResources))]
+                POP3Server,
+                [EnumLabel(ListenerConfiguration.ListenerTypes_Custom, PipelineAdminResources.Names.Connection_Type_Custom, typeof(PipelineAdminResources))]
+                Custom*/
     }
 
     public enum MessageLengthSize
@@ -60,6 +65,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ListenerTypes_RawUdp = "raw_udp";
         public const string ListenerTypes_AMQP = "amqp";
         public const string ListenerTypes_MQTT = "mqtt";
+        public const string ListenerTypes_MQTT_Client = "mqttclient";
         public const string ListenerTypes_POP3Server = "pop3server";
         public const string ListenerTypes_Custom = "custom";
 
@@ -69,7 +75,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenerType, EnumType: (typeof(ListenerTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.Connection_Select_Type, IsRequired: true, IsUserEditable: true)]
         public EntityHeader<ListenerTypes> ListenerType { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenOnPort, HelpResource:PipelineAdminResources.Names.Listener_Port_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources),  IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenOnPort, HelpResource: PipelineAdminResources.Names.Listener_Port_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public int ListenOnPort { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_DelimitedWithSOH_EOT, HelpResource: PipelineAdminResources.Names.Listener_DelimitedWithSOH_EOT_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
@@ -101,6 +107,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessToken, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string AccessToken { get; set; }
 
+
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Subscription, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Subscription { get; set; }
 
@@ -120,7 +127,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_KeepAliveToSendReply_Timeout, HelpResource: PipelineAdminResources.Names.Listener_KeepAliveToSendReplyTimeout_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public int KeepAliveToSendReplyTimeoutMS { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_StartMessageSequence, HelpResource:PipelineAdminResources.Names.Listener_StartMessageSequence_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_StartMessageSequence, HelpResource: PipelineAdminResources.Names.Listener_StartMessageSequence_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string StartMessageSequence { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_EndMessageSequence, HelpResource: PipelineAdminResources.Names.Listener_EndMessageSequence_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
