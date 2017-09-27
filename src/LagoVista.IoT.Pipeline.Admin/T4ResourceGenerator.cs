@@ -167,9 +167,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:InputTranslator_TranslatorType_Select
 
 		public static string InputTranslator_TranslatorType_Select { get { return GetResourceString("InputTranslator_TranslatorType_Select"); } }
-//Resources:PipelineAdminResources:Listener_AccessToken
+//Resources:PipelineAdminResources:Listener_AccessKey
 
-		public static string Listener_AccessToken { get { return GetResourceString("Listener_AccessToken"); } }
+		public static string Listener_AccessKey { get { return GetResourceString("Listener_AccessKey"); } }
 //Resources:PipelineAdminResources:Listener_ConnectToPort
 
 		public static string Listener_ConnectToPort { get { return GetResourceString("Listener_ConnectToPort"); } }
@@ -191,6 +191,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_Endpoint
 
 		public static string Listener_Endpoint { get { return GetResourceString("Listener_Endpoint"); } }
+//Resources:PipelineAdminResources:Listener_EventHub_ConsumerGroup
+
+		public static string Listener_EventHub_ConsumerGroup { get { return GetResourceString("Listener_EventHub_ConsumerGroup"); } }
 //Resources:PipelineAdminResources:Listener_Help
 
 		public static string Listener_Help { get { return GetResourceString("Listener_Help"); } }
@@ -266,6 +269,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_Port_Help
 
 		public static string Listener_Port_Help { get { return GetResourceString("Listener_Port_Help"); } }
+//Resources:PipelineAdminResources:Listener_ResourceName
+
+		public static string Listener_ResourceName { get { return GetResourceString("Listener_ResourceName"); } }
 //Resources:PipelineAdminResources:Listener_StartMessageSequence
 
 		public static string Listener_StartMessageSequence { get { return GetResourceString("Listener_StartMessageSequence"); } }
@@ -685,7 +691,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string InputTranslator_Title = "InputTranslator_Title";
 			public const string InputTranslator_TranslatorType = "InputTranslator_TranslatorType";
 			public const string InputTranslator_TranslatorType_Select = "InputTranslator_TranslatorType_Select";
-			public const string Listener_AccessToken = "Listener_AccessToken";
+			public const string Listener_AccessKey = "Listener_AccessKey";
 			public const string Listener_ConnectToPort = "Listener_ConnectToPort";
 			public const string Listener_DelimitedWithSOH_EOT = "Listener_DelimitedWithSOH_EOT";
 			public const string Listener_DelimitedWithSOH_EOT_Help = "Listener_DelimitedWithSOH_EOT_Help";
@@ -693,6 +699,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_EndMessageSequence = "Listener_EndMessageSequence";
 			public const string Listener_EndMessageSequence_Help = "Listener_EndMessageSequence_Help";
 			public const string Listener_Endpoint = "Listener_Endpoint";
+			public const string Listener_EventHub_ConsumerGroup = "Listener_EventHub_ConsumerGroup";
 			public const string Listener_Help = "Listener_Help";
 			public const string Listener_KeepAliveToSendReply = "Listener_KeepAliveToSendReply";
 			public const string Listener_KeepAliveToSendReply_Timeout = "Listener_KeepAliveToSendReply_Timeout";
@@ -718,6 +725,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_MessageReceivedTimeout_Help = "Listener_MessageReceivedTimeout_Help";
 			public const string Listener_Password = "Listener_Password";
 			public const string Listener_Port_Help = "Listener_Port_Help";
+			public const string Listener_ResourceName = "Listener_ResourceName";
 			public const string Listener_StartMessageSequence = "Listener_StartMessageSequence";
 			public const string Listener_StartMessageSequence_Help = "Listener_StartMessageSequence_Help";
 			public const string Listener_Subscription = "Listener_Subscription";

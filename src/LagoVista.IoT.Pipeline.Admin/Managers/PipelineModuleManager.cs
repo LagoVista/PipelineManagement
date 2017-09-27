@@ -26,8 +26,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         IOutputTranslatorConfigurationRepo _outputTranslatorConfigurationRepo;
         ITransmitterConfigurationRepo _transmitterConfigurationRepo;
         ICustomPipelineConfigurationRepo _customPipelineConfigurationRepo;
+        ISecureStorage _secureStorage;
 
-        public PipelineModuleManager(IListenerConfigurationRepo listenerConfigurationRep, IInputTranslatorConfigurationRepo inputConfigurationRepo, ISentinelConfigurationRepo sentinalConfigurationRepo, IPlannerConfigurationRepo plannerConfigurationRepo,
+        public PipelineModuleManager(IListenerConfigurationRepo listenerConfigurationRep, ISecureStorage secureStorage, IInputTranslatorConfigurationRepo inputConfigurationRepo, ISentinelConfigurationRepo sentinalConfigurationRepo, IPlannerConfigurationRepo plannerConfigurationRepo,
                IOutputTranslatorConfigurationRepo outputConfigurationRepo, ITransmitterConfigurationRepo translatorConfigurationRepo, ICustomPipelineConfigurationRepo pipelineConfigrationRepo, IAdminLogger logger, IAppConfig appConfig,
                IDependencyManager depManager, ISecurity security) : base(logger, appConfig, depManager, security)
         {
@@ -38,6 +39,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             _transmitterConfigurationRepo = translatorConfigurationRepo;
             _customPipelineConfigurationRepo = pipelineConfigrationRepo;
             _plannerConfigurationRepo = plannerConfigurationRepo;
+            _secureStorage = secureStorage;
         }
 
         #region Add Methods
@@ -45,6 +47,23 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         {
             await AuthorizeAsync(listenerConfiguration, AuthorizeActions.Create, user, org);
             ValidationCheck(listenerConfiguration, Actions.Create);
+
+            if (!String.IsNullOrEmpty(listenerConfiguration.AccessKey))
+            {
+                var addSecretResult = await _secureStorage.AddSecretAsync(listenerConfiguration.AccessKey);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                listenerConfiguration.SecureAccessKeyId = addSecretResult.Result;
+                listenerConfiguration.AccessKey = null;
+            }
+
+            if (!String.IsNullOrEmpty(listenerConfiguration.Password))
+            {
+                var addSecretResult = await _secureStorage.AddSecretAsync(listenerConfiguration.Password);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                listenerConfiguration.SecurePasswordId = addSecretResult.Result;
+                listenerConfiguration.Password = null;
+            }
+
             await _listenerConfigurationRepo.AddListenerConfigurationAsync(listenerConfiguration);
             return InvokeResult.Success;
         }
@@ -103,6 +122,27 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         {
             await AuthorizeAsync(listenerConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(listenerConfiguration, Actions.Update);
+
+            if (!String.IsNullOrEmpty(listenerConfiguration.AccessKey))
+            {
+                await _secureStorage.RemoveSecretAsync(listenerConfiguration.SecureAccessKeyId);
+
+                var addSecretResult = await _secureStorage.AddSecretAsync(listenerConfiguration.AccessKey);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                listenerConfiguration.SecureAccessKeyId = addSecretResult.Result;
+                listenerConfiguration.AccessKey = null;
+            }
+
+            if (!String.IsNullOrEmpty(listenerConfiguration.Password))
+            {
+                await _secureStorage.RemoveSecretAsync(listenerConfiguration.SecurePasswordId);
+
+                var addSecretResult = await _secureStorage.AddSecretAsync(listenerConfiguration.Password);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                listenerConfiguration.SecurePasswordId = addSecretResult.Result;
+                listenerConfiguration.Password = null;
+            }
+
             await _listenerConfigurationRepo.UpdateListenerConfigurationAsync(listenerConfiguration);
             return InvokeResult.Success;
         }

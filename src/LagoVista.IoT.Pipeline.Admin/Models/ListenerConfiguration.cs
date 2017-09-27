@@ -101,11 +101,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string UserName { get; set; }
 
+
+
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Password, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Password { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessToken, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string AccessToken { get; set; }
+        public string SecurePasswordId { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string AccessKey { get; set; }
+
+        public string SecureAccessKeyId { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Subscription, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
@@ -116,6 +122,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Endpoint, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Endpoint { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ResourceName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string ResourceName { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_EventHub_ConsumerGroup, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string ConsumerGroup { get; set; }
+
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectToPort, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string ConnectToPort { get; set; }
