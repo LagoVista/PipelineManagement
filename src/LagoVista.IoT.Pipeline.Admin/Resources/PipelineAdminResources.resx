@@ -727,4 +727,10 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="ConnectionType_RabbitMQClient" xml:space="preserve">
     <value>Rabbit MQ Client</value>
   </data>
+  <data name="Listener_AccessKeyName" xml:space="preserve">
+    <value>Access Key Name</value>
+  </data>
+  <data name="Listener_HostName" xml:space="preserve">
+    <value>Host Name</value>
+  </data>
 </root>

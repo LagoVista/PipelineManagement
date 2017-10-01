@@ -179,6 +179,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_AccessKey
 
 		public static string Listener_AccessKey { get { return GetResourceString("Listener_AccessKey"); } }
+//Resources:PipelineAdminResources:Listener_AccessKeyName
+
+		public static string Listener_AccessKeyName { get { return GetResourceString("Listener_AccessKeyName"); } }
 //Resources:PipelineAdminResources:Listener_ConnectToPort
 
 		public static string Listener_ConnectToPort { get { return GetResourceString("Listener_ConnectToPort"); } }
@@ -206,6 +209,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_Help
 
 		public static string Listener_Help { get { return GetResourceString("Listener_Help"); } }
+//Resources:PipelineAdminResources:Listener_HostName
+
+		public static string Listener_HostName { get { return GetResourceString("Listener_HostName"); } }
 //Resources:PipelineAdminResources:Listener_KeepAliveToSendReply
 
 		public static string Listener_KeepAliveToSendReply { get { return GetResourceString("Listener_KeepAliveToSendReply"); } }
@@ -704,6 +710,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string InputTranslator_TranslatorType = "InputTranslator_TranslatorType";
 			public const string InputTranslator_TranslatorType_Select = "InputTranslator_TranslatorType_Select";
 			public const string Listener_AccessKey = "Listener_AccessKey";
+			public const string Listener_AccessKeyName = "Listener_AccessKeyName";
 			public const string Listener_ConnectToPort = "Listener_ConnectToPort";
 			public const string Listener_DelimitedWithSOH_EOT = "Listener_DelimitedWithSOH_EOT";
 			public const string Listener_DelimitedWithSOH_EOT_Help = "Listener_DelimitedWithSOH_EOT_Help";
@@ -713,6 +720,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_Endpoint = "Listener_Endpoint";
 			public const string Listener_EventHub_ConsumerGroup = "Listener_EventHub_ConsumerGroup";
 			public const string Listener_Help = "Listener_Help";
+			public const string Listener_HostName = "Listener_HostName";
 			public const string Listener_KeepAliveToSendReply = "Listener_KeepAliveToSendReply";
 			public const string Listener_KeepAliveToSendReply_Timeout = "Listener_KeepAliveToSendReply_Timeout";
 			public const string Listener_KeepAliveToSendReplyTimeout_Help = "Listener_KeepAliveToSendReplyTimeout_Help";
