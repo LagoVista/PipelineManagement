@@ -27,8 +27,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             RawUDP,
             [EnumLabel("amqp", PipelineAdminResources.Names.Connection_Type_AMQP, typeof(PipelineAdminResources))]
             AMQP,
-            [EnumLabel("mqtt", PipelineAdminResources.Names.Connection_Type_MQTT, typeof(PipelineAdminResources))]
-            MQTT,
             [EnumLabel("sms", PipelineAdminResources.Names.Transmitter_TransmitterType_SMS, typeof(PipelineAdminResources))]
             SMS,
             [EnumLabel("outbox", PipelineAdminResources.Names.Transmitter_TransmitterType_Outbox, typeof(PipelineAdminResources))]

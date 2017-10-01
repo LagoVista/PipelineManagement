@@ -95,9 +95,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Connection_Type_Custom
 
 		public static string Connection_Type_Custom { get { return GetResourceString("Connection_Type_Custom"); } }
-//Resources:PipelineAdminResources:Connection_Type_MQTT
+//Resources:PipelineAdminResources:Connection_Type_MQTT_Broker
 
-		public static string Connection_Type_MQTT { get { return GetResourceString("Connection_Type_MQTT"); } }
+		public static string Connection_Type_MQTT_Broker { get { return GetResourceString("Connection_Type_MQTT_Broker"); } }
 //Resources:PipelineAdminResources:Connection_Type_MQTT_Client
 
 		public static string Connection_Type_MQTT_Client { get { return GetResourceString("Connection_Type_MQTT_Client"); } }
@@ -116,6 +116,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Connection_Type_UDP
 
 		public static string Connection_Type_UDP { get { return GetResourceString("Connection_Type_UDP"); } }
+//Resources:PipelineAdminResources:ConnectionType_MQTT_Listener
+
+		public static string ConnectionType_MQTT_Listener { get { return GetResourceString("ConnectionType_MQTT_Listener"); } }
+//Resources:PipelineAdminResources:ConnectionType_RabbitMQ
+
+		public static string ConnectionType_RabbitMQ { get { return GetResourceString("ConnectionType_RabbitMQ"); } }
+//Resources:PipelineAdminResources:ConnectionType_RabbitMQClient
+
+		public static string ConnectionType_RabbitMQClient { get { return GetResourceString("ConnectionType_RabbitMQClient"); } }
 //Resources:PipelineAdminResources:CustomModule_Description
 
 		public static string CustomModule_Description { get { return GetResourceString("CustomModule_Description"); } }
@@ -667,13 +676,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Connection_Type_AzureIoTHub = "Connection_Type_AzureIoTHub";
 			public const string Connection_Type_AzureServiceBus = "Connection_Type_AzureServiceBus";
 			public const string Connection_Type_Custom = "Connection_Type_Custom";
-			public const string Connection_Type_MQTT = "Connection_Type_MQTT";
+			public const string Connection_Type_MQTT_Broker = "Connection_Type_MQTT_Broker";
 			public const string Connection_Type_MQTT_Client = "Connection_Type_MQTT_Client";
 			public const string Connection_Type_POP3Server = "Connection_Type_POP3Server";
 			public const string Connection_Type_Rest = "Connection_Type_Rest";
 			public const string Connection_Type_Soap = "Connection_Type_Soap";
 			public const string Connection_Type_TCP = "Connection_Type_TCP";
 			public const string Connection_Type_UDP = "Connection_Type_UDP";
+			public const string ConnectionType_MQTT_Listener = "ConnectionType_MQTT_Listener";
+			public const string ConnectionType_RabbitMQ = "ConnectionType_RabbitMQ";
+			public const string ConnectionType_RabbitMQClient = "ConnectionType_RabbitMQClient";
 			public const string CustomModule_Description = "CustomModule_Description";
 			public const string CustomModule_Help = "CustomModule_Help";
 			public const string CustomModule_Title = "CustomModule_Title";

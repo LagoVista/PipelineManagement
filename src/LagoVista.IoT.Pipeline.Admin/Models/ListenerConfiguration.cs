@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
 using LagoVista.IoT.DeviceMessaging.Admin.Resources;
 using LagoVista.IoT.Pipeline.Admin.Resources;
@@ -18,14 +19,20 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         Rest,
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawTCP, PipelineAdminResources.Names.Connection_Type_TCP, typeof(PipelineAdminResources))]
         RawTCP,
+        [EnumLabel(ListenerConfiguration.ListenerTypes_RabbitMQClient, PipelineAdminResources.Names.ConnectionType_RabbitMQClient, typeof(PipelineAdminResources))]
+        RabbitMQClient,
+        [EnumLabel(ListenerConfiguration.ListenerTypes_RabbitMQ, PipelineAdminResources.Names.ConnectionType_RabbitMQ, typeof(PipelineAdminResources))]
+        RabbitMQ,
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawUdp, PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
         RawUDP,
         [EnumLabel(ListenerConfiguration.ListenerTypes_AMQP, PipelineAdminResources.Names.Connection_Type_AMQP, typeof(PipelineAdminResources))]
         AMQP,
-        [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT, PipelineAdminResources.Names.Connection_Type_MQTT, typeof(PipelineAdminResources))]
-        MQTT,
+        [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Listener, PipelineAdminResources.Names.ConnectionType_MQTT_Listener, typeof(PipelineAdminResources))]
+        MQTTListener,
+        [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Broker, PipelineAdminResources.Names.Connection_Type_MQTT_Broker, typeof(PipelineAdminResources))]
+        MQTTBroker,
         [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Client, PipelineAdminResources.Names.Connection_Type_MQTT_Client, typeof(PipelineAdminResources))]
-        MQTTHosted,
+        MQTTClient,
         /*
             Soap,
         
@@ -58,13 +65,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public const string ListenerTypes_AzureServiceBus = "azureserivcebus";
         public const string ListenerTypes_AzureEventHub = "azureeventhub";
+        public const string ListenerTypes_RabbitMQ = "rabbitmq";
+        public const string ListenerTypes_RabbitMQClient = "rabbitmqclient";
         public const string ListenerTypes_AzureIoTHub = "azureiothub";
         public const string ListenerTypes_REST = "rest";
         public const string ListenerTypes_SOAP = "soap";
         public const string ListenerTypes_RawTCP = "rawtcp";
         public const string ListenerTypes_RawUdp = "raw_udp";
         public const string ListenerTypes_AMQP = "amqp";
-        public const string ListenerTypes_MQTT = "mqtt";
+        public const string ListenerTypes_MQTT_Broker = "mqttbroker";
+        public const string ListenerTypes_MQTT_Listener = "mqttlistener";
         public const string ListenerTypes_MQTT_Client = "mqttclient";
         public const string ListenerTypes_POP3Server = "pop3server";
         public const string ListenerTypes_Custom = "custom";
@@ -151,5 +161,45 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_MaxMessageSize, HelpResource: PipelineAdminResources.Names.Listener_MaxMessageSize_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public int? MaxMessageSize { get; set; }
+
+
+        [CustomValidator]
+        public void Validate(ValidationResult result)
+        {
+            if(EntityHeader.IsNullOrEmpty(ListenerType))
+            {
+                result.AddUserError("Listener Type is a Required Field.");
+                return;
+            }
+
+            switch(ListenerType.Value)
+            {
+                case ListenerTypes.AMQP:
+                    break;
+                case ListenerTypes.AzureEventHub:
+                    break;
+                case ListenerTypes.AzureIoTHub:
+
+                    break;
+                case ListenerTypes.AzureServiceBus:
+                    break;
+                case ListenerTypes.MQTTBroker:
+                    break;
+                case ListenerTypes.MQTTClient:
+                    break;
+                case ListenerTypes.MQTTListener:
+                    break;
+                case ListenerTypes.RabbitMQ:
+                    break;
+                case ListenerTypes.RabbitMQClient:
+                    break;
+                case ListenerTypes.RawTCP:
+                    break;
+                case ListenerTypes.RawUDP:
+                    break;
+                case ListenerTypes.Rest:
+                    break;
+            }
+        }
     }
 }

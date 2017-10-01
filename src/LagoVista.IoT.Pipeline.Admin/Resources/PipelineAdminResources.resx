@@ -159,8 +159,8 @@
   <data name="Connection_Type_Custom" xml:space="preserve">
     <value>Custom</value>
   </data>
-  <data name="Connection_Type_MQTT" xml:space="preserve">
-    <value>MQTT (Server)</value>
+  <data name="Connection_Type_MQTT_Broker" xml:space="preserve">
+    <value>MQTT Broker</value>
   </data>
   <data name="Connection_Type_POP3Server" xml:space="preserve">
     <value>POP3 Server</value>
@@ -710,12 +710,21 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Could Not Find Custom Module</value>
   </data>
   <data name="Connection_Type_MQTT_Client" xml:space="preserve">
-    <value>MQTT (Client/External)</value>
+    <value>MQTT Client</value>
   </data>
   <data name="Listener_ResourceName" xml:space="preserve">
     <value>Resource Name</value>
   </data>
   <data name="Listener_EventHub_ConsumerGroup" xml:space="preserve">
     <value>Consumer Group</value>
+  </data>
+  <data name="ConnectionType_MQTT_Listener" xml:space="preserve">
+    <value>MQTT Listener (low volume/dev)</value>
+  </data>
+  <data name="ConnectionType_RabbitMQ" xml:space="preserve">
+    <value>Rabbit MQ</value>
+  </data>
+  <data name="ConnectionType_RabbitMQClient" xml:space="preserve">
+    <value>Rabbit MQ Client</value>
   </data>
 </root>
