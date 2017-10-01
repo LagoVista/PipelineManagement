@@ -145,7 +145,7 @@
     <value>-select connection type-</value>
   </data>
   <data name="Connection_Type_AMQP" xml:space="preserve">
-    <value>AMQP</value>
+    <value>AMQP Client</value>
   </data>
   <data name="Connection_Type_AzureEventHub" xml:space="preserve">
     <value>Azure Event Hub</value>
@@ -732,5 +732,11 @@ This is a list of parsers that are executed in the order they appear, if a match
   </data>
   <data name="Listener_HostName" xml:space="preserve">
     <value>Host Name</value>
+  </data>
+  <data name="Listener_Anonymous" xml:space="preserve">
+    <value>Anonymous Connection</value>
+  </data>
+  <data name="Listener_ConnectSSLTLS" xml:space="preserve">
+    <value>Connect with SSL/TLS</value>
   </data>
 </root>

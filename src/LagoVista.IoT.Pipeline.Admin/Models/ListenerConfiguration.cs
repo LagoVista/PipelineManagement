@@ -85,8 +85,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenerType, EnumType: (typeof(ListenerTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.Connection_Select_Type, IsRequired: true, IsUserEditable: true)]
         public EntityHeader<ListenerTypes> ListenerType { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenOnPort, HelpResource: PipelineAdminResources.Names.Listener_Port_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public int ListenOnPort { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_DelimitedWithSOH_EOT, HelpResource: PipelineAdminResources.Names.Listener_DelimitedWithSOH_EOT_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public bool DelimitedWithSOHEOT { get; set; }
@@ -108,16 +106,20 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public EntityHeader<EndianTypes> MessageLengthByteCountEndiness { get; set; }
 
 
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Anonymous, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
+        public bool Anonymous { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectSSLTLS, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
+        public bool SecureConnection { get; set; }
+
+
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string UserName { get; set; }
-
-
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Password, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Password { get; set; }
 
         public string SecurePasswordId { get; set; }
-
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_HostName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string HostName { get; set; }
@@ -132,7 +134,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Subscription, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Subscription { get; set; }
+        public EntityHeader Subscription { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Topic, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Topic { get; set; }
@@ -147,8 +149,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string ConsumerGroup { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectToPort, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string ConnectToPort { get; set; }
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenOnPort, HelpResource: PipelineAdminResources.Names.Listener_Port_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources))]
+        public int? ListenOnPort { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectToPort, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources))]
+        public int? ConnectToPort { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_KeepAliveToSendReply, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
@@ -173,38 +178,86 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [CustomValidator]
         public void Validate(ValidationResult result)
         {
-            if(EntityHeader.IsNullOrEmpty(ListenerType))
+            if (EntityHeader.IsNullOrEmpty(ListenerType))
             {
                 result.AddUserError("Listener Type is a Required Field.");
                 return;
             }
 
-            switch(ListenerType.Value)
+            switch (ListenerType.Value)
             {
                 case ListenerTypes.AMQP:
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for Connecting to an AMQP Server.");
+                    if(!Anonymous)
+                    {
+                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your AMQP server for non-anonymous connections.");
+                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to connect to your AMQP server for non-anonymous connections.");
+                    }
+                    else
+                    {
+                        UserName = null;
+                        Password = null;
+                    }
+                    if (string.IsNullOrEmpty(Topic)) result.AddUserError("Please ensure you provide a topic/queue (including wildcards * and #) that will be monitored for incoming messages.");
                     break;
                 case ListenerTypes.AzureEventHub:
+                    if (HostName.ToLower().StartsWith("sb://")) HostName = HostName.Substring(5);
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for Azure Event Hubs, this is the host name of your Event Hub without the sb:// protocol.");
+                    if (string.IsNullOrEmpty(ResourceName)) result.AddUserError("Resource Name is require for Azure IoT Hub, this is found in the Event Hub-compatible name field on the Azure Portal.");
+                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
+                    if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
                     break;
                 case ListenerTypes.AzureIoTHub:
-
+                    if(HostName.ToLower().StartsWith("sb://")) HostName = HostName.Substring(5);
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for Azure IoT Hub, this is found in the Event Hub-compatible endpoint field on the Azure Portal.");
+                    if (string.IsNullOrEmpty(ResourceName)) result.AddUserError("Resource Name is require for Azure IoT Hub, this is found in the Event Hub-compatible name field on the Azure Portal.");
+                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
+                    if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
                     break;
                 case ListenerTypes.AzureServiceBus:
                     break;
                 case ListenerTypes.MQTTBroker:
                     break;
                 case ListenerTypes.MQTTClient:
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for Connecting to an MQTT Server.");
+                    if (!Anonymous)
+                    {
+                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your AMQP server for non-anonymous connections.");
+                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to connect to your AMQP server for non-anonymous connections.");
+                    }
+                    else
+                    {
+                        UserName = null;
+                        Password = null;
+                    }
+                    if (!ConnectToPort.HasValue) result.AddUserError("Please provide a port that your MQTT Client will connect, usually 1883 or 8883 (SSL).");
+                    if (string.IsNullOrEmpty(Topic)) result.AddUserError("Please ensure you provide a topic/queue (including wildcards * and #) that will be monitored for incoming messages.");
                     break;
                 case ListenerTypes.MQTTListener:
+                    if (!Anonymous)
+                    {
+                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your AMQP server for non-anonymous connections.");
+                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to connect to your AMQP server for non-anonymous connections.");
+                    }
+                    else
+                    {
+                        UserName = null;
+                        Password = null;
+                    }
+                    if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your MQTT listenr will listen for incoming messages, usually 1883.");
                     break;
                 case ListenerTypes.RabbitMQ:
                     break;
                 case ListenerTypes.RabbitMQClient:
                     break;
                 case ListenerTypes.RawTCP:
+                    if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your TCP listenr will listen for incoming messages.");
                     break;
                 case ListenerTypes.RawUDP:
+                    if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your UDP listenr will listen for incoming messages.");
                     break;
                 case ListenerTypes.Rest:
+                    if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your REST listenr will listen for incoming messages.");
                     break;
             }
         }

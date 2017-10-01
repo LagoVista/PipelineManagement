@@ -182,6 +182,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_AccessKeyName
 
 		public static string Listener_AccessKeyName { get { return GetResourceString("Listener_AccessKeyName"); } }
+//Resources:PipelineAdminResources:Listener_Anonymous
+
+		public static string Listener_Anonymous { get { return GetResourceString("Listener_Anonymous"); } }
+//Resources:PipelineAdminResources:Listener_ConnectSSLTLS
+
+		public static string Listener_ConnectSSLTLS { get { return GetResourceString("Listener_ConnectSSLTLS"); } }
 //Resources:PipelineAdminResources:Listener_ConnectToPort
 
 		public static string Listener_ConnectToPort { get { return GetResourceString("Listener_ConnectToPort"); } }
@@ -711,6 +717,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string InputTranslator_TranslatorType_Select = "InputTranslator_TranslatorType_Select";
 			public const string Listener_AccessKey = "Listener_AccessKey";
 			public const string Listener_AccessKeyName = "Listener_AccessKeyName";
+			public const string Listener_Anonymous = "Listener_Anonymous";
+			public const string Listener_ConnectSSLTLS = "Listener_ConnectSSLTLS";
 			public const string Listener_ConnectToPort = "Listener_ConnectToPort";
 			public const string Listener_DelimitedWithSOH_EOT = "Listener_DelimitedWithSOH_EOT";
 			public const string Listener_DelimitedWithSOH_EOT_Help = "Listener_DelimitedWithSOH_EOT_Help";
