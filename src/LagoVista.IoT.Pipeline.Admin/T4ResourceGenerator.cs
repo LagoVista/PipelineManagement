@@ -290,6 +290,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_Port_Help
 
 		public static string Listener_Port_Help { get { return GetResourceString("Listener_Port_Help"); } }
+//Resources:PipelineAdminResources:Listener_Queue
+
+		public static string Listener_Queue { get { return GetResourceString("Listener_Queue"); } }
 //Resources:PipelineAdminResources:Listener_ResourceName
 
 		public static string Listener_ResourceName { get { return GetResourceString("Listener_ResourceName"); } }
@@ -753,6 +756,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_MessageReceivedTimeout_Help = "Listener_MessageReceivedTimeout_Help";
 			public const string Listener_Password = "Listener_Password";
 			public const string Listener_Port_Help = "Listener_Port_Help";
+			public const string Listener_Queue = "Listener_Queue";
 			public const string Listener_ResourceName = "Listener_ResourceName";
 			public const string Listener_StartMessageSequence = "Listener_StartMessageSequence";
 			public const string Listener_StartMessageSequence_Help = "Listener_StartMessageSequence_Help";

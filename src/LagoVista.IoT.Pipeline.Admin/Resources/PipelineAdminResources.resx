@@ -739,4 +739,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Listener_ConnectSSLTLS" xml:space="preserve">
     <value>Connect with SSL/TLS</value>
   </data>
+  <data name="Listener_Queue" xml:space="preserve">
+    <value>Queue</value>
+  </data>
 </root>
