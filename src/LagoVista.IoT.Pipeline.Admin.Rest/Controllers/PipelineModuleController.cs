@@ -518,12 +518,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// <summary>
         /// Planner - Update
         /// </summary>
-        /// <param name="transmitterConfiguration"></param>
+        /// <param name="plannerConfiguration"></param>
         /// <returns></returns>
         [HttpPut("/api/pipeline/admin/planner")]
-        public Task<InvokeResult> UpdatePlannerConfigurationAsync([FromBody] PlannerConfiguration transmitterConfiguration)
+        public Task<InvokeResult> UpdatePlannerConfigurationAsync([FromBody] PlannerConfiguration plannerConfiguration)
         {
-            return _pipelineModuleManager.UpdatePlannerConfigurationAsync(transmitterConfiguration, OrgEntityHeader, UserEntityHeader);
+            return _pipelineModuleManager.UpdatePlannerConfigurationAsync(plannerConfiguration, OrgEntityHeader, UserEntityHeader);
         }
 
         /// <summary>
