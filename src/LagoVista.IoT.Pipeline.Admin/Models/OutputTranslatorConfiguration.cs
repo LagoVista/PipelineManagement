@@ -11,7 +11,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     {
         public enum OutputTranslatorTypes
         {
-            [EnumLabel("binary", PipelineAdminResources.Names.Translator_Type_Binary, typeof(PipelineAdminResources))]
+            [EnumLabel("message", PipelineAdminResources.Names.Translator_Type_Message, typeof(PipelineAdminResources))]
+            MessageBased,
+            /*[EnumLabel("binary", PipelineAdminResources.Names.Translator_Type_Binary, typeof(PipelineAdminResources))]
             Binary,
             [EnumLabel("string", PipelineAdminResources.Names.Translator_Type_String, typeof(PipelineAdminResources))]
             String,
@@ -20,9 +22,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             [EnumLabel("json", PipelineAdminResources.Names.Translator_Type_JSON, typeof(PipelineAdminResources))]
             JSON,            
             [EnumLabel("xml", PipelineAdminResources.Names.Translator_Type_XML, typeof(PipelineAdminResources))]
-            XML,            
+            XML,            */
             [EnumLabel("custom", PipelineAdminResources.Names.Translator_Type_Custom, typeof(PipelineAdminResources))]
             Custom
+        }
+
+        public OutputTranslatorConfiguration()
+        {
+            OutputTranslatorType = EntityHeader<OutputTranslatorTypes>.Create(OutputTranslatorTypes.MessageBased);
         }
 
         public override string ModuleType => PipelineModuleType_OutputTranslator;

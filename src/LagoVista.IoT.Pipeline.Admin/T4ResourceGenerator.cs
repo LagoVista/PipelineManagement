@@ -635,6 +635,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Translator_Type_Custom
 
 		public static string Translator_Type_Custom { get { return GetResourceString("Translator_Type_Custom"); } }
+//Resources:PipelineAdminResources:Translator_Type_Default
+
+		public static string Translator_Type_Default { get { return GetResourceString("Translator_Type_Default"); } }
 //Resources:PipelineAdminResources:Translator_Type_Delimited
 
 		public static string Translator_Type_Delimited { get { return GetResourceString("Translator_Type_Delimited"); } }
@@ -871,6 +874,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Sentinel_Title = "Sentinel_Title";
 			public const string Translator_Type_Binary = "Translator_Type_Binary";
 			public const string Translator_Type_Custom = "Translator_Type_Custom";
+			public const string Translator_Type_Default = "Translator_Type_Default";
 			public const string Translator_Type_Delimited = "Translator_Type_Delimited";
 			public const string Translator_Type_JSON = "Translator_Type_JSON";
 			public const string Translator_Type_Message = "Translator_Type_Message";
