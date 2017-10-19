@@ -62,6 +62,7 @@ try{
 	var currentClass = "";
 	var thisIsFirstEntryInClass = true;
 	var names = new List<string>();
+
 	foreach(var entry in AllEntries)
 	{
 	    WriteLine("//" + entry.Path + ":" + entry.File+ ":" + entry.Name);
@@ -319,17 +320,16 @@ Project GetProjectContainingT4File(DTE dte) {
     // Find the .tt file's ProjectItem
     ProjectItem projectItem = dte.Solution.FindProjectItem(Host.TemplateFile);
 
-	/*
     // If the .tt file is not opened, open it
     if (projectItem.Document == null)
         projectItem.Open(Constants.vsViewKindCode);
 
-    if (AlwaysKeepTemplateDirty) {
+    //if (AlwaysKeepTemplateDirty) {
         // Mark the .tt file as unsaved. This way it will be saved and update itself next time the
         // project is built. Basically, it keeps marking itself as unsaved to make the next build work.
         // Note: this is certainly hacky, but is the best I could come up with so far.
         projectItem.Document.Saved = false;
-    }*/
+    //}
 
     return projectItem.ContainingProject;
 }

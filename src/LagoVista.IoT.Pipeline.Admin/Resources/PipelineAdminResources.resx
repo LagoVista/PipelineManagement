@@ -742,4 +742,10 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Listener_Queue" xml:space="preserve">
     <value>Queue</value>
   </data>
+  <data name="Listener_HubName" xml:space="preserve">
+    <value>Hub Name</value>
+  </data>
+  <data name="Transmitter_Headers" xml:space="preserve">
+    <value>Headers</value>
+  </data>
 </root>
