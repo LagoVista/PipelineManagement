@@ -31,7 +31,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             MQTTClient,
             [EnumLabel("originallistener", PipelineAdminResources.Names.Transmitter_TransmitterType_OriginalListener, typeof(PipelineAdminResources))]
             OriginalListener,
-            
+
             /*[EnumLabel("mqtt", PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
             MQTT,
             [EnumLabel("soap", PipelineAdminResources.Names.Connection_Type_Soap, typeof(PipelineAdminResources))]
@@ -60,7 +60,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectSSLTLS, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool SecureConnection { get; set; }
-
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string UserName { get; set; }
@@ -99,7 +98,46 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [CustomValidator]
         public void Validate(ValidationResult result)
         {
+            if (EntityHeader.IsNullOrEmpty(TransmitterType))
+            {
+                result.AddUserError(Resources.PipelineAdminResources.Err_TransmitterTypeIsRequired);
+                return;
+            }
 
+            switch (TransmitterType.Value)
+            {
+                case TransmitterTypes.AzureEventHub:
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
+                    if (string.IsNullOrEmpty(HubName)) result.AddUserError("Hub Name is a Required Field.");
+                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
+                    if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
+                    break;
+                case TransmitterTypes.AzureIoTHub:
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
+                    if (string.IsNullOrEmpty(AccessKeyName)) result.AddUserError("Access Key Name is a Required Field.");
+                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
+                    if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
+                    break;
+                case TransmitterTypes.AzureServiceBus:
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
+                    if (string.IsNullOrEmpty(Queue)) result.AddUserError("QUeue is a Required Field.");
+                    if (string.IsNullOrEmpty(AccessKeyName)) result.AddUserError("Access Key Name is a Required Field.");
+                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
+                    if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
+                    break;
+                case TransmitterTypes.MQTTClient:
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
+                    if (!ConnectToPort.HasValue) result.AddUserError("Port is a Required field, this is usually 1883 or 8883 for a secure connection.");
+                    break;
+                case TransmitterTypes.OriginalListener:
+                    break;
+                case TransmitterTypes.Rest:
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
+                    if (String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password)) result.AddUserError("If User Name is Provided, Password must also be provided.");
+                    if (!String.IsNullOrEmpty(UserName) && String.IsNullOrEmpty(Password)) result.AddUserError("If Password is Provided, Name must also be provided");
+
+                    break;
+            }
         }
     }
 }

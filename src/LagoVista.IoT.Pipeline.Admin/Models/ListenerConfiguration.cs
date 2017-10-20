@@ -194,7 +194,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 case ListenerTypes.AMQP:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for Connecting to an AMQP Server.");
-                    if(!Anonymous)
+                    if (string.IsNullOrEmpty(Topic)) result.AddUserError("Topic is required for Connecting to an AMQP Server.");
+                    if (!Anonymous)
                     {
                         if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your AMQP server for non-anonymous connections.");
                         if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to connect to your AMQP server for non-anonymous connections.");

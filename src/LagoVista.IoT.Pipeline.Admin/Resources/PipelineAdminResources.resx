@@ -748,4 +748,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Transmitter_Headers" xml:space="preserve">
     <value>Headers</value>
   </data>
+  <data name="Err_TransmitterTypeIsRequired" xml:space="preserve">
+    <value>Transmitter Type is Required</value>
+  </data>
 </root>
