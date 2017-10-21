@@ -61,6 +61,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectSSLTLS, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool SecureConnection { get; set; }
 
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Anonymous, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
+        public bool Anonymous { get; set; }
+
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string UserName { get; set; }
 
@@ -120,14 +124,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     break;
                 case TransmitterTypes.AzureServiceBus:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
-                    if (string.IsNullOrEmpty(Queue)) result.AddUserError("QUeue is a Required Field.");
+                    if (string.IsNullOrEmpty(Queue)) result.AddUserError("Queue is a Required Field.");
                     if (string.IsNullOrEmpty(AccessKeyName)) result.AddUserError("Access Key Name is a Required Field.");
-                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
+                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for an Azure Service Bus Transmitter.");
                     if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
                     break;
                 case TransmitterTypes.MQTTClient:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
                     if (!ConnectToPort.HasValue) result.AddUserError("Port is a Required field, this is usually 1883 or 8883 for a secure connection.");
+                    if (String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password)) result.AddUserError("If User Name is Provided, Password must also be provided.");
+                    if (!String.IsNullOrEmpty(UserName) && String.IsNullOrEmpty(Password)) result.AddUserError("If Password is Provided, Name must also be provided");
                     break;
                 case TransmitterTypes.OriginalListener:
                     break;
