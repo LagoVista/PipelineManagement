@@ -1,13 +1,10 @@
 ﻿using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using LagoVista.Core;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.Core.Managers;
-using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Interfaces;
 using static LagoVista.Core.Models.AuthorizeResult;
 using LagoVista.Core.Validation;
@@ -104,6 +101,23 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         {
             await AuthorizeAsync(transmitterConfiguration, AuthorizeActions.Create, user, org);
             ValidationCheck(transmitterConfiguration, Actions.Create);
+
+            if (!String.IsNullOrEmpty(transmitterConfiguration.AccessKey))
+            {
+                var addSecretResult = await _secureStorage.AddSecretAsync(transmitterConfiguration.AccessKey);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                transmitterConfiguration.SecureAccessKeyId = addSecretResult.Result;
+                transmitterConfiguration.AccessKey = null;
+            }
+
+            if (!String.IsNullOrEmpty(transmitterConfiguration.Password))
+            {
+                var addSecretResult = await _secureStorage.AddSecretAsync(transmitterConfiguration.Password);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                transmitterConfiguration.SecurePasswordId = addSecretResult.Result;
+                transmitterConfiguration.Password = null;
+            }
+
             await _transmitterConfigurationRepo.AddTransmitterConfigurationAsync(transmitterConfiguration);
             return InvokeResult.Success;
         }
@@ -183,6 +197,27 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         {
             await AuthorizeAsync(transmitterConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(transmitterConfiguration, Actions.Update);
+
+            if (!String.IsNullOrEmpty(transmitterConfiguration.AccessKey))
+            {
+                await _secureStorage.RemoveSecretAsync(transmitterConfiguration.SecureAccessKeyId);
+
+                var addSecretResult = await _secureStorage.AddSecretAsync(transmitterConfiguration.AccessKey);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                transmitterConfiguration.SecureAccessKeyId = addSecretResult.Result;
+                transmitterConfiguration.AccessKey = null;
+            }
+
+            if (!String.IsNullOrEmpty(transmitterConfiguration.Password))
+            {
+                await _secureStorage.RemoveSecretAsync(transmitterConfiguration.SecurePasswordId);
+
+                var addSecretResult = await _secureStorage.AddSecretAsync(transmitterConfiguration.Password);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                transmitterConfiguration.SecurePasswordId = addSecretResult.Result;
+                transmitterConfiguration.Password = null;
+            }
+
             await _transmitterConfigurationRepo.UpdateTransmitterConfigurationAsync(transmitterConfiguration);
             return InvokeResult.Success;
         }

@@ -754,4 +754,40 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Listener_Subscriptions" xml:space="preserve">
     <value>Subscriptions</value>
   </data>
+  <data name="Listener_AccessKeyName_Help" xml:space="preserve">
+    <value>Please provide the name of the Access Key or Shared Access Policy for the provided Access Key, ensure this access key has the proper claims to access the resource.  See the associated help for required claims.</value>
+  </data>
+  <data name="Listener_AccessKey_Help" xml:space="preserve">
+    <value>Please provide the Access Key that has proper permission to access this server resource.  The Access Key is a Base 64 Encoded value such as f9/XxrkJ84bnH+z7+5tTbHbANhYtqo1E4vryLtpoyUc= </value>
+  </data>
+  <data name="Listener_ConsumerGroup_Help" xml:space="preserve">
+    <value>Please provide the Consumer Group for this event hub, if you leave this blank your listener will use the $Default Consumer Group.</value>
+  </data>
+  <data name="Listener_HubName_Help" xml:space="preserve">
+    <value>Please provide the name of the Event Hub resource for this connection.</value>
+  </data>
+  <data name="Listener_Password_Help" xml:space="preserve">
+    <value>Please provide a Password to allow access to this resource.</value>
+  </data>
+  <data name="Listener_Queue_Help" xml:space="preserve">
+    <value>Please provide the name of the Queue resource for this connection.</value>
+  </data>
+  <data name="Listener_RESTServerType" xml:space="preserve">
+    <value>Allowable Connection Type</value>
+  </data>
+  <data name="Listener_RESTServerType_HTTP" xml:space="preserve">
+    <value>HTTP</value>
+  </data>
+  <data name="Listener_RESTServerType_HTTPorHTTPS" xml:space="preserve">
+    <value>HTTP or HTTPS</value>
+  </data>
+  <data name="Listener_RESTServerType_HTTPS" xml:space="preserve">
+    <value>HTTPS</value>
+  </data>
+  <data name="Listener_RESTServerType_Select" xml:space="preserve">
+    <value>-select connection type-</value>
+  </data>
+  <data name="Listener_UserName_Help" xml:space="preserve">
+    <value>Please provide a User Name to allow access to this resource.</value>
+  </data>
 </root>

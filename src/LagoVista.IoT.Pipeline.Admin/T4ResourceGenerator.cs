@@ -182,9 +182,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_AccessKey
 
 		public static string Listener_AccessKey { get { return GetResourceString("Listener_AccessKey"); } }
+//Resources:PipelineAdminResources:Listener_AccessKey_Help
+
+		public static string Listener_AccessKey_Help { get { return GetResourceString("Listener_AccessKey_Help"); } }
 //Resources:PipelineAdminResources:Listener_AccessKeyName
 
 		public static string Listener_AccessKeyName { get { return GetResourceString("Listener_AccessKeyName"); } }
+//Resources:PipelineAdminResources:Listener_AccessKeyName_Help
+
+		public static string Listener_AccessKeyName_Help { get { return GetResourceString("Listener_AccessKeyName_Help"); } }
 //Resources:PipelineAdminResources:Listener_Anonymous
 
 		public static string Listener_Anonymous { get { return GetResourceString("Listener_Anonymous"); } }
@@ -194,6 +200,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_ConnectToPort
 
 		public static string Listener_ConnectToPort { get { return GetResourceString("Listener_ConnectToPort"); } }
+//Resources:PipelineAdminResources:Listener_ConsumerGroup_Help
+
+		public static string Listener_ConsumerGroup_Help { get { return GetResourceString("Listener_ConsumerGroup_Help"); } }
 //Resources:PipelineAdminResources:Listener_DelimitedWithSOH_EOT
 
 		public static string Listener_DelimitedWithSOH_EOT { get { return GetResourceString("Listener_DelimitedWithSOH_EOT"); } }
@@ -224,6 +233,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_HubName
 
 		public static string Listener_HubName { get { return GetResourceString("Listener_HubName"); } }
+//Resources:PipelineAdminResources:Listener_HubName_Help
+
+		public static string Listener_HubName_Help { get { return GetResourceString("Listener_HubName_Help"); } }
 //Resources:PipelineAdminResources:Listener_KeepAliveToSendReply
 
 		public static string Listener_KeepAliveToSendReply { get { return GetResourceString("Listener_KeepAliveToSendReply"); } }
@@ -293,15 +305,36 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_Password
 
 		public static string Listener_Password { get { return GetResourceString("Listener_Password"); } }
+//Resources:PipelineAdminResources:Listener_Password_Help
+
+		public static string Listener_Password_Help { get { return GetResourceString("Listener_Password_Help"); } }
 //Resources:PipelineAdminResources:Listener_Port_Help
 
 		public static string Listener_Port_Help { get { return GetResourceString("Listener_Port_Help"); } }
 //Resources:PipelineAdminResources:Listener_Queue
 
 		public static string Listener_Queue { get { return GetResourceString("Listener_Queue"); } }
+//Resources:PipelineAdminResources:Listener_Queue_Help
+
+		public static string Listener_Queue_Help { get { return GetResourceString("Listener_Queue_Help"); } }
 //Resources:PipelineAdminResources:Listener_ResourceName
 
 		public static string Listener_ResourceName { get { return GetResourceString("Listener_ResourceName"); } }
+//Resources:PipelineAdminResources:Listener_RESTServerType
+
+		public static string Listener_RESTServerType { get { return GetResourceString("Listener_RESTServerType"); } }
+//Resources:PipelineAdminResources:Listener_RESTServerType_HTTP
+
+		public static string Listener_RESTServerType_HTTP { get { return GetResourceString("Listener_RESTServerType_HTTP"); } }
+//Resources:PipelineAdminResources:Listener_RESTServerType_HTTPorHTTPS
+
+		public static string Listener_RESTServerType_HTTPorHTTPS { get { return GetResourceString("Listener_RESTServerType_HTTPorHTTPS"); } }
+//Resources:PipelineAdminResources:Listener_RESTServerType_HTTPS
+
+		public static string Listener_RESTServerType_HTTPS { get { return GetResourceString("Listener_RESTServerType_HTTPS"); } }
+//Resources:PipelineAdminResources:Listener_RESTServerType_Select
+
+		public static string Listener_RESTServerType_Select { get { return GetResourceString("Listener_RESTServerType_Select"); } }
 //Resources:PipelineAdminResources:Listener_StartMessageSequence
 
 		public static string Listener_StartMessageSequence { get { return GetResourceString("Listener_StartMessageSequence"); } }
@@ -323,6 +356,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_UserName
 
 		public static string Listener_UserName { get { return GetResourceString("Listener_UserName"); } }
+//Resources:PipelineAdminResources:Listener_UserName_Help
+
+		public static string Listener_UserName_Help { get { return GetResourceString("Listener_UserName_Help"); } }
 //Resources:PipelineAdminResources:MessageFieldParseConfiguration_BinaryOffset_Help
 
 		public static string MessageFieldParseConfiguration_BinaryOffset_Help { get { return GetResourceString("MessageFieldParseConfiguration_BinaryOffset_Help"); } }
@@ -732,10 +768,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string InputTranslator_TranslatorType = "InputTranslator_TranslatorType";
 			public const string InputTranslator_TranslatorType_Select = "InputTranslator_TranslatorType_Select";
 			public const string Listener_AccessKey = "Listener_AccessKey";
+			public const string Listener_AccessKey_Help = "Listener_AccessKey_Help";
 			public const string Listener_AccessKeyName = "Listener_AccessKeyName";
+			public const string Listener_AccessKeyName_Help = "Listener_AccessKeyName_Help";
 			public const string Listener_Anonymous = "Listener_Anonymous";
 			public const string Listener_ConnectSSLTLS = "Listener_ConnectSSLTLS";
 			public const string Listener_ConnectToPort = "Listener_ConnectToPort";
+			public const string Listener_ConsumerGroup_Help = "Listener_ConsumerGroup_Help";
 			public const string Listener_DelimitedWithSOH_EOT = "Listener_DelimitedWithSOH_EOT";
 			public const string Listener_DelimitedWithSOH_EOT_Help = "Listener_DelimitedWithSOH_EOT_Help";
 			public const string Listener_Description = "Listener_Description";
@@ -746,6 +785,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_Help = "Listener_Help";
 			public const string Listener_HostName = "Listener_HostName";
 			public const string Listener_HubName = "Listener_HubName";
+			public const string Listener_HubName_Help = "Listener_HubName_Help";
 			public const string Listener_KeepAliveToSendReply = "Listener_KeepAliveToSendReply";
 			public const string Listener_KeepAliveToSendReply_Timeout = "Listener_KeepAliveToSendReply_Timeout";
 			public const string Listener_KeepAliveToSendReplyTimeout_Help = "Listener_KeepAliveToSendReplyTimeout_Help";
@@ -769,9 +809,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_MessageReceivedTimeout = "Listener_MessageReceivedTimeout";
 			public const string Listener_MessageReceivedTimeout_Help = "Listener_MessageReceivedTimeout_Help";
 			public const string Listener_Password = "Listener_Password";
+			public const string Listener_Password_Help = "Listener_Password_Help";
 			public const string Listener_Port_Help = "Listener_Port_Help";
 			public const string Listener_Queue = "Listener_Queue";
+			public const string Listener_Queue_Help = "Listener_Queue_Help";
 			public const string Listener_ResourceName = "Listener_ResourceName";
+			public const string Listener_RESTServerType = "Listener_RESTServerType";
+			public const string Listener_RESTServerType_HTTP = "Listener_RESTServerType_HTTP";
+			public const string Listener_RESTServerType_HTTPorHTTPS = "Listener_RESTServerType_HTTPorHTTPS";
+			public const string Listener_RESTServerType_HTTPS = "Listener_RESTServerType_HTTPS";
+			public const string Listener_RESTServerType_Select = "Listener_RESTServerType_Select";
 			public const string Listener_StartMessageSequence = "Listener_StartMessageSequence";
 			public const string Listener_StartMessageSequence_Help = "Listener_StartMessageSequence_Help";
 			public const string Listener_Subscription = "Listener_Subscription";
@@ -779,6 +826,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_Title = "Listener_Title";
 			public const string Listener_Topic = "Listener_Topic";
 			public const string Listener_UserName = "Listener_UserName";
+			public const string Listener_UserName_Help = "Listener_UserName_Help";
 			public const string MessageFieldParseConfiguration_BinaryOffset_Help = "MessageFieldParseConfiguration_BinaryOffset_Help";
 			public const string MessageFieldParserConfiguration_BinaryOffset = "MessageFieldParserConfiguration_BinaryOffset";
 			public const string MessageFieldParserConfiguration_BinaryType = "MessageFieldParserConfiguration_BinaryType";

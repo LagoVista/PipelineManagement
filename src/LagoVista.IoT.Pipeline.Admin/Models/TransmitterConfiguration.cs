@@ -5,7 +5,9 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Resources;
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
@@ -14,7 +16,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     {
         public TransmitterConfiguration()
         {
-            Headers = new ObservableCollection<Header>();
+            Headers = new List<Header>();
         }
 
         public enum TransmitterTypes
@@ -65,10 +67,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Anonymous, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool Anonymous { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, HelpResource: PipelineAdminResources.Names.Listener_UserName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string UserName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Password, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Password, HelpResource: PipelineAdminResources.Names.Listener_Password_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Password { get; set; }
 
         public string SecurePasswordId { get; set; }
@@ -76,21 +78,21 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_HostName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string HostName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKeyName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKeyName, HelpResource: PipelineAdminResources.Names.Listener_AccessKeyName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string AccessKeyName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKey, HelpResource: PipelineAdminResources.Names.Listener_AccessKey_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string AccessKey { get; set; }
 
         public string SecureAccessKeyId { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Transmitter_Headers, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public ObservableCollection<Header> Headers { get; set; }
+        public List<Header> Headers { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_HubName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_HubName, HelpResource: PipelineAdminResources.Names.Listener_HubName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string HubName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Queue, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Queue, HelpResource: PipelineAdminResources.Names.Listener_Queue_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Queue { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectToPort, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources))]
@@ -132,15 +134,40 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 case TransmitterTypes.MQTTClient:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
                     if (!ConnectToPort.HasValue) result.AddUserError("Port is a Required field, this is usually 1883 or 8883 for a secure connection.");
-                    if (String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password)) result.AddUserError("If User Name is Provided, Password must also be provided.");
-                    if (!String.IsNullOrEmpty(UserName) && String.IsNullOrEmpty(Password)) result.AddUserError("If Password is Provided, Name must also be provided");
+                    if (!Anonymous)
+                    {
+                        if (String.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required for non-Anonymous Connections.");
+                        if (String.IsNullOrEmpty(Password)) result.AddUserError("Password is Required for non-Anonymous Connections");
+                    }
+                    else
+                    {
+                        this.Password = null;
+                        this.UserName = null;
+                    }
                     break;
                 case TransmitterTypes.OriginalListener:
                     break;
                 case TransmitterTypes.Rest:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
                     if (String.IsNullOrEmpty(UserName) && !String.IsNullOrEmpty(Password)) result.AddUserError("If User Name is Provided, Password must also be provided.");
-                    if (!String.IsNullOrEmpty(UserName) && String.IsNullOrEmpty(Password)) result.AddUserError("If Password is Provided, Name must also be provided");
+                    if (!Anonymous)
+                    {
+                        if (String.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required for non-Anonymous Connections.");
+                        if (String.IsNullOrEmpty(Password)) result.AddUserError("Password is Required for non-Anonymous Connections");
+                    }
+                    else
+                    {
+                        this.Password = null;
+                        this.UserName = null;
+                    }
+
+                    if (Headers == null) Headers = new List<Header>();
+                    Headers.RemoveAll(hdr => String.IsNullOrEmpty(hdr.Name) && String.IsNullOrEmpty(hdr.Value));
+
+                    foreach (var header in Headers)
+                    {
+                        if (string.IsNullOrEmpty(header.Name) || string.IsNullOrEmpty(header.Value)) result.AddUserError("Invalid Header Value, Name and Value are both Required.");
+                    }
 
                     break;
             }

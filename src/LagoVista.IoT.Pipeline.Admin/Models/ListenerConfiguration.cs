@@ -59,6 +59,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         FourBytes
     }
 
+    public enum RESTServerTypes
+    {
+        [EnumLabel(ListenerConfiguration.RESTServerType_HTTP, PipelineAdminResources.Names.Listener_RESTServerType_HTTP, typeof(PipelineAdminResources))]
+        HTTP,
+        [EnumLabel(ListenerConfiguration.RESTServerType_HTTPS, PipelineAdminResources.Names.Listener_RESTServerType_HTTPS, typeof(PipelineAdminResources))]
+        HTTPS,
+        [EnumLabel(ListenerConfiguration.RESTServerType_HTTPorHTTPS, PipelineAdminResources.Names.Listener_RESTServerType_HTTPS, typeof(PipelineAdminResources))]
+        HTTPorHTTPS
+    }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
     public class ListenerConfiguration : PipelineModuleConfiguration
@@ -67,6 +76,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string MessageLengthSize_One = "one";
         public const string MessageLengthSize_Two = "two";
         public const string MessageLengthSize_Four = "four";
+
+        public const string RESTServerType_HTTP = "http";
+        public const string RESTServerType_HTTPS = "https";
+        public const string RESTServerType_HTTPorHTTPS = "httporhttps";
 
         public const string ListenerTypes_AzureServiceBus = "azureserivcebus";
         public const string ListenerTypes_AzureEventHub = "azureeventhub";
@@ -115,6 +128,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Length_Endiness, HelpResource: PipelineAdminResources.Names.Listener_Length_Endiness_Help, FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.Listener_MessageLength_Select, EnumType: typeof(MessageLengthSize), ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public EntityHeader<EndianTypes> MessageLengthByteCountEndiness { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_RESTServerType, FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.Listener_RESTServerType_Select, EnumType: typeof(RESTServerTypes), ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public EntityHeader<RESTServerTypes> RestServerType { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Anonymous, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool Anonymous { get; set; }
@@ -122,11 +137,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectSSLTLS, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool SecureConnection { get; set; }
 
-
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, HelpResource: PipelineAdminResources.Names.Listener_UserName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string UserName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Password, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Password, HelpResource: PipelineAdminResources.Names.Listener_Password_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Password { get; set; }
 
         public string SecurePasswordId { get; set; }
@@ -134,10 +148,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_HostName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string HostName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKeyName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKeyName, HelpResource: PipelineAdminResources.Names.Listener_AccessKeyName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string AccessKeyName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKey, HelpResource: PipelineAdminResources.Names.Listener_AccessKey_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string AccessKey { get; set; }
 
         public string SecureAccessKeyId { get; set; }
@@ -146,8 +160,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Topic, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Topic { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Queue, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public string Queue { get; set; }
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Queue, HelpResource: PipelineAdminResources.Names.Listener_Queue_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+         public string Queue { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Endpoint, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
@@ -156,10 +170,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ResourceName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string ResourceName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_EventHub_ConsumerGroup, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_EventHub_ConsumerGroup, HelpResource: PipelineAdminResources.Names.Listener_ConsumerGroup_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string ConsumerGroup { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_HubName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_HubName, HelpResource: PipelineAdminResources.Names.Listener_HubName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string HubName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenOnPort, HelpResource: PipelineAdminResources.Names.Listener_Port_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources))]
@@ -247,8 +261,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for Connecting to an MQTT Server.");
                     if (!Anonymous)
                     {
-                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your AMQP server for non-anonymous connections.");
-                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to connect to your AMQP server for non-anonymous connections.");
+                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your MQTT Broker for non-anonymous connections.");
+                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to connect to your MQTT Broker for non-anonymous connections.");
                     }
                     else
                     {
@@ -287,7 +301,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your UDP listenr will listen for incoming messages.");
                     break;
                 case ListenerTypes.Rest:
-                    if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your REST listenr will listen for incoming messages.");
+                    if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your REST listenr will listen for incoming messages, this is usually port 80 for HTTP and 443 for HTTPS.");
+                    if (EntityHeader.IsNullOrEmpty(RestServerType)) result.AddUserError("Allowable Connection Type is required for an REST Listener.");
                     break;
             }
         }
