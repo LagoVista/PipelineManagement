@@ -1,18 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.2</TargetFramework>
+    <NetStandardImplicitPackageVersion>2.0.1</NetStandardImplicitPackageVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Models\IMessageFieldParserConfiguration.cs" />
-    <Compile Remove="Models\MessageFieldParserConfiguration.cs" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="LagoVista.Core" Version="1.2.163-alpha0901" />
     <PackageReference Include="LagoVista.Core.Authentication" Version="1.2.163-alpha0901" />
     <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="1.2.163-alpha0901" />
     <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="1.2.163-alpha0901" />
     <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.163-alpha0901" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />

@@ -1,10 +1,6 @@
-﻿using LagoVista.IoT.Pipeline.Admin.Models;
+﻿using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.CloudRepos.Repos;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.IoT.Pipeline.CloudRepos
 {

@@ -1,9 +1,6 @@
-﻿using LagoVista.IoT.Logging;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.IoT.Logging;
 using LagoVista.IoT.Pipeline.Admin.Managers;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.IoT.Pipeline.Admin
 {
