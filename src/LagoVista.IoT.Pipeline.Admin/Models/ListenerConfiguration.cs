@@ -305,6 +305,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (EntityHeader.IsNullOrEmpty(RestServerType)) result.AddUserError("Allowable Connection Type is required for an REST Listener.");
                     break;
             }
+            
         }
+
+        /// <summary>
+        /// Populated at run time so any modules that need to create temporary storage for event hub checkpoint containers
+        /// </summary>
+        public string EventHubCheckPointContainerStorageAccountId { get; set; }
+
+        /// <summary>
+        /// Populated at run time so any modules that need to create temporary storage for event hub checkpoint containers
+        /// </summary>
+        public string EventHubCheckPointContainerStorageAccessKey { get; set; }
     }
 }
