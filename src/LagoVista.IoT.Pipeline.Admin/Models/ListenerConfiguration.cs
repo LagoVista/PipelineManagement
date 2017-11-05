@@ -27,17 +27,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         MQTTBroker,*/
         [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Client, PipelineAdminResources.Names.Connection_Type_MQTT_Client, typeof(PipelineAdminResources))]
         MQTTClient,
-        [EnumLabel(ListenerConfiguration.ListenerTypes_REST, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
-        Rest,
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawTCP, PipelineAdminResources.Names.Connection_Type_TCP, typeof(PipelineAdminResources))]
         RawTCP,
         [EnumLabel(ListenerConfiguration.ListenerTypes_RabbitMQClient, PipelineAdminResources.Names.ConnectionType_RabbitMQClient, typeof(PipelineAdminResources))]
         RabbitMQClient,
+        [EnumLabel(ListenerConfiguration.ListenerTypes_REST, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
+        Rest,
         /*[EnumLabel(ListenerConfiguration.ListenerTypes_RabbitMQ, PipelineAdminResources.Names.ConnectionType_RabbitMQ, typeof(PipelineAdminResources))]
         RabbitMQ,*/
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawUdp, PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
         RawUDP,
-
+        [EnumLabel(ListenerConfiguration.ListenerTypes_WebSocket, PipelineAdminResources.Names.Connection_Type_WebSocket, typeof(PipelineAdminResources))]
+        WebSocket,
         /*
             Soap,
         
@@ -96,6 +97,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ListenerTypes_MQTT_Client = "mqttclient";
         public const string ListenerTypes_POP3Server = "pop3server";
         public const string ListenerTypes_Custom = "custom";
+        public const string ListenerTypes_WebSocket = "websocket";
 
         public override string ModuleType => PipelineModuleType_Listener;
 
@@ -182,6 +184,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectToPort, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources))]
         public int? ConnectToPort { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_SupportedProtocol, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources))]
+        public string SupportedProtocol { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Path, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources))]
+        public string Path { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Origin, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources))]
+        public string Origin { get; set; }
+            
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_KeepAliveToSendReply, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public bool KeepAliveToSendReply { get; set; }
@@ -249,8 +260,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
                     break;
                 case ListenerTypes.AzureServiceBus:
-                    if (HostName != null && HostName.ToLower().StartsWith("sb://")) HostName = HostName.Substring(5);
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for an Azure Service Bus Listener, this is the host name of your Event Hub without the sb:// protocol.");
+                    if (HostName != null && HostName.ToLower().StartsWith("sb://")) HostName = HostName.Substring(5);
                     if (string.IsNullOrEmpty(Queue)) result.AddUserError("Queue Name is required for an Azure Service Bus Listener.");
                     if (string.IsNullOrEmpty(AccessKeyName)) result.AddUserError("Access Key Name is a required field for an Azure Serice Bus Listener.");
                     if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for an Azure IoT Service Bus Listener.");
@@ -272,6 +283,24 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (!ConnectToPort.HasValue) result.AddUserError("Please provide a port that your MQTT Client will connect, usually 1883 or 8883 (SSL).");
                     MqttSubscriptions.RemoveAll(sub => string.IsNullOrEmpty(sub.Topic));
                     if (!MqttSubscriptions.Any()) result.AddUserError("Please ensure you provide at least one subscription (including wildcards + and #) that will be monitored for incoming messages.");                    
+
+                    break;
+                case ListenerTypes.WebSocket:
+                    if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for an Azure Service Bus Listener, this is the host name of your Event Hub without the sb:// protocol.");
+                    if (HostName != null && HostName.ToLower().StartsWith("wss://")) HostName = HostName.Substring(5);
+                    if (HostName != null && HostName.ToLower().StartsWith("ws://")) HostName = HostName.Substring(4);
+                    if (!string.IsNullOrEmpty(Path) && !Path.StartsWith("/")) Path = "/" + Path; 
+
+                    if (!Anonymous)
+                    {
+                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to to be used to authenticate MQTT clients authenticating with your broker.");
+                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to to be used to authenticate MQTT clients authenticating with your broker.");
+                    }
+                    else
+                    {
+                        UserName = null;
+                        Password = null;
+                    }
 
                     break;
                 case ListenerTypes.MQTTListener:

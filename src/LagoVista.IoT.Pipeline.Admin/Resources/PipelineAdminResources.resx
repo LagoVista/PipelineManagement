@@ -790,4 +790,16 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Listener_UserName_Help" xml:space="preserve">
     <value>Please provide a User Name to allow access to this resource.</value>
   </data>
+  <data name="Connection_Type_WebSocket" xml:space="preserve">
+    <value>Web Socket</value>
+  </data>
+  <data name="Listener_Origin" xml:space="preserve">
+    <value>Origin</value>
+  </data>
+  <data name="Listener_Path" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="Listener_SupportedProtocol" xml:space="preserve">
+    <value>Supported Protocol</value>
+  </data>
 </root>

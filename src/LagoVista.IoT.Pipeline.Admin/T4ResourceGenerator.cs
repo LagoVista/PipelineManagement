@@ -116,6 +116,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Connection_Type_UDP
 
 		public static string Connection_Type_UDP { get { return GetResourceString("Connection_Type_UDP"); } }
+//Resources:PipelineAdminResources:Connection_Type_WebSocket
+
+		public static string Connection_Type_WebSocket { get { return GetResourceString("Connection_Type_WebSocket"); } }
 //Resources:PipelineAdminResources:ConnectionType_MQTT_Listener
 
 		public static string ConnectionType_MQTT_Listener { get { return GetResourceString("ConnectionType_MQTT_Listener"); } }
@@ -302,12 +305,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_MessageReceivedTimeout_Help
 
 		public static string Listener_MessageReceivedTimeout_Help { get { return GetResourceString("Listener_MessageReceivedTimeout_Help"); } }
+//Resources:PipelineAdminResources:Listener_Origin
+
+		public static string Listener_Origin { get { return GetResourceString("Listener_Origin"); } }
 //Resources:PipelineAdminResources:Listener_Password
 
 		public static string Listener_Password { get { return GetResourceString("Listener_Password"); } }
 //Resources:PipelineAdminResources:Listener_Password_Help
 
 		public static string Listener_Password_Help { get { return GetResourceString("Listener_Password_Help"); } }
+//Resources:PipelineAdminResources:Listener_Path
+
+		public static string Listener_Path { get { return GetResourceString("Listener_Path"); } }
 //Resources:PipelineAdminResources:Listener_Port_Help
 
 		public static string Listener_Port_Help { get { return GetResourceString("Listener_Port_Help"); } }
@@ -347,6 +356,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Listener_Subscriptions
 
 		public static string Listener_Subscriptions { get { return GetResourceString("Listener_Subscriptions"); } }
+//Resources:PipelineAdminResources:Listener_SupportedProtocol
+
+		public static string Listener_SupportedProtocol { get { return GetResourceString("Listener_SupportedProtocol"); } }
 //Resources:PipelineAdminResources:Listener_Title
 
 		public static string Listener_Title { get { return GetResourceString("Listener_Title"); } }
@@ -746,6 +758,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Connection_Type_Soap = "Connection_Type_Soap";
 			public const string Connection_Type_TCP = "Connection_Type_TCP";
 			public const string Connection_Type_UDP = "Connection_Type_UDP";
+			public const string Connection_Type_WebSocket = "Connection_Type_WebSocket";
 			public const string ConnectionType_MQTT_Listener = "ConnectionType_MQTT_Listener";
 			public const string ConnectionType_RabbitMQ = "ConnectionType_RabbitMQ";
 			public const string ConnectionType_RabbitMQClient = "ConnectionType_RabbitMQClient";
@@ -808,8 +821,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_MessageLength_Select = "Listener_MessageLength_Select";
 			public const string Listener_MessageReceivedTimeout = "Listener_MessageReceivedTimeout";
 			public const string Listener_MessageReceivedTimeout_Help = "Listener_MessageReceivedTimeout_Help";
+			public const string Listener_Origin = "Listener_Origin";
 			public const string Listener_Password = "Listener_Password";
 			public const string Listener_Password_Help = "Listener_Password_Help";
+			public const string Listener_Path = "Listener_Path";
 			public const string Listener_Port_Help = "Listener_Port_Help";
 			public const string Listener_Queue = "Listener_Queue";
 			public const string Listener_Queue_Help = "Listener_Queue_Help";
@@ -823,6 +838,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Listener_StartMessageSequence_Help = "Listener_StartMessageSequence_Help";
 			public const string Listener_Subscription = "Listener_Subscription";
 			public const string Listener_Subscriptions = "Listener_Subscriptions";
+			public const string Listener_SupportedProtocol = "Listener_SupportedProtocol";
 			public const string Listener_Title = "Listener_Title";
 			public const string Listener_Topic = "Listener_Topic";
 			public const string Listener_UserName = "Listener_UserName";
