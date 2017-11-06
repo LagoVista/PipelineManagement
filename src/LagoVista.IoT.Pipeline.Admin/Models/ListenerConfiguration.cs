@@ -234,7 +234,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (!Anonymous)
                     {
                         if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your AMQP server for non-anonymous connections.");
-                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to connect to your AMQP server for non-anonymous connections.");
+                        if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to connect to your AMQP server for non-anonymous connections.");
                     }
                     else
                     {
@@ -273,7 +273,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (!Anonymous)
                     {
                         if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your MQTT Broker for non-anonymous connections.");
-                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to connect to your MQTT Broker for non-anonymous connections.");
+                        if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to connect to your MQTT Broker for non-anonymous connections.");
                     }
                     else
                     {
@@ -293,8 +293,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
                     if (!Anonymous)
                     {
-                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to to be used to authenticate MQTT clients authenticating with your broker.");
-                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to to be used to authenticate MQTT clients authenticating with your broker.");
+                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to to be used to authenticate with your Web Socket Server.");
+                        if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to to be used to authenticate with your Web Socket Server..");
                     }
                     else
                     {
@@ -307,7 +307,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (!Anonymous)
                     {
                         if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to to be used to authenticate MQTT clients authenticating with your broker.");
-                        if (string.IsNullOrEmpty(Password)) result.AddUserError("Password is Required to to be used to authenticate MQTT clients authenticating with your broker.");
+                        if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to to be used to authenticate MQTT clients authenticating with your broker.");
                     }
                     else
                     {
