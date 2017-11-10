@@ -293,8 +293,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
                     if (!Anonymous)
                     {
-                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to to be used to authenticate with your Web Socket Server.");
-                        if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to to be used to authenticate with your Web Socket Server..");
+                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to be used to authenticate with your Web Socket Server.");
+                        if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to be used to authenticate with your Web Socket Server..");
                     }
                     else
                     {
@@ -306,8 +306,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 case ListenerTypes.MQTTListener:
                     if (!Anonymous)
                     {
-                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to to be used to authenticate MQTT clients authenticating with your broker.");
-                        if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to to be used to authenticate MQTT clients authenticating with your broker.");
+                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to be used to authenticate MQTT clients authenticating with your broker.");
+                        if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to be used to authenticate MQTT clients authenticating with your broker.");
                     }
                     else
                     {
@@ -332,6 +332,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 case ListenerTypes.Rest:
                     if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your REST listenr will listen for incoming messages, this is usually port 80 for HTTP and 443 for HTTPS.");
                     if (EntityHeader.IsNullOrEmpty(RestServerType)) result.AddUserError("Allowable Connection Type is required for an REST Listener.");
+                    if (!Anonymous)
+                    {
+                        if (string.IsNullOrEmpty(UserName)) result.AddUserError("Anonymous connections are not enabled, you must provide a user name that will be used to connect to your REST endpoint.");
+                        if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Anonymous connections are not enabled, you must provide a password that will be used to connect to your REST endpoint.");
+                    }
+                    else
+                    {
+                        UserName = null;
+                        Password = null;
+                    }
+
+
                     break;
             }
             
