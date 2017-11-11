@@ -53,6 +53,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public abstract string ModuleType { get; }
 
+        public bool DebugMode { get; set; }
+
         public PipelineModuleConfigurationSummary CreateSummary()
         {
             return new PipelineModuleConfigurationSummary()

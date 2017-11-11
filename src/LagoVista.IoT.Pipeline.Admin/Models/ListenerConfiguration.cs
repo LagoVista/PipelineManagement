@@ -10,6 +10,13 @@ using System.Linq;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
+    public enum RESTListenerTypes
+    {
+        PipelineModule,
+        InputCommandListener,
+        AcmeListener
+    }
+
     public enum ListenerTypes
     {
         [EnumLabel(ListenerConfiguration.ListenerTypes_AMQP, PipelineAdminResources.Names.Connection_Type_AMQP, typeof(PipelineAdminResources))]
@@ -105,7 +112,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         {
             MqttSubscriptions = new List<MQTTSubscription>();
             AmqpSubscriptions = new List<string>();
+            RESTListenerType = RESTListenerTypes.PipelineModule;
         }
+
+        public RESTListenerTypes RESTListenerType { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenerType, EnumType: (typeof(ListenerTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.Connection_Select_Type, IsRequired: true, IsUserEditable: true)]
         public EntityHeader<ListenerTypes> ListenerType { get; set; }
