@@ -72,9 +72,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [EnumLabel(ListenerConfiguration.RESTServerType_HTTP, PipelineAdminResources.Names.Listener_RESTServerType_HTTP, typeof(PipelineAdminResources))]
         HTTP,
         [EnumLabel(ListenerConfiguration.RESTServerType_HTTPS, PipelineAdminResources.Names.Listener_RESTServerType_HTTPS, typeof(PipelineAdminResources))]
-        HTTPS,
-        [EnumLabel(ListenerConfiguration.RESTServerType_HTTPorHTTPS, PipelineAdminResources.Names.Listener_RESTServerType_HTTPorHTTPS, typeof(PipelineAdminResources))]
-        HTTPorHTTPS
+        HTTPS,     
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
