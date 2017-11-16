@@ -683,6 +683,45 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Sentinel_Help
 
 		public static string Sentinel_Help { get { return GetResourceString("Sentinel_Help"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField
+
+		public static string Sentinel_SecurityField { get { return GetResourceString("Sentinel_SecurityField"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Description
+
+		public static string Sentinel_SecurityField_Description { get { return GetResourceString("Sentinel_SecurityField_Description"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Help
+
+		public static string Sentinel_SecurityField_Help { get { return GetResourceString("Sentinel_SecurityField_Help"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Locator
+
+		public static string Sentinel_SecurityField_Locator { get { return GetResourceString("Sentinel_SecurityField_Locator"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Locator_Help
+
+		public static string Sentinel_SecurityField_Locator_Help { get { return GetResourceString("Sentinel_SecurityField_Locator_Help"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Title
+
+		public static string Sentinel_SecurityField_Title { get { return GetResourceString("Sentinel_SecurityField_Title"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Title_Help
+
+		public static string Sentinel_SecurityField_Title_Help { get { return GetResourceString("Sentinel_SecurityField_Title_Help"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Type
+
+		public static string Sentinel_SecurityField_Type { get { return GetResourceString("Sentinel_SecurityField_Type"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Type_AccessKey
+
+		public static string Sentinel_SecurityField_Type_AccessKey { get { return GetResourceString("Sentinel_SecurityField_Type_AccessKey"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Type_BasicAuth
+
+		public static string Sentinel_SecurityField_Type_BasicAuth { get { return GetResourceString("Sentinel_SecurityField_Type_BasicAuth"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Type_Help
+
+		public static string Sentinel_SecurityField_Type_Help { get { return GetResourceString("Sentinel_SecurityField_Type_Help"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Type_Select
+
+		public static string Sentinel_SecurityField_Type_Select { get { return GetResourceString("Sentinel_SecurityField_Type_Select"); } }
+//Resources:PipelineAdminResources:Sentinel_SecurityField_Type_SharedSignature
+
+		public static string Sentinel_SecurityField_Type_SharedSignature { get { return GetResourceString("Sentinel_SecurityField_Type_SharedSignature"); } }
 //Resources:PipelineAdminResources:Sentinel_Title
 
 		public static string Sentinel_Title { get { return GetResourceString("Sentinel_Title"); } }
@@ -947,6 +986,19 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Planner_Title = "Planner_Title";
 			public const string Sentinel_Description = "Sentinel_Description";
 			public const string Sentinel_Help = "Sentinel_Help";
+			public const string Sentinel_SecurityField = "Sentinel_SecurityField";
+			public const string Sentinel_SecurityField_Description = "Sentinel_SecurityField_Description";
+			public const string Sentinel_SecurityField_Help = "Sentinel_SecurityField_Help";
+			public const string Sentinel_SecurityField_Locator = "Sentinel_SecurityField_Locator";
+			public const string Sentinel_SecurityField_Locator_Help = "Sentinel_SecurityField_Locator_Help";
+			public const string Sentinel_SecurityField_Title = "Sentinel_SecurityField_Title";
+			public const string Sentinel_SecurityField_Title_Help = "Sentinel_SecurityField_Title_Help";
+			public const string Sentinel_SecurityField_Type = "Sentinel_SecurityField_Type";
+			public const string Sentinel_SecurityField_Type_AccessKey = "Sentinel_SecurityField_Type_AccessKey";
+			public const string Sentinel_SecurityField_Type_BasicAuth = "Sentinel_SecurityField_Type_BasicAuth";
+			public const string Sentinel_SecurityField_Type_Help = "Sentinel_SecurityField_Type_Help";
+			public const string Sentinel_SecurityField_Type_Select = "Sentinel_SecurityField_Type_Select";
+			public const string Sentinel_SecurityField_Type_SharedSignature = "Sentinel_SecurityField_Type_SharedSignature";
 			public const string Sentinel_Title = "Sentinel_Title";
 			public const string Translator_Type_Binary = "Translator_Type_Binary";
 			public const string Translator_Type_Custom = "Translator_Type_Custom";

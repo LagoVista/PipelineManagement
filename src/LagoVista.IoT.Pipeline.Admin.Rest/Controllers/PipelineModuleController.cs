@@ -312,6 +312,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
 
             return sentinelConfiguration;
         }
+
+        /// <summary>
+        /// Sentinel - Create New
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/api/pipeline/admin/sentinel/securityfield/factory")]
+        public DetailResponse<SecurityField> CreateSentinelSecurityField()
+        {
+            var sentinelConfiguration = DetailResponse<SecurityField>.Create();
+            return sentinelConfiguration;
+        }
         #endregion
 
         #region Output Translator CRUD and Company...

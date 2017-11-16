@@ -802,4 +802,43 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Listener_SupportedProtocol" xml:space="preserve">
     <value>Supported Protocol</value>
   </data>
+  <data name="Sentinel_SecurityField" xml:space="preserve">
+    <value>Security Fields</value>
+  </data>
+  <data name="Sentinel_SecurityField_Help" xml:space="preserve">
+    <value>You can define a set of security field definitions that will be used to look in the message to find a value that can be used to authenticate your message.  </value>
+  </data>
+  <data name="Sentinel_SecurityField_Locator" xml:space="preserve">
+    <value>Locators</value>
+  </data>
+  <data name="Sentinel_SecurityField_Locator_Help" xml:space="preserve">
+    <value>Locators are used to locate the item within the incoming message that will be used to authenticate the device sending the message.</value>
+  </data>
+  <data name="Sentinel_SecurityField_Title" xml:space="preserve">
+    <value>Security Field</value>
+  </data>
+  <data name="Sentinel_SecurityField_Description" xml:space="preserve">
+    <value>Security Fields are used to describe where authentication information should arrive in your device messages as well as how that information should be validated.</value>
+  </data>
+  <data name="Sentinel_SecurityField_Title_Help" xml:space="preserve">
+    <value>Security Fields are used to describe where authentication information should arrive in your device messages as well as how that information should be validated. </value>
+  </data>
+  <data name="Sentinel_SecurityField_Type" xml:space="preserve">
+    <value>Authentication Type</value>
+  </data>
+  <data name="Sentinel_SecurityField_Type_Help" xml:space="preserve">
+    <value>You can define different methods on how the authentication value should be used to authenticate messages coming from your devices.</value>
+  </data>
+  <data name="Sentinel_SecurityField_Type_AccessKey" xml:space="preserve">
+    <value>Access Key</value>
+  </data>
+  <data name="Sentinel_SecurityField_Type_BasicAuth" xml:space="preserve">
+    <value>Basic Access Authentication</value>
+  </data>
+  <data name="Sentinel_SecurityField_Type_Select" xml:space="preserve">
+    <value>-select authentication scheme-</value>
+  </data>
+  <data name="Sentinel_SecurityField_Type_SharedSignature" xml:space="preserve">
+    <value>Shared Signature</value>
+  </data>
 </root>
