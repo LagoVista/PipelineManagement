@@ -33,7 +33,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public override string ModuleType => PipelineModuleType_Planner;
 
-
         [CustomValidator]
         public void Validate(ValidationResult result)
         {

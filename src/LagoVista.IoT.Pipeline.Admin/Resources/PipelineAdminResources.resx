@@ -611,10 +611,10 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Planner</value>
   </data>
   <data name="Sentinel_Description" xml:space="preserve">
-    <value>The Sential Module provides security for your Device.  It will authenticate that the device is valid,</value>
+    <value>The Sential Module provides security for your Device.  It will authenticate that the device that is sending the message is that which is claimed.</value>
   </data>
   <data name="Sentinel_Help" xml:space="preserve">
-    <value>The Sential Module provides security for your Device.  It will authenticate that the device is valid,</value>
+    <value>The Sential Module provides security for your Device.  It will authenticate that the device that is sending the message is that which is claimed.</value>
   </data>
   <data name="Sentinel_Title" xml:space="preserve">
     <value>Sentinel</value>
@@ -840,5 +840,14 @@ This is a list of parsers that are executed in the order they appear, if a match
   </data>
   <data name="Sentinel_SecurityField_Type_SharedSignature" xml:space="preserve">
     <value>Shared Signature</value>
+  </data>
+  <data name="Common_UniqueId" xml:space="preserve">
+    <value>Record Id</value>
+  </data>
+  <data name="Sentinel_SecurityField_Type_Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="Sentinel_SecurityField_Locator_Select" xml:space="preserve">
+    <value>-select field locator-</value>
   </data>
 </root>
