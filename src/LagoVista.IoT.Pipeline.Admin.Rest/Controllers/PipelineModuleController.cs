@@ -321,6 +321,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         public DetailResponse<SecurityField> CreateSentinelSecurityField()
         {
             var sentinelConfiguration = DetailResponse<SecurityField>.Create();
+            sentinelConfiguration.Model.Id = Guid.NewGuid().ToId();
             return sentinelConfiguration;
         }
         #endregion
