@@ -110,6 +110,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 //Resources:PipelineAdminResources:Connection_Type_Rest
 
 		public static string Connection_Type_Rest { get { return GetResourceString("Connection_Type_Rest"); } }
+//Resources:PipelineAdminResources:Connection_Type_SharedRest
+
+		public static string Connection_Type_SharedRest { get { return GetResourceString("Connection_Type_SharedRest"); } }
 //Resources:PipelineAdminResources:Connection_Type_Soap
 
 		public static string Connection_Type_Soap { get { return GetResourceString("Connection_Type_Soap"); } }
@@ -804,6 +807,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			public const string Connection_Type_MQTT_Client = "Connection_Type_MQTT_Client";
 			public const string Connection_Type_POP3Server = "Connection_Type_POP3Server";
 			public const string Connection_Type_Rest = "Connection_Type_Rest";
+			public const string Connection_Type_SharedRest = "Connection_Type_SharedRest";
 			public const string Connection_Type_Soap = "Connection_Type_Soap";
 			public const string Connection_Type_TCP = "Connection_Type_TCP";
 			public const string Connection_Type_UDP = "Connection_Type_UDP";

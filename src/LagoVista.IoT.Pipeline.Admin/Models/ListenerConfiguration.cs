@@ -40,6 +40,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         RabbitMQClient,
         [EnumLabel(ListenerConfiguration.ListenerTypes_REST, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
         Rest,
+
+        [EnumLabel(ListenerConfiguration.ListenerTypes_SharedREST, PipelineAdminResources.Names.Connection_Type_SharedRest, typeof(PipelineAdminResources))]
+        SharedRest,
         /*[EnumLabel(ListenerConfiguration.ListenerTypes_RabbitMQ, PipelineAdminResources.Names.ConnectionType_RabbitMQ, typeof(PipelineAdminResources))]
         RabbitMQ,*/
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawUdp, PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
@@ -93,6 +96,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ListenerTypes_RabbitMQClient = "rabbitmqclient";
         public const string ListenerTypes_AzureIoTHub = "azureiothub";
         public const string ListenerTypes_REST = "rest";
+        public const string ListenerTypes_SharedREST = "sharedrest";
         public const string ListenerTypes_SOAP = "soap";
         public const string ListenerTypes_RawTCP = "rawtcp";
         public const string ListenerTypes_RawUdp = "raw_udp";

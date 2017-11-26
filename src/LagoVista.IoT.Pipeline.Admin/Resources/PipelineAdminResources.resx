@@ -850,4 +850,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Sentinel_SecurityField_Locator_Select" xml:space="preserve">
     <value>-select field locator-</value>
   </data>
+  <data name="Connection_Type_SharedRest" xml:space="preserve">
+    <value>Shared REST</value>
+  </data>
 </root>
