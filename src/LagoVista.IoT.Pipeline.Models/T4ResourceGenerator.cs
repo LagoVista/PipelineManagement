@@ -2,7 +2,7 @@
 using System.Reflection;
 
 //Resources:PipelineAdminResources:Common_Description
-namespace LagoVista.IoT.Pipeline.Admin.Resources
+namespace LagoVista.IoT.Pipeline.Models.Resources
 {
 	public class PipelineAdminResources
 	{
@@ -18,7 +18,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
 			{
                 if (object.ReferenceEquals(_resourceManager, null)) 
 				{
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LagoVista.IoT.Pipeline.Admin.Resources.PipelineAdminResources", typeof(PipelineAdminResources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LagoVista.IoT.Pipeline.Models.Resources.PipelineAdminResources", typeof(PipelineAdminResources).GetTypeInfo().Assembly);
                     _resourceManager = temp;
                 }
                 return _resourceManager;

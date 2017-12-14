@@ -4,27 +4,28 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceAdmin.Interfaces;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     public enum PipelineModuleType
     {
-        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Listener, Resources.PipelineAdminResources.Names.PipelineModuleType_Listener, typeof(Resources.PipelineAdminResources))]
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Listener, PipelineAdminResources.Names.PipelineModuleType_Listener, typeof(PipelineAdminResources))]
         Listener,
-        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Planner, Resources.PipelineAdminResources.Names.PipelineModuleType_Planner, typeof(Resources.PipelineAdminResources))]
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Planner, PipelineAdminResources.Names.PipelineModuleType_Planner, typeof(PipelineAdminResources))]
         Planner,
-        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Sentinel, Resources.PipelineAdminResources.Names.PipelineModuleType_Sentinel, typeof(Resources.PipelineAdminResources))]
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Sentinel, PipelineAdminResources.Names.PipelineModuleType_Sentinel, typeof(PipelineAdminResources))]
         Sentinel,
-        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_InputTranslator, Resources.PipelineAdminResources.Names.PipelineModuleType_InputTranslator, typeof(Resources.PipelineAdminResources))]
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_InputTranslator, PipelineAdminResources.Names.PipelineModuleType_InputTranslator, typeof(PipelineAdminResources))]
         InputTranslator,
-        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_WorkFlow, Resources.PipelineAdminResources.Names.PipelineModuleType_Workflow, typeof(Resources.PipelineAdminResources))]
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_WorkFlow, PipelineAdminResources.Names.PipelineModuleType_Workflow, typeof(PipelineAdminResources))]
         Workflow,
-        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_OutputTranslator, Resources.PipelineAdminResources.Names.PipelineModuleType_OutputTranslator, typeof(Resources.PipelineAdminResources))]
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_OutputTranslator, PipelineAdminResources.Names.PipelineModuleType_OutputTranslator, typeof(PipelineAdminResources))]
         OutputTranslator,
-        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Transmitter, Resources.PipelineAdminResources.Names.PipelineModuleType_Transmitter, typeof(Resources.PipelineAdminResources))]
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Transmitter, PipelineAdminResources.Names.PipelineModuleType_Transmitter, typeof(PipelineAdminResources))]
         Transmitter,
-        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Custom, Resources.PipelineAdminResources.Names.PipelineModuleType_Custom, typeof(Resources.PipelineAdminResources))]
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Custom, PipelineAdminResources.Names.PipelineModuleType_Custom, typeof(PipelineAdminResources))]
         Custom,
     }
 
@@ -39,14 +40,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string PipelineModuleType_Transmitter = "transmitter";
         public const string PipelineModuleType_Custom = "custom";
 
-        [FormField(LabelResource: Resources.PipelineAdminResources.Names.Common_Key, HelpResource: Resources.PipelineAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: Resources.PipelineAdminResources.Names.Common_Key_Validation, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Key, HelpResource: PipelineAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: PipelineAdminResources.Names.Common_Key_Validation, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public String Key { get; set; }
 
         public String DatabaseName { get; set; }
 
         public String EntityType { get; set; }
 
-        [FormField(LabelResource: Resources.PipelineAdminResources.Names.Common_IsPublic,  FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_IsPublic,  FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.Pipeline.Admin", "src\LagoVista.IoT.Pipeline.Admin\LagoVista.IoT.Pipeline.Admin.csproj", "{A0BE4A43-6277-48AC-B29B-6A61D8DC55BF}"
 EndProject
@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1D7E5971-7C3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{112D9574-A439-43AA-96C6-792FAFCA0B7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.IoT.PipelineAdmin.tests", "tests\LagoVista.IoT.PipelineAdmin.tests\LagoVista.IoT.PipelineAdmin.tests.csproj", "{0566B777-DFEF-498C-BE80-AC04CBD60F14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.PipelineAdmin.tests", "tests\LagoVista.IoT.PipelineAdmin.tests\LagoVista.IoT.PipelineAdmin.tests.csproj", "{0566B777-DFEF-498C-BE80-AC04CBD60F14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.IoT.Pipeline.Models", "src\LagoVista.IoT.Pipeline.Models\LagoVista.IoT.Pipeline.Models.csproj", "{8E2ECF9E-FA50-4A8B-A235-E108DCB236A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{0566B777-DFEF-498C-BE80-AC04CBD60F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0566B777-DFEF-498C-BE80-AC04CBD60F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0566B777-DFEF-498C-BE80-AC04CBD60F14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2ECF9E-FA50-4A8B-A235-E108DCB236A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2ECF9E-FA50-4A8B-A235-E108DCB236A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2ECF9E-FA50-4A8B-A235-E108DCB236A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2ECF9E-FA50-4A8B-A235-E108DCB236A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,5 +52,9 @@ Global
 		{DDEDFFCD-0FD0-487A-9027-9BF424D1C453} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
 		{EAD32CBC-4BC5-490D-BBB2-9F21811C63D8} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
 		{0566B777-DFEF-498C-BE80-AC04CBD60F14} = {112D9574-A439-43AA-96C6-792FAFCA0B7C}
+		{8E2ECF9E-FA50-4A8B-A235-E108DCB236A2} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA0DE310-6813-40E3-BE43-49F1C1B415B7}
 	EndGlobalSection
 EndGlobal

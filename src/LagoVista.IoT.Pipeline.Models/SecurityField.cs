@@ -4,6 +4,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using LagoVista.IoT.Pipeline.Models.Resources;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

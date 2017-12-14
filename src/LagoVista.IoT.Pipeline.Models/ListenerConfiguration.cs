@@ -4,7 +4,9 @@ using LagoVista.Core.Networking.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
 using LagoVista.IoT.DeviceMessaging.Admin.Resources;
+using LagoVista.IoT.DeviceMessaging.Models.Resources;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using LagoVista.IoT.Pipeline.Models.Resources;
 using System.Collections.Generic;
 using System.Linq;
 

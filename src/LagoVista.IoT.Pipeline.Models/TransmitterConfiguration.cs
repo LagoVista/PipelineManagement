@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using LagoVista.IoT.Pipeline.Models.Resources;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
@@ -106,7 +107,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         {
             if (EntityHeader.IsNullOrEmpty(TransmitterType))
             {
-                result.AddUserError(Resources.PipelineAdminResources.Err_TransmitterTypeIsRequired);
+                result.AddUserError(PipelineAdminResources.Err_TransmitterTypeIsRequired);
                 return;
             }
 

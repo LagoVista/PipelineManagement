@@ -2,6 +2,7 @@
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models

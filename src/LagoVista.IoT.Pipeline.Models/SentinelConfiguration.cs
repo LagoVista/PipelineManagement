@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
 using System.Collections.Generic;
 
