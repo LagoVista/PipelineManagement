@@ -9,7 +9,7 @@
     <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="1.2.248-alpha2001" />
     <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="1.2.248-alpha2001" />
     <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.248-alpha2001" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1-beta1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1-beta3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.Models\LagoVista.IoT.Pipeline.Models.csproj" />
