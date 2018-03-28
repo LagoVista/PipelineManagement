@@ -143,9 +143,132 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:CustomModule_Title
 
 		public static string CustomModule_Title { get { return GetResourceString("CustomModule_Title"); } }
+//Resources:PipelineAdminResources:DataStream_ConnectionString
+
+		public static string DataStream_ConnectionString { get { return GetResourceString("DataStream_ConnectionString"); } }
+//Resources:PipelineAdminResources:DataStream_ConnectionString_Help
+
+		public static string DataStream_ConnectionString_Help { get { return GetResourceString("DataStream_ConnectionString_Help"); } }
+//Resources:PipelineAdminResources:DataStream_Description
+
+		public static string DataStream_Description { get { return GetResourceString("DataStream_Description"); } }
+//Resources:PipelineAdminResources:DataStream_Fields
+
+		public static string DataStream_Fields { get { return GetResourceString("DataStream_Fields"); } }
+//Resources:PipelineAdminResources:DataStream_Help
+
+		public static string DataStream_Help { get { return GetResourceString("DataStream_Help"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType
+
+		public static string DataStream_StreamType { get { return GetResourceString("DataStream_StreamType"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_AWS_ElasticSearch
+
+		public static string DataStream_StreamType_AWS_ElasticSearch { get { return GetResourceString("DataStream_StreamType_AWS_ElasticSearch"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_AWS_S3
+
+		public static string DataStream_StreamType_AWS_S3 { get { return GetResourceString("DataStream_StreamType_AWS_S3"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_AzureBlob
+
+		public static string DataStream_StreamType_AzureBlob { get { return GetResourceString("DataStream_StreamType_AzureBlob"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_AzureBlob_Managed
+
+		public static string DataStream_StreamType_AzureBlob_Managed { get { return GetResourceString("DataStream_StreamType_AzureBlob_Managed"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_AzureEventHub
+
+		public static string DataStream_StreamType_AzureEventHub { get { return GetResourceString("DataStream_StreamType_AzureEventHub"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_AzureEventHub_Managegd
+
+		public static string DataStream_StreamType_AzureEventHub_Managegd { get { return GetResourceString("DataStream_StreamType_AzureEventHub_Managegd"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_DataLake
+
+		public static string DataStream_StreamType_DataLake { get { return GetResourceString("DataStream_StreamType_DataLake"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_Select
+
+		public static string DataStream_StreamType_Select { get { return GetResourceString("DataStream_StreamType_Select"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_SQLServer
+
+		public static string DataStream_StreamType_SQLServer { get { return GetResourceString("DataStream_StreamType_SQLServer"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_TableStorage
+
+		public static string DataStream_StreamType_TableStorage { get { return GetResourceString("DataStream_StreamType_TableStorage"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_TableStorage_Managed
+
+		public static string DataStream_StreamType_TableStorage_Managed { get { return GetResourceString("DataStream_StreamType_TableStorage_Managed"); } }
+//Resources:PipelineAdminResources:DataStream_Title
+
+		public static string DataStream_Title { get { return GetResourceString("DataStream_Title"); } }
+//Resources:PipelineAdminResources:DataStreamField_DataType
+
+		public static string DataStreamField_DataType { get { return GetResourceString("DataStreamField_DataType"); } }
+//Resources:PipelineAdminResources:DataStreamField_DataType_Help
+
+		public static string DataStreamField_DataType_Help { get { return GetResourceString("DataStreamField_DataType_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_DataType_Select
+
+		public static string DataStreamField_DataType_Select { get { return GetResourceString("DataStreamField_DataType_Select"); } }
+//Resources:PipelineAdminResources:DataStreamField_Description
+
+		public static string DataStreamField_Description { get { return GetResourceString("DataStreamField_Description"); } }
+//Resources:PipelineAdminResources:DataStreamField_FieldName
+
+		public static string DataStreamField_FieldName { get { return GetResourceString("DataStreamField_FieldName"); } }
+//Resources:PipelineAdminResources:DataStreamField_FieldName_Help
+
+		public static string DataStreamField_FieldName_Help { get { return GetResourceString("DataStreamField_FieldName_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_Help
+
+		public static string DataStreamField_Help { get { return GetResourceString("DataStreamField_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_IsRequired
+
+		public static string DataStreamField_IsRequired { get { return GetResourceString("DataStreamField_IsRequired"); } }
+//Resources:PipelineAdminResources:DataStreamField_IsRequired_Help
+
+		public static string DataStreamField_IsRequired_Help { get { return GetResourceString("DataStreamField_IsRequired_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_MaxValue
+
+		public static string DataStreamField_MaxValue { get { return GetResourceString("DataStreamField_MaxValue"); } }
+//Resources:PipelineAdminResources:DataStreamField_MaxValue_Help
+
+		public static string DataStreamField_MaxValue_Help { get { return GetResourceString("DataStreamField_MaxValue_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_MinValue
+
+		public static string DataStreamField_MinValue { get { return GetResourceString("DataStreamField_MinValue"); } }
+//Resources:PipelineAdminResources:DataStreamField_MinValue_Help
+
+		public static string DataStreamField_MinValue_Help { get { return GetResourceString("DataStreamField_MinValue_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_NumberDecimalPoints
+
+		public static string DataStreamField_NumberDecimalPoints { get { return GetResourceString("DataStreamField_NumberDecimalPoints"); } }
+//Resources:PipelineAdminResources:DataStreamField_NumberDecimalPoints_Help
+
+		public static string DataStreamField_NumberDecimalPoints_Help { get { return GetResourceString("DataStreamField_NumberDecimalPoints_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_RegEx
+
+		public static string DataStreamField_RegEx { get { return GetResourceString("DataStreamField_RegEx"); } }
+//Resources:PipelineAdminResources:DataStreamField_RegEx_Help
+
+		public static string DataStreamField_RegEx_Help { get { return GetResourceString("DataStreamField_RegEx_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_StateSet
+
+		public static string DataStreamField_StateSet { get { return GetResourceString("DataStreamField_StateSet"); } }
+//Resources:PipelineAdminResources:DataStreamField_StateSet_Watermark
+
+		public static string DataStreamField_StateSet_Watermark { get { return GetResourceString("DataStreamField_StateSet_Watermark"); } }
+//Resources:PipelineAdminResources:DataStreamField_Title
+
+		public static string DataStreamField_Title { get { return GetResourceString("DataStreamField_Title"); } }
+//Resources:PipelineAdminResources:DataStreamField_UnitSet
+
+		public static string DataStreamField_UnitSet { get { return GetResourceString("DataStreamField_UnitSet"); } }
+//Resources:PipelineAdminResources:DataStreamField_UnitSet_Watermark
+
+		public static string DataStreamField_UnitSet_Watermark { get { return GetResourceString("DataStreamField_UnitSet_Watermark"); } }
 //Resources:PipelineAdminResources:Err_CouldNotLoadCustomModule
 
 		public static string Err_CouldNotLoadCustomModule { get { return GetResourceString("Err_CouldNotLoadCustomModule"); } }
+//Resources:PipelineAdminResources:Err_CouldNotLoadDataStream
+
+		public static string Err_CouldNotLoadDataStream { get { return GetResourceString("Err_CouldNotLoadDataStream"); } }
 //Resources:PipelineAdminResources:Err_CouldNotLoadInputTranslator
 
 		public static string Err_CouldNotLoadInputTranslator { get { return GetResourceString("Err_CouldNotLoadInputTranslator"); } }
@@ -638,6 +761,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:PipelineModuleType_Custom
 
 		public static string PipelineModuleType_Custom { get { return GetResourceString("PipelineModuleType_Custom"); } }
+//Resources:PipelineAdminResources:PipelineModuleType_DataStream
+
+		public static string PipelineModuleType_DataStream { get { return GetResourceString("PipelineModuleType_DataStream"); } }
 //Resources:PipelineAdminResources:PipelineModuleType_InputTranslator
 
 		public static string PipelineModuleType_InputTranslator { get { return GetResourceString("PipelineModuleType_InputTranslator"); } }
@@ -818,7 +944,48 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string CustomModule_Description = "CustomModule_Description";
 			public const string CustomModule_Help = "CustomModule_Help";
 			public const string CustomModule_Title = "CustomModule_Title";
+			public const string DataStream_ConnectionString = "DataStream_ConnectionString";
+			public const string DataStream_ConnectionString_Help = "DataStream_ConnectionString_Help";
+			public const string DataStream_Description = "DataStream_Description";
+			public const string DataStream_Fields = "DataStream_Fields";
+			public const string DataStream_Help = "DataStream_Help";
+			public const string DataStream_StreamType = "DataStream_StreamType";
+			public const string DataStream_StreamType_AWS_ElasticSearch = "DataStream_StreamType_AWS_ElasticSearch";
+			public const string DataStream_StreamType_AWS_S3 = "DataStream_StreamType_AWS_S3";
+			public const string DataStream_StreamType_AzureBlob = "DataStream_StreamType_AzureBlob";
+			public const string DataStream_StreamType_AzureBlob_Managed = "DataStream_StreamType_AzureBlob_Managed";
+			public const string DataStream_StreamType_AzureEventHub = "DataStream_StreamType_AzureEventHub";
+			public const string DataStream_StreamType_AzureEventHub_Managegd = "DataStream_StreamType_AzureEventHub_Managegd";
+			public const string DataStream_StreamType_DataLake = "DataStream_StreamType_DataLake";
+			public const string DataStream_StreamType_Select = "DataStream_StreamType_Select";
+			public const string DataStream_StreamType_SQLServer = "DataStream_StreamType_SQLServer";
+			public const string DataStream_StreamType_TableStorage = "DataStream_StreamType_TableStorage";
+			public const string DataStream_StreamType_TableStorage_Managed = "DataStream_StreamType_TableStorage_Managed";
+			public const string DataStream_Title = "DataStream_Title";
+			public const string DataStreamField_DataType = "DataStreamField_DataType";
+			public const string DataStreamField_DataType_Help = "DataStreamField_DataType_Help";
+			public const string DataStreamField_DataType_Select = "DataStreamField_DataType_Select";
+			public const string DataStreamField_Description = "DataStreamField_Description";
+			public const string DataStreamField_FieldName = "DataStreamField_FieldName";
+			public const string DataStreamField_FieldName_Help = "DataStreamField_FieldName_Help";
+			public const string DataStreamField_Help = "DataStreamField_Help";
+			public const string DataStreamField_IsRequired = "DataStreamField_IsRequired";
+			public const string DataStreamField_IsRequired_Help = "DataStreamField_IsRequired_Help";
+			public const string DataStreamField_MaxValue = "DataStreamField_MaxValue";
+			public const string DataStreamField_MaxValue_Help = "DataStreamField_MaxValue_Help";
+			public const string DataStreamField_MinValue = "DataStreamField_MinValue";
+			public const string DataStreamField_MinValue_Help = "DataStreamField_MinValue_Help";
+			public const string DataStreamField_NumberDecimalPoints = "DataStreamField_NumberDecimalPoints";
+			public const string DataStreamField_NumberDecimalPoints_Help = "DataStreamField_NumberDecimalPoints_Help";
+			public const string DataStreamField_RegEx = "DataStreamField_RegEx";
+			public const string DataStreamField_RegEx_Help = "DataStreamField_RegEx_Help";
+			public const string DataStreamField_StateSet = "DataStreamField_StateSet";
+			public const string DataStreamField_StateSet_Watermark = "DataStreamField_StateSet_Watermark";
+			public const string DataStreamField_Title = "DataStreamField_Title";
+			public const string DataStreamField_UnitSet = "DataStreamField_UnitSet";
+			public const string DataStreamField_UnitSet_Watermark = "DataStreamField_UnitSet_Watermark";
 			public const string Err_CouldNotLoadCustomModule = "Err_CouldNotLoadCustomModule";
+			public const string Err_CouldNotLoadDataStream = "Err_CouldNotLoadDataStream";
 			public const string Err_CouldNotLoadInputTranslator = "Err_CouldNotLoadInputTranslator";
 			public const string Err_CouldNotLoadListener = "Err_CouldNotLoadListener";
 			public const string Err_CouldNotLoadOutputTranslator = "Err_CouldNotLoadOutputTranslator";
@@ -983,6 +1150,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string OutputTranslator_TranslatorType = "OutputTranslator_TranslatorType";
 			public const string OutputTranslator_TranslatorType_Select = "OutputTranslator_TranslatorType_Select";
 			public const string PipelineModuleType_Custom = "PipelineModuleType_Custom";
+			public const string PipelineModuleType_DataStream = "PipelineModuleType_DataStream";
 			public const string PipelineModuleType_InputTranslator = "PipelineModuleType_InputTranslator";
 			public const string PipelineModuleType_Listener = "PipelineModuleType_Listener";
 			public const string PipelineModuleType_OutputTranslator = "PipelineModuleType_OutputTranslator";

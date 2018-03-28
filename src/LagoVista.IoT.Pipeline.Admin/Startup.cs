@@ -11,6 +11,8 @@ namespace LagoVista.IoT.Pipeline.Admin
             ErrorCodes.Register(typeof(Resources.ErrorCodes));
 
             services.AddTransient<IPipelineModuleManager, PipelineModuleManager>();
+            services.AddTransient<IDataStreamManager, DataStreamManager>();
+
         }
     }
 }

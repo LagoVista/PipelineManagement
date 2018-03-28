@@ -1,20 +1,17 @@
-﻿using LagoVista.Core.PlatformSupport;
+﻿using LagoVista.Core;
+using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Web.Common.Controllers;
+using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using LagoVista.Core;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using LagoVista.Core.Interfaces;
-using LagoVista.Core.Models.UIMetaData;
-using LagoVista.Core.Models;
-using LagoVista.IoT.Logging.Loggers;
-using LagoVista.UserAdmin.Models.Users;
 
 namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
 {

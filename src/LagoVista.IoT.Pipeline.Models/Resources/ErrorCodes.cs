@@ -15,5 +15,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Resources
         public static ErrorCode CouldNotLoadOutputTranslator => new ErrorCode() { Code = "SLN2005", Message = PipelineAdminResources.Err_CouldNotLoadOutputTranslator };
         public static ErrorCode CouldNotLoadTransmitter => new ErrorCode() { Code = "SLN2006", Message = PipelineAdminResources.Err_CouldNotLoadTransmitter };
         public static ErrorCode CouldNotLoadCustomModule => new ErrorCode() { Code = "SLN2007", Message = PipelineAdminResources.Err_CouldNotLoadCustomModule };
+        public static ErrorCode CouldNotLoadDataStreamModule => new ErrorCode() { Code = "SLN2008", Message = PipelineAdminResources.Err_CouldNotLoadDataStream };
     }
 }

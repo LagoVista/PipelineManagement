@@ -25,7 +25,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         OutputTranslator,
         [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Transmitter, PipelineAdminResources.Names.PipelineModuleType_Transmitter, typeof(PipelineAdminResources))]
         Transmitter,
-        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Custom, PipelineAdminResources.Names.PipelineModuleType_Custom, typeof(PipelineAdminResources))]
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_DataStream, PipelineAdminResources.Names.PipelineModuleType_Transmitter, typeof(PipelineAdminResources))]
+        DataStream,
+        [EnumLabel(PipelineModuleConfiguration.PipelineModuleType_Custom, PipelineAdminResources.Names.PipelineModuleType_DataStream, typeof(PipelineAdminResources))]
         Custom,
     }
 
@@ -39,6 +41,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string PipelineModuleType_OutputTranslator = "outputtranslator";
         public const string PipelineModuleType_Transmitter = "transmitter";
         public const string PipelineModuleType_Custom = "custom";
+        public const string PipelineModuleType_DataStream = "datastream";
 
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Key, HelpResource: PipelineAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: PipelineAdminResources.Names.Common_Key_Validation, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public String Key { get; set; }
