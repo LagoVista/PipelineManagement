@@ -1,20 +1,19 @@
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <id>LagoVista.IoT.Pipeline.Admin.Rest</id>
-    <version>1.2.288-alpha0733</version>
+    <id>LagoVista.IoT.DataStreamConnectors</id>
+    <version>1.2.315-alpha1603</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://github.com/LagoVista/IoTEngine</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
-    <description>Provides a set of REST Services for working with Pipeline Module Configurations for the LagoVista Devices, IoT and Home Automation Frameworks</description>
+    <description>Provides services to write data stream records from LagoVista IoT to Azure, AWS and other cloud storage mechanisms</description>
     <releaseNotes>Initial and Unstable Release</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright 2018</copyright>
     <tags>HomeAutomation IoT Cloud LagoVista</tags>
   </metadata>
   <files>
-    <file src="bin\release\netstandard2.0\LagoVista.IoT.Pipeline.Admin.Rest.xml" target="contentFiles\wwwroot\xmldocs" />
     <file src="bin\release\netstandard2.0\*.dll" target="lib\netstandard2.0" />
   </files>
 </package>

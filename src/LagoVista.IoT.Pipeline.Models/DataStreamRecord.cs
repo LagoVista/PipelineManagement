@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
-    public class DataStreamRecord : TableStorageEntity
+    public class DataStreamRecord
     {
         public DataStreamRecord()
         {

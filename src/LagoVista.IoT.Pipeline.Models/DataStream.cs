@@ -18,10 +18,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AzureBlob,
         [EnumLabel(DataStream.StreamType_AzureBlob_Managed, PipelineAdminResources.Names.DataStream_StreamType_AzureBlob_Managed, typeof(PipelineAdminResources))]
         AzureBlob_Managed,
-        [EnumLabel(DataStream.StreamType_AzureEventHub, PipelineAdminResources.Names.DataStream_StreamType_AzureEventHub, typeof(PipelineAdminResources))]
-        AzureEventHub,
-        [EnumLabel(DataStream.StreamType_AzureEventHub_Managed, PipelineAdminResources.Names.DataStream_StreamType_AzureEventHub_Managegd, typeof(PipelineAdminResources))]
-        AzureEventHub_Managed,
         [EnumLabel(DataStream.StreamType_AzureTableStorage, PipelineAdminResources.Names.DataStream_StreamType_TableStorage, typeof(PipelineAdminResources))]
         AzureTableStorage,
         [EnumLabel(DataStream.StreamType_AzureTableStorage_Managed, PipelineAdminResources.Names.DataStream_StreamType_TableStorage_Managed, typeof(PipelineAdminResources))]
@@ -42,8 +38,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string StreamType_AzureTableStorage = "azuretablestorage";
         public const string StreamType_AzureTableStorage_Managed = "azuretablestoragemanaged";
         public const string StreamType_DataLake = "azuredatalake";
-        public const string StreamType_AzureEventHub = "azureeventhub";
-        public const string StreamType_AzureEventHub_Managed = "azureeventhubmanaged";
         public const string StreamType_SQLServer = "sqlserver";
 
         public DataStream()
@@ -58,6 +52,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string ConnectionString { get; set; }
 
         public string SecureConnectionStringId { get; set; }
+
+        public string S3BucketName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<DataStreamField> Fields { get; set; }
