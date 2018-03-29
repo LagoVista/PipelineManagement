@@ -12,8 +12,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.DataStreamConnectors;
 
-namespace LagoVista.IoT.DataStreamWriters
+namespace LagoVista.IoT.DataStreamConnectors
 {
     public class AWSS3Connector : IDataStreamConnector
     {
@@ -36,7 +37,6 @@ namespace LagoVista.IoT.DataStreamWriters
             };
 
             var profile = new Amazon.Runtime.CredentialManagement.CredentialProfile($"awsprofile_{stream.Id}", options);
-            profile.Region = RegionEndpoint.USEast1;
             var netSDKFile = new NetSDKCredentialsFile();
             netSDKFile.RegisterProfile(profile);
 
@@ -44,7 +44,7 @@ namespace LagoVista.IoT.DataStreamWriters
 
             try
             {
-                _s3Client = new AmazonS3Client(creds, RegionEndpoint.USEast1);
+                _s3Client = new AmazonS3Client(creds, AWSRegionMappings.MapRegion(stream.AWSRegion));
                 await _s3Client.EnsureBucketExistsAsync(stream.S3BucketName);
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -111,9 +111,15 @@ namespace LagoVista.IoT.DataStreamWriters
             }
         }
 
-        public Task<LagoVista.Core.Models.UIMetaData.ListResponse<List<DataStreamRecord>>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
+        public async Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
-            throw new NotImplementedException();
+            var lob = new ListObjectsV2Request()
+            {
+                BucketName = _stream.S3BucketName,
+                MaxKeys = request.PageSize
+            };
+
+            return null;
         }
     }
 }

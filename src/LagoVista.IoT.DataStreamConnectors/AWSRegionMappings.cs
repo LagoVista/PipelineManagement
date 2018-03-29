@@ -4,9 +4,9 @@ using System;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
-    public class AWSRegionMappings
+    public static class AWSRegionMappings
     {
-        public RegionEndpoint MapRegion(string regionName)
+        public static RegionEndpoint MapRegion(string regionName)
         {
             if(String.IsNullOrEmpty(regionName))
             {

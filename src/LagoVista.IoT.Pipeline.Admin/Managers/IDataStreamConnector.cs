@@ -12,6 +12,6 @@ namespace LagoVista.IoT.Pipeline.Admin
         Task<InvokeResult> InitAsync(DataStream stream);
         Task<InvokeResult> AddItemAsync(DataStreamRecord item, EntityHeader org, EntityHeader user);
         Task<InvokeResult> AddItemAsync(DataStreamRecord item);
-        Task<ListResponse<List<DataStreamRecord>>> GetItemsAsync(string deviceId, ListRequest request);
+        Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, ListRequest request);
     }
 }

@@ -70,7 +70,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public EntityHeader<DataStreamTypes> StreamType { get; set; }
 
 
-
+        #region Data Formatting Properties
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, HelpResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string TimeStampFieldName { get; set; }
 
@@ -80,16 +80,29 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DateStorageFormat, EnumType: (typeof(DateStorageFormats)), HelpResource: PipelineAdminResources.Names.DataStream_DateStorageFormat,
             FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.DataStreamField_DataType_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public EntityHeader<DateStorageFormats> DateStorageFormat { get; set; }
-
-
+        #endregion
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ConnectionString, HelpResource: PipelineAdminResources.Names.DataStream_ConnectionString_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string ConnectionString { get; set; }
 
 
+        #region Amazon Properties
+        #region AWS S3 Properties
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_S3_BucketName, ValidationRegEx: @"^([a-z]|(\d(?!\d{0,2}\.\d{1,3}\.\d{1,3}\.\d{1,3})))([a-z\d]|(\.(?!(\.|-)))|(-(?!\.))){1,61}[a-z\d]$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidBucketName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string S3BucketName { get; set; }
+        #endregion
+
+        #region AWS Elastic Search Properties
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string ESDomainName { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string ESIndexName { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string ESTypeName { get; set; }
+        #endregion
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AWSAccessKey { get; set; }
@@ -99,7 +112,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AWSSecretKey { get; set; }
-
+        #endregion
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}@$#_]{0,127}$", FieldType: FieldTypes.Text,

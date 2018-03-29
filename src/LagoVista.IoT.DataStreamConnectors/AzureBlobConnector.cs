@@ -28,7 +28,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             throw new NotImplementedException();
         }
 
-        public Task<LagoVista.Core.Models.UIMetaData.ListResponse<List<DataStreamRecord>>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
+        public async Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
             throw new NotImplementedException();
         }
