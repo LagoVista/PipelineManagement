@@ -43,7 +43,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult<DataStream>> LoadFillDataStreamConfigurationAsync(String id)
+        public async Task<InvokeResult<DataStream>> LoadFullDataStreamConfigurationAsync(String id)
         {
             try
             {

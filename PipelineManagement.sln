@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.Pipeline.Mode
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.DataStreamConnectors", "src\LagoVista.IoT.DataStreamConnectors\LagoVista.IoT.DataStreamConnectors.csproj", "{0CEE71E1-D22C-4EC4-AD76-95145D921BD1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.IoT.DataStreamConnector.Tests", "tests\LagoVista.IoT.DataStreamConnector.Tests\LagoVista.IoT.DataStreamConnector.Tests.csproj", "{D7E2F846-7554-408B-9CCA-7741A9B7CA36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{0CEE71E1-D22C-4EC4-AD76-95145D921BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CEE71E1-D22C-4EC4-AD76-95145D921BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CEE71E1-D22C-4EC4-AD76-95145D921BD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7E2F846-7554-408B-9CCA-7741A9B7CA36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7E2F846-7554-408B-9CCA-7741A9B7CA36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7E2F846-7554-408B-9CCA-7741A9B7CA36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7E2F846-7554-408B-9CCA-7741A9B7CA36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{0566B777-DFEF-498C-BE80-AC04CBD60F14} = {112D9574-A439-43AA-96C6-792FAFCA0B7C}
 		{8E2ECF9E-FA50-4A8B-A235-E108DCB236A2} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
 		{0CEE71E1-D22C-4EC4-AD76-95145D921BD1} = {1D7E5971-7C39-418F-956D-E7A2748B9C1F}
+		{D7E2F846-7554-408B-9CCA-7741A9B7CA36} = {112D9574-A439-43AA-96C6-792FAFCA0B7C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA0DE310-6813-40E3-BE43-49F1C1B415B7}

@@ -1,4 +1,5 @@
-﻿using LagoVista.IoT.Pipeline.Admin;
+﻿using LagoVista.Core.Validation;
+using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,12 @@ namespace LagoVista.IoT.DataStreamConnectors
 {
     public class AWSElasticSearchConnector : IDataStreamConnector
     {
-        public Task AddItemAsync(DataStream stream, DataStreamRecord archiveEntry, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)
+        public Task<InvokeResult> AddItemAsync(DataStream stream, DataStreamRecord archiveEntry, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)
         {
             throw new NotImplementedException();
         }
 
-        public Task AddItemAsync(DataStream stream, DataStreamRecord archiveEntry)
+        public Task<InvokeResult> AddItemAsync(DataStream stream, DataStreamRecord archiveEntry)
         {
             throw new NotImplementedException();
         }

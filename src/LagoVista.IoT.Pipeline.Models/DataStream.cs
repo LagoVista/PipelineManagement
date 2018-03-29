@@ -28,6 +28,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         SQLServer
     }
 
+    public enum DateStorageFormats
+    {
+        Epoch,
+        ISO8601
+    }
+
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.DataStream_Title, PipelineAdminResources.Names.DataStream_Help, PipelineAdminResources.Names.DataStream_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
     public class DataStream : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor
     {
@@ -43,6 +49,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public DataStream()
         {
             Fields = new List<DataStreamField>();
+            TimeStampFieldName = "timeStamp";
+            DeviceIdFieldName = "deviceId";
+            DateStorageFormat = EntityHeader<DateStorageFormats>.Create(DateStorageFormats.ISO8601);
         }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_StreamType, EnumType: typeof(DataStreamTypes), FieldType: FieldTypes.Picker, RegExValidationMessageResource: PipelineAdminResources.Names.Common_Key_Validation, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.DataStream_StreamType_Select, IsRequired: true)]
@@ -53,7 +62,21 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public string SecureConnectionStringId { get; set; }
 
+        /* Need to add reg ex for valid bucket names */
         public string S3BucketName { get; set; }
+
+        public string AWSAccessKey { get; set; }
+        public string AWSRegion { get; set; }
+
+        public string AWSSecretKey { get; set; }
+
+        public string AWSSecretKeyId { get; set; }
+
+        public string TimeStampFieldName { get; set; }
+
+        public string DeviceIdFieldName { get; set; }
+
+        public EntityHeader<DateStorageFormats> DateStorageFormat { get; set; } 
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<DataStreamField> Fields { get; set; }
