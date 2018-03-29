@@ -26,7 +26,7 @@ namespace LagoVista.IoT.DataStreamWriters
             _instanceLogger = instanceLogger;
         }
 
-        public async Task InitAsync(DataStream stream)
+        public async Task<InvokeResult> InitAsync(DataStream stream)
         {
             _stream = stream;
             var options = new CredentialProfileOptions
@@ -42,11 +42,21 @@ namespace LagoVista.IoT.DataStreamWriters
 
             var creds = AWSCredentialsFactory.GetAWSCredentials(profile, netSDKFile);
 
-            _s3Client = new AmazonS3Client(creds, RegionEndpoint.USEast1);
-            await _s3Client.EnsureBucketExistsAsync(stream.S3BucketName);
+            try
+            {
+                _s3Client = new AmazonS3Client(creds, RegionEndpoint.USEast1);
+                await _s3Client.EnsureBucketExistsAsync(stream.S3BucketName);
+            }
+            catch (AmazonS3Exception amazonS3Exception)
+            {
+                _instanceLogger.AddException("AWSS3Connector_InitAsync", amazonS3Exception);
+                return InvokeResult.FromException("AWSS3Connector_InitAsync", amazonS3Exception);
+            }
+
+            return InvokeResult.Success;
         }
 
-        public Task<InvokeResult> AddItemAsync(DataStream stream, DataStreamRecord item, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)
+        public Task<InvokeResult> AddItemAsync(DataStreamRecord item, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)
         {
             item.Data.Add("orgId", org.Id);
             item.Data.Add("orgName", org.Text);
@@ -54,34 +64,34 @@ namespace LagoVista.IoT.DataStreamWriters
             item.Data.Add("userId", user.Id);
             item.Data.Add("userName", user.Text);
 
-            return AddItemAsync(stream, item);
+            return AddItemAsync(item);
 
         }
 
-        public async Task<InvokeResult> AddItemAsync(DataStream stream, DataStreamRecord item)
+        public async Task<InvokeResult> AddItemAsync(DataStreamRecord item)
         {
             var recordId = DateTime.UtcNow.ToInverseTicksRowKey();
 
             if (String.IsNullOrEmpty(item.Timestamp))
             {
-                switch (stream.DateStorageFormat.Value)
+                switch (_stream.DateStorageFormat.Value)
                 {
                     case DateStorageFormats.Epoch:
-                        item.Data.Add(stream.TimeStampFieldName, DateTimeOffset.Now.ToUnixTimeSeconds());
+                        item.Data.Add(_stream.TimeStampFieldName, DateTimeOffset.Now.ToUnixTimeSeconds());
                         break;
                     case DateStorageFormats.ISO8601:
-                        item.Data.Add(stream.TimeStampFieldName, DateTime.UtcNow.ToJSONString());
+                        item.Data.Add(_stream.TimeStampFieldName, DateTime.UtcNow.ToJSONString());
                         break;
                 }
             }
 
             item.Data.Add("id", recordId);
-            item.Data.Add("dataStreamId", stream.Id);
-            item.Data.Add(stream.DeviceIdFieldName, item.DeviceId);
+            item.Data.Add("dataStreamId", _stream.Id);
+            item.Data.Add(_stream.DeviceIdFieldName, item.DeviceId);
 
             var obj = new PutObjectRequest()
             {
-                BucketName = stream.S3BucketName,
+                BucketName = _stream.S3BucketName,
                 Key = recordId,
                 ContentBody = JsonConvert.SerializeObject(item.Data)
             };
@@ -96,12 +106,12 @@ namespace LagoVista.IoT.DataStreamWriters
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
-                _instanceLogger.AddException("AWSS3Connector_AddArchiveAsync", amazonS3Exception);
+                _instanceLogger.AddException("AWSS3Connector_AddItem", amazonS3Exception);
                 return InvokeResult.FromException("AWSS3Connector_AddItem", amazonS3Exception);
             }
         }
 
-        public Task<LagoVista.Core.Models.UIMetaData.ListResponse<List<DataStreamRecord>>> GetItemsAsync(DataStream stream, string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)
+        public Task<LagoVista.Core.Models.UIMetaData.ListResponse<List<DataStreamRecord>>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
             throw new NotImplementedException();
         }

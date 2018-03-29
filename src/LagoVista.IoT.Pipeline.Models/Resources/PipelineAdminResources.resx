@@ -979,4 +979,58 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Err_CouldNotLoadDataStream" xml:space="preserve">
     <value>Could not load data stream configuration.</value>
   </data>
+  <data name="DataStream_AutoCreateTable" xml:space="preserve">
+    <value>Auto Create SQL Server Table</value>
+  </data>
+  <data name="DataStream_AutoCreateTable_Help" xml:space="preserve">
+    <value>If you choose this option the connection string you provide must allow access to modify your databases table structure. This is not recommended.</value>
+  </data>
+  <data name="DataStream_AWSAccessKey" xml:space="preserve">
+    <value>AWS Access Key</value>
+  </data>
+  <data name="DataStream_AWSRegion" xml:space="preserve">
+    <value>AWS Region</value>
+  </data>
+  <data name="DataStream_AWSSecretKey" xml:space="preserve">
+    <value>AWS Secret Key</value>
+  </data>
+  <data name="DataStream_DateStorageFormat" xml:space="preserve">
+    <value>Date Storage Format</value>
+  </data>
+  <data name="DataStream_DateStorageFormat_Help" xml:space="preserve">
+    <value>You can store the date as a numeric seconds since epoch (1/1/1970) or ISO8601 Format (YYYY-MM-DDTHH:MM:SS.mmmm)</value>
+  </data>
+  <data name="DataStream_DateStorageFormat_Select" xml:space="preserve">
+    <value>-select date storage format-</value>
+  </data>
+  <data name="DataStream_DateStorageFormat_Type_Epoch" xml:space="preserve">
+    <value>Unix Epoch</value>
+  </data>
+  <data name="DataStream_DateStorageFormat_Type_ISO8601" xml:space="preserve">
+    <value>IS0 8601 (YYYY-MM-DDTHH:MM:SS.mmmm)</value>
+  </data>
+  <data name="DataStream_DeviceIdFieldName" xml:space="preserve">
+    <value>Device Id Field Name</value>
+  </data>
+  <data name="DataStream_DeviceIdFieldName_Help" xml:space="preserve">
+    <value>This will be the name of the device id field that will be appended to the output document</value>
+  </data>
+  <data name="DataStream_InvalidBucketName" xml:space="preserve">
+    <value>Invalid name for S3 bucket, please check AWS documentation results for valid bucket names.</value>
+  </data>
+  <data name="DataStream_InvalidTableName" xml:space="preserve">
+    <value>Invalid table name, please check an online reference for your database server.</value>
+  </data>
+  <data name="DataStream_S3_BucketName" xml:space="preserve">
+    <value>S3 Bucket Name</value>
+  </data>
+  <data name="DataStream_TableName" xml:space="preserve">
+    <value>SQL Server Table Name</value>
+  </data>
+  <data name="DataStream_TimeStampFieldName" xml:space="preserve">
+    <value>Time Stamp Field Name</value>
+  </data>
+  <data name="DataStream_TimeStampFieldName_Help" xml:space="preserve">
+    <value>This will be the name of the time stamp field that will be appended to the output document</value>
+  </data>
 </root>

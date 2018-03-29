@@ -9,7 +9,7 @@ using LagoVista.IoT.Pipeline.Admin.Models;
 namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
 {
     [TestClass]
-    public class DataStreaamValidaationTests
+    public class DataStreaamValidationTests
     {
         private void AssertValidModel(ValidationResult result)
         {
@@ -53,11 +53,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
+            stream.TableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3);
+            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
            
             AssertValidModel(Validator.Validate(stream));
         }
@@ -69,11 +70,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
+            stream.TableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3);
+            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",
@@ -100,11 +102,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
+            stream.TableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3);
+            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",
@@ -121,7 +124,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
                 FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.String)
             });
 
-            AssertInvalidModel(Validator.Validate(stream), "Keys on fields must be unique");
+            AssertInvalidModel(Validator.Validate(stream), "Keys on fields must be unique.");
         }
 
         [TestMethod]
@@ -131,11 +134,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
+            stream.TableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3);
+            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",
@@ -152,7 +156,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
                 FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.String)
             });
 
-            AssertInvalidModel(Validator.Validate(stream), "Field Names on fields must be unique");
+            AssertInvalidModel(Validator.Validate(stream), "Field Names on fields must be unique.");
         }
 
         [TestMethod]
@@ -162,11 +166,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
+            stream.TableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3);
+            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",
@@ -193,11 +198,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
+            stream.TableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3);
+            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",

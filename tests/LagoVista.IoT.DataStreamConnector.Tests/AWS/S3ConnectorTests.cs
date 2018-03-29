@@ -14,13 +14,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/* To Run Tests:
+ * 1) Add the three ENV variables that have access to S3 and Elastic Search on the account used for testing *
+ *      AWSUSER
+ *      AWSSECRET
+ *      AWSACCESSKEY
+ */
 namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 {
     [TestClass]
     public class S3ConnectorTests
     {
         const string BUCKET_NAME = "nuviot-testbucket";
-        private async Task<DataStreamRecord> AddObject(DataStream stream, string deviceId, params KeyValuePair<string, object>[] items)
+
+        private async Task<DataStreamRecord> AddObject(AWSS3Connector connector, string deviceId, params KeyValuePair<string, object>[] items)
         {
             var record = new Pipeline.Admin.Models.DataStreamRecord()
             {
@@ -32,24 +39,71 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
                 record.Data.Add(item.Key, item.Value);
             }
 
-            var connector = new AWSS3Connector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            await connector.InitAsync(stream);
-            var addResult = await connector.AddItemAsync(stream, record);
+            var addResult = await connector.AddItemAsync(record);
             Assert.IsTrue(addResult.Successful);
 
             return record;
-
         }
 
-        /* To Run Tests:
-         * 1) Add the three ENV variables that have access to S3 and Elastic Search on the account used for testing *
-         *      AWSUSER
-         *      AWSSECRET
-         *      AWSACCESSKEY
-         */
+        private AmazonS3Client GetS3Client()
+        {
+            var options = new CredentialProfileOptions
+            {
+                AccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
+                SecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET")
+            };
+
+
+            var profile = new Amazon.Runtime.CredentialManagement.CredentialProfile("basic_profile", options);
+            var netSDKFile = new NetSDKCredentialsFile();
+            netSDKFile.RegisterProfile(profile);
+
+            var creds = AWSCredentialsFactory.GetAWSCredentials(profile, netSDKFile);
+
+            return new AmazonS3Client(creds, RegionEndpoint.USEast1);
+        }
+
+        [TestInitialize]
+        public void Init()
+        {
+            using (var client = GetS3Client())
+            {
+                if(client.ListBuckets().Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Any())
+                {
+                    RemoveBucket();
+                }
+            }
+        }
+
 
         [TestMethod]
-        public async Task CreateBucketTest()
+        public async Task AWS_CreateBucket()
+        {
+            using (var client = GetS3Client())
+            {
+                Assert.AreEqual(0, client.ListBuckets().Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Count());
+            }
+
+            var stream = new Pipeline.Admin.Models.DataStream()
+            {
+                Id = "06A0754DB67945E7BAD5614B097C61F5",
+                AWSAccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
+                AWSSecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET"),
+                S3BucketName = BUCKET_NAME
+            };
+
+            var connector = new AWSS3Connector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
+            await connector.InitAsync(stream);
+
+            using (var client = GetS3Client())
+            {
+                Assert.AreEqual(1, client.ListBuckets().Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Count());
+            }
+        }
+
+
+        [TestMethod]
+        public async Task AWS_InsertItemTest()
         {
             var stream = new Pipeline.Admin.Models.DataStream()
             {
@@ -59,7 +113,10 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
                 S3BucketName = BUCKET_NAME
             };
 
-            var record = await AddObject(stream, "dev123", new KeyValuePair<string, object>("pointOne", 37.5),
+            var connector = new AWSS3Connector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
+            await connector.InitAsync(stream);
+
+            var record = await AddObject(connector, "dev123", new KeyValuePair<string, object>("pointOne", 37.5),
                 new KeyValuePair<string, object>("pointTwo", 58.6),
                 new KeyValuePair<string, object>("pointThree", "testing"));
 
@@ -99,30 +156,17 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         }
 
         [TestCleanup]
-        public async Task RemoveBucket()
-        {
-            var options = new CredentialProfileOptions
+        public void RemoveBucket()
+        {          
+            using (var s3Client = GetS3Client())
             {
-                AccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
-                SecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET")
-            };
-
-
-            var profile = new Amazon.Runtime.CredentialManagement.CredentialProfile("basic_profile", options);
-            var netSDKFile = new NetSDKCredentialsFile();
-            netSDKFile.RegisterProfile(profile);
-
-            var creds = AWSCredentialsFactory.GetAWSCredentials(profile, netSDKFile);
-
-            using (var s3Client = new AmazonS3Client(creds, RegionEndpoint.USEast1))
-            {
-                var items = await s3Client.ListObjectsAsync(BUCKET_NAME);
+                var items = s3Client.ListObjects(BUCKET_NAME);
                 foreach(var item in items.S3Objects)
                 {
-                    await s3Client.DeleteObjectAsync(BUCKET_NAME, item.Key);
+                    s3Client.DeleteObject(BUCKET_NAME, item.Key);
                 }
 
-                await s3Client.DeleteBucketAsync(BUCKET_NAME);
+                s3Client.DeleteBucket(BUCKET_NAME);
             }
         }
     }

@@ -10,17 +10,25 @@ namespace LagoVista.IoT.DataStreamConnectors
 {
     public class AzureTableStorageConnector : IDataStreamConnector
     {
-        public Task<InvokeResult> AddItemAsync(DataStream stream, DataStreamRecord archiveEntry, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)
+        DataStream _stream;
+
+        public Task<InvokeResult> InitAsync(DataStream stream)
+        {
+            _stream = stream;
+            throw new NotImplementedException();
+        }
+
+        public Task<InvokeResult> AddItemAsync(DataStreamRecord item, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)
         {
             throw new NotImplementedException();
         }
 
-        public Task<InvokeResult> AddItemAsync(DataStream stream, DataStreamRecord archiveEntry)
+        public Task<InvokeResult> AddItemAsync(DataStreamRecord item)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LagoVista.Core.Models.UIMetaData.ListResponse<List<DataStreamRecord>>> GetItemsAsync(DataStream stream, string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)
+        public Task<LagoVista.Core.Models.UIMetaData.ListResponse<List<DataStreamRecord>>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
             throw new NotImplementedException();
         }

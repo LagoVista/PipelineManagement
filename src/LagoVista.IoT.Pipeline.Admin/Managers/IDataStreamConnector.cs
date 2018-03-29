@@ -9,8 +9,9 @@ namespace LagoVista.IoT.Pipeline.Admin
 {
     public interface IDataStreamConnector
     {
-        Task<InvokeResult> AddItemAsync(DataStream stream, DataStreamRecord item, EntityHeader org, EntityHeader user);
-        Task<InvokeResult> AddItemAsync(DataStream stream, DataStreamRecord item);
-        Task<ListResponse<List<DataStreamRecord>>> GetItemsAsync(DataStream stream, string deviceId, ListRequest request, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> InitAsync(DataStream stream);
+        Task<InvokeResult> AddItemAsync(DataStreamRecord item, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> AddItemAsync(DataStreamRecord item);
+        Task<ListResponse<List<DataStreamRecord>>> GetItemsAsync(string deviceId, ListRequest request);
     }
 }

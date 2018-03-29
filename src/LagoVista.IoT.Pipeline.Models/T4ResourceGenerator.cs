@@ -143,21 +143,66 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:CustomModule_Title
 
 		public static string CustomModule_Title { get { return GetResourceString("CustomModule_Title"); } }
+//Resources:PipelineAdminResources:DataStream_AutoCreateTable
+
+		public static string DataStream_AutoCreateTable { get { return GetResourceString("DataStream_AutoCreateTable"); } }
+//Resources:PipelineAdminResources:DataStream_AutoCreateTable_Help
+
+		public static string DataStream_AutoCreateTable_Help { get { return GetResourceString("DataStream_AutoCreateTable_Help"); } }
+//Resources:PipelineAdminResources:DataStream_AWSAccessKey
+
+		public static string DataStream_AWSAccessKey { get { return GetResourceString("DataStream_AWSAccessKey"); } }
+//Resources:PipelineAdminResources:DataStream_AWSRegion
+
+		public static string DataStream_AWSRegion { get { return GetResourceString("DataStream_AWSRegion"); } }
+//Resources:PipelineAdminResources:DataStream_AWSSecretKey
+
+		public static string DataStream_AWSSecretKey { get { return GetResourceString("DataStream_AWSSecretKey"); } }
 //Resources:PipelineAdminResources:DataStream_ConnectionString
 
 		public static string DataStream_ConnectionString { get { return GetResourceString("DataStream_ConnectionString"); } }
 //Resources:PipelineAdminResources:DataStream_ConnectionString_Help
 
 		public static string DataStream_ConnectionString_Help { get { return GetResourceString("DataStream_ConnectionString_Help"); } }
+//Resources:PipelineAdminResources:DataStream_DateStorageFormat
+
+		public static string DataStream_DateStorageFormat { get { return GetResourceString("DataStream_DateStorageFormat"); } }
+//Resources:PipelineAdminResources:DataStream_DateStorageFormat_Help
+
+		public static string DataStream_DateStorageFormat_Help { get { return GetResourceString("DataStream_DateStorageFormat_Help"); } }
+//Resources:PipelineAdminResources:DataStream_DateStorageFormat_Select
+
+		public static string DataStream_DateStorageFormat_Select { get { return GetResourceString("DataStream_DateStorageFormat_Select"); } }
+//Resources:PipelineAdminResources:DataStream_DateStorageFormat_Type_Epoch
+
+		public static string DataStream_DateStorageFormat_Type_Epoch { get { return GetResourceString("DataStream_DateStorageFormat_Type_Epoch"); } }
+//Resources:PipelineAdminResources:DataStream_DateStorageFormat_Type_ISO8601
+
+		public static string DataStream_DateStorageFormat_Type_ISO8601 { get { return GetResourceString("DataStream_DateStorageFormat_Type_ISO8601"); } }
 //Resources:PipelineAdminResources:DataStream_Description
 
 		public static string DataStream_Description { get { return GetResourceString("DataStream_Description"); } }
+//Resources:PipelineAdminResources:DataStream_DeviceIdFieldName
+
+		public static string DataStream_DeviceIdFieldName { get { return GetResourceString("DataStream_DeviceIdFieldName"); } }
+//Resources:PipelineAdminResources:DataStream_DeviceIdFieldName_Help
+
+		public static string DataStream_DeviceIdFieldName_Help { get { return GetResourceString("DataStream_DeviceIdFieldName_Help"); } }
 //Resources:PipelineAdminResources:DataStream_Fields
 
 		public static string DataStream_Fields { get { return GetResourceString("DataStream_Fields"); } }
 //Resources:PipelineAdminResources:DataStream_Help
 
 		public static string DataStream_Help { get { return GetResourceString("DataStream_Help"); } }
+//Resources:PipelineAdminResources:DataStream_InvalidBucketName
+
+		public static string DataStream_InvalidBucketName { get { return GetResourceString("DataStream_InvalidBucketName"); } }
+//Resources:PipelineAdminResources:DataStream_InvalidTableName
+
+		public static string DataStream_InvalidTableName { get { return GetResourceString("DataStream_InvalidTableName"); } }
+//Resources:PipelineAdminResources:DataStream_S3_BucketName
+
+		public static string DataStream_S3_BucketName { get { return GetResourceString("DataStream_S3_BucketName"); } }
 //Resources:PipelineAdminResources:DataStream_StreamType
 
 		public static string DataStream_StreamType { get { return GetResourceString("DataStream_StreamType"); } }
@@ -194,6 +239,15 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_StreamType_TableStorage_Managed
 
 		public static string DataStream_StreamType_TableStorage_Managed { get { return GetResourceString("DataStream_StreamType_TableStorage_Managed"); } }
+//Resources:PipelineAdminResources:DataStream_TableName
+
+		public static string DataStream_TableName { get { return GetResourceString("DataStream_TableName"); } }
+//Resources:PipelineAdminResources:DataStream_TimeStampFieldName
+
+		public static string DataStream_TimeStampFieldName { get { return GetResourceString("DataStream_TimeStampFieldName"); } }
+//Resources:PipelineAdminResources:DataStream_TimeStampFieldName_Help
+
+		public static string DataStream_TimeStampFieldName_Help { get { return GetResourceString("DataStream_TimeStampFieldName_Help"); } }
 //Resources:PipelineAdminResources:DataStream_Title
 
 		public static string DataStream_Title { get { return GetResourceString("DataStream_Title"); } }
@@ -944,11 +998,26 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string CustomModule_Description = "CustomModule_Description";
 			public const string CustomModule_Help = "CustomModule_Help";
 			public const string CustomModule_Title = "CustomModule_Title";
+			public const string DataStream_AutoCreateTable = "DataStream_AutoCreateTable";
+			public const string DataStream_AutoCreateTable_Help = "DataStream_AutoCreateTable_Help";
+			public const string DataStream_AWSAccessKey = "DataStream_AWSAccessKey";
+			public const string DataStream_AWSRegion = "DataStream_AWSRegion";
+			public const string DataStream_AWSSecretKey = "DataStream_AWSSecretKey";
 			public const string DataStream_ConnectionString = "DataStream_ConnectionString";
 			public const string DataStream_ConnectionString_Help = "DataStream_ConnectionString_Help";
+			public const string DataStream_DateStorageFormat = "DataStream_DateStorageFormat";
+			public const string DataStream_DateStorageFormat_Help = "DataStream_DateStorageFormat_Help";
+			public const string DataStream_DateStorageFormat_Select = "DataStream_DateStorageFormat_Select";
+			public const string DataStream_DateStorageFormat_Type_Epoch = "DataStream_DateStorageFormat_Type_Epoch";
+			public const string DataStream_DateStorageFormat_Type_ISO8601 = "DataStream_DateStorageFormat_Type_ISO8601";
 			public const string DataStream_Description = "DataStream_Description";
+			public const string DataStream_DeviceIdFieldName = "DataStream_DeviceIdFieldName";
+			public const string DataStream_DeviceIdFieldName_Help = "DataStream_DeviceIdFieldName_Help";
 			public const string DataStream_Fields = "DataStream_Fields";
 			public const string DataStream_Help = "DataStream_Help";
+			public const string DataStream_InvalidBucketName = "DataStream_InvalidBucketName";
+			public const string DataStream_InvalidTableName = "DataStream_InvalidTableName";
+			public const string DataStream_S3_BucketName = "DataStream_S3_BucketName";
 			public const string DataStream_StreamType = "DataStream_StreamType";
 			public const string DataStream_StreamType_AWS_ElasticSearch = "DataStream_StreamType_AWS_ElasticSearch";
 			public const string DataStream_StreamType_AWS_S3 = "DataStream_StreamType_AWS_S3";
@@ -961,6 +1030,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_StreamType_SQLServer = "DataStream_StreamType_SQLServer";
 			public const string DataStream_StreamType_TableStorage = "DataStream_StreamType_TableStorage";
 			public const string DataStream_StreamType_TableStorage_Managed = "DataStream_StreamType_TableStorage_Managed";
+			public const string DataStream_TableName = "DataStream_TableName";
+			public const string DataStream_TimeStampFieldName = "DataStream_TimeStampFieldName";
+			public const string DataStream_TimeStampFieldName_Help = "DataStream_TimeStampFieldName_Help";
 			public const string DataStream_Title = "DataStream_Title";
 			public const string DataStreamField_DataType = "DataStreamField_DataType";
 			public const string DataStreamField_DataType_Help = "DataStreamField_DataType_Help";
