@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -16,8 +17,14 @@ namespace LagoVista.IoT.DataStreamConnectors
     {
         DataStream _stream;
         AwsHttpConnection _connection;
+        IInstanceLogger _instanceLogger;
 
         ElasticClient _client;
+
+        public AWSElasticSearchConnector(IInstanceLogger instanceLogger)
+        {
+            _instanceLogger = instanceLogger;
+        }
 
         public Task<InvokeResult> InitAsync(DataStream stream)
         {

@@ -12,9 +12,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 {
+    /* To Run Tests:
+     * 1) Add the three ENV variables that have access to S3 and Elastic Search on the account used for testing *
+     *      AWSUSER
+     *      AWSSECRET
+     *      AWSACCESSKEY
+     */
     [TestClass]
     public class AWSElasticsearchTests
     {
@@ -87,7 +94,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         {
             var stream = GetValidStream();
 
-            var connector = new AWSElasticSearchConnector();
+            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             var result = await connector.InitAsync(stream);
             Assert.IsTrue(result.Successful);
 
@@ -105,7 +112,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         {
             var stream = GetValidStream();
 
-            var connector = new AWSElasticSearchConnector();
+            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             var result = await connector.InitAsync(stream);
             Assert.IsTrue(result.Successful);
 
@@ -141,7 +148,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         {
             var stream = GetValidStream();
 
-            var connector = new AWSElasticSearchConnector();
+            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             var result = await connector.InitAsync(stream);
             Assert.IsTrue(result.Successful);
 
@@ -198,7 +205,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         {
             var stream = GetValidStream();
 
-            var connector = new AWSElasticSearchConnector();
+            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             var result = await connector.InitAsync(stream);
             Assert.IsTrue(result.Successful);
 
@@ -256,7 +263,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         {
             var stream = GetValidStream();
 
-            var connector = new AWSElasticSearchConnector();
+            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             var result = await connector.InitAsync(stream);
             Assert.IsTrue(result.Successful);
 
@@ -313,7 +320,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         {
             var stream = GetValidStream();
 
-            var connector = new AWSElasticSearchConnector();
+            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             var result = await connector.InitAsync(stream);
             Assert.IsTrue(result.Successful);
 

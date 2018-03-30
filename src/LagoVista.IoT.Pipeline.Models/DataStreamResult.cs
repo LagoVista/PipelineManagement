@@ -13,5 +13,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public string Timestamp { get; set; }
         public Dictionary<string, object> Fields { get; set; }
+
     }
 }

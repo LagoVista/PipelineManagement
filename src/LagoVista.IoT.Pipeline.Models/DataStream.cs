@@ -114,6 +114,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string AWSSecretKey { get; set; }
         #endregion
 
+        #region Azure Properties
+        public string AzureAccountId { get; set; }
+
+        public string AzureAccessKey { get; set; }
+
+        public string AzureTableStorageName { get; set; }
+
+        public string AzureBlobStorageName { get; set; }
+
+        public string AzureBlobStoragePath { get; set; }
+        #endregion
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}@$#_]{0,127}$", FieldType: FieldTypes.Text,
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]

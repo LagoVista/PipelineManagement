@@ -65,7 +65,6 @@ namespace LagoVista.IoT.DataStreamConnectors
             item.Data.Add("userName", user.Text);
 
             return AddItemAsync(item);
-
         }
 
         public async Task<InvokeResult> AddItemAsync(DataStreamRecord item)

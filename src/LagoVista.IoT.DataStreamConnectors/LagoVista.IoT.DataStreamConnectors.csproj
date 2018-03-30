@@ -11,6 +11,7 @@
     <PackageReference Include="LagoVista.Core" Version="1.2.316-alpha1023" />
     <PackageReference Include="LagoVista.IoT.Logging" Version="1.2.316-alpha1023" />
     <PackageReference Include="NEST" Version="6.0.2" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.Admin\LagoVista.IoT.Pipeline.Admin.csproj" />

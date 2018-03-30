@@ -18,7 +18,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Utils
 
         public Task WriteEvent(LogRecord record)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(record.Message);
+            return Task.FromResult(default(object));
         }
     }
 }
