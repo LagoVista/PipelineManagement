@@ -138,9 +138,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string AzureEventHubEntityPath { get; set; }
         #endregion
 
+        #region RDBMSProperties
+        public string DBUserName { get; set; }
+        public string DBPassword { get; set; }
+        public string DBPasswordSecureId { get; set; }
+        public string DBName { get; set; }
+        public bool DBValidateSchema { get; set; }
+        public string DBURL { get; set; }
+        #endregion
+
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}@$#_]{0,127}$", FieldType: FieldTypes.Text,
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]
-        public string TableName { get; set; }
+        public string DBTableName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AutoCreateTable, HelpResource: PipelineAdminResources.Names.DataStream_AutoCreateTable_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool AutoCreateSQLTable { get; set; }
@@ -206,7 +215,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
             if (StreamType.Value == DataStreamTypes.SQLServer)
             {
-                if (string.IsNullOrEmpty(TableName)) result.Errors.Add(new ErrorMessage("SQL Server Table Name is Required for SQL Server Data Streams"));
+                if (string.IsNullOrEmpty(DBTableName)) result.Errors.Add(new ErrorMessage("SQL Server Table Name is Required for SQL Server Data Streams"));
             }
         }
     }

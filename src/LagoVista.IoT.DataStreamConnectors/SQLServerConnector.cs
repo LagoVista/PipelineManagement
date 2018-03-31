@@ -11,11 +11,39 @@ namespace LagoVista.IoT.DataStreamConnectors
     public class SQLServerConnector : IDataStreamConnector
     {
         DataStream _stream;
+        Logging.Loggers.IInstanceLogger _instanceLogger;
 
-        public Task<InvokeResult> InitAsync(DataStream stream)
+        public SQLServerConnector(Logging.Loggers.IInstanceLogger instanceLogger)
+        {
+            _instanceLogger = instanceLogger;
+        }
+
+        public async Task<InvokeResult> InitAsync(DataStream stream)
         {
             _stream = stream;
-            throw new NotImplementedException();
+
+            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            builder.Add("Data Source", stream.DBURL);
+            builder.Add("Initial Catalog", stream.DBName);
+            builder.Add("User Id", stream.DBUserName);
+            builder.Add("Password", stream.DBPassword);
+
+            using (var cn = new System.Data.SqlClient.SqlConnection(builder.ConnectionString))
+            using (var cmd = new System.Data.SqlClient.SqlCommand($"select * from [{stream.DBTableName}]", cn)) 
+            {
+                await cn.OpenAsync();
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    while(rdr.Read())
+                    {
+                        Console.WriteLine(rdr["deviceid"]);
+                    }
+                }
+
+            }
+
+            return InvokeResult.Success;
+
         }
 
         public Task<InvokeResult> AddItemAsync(DataStreamRecord item, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)

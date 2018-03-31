@@ -73,7 +73,6 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             Assert.IsFalse(await container.ExistsAsync());
         }
 
-
         [TestMethod]
         public async Task Azure_Blob_Init()
         {
