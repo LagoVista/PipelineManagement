@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.IoT.Logging.Loggers;
+using System.Threading;
+using LagoVista.IoT.Pipeline.Admin;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 {
@@ -23,7 +25,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
      *      AWSACCESSKEY
      */
     [TestClass]
-    public class AWSElasticsearchTests
+    public class AWSElasticsearchTests : DataStreamConnectorTestBase
     {
         private DataStream GetValidStream()
         {
@@ -44,29 +46,11 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             return stream;
         }
 
-        private async Task<DataStreamRecord> AddObject(AWSElasticSearchConnector connector, string deviceId, string timeStamp, params KeyValuePair<string, object>[] items)
+        private async Task<IDataStreamConnector> GetConnector(DataStream stream)
         {
-            var record = new Pipeline.Admin.Models.DataStreamRecord(){DeviceId = deviceId};
-            
-            if(!String.IsNullOrEmpty(timeStamp))
-            {
-                record.Timestamp = timeStamp;
-            }
-
-            foreach (var item in items)
-            {
-                record.Data.Add(item.Key, item.Value);
-            }
-
-            var addResult = await connector.AddItemAsync(record);
-
-            if (!addResult.Successful)
-            {
-                Console.WriteLine(addResult.Errors.First().Message);
-            }
-
-            Assert.IsTrue(addResult.Successful);
-            return record;
+            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
+            Assert.IsTrue((await connector.InitAsync(stream)).Successful);
+            return connector;
         }
 
         [TestInitialize]
@@ -89,6 +73,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             }
         }
 
+
         [TestMethod]
         public async Task AWS_E3_Insert_Record()
         {
@@ -100,12 +85,13 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
             var rnd = new Random();
 
-            await AddObject(connector, "dev123", null, new KeyValuePair<string, object>("pointIndex",0),
+            await AddObject(connector, stream, "dev123", null,
+                new KeyValuePair<string, object>("pointIndex", 0),
                 new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
                 new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
                 new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
         }
-        
+
 
         [TestMethod]
         public async Task AWS_E3_Insert_100_Records()
@@ -120,83 +106,36 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
             for (var idx = 0; idx < 100; ++idx)
             {
-                var record = await AddObject(connector, "dev123", null, new KeyValuePair<string, object>("pointIndex", idx),
+                var record = await AddObject(connector, stream, "dev123", null, 
+                    new KeyValuePair<string, object>("pointIndex", idx),
                     new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
                     new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
                     new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
             }
         }
 
-        private void WriteResult(ListResponse<DataStreamResult> response)
+        private async Task BulkInsert(IDataStreamConnector connector, DataStream stream, string deviceType, QueryRangeType rangeType)
         {
-            var idx = 1;
-            foreach (var item in response.Model)
+            var records = GetRecordsToInsert(stream, "dev123", rangeType);
+            foreach (var record in records)
             {
-                Console.WriteLine($"Record {idx++}");
-
-                foreach (var fld in item.Fields)
-                {
-                    Console.WriteLine($"\t{fld.Key} - {fld.Value}");
-                }
-                Console.WriteLine("----");
-                Console.WriteLine();
+                Assert.IsTrue((await connector.AddItemAsync(record)).Successful, "Did not insert bulk item");
             }
+
+            // Give it just a little time to insert the rest of the records
+            await Task.Delay(1000);
         }
 
         [TestMethod]
         public async Task AWS_E3_PaginatedRecordGet()
         {
             var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
 
-            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.Records_100);
 
-            var rnd = new Random();
-
-            for (var idx = 0; idx < 100; ++idx)
-            {
-                var record = await AddObject(connector, "dev123", null, new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            // Give it just a little time to insert the rest of the records
-            await Task.Delay(1000);
-
-            var getResult = await connector.GetItemsAsync("123", new Core.Models.UIMetaData.ListRequest()
-            {
-                PageIndex = 0,
-                PageSize = 15
-            });
-
-            Assert.AreEqual(99L, getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value);
-            Assert.IsTrue(getResult.Successful);
-            Assert.IsTrue(getResult.HasMoreRecords);
-            WriteResult(getResult);
-
-            getResult = await connector.GetItemsAsync("123", new Core.Models.UIMetaData.ListRequest() { PageIndex = 1, PageSize = 15 });
-
-            Assert.AreEqual(84L, getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value);
-            Assert.IsTrue(getResult.Successful);
-            Assert.IsTrue(getResult.HasMoreRecords);
-            WriteResult(getResult);
-
-            getResult = await connector.GetItemsAsync("123", new Core.Models.UIMetaData.ListRequest() { PageIndex = 6, PageSize = 15 });
-
-            Assert.AreEqual(9L, getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value);
-            Assert.AreEqual(10, getResult.PageSize);
-            Assert.IsTrue(getResult.Successful);
-            Assert.IsFalse(getResult.HasMoreRecords);
-            WriteResult(getResult);
-
-            getResult = await connector.GetItemsAsync("123", new Core.Models.UIMetaData.ListRequest() { PageIndex = 7, PageSize = 15 });
-
-            Assert.AreEqual(0, getResult.PageSize);
-            Assert.IsTrue(getResult.Successful);
-            Assert.IsFalse(getResult.HasMoreRecords);
-            WriteResult(getResult);
+            await ValidatePaginatedRecordSet(deviceId, connector);
         }
 
 
@@ -204,170 +143,36 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         public async Task AWS_E3_DateFiltereBefore()
         {
             var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
 
-            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForBeforeQuery);
 
-            var rnd = new Random();
-
-            for (var idx = 0; idx < 10; ++idx)
-            {
-                await AddObject(connector, "dev123", DateTime.Now.AddDays(5).ToJSONString(), new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("inrange", false),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            for (var idx = 10; idx < 20; ++idx)
-            {
-                await AddObject(connector, "dev123", DateTime.Now.AddDays(0).ToJSONString(), new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("inrange", false),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            for (var idx = 20; idx < 30; ++idx)
-            {
-                await AddObject(connector, "dev123", DateTime.Now.AddDays(-5).ToJSONString(), new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("inrange", true),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            // Give it just a little time to insert the rest of the records
-            await Task.Delay(1000);
-
-            var getResult = await connector.GetItemsAsync("123", new Core.Models.UIMetaData.ListRequest()
-            {
-                PageIndex = 0,
-                PageSize = 30,
-                EndDate = DateTime.UtcNow.AddDays(-1).ToJSONString(),
-            });
-
-            WriteResult(getResult);
-
-            Assert.IsTrue(getResult.Successful);
-            Assert.IsFalse(getResult.HasMoreRecords);
-            Assert.AreEqual(10, getResult.PageSize);
-            Assert.IsFalse(getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "inrange" && Convert.ToBoolean(fld.Value) == false).Any());
-            
-            
+            await ValidateDataFilterBefore(deviceId, stream, connector);
         }
 
         [TestMethod]
         public async Task AWS_E3_DateFilteredInRange()
         {
             var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
 
-            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForInRangeQuery);
 
-            var rnd = new Random();
-
-            for (var idx = 0; idx < 10; ++idx)
-            {
-                await AddObject(connector, "dev123", DateTime.Now.AddDays(5).ToJSONString(), new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("inrange", false),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            for (var idx = 10; idx < 20; ++idx)
-            {
-                await AddObject(connector, "dev123", DateTime.Now.AddDays(0).ToJSONString(), new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("inrange", true),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            for (var idx = 20; idx < 30; ++idx)
-            {
-                await AddObject(connector, "dev123", DateTime.Now.AddDays(-5).ToJSONString(), new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("inrange", false),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            // Give it just a little time to insert the rest of the records
-            await Task.Delay(1000);
-
-            var getResult = await connector.GetItemsAsync("123", new Core.Models.UIMetaData.ListRequest()
-            {
-                PageIndex = 0,
-                PageSize = 30,
-                StartDate = DateTime.UtcNow.AddDays(-1).ToJSONString(),
-                EndDate = DateTime.UtcNow.AddDays(1).ToJSONString(),
-            });
-
-            WriteResult(getResult);
-
-            Assert.IsTrue(getResult.Successful);
-            Assert.IsFalse(getResult.HasMoreRecords);
-            Assert.AreEqual(10, getResult.PageSize);
-            Assert.IsFalse(getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "inrange" && Convert.ToBoolean(fld.Value) == false).Any());            
+            await ValidateDataFilterInRange("dev123", stream, connector);
         }
 
         [TestMethod]
         public async Task AWS_E3_DateFilteredAfter()
         {
             var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
 
-            var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForAfterQuery);
 
-            var rnd = new Random();
-
-            for (var idx = 0; idx < 10; ++idx)
-            {
-                await AddObject(connector, "dev123", DateTime.Now.AddDays(-5).ToJSONString(), new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("inrange", false),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            for (var idx = 10; idx < 20; ++idx)
-            {
-                await AddObject(connector, "dev123", DateTime.Now.AddDays(0).ToJSONString(), new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("inrange", false),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            for (var idx = 20; idx < 30; ++idx)
-            {
-                await AddObject(connector, "dev123", DateTime.Now.AddDays(5).ToJSONString(), new KeyValuePair<string, object>("pointIndex", idx),
-                    new KeyValuePair<string, object>("pointOn", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("inrange", true),
-                    new KeyValuePair<string, object>("pointTwo", 50 - rnd.NextDouble() * 100),
-                    new KeyValuePair<string, object>("pointThree", $"testing-{rnd.Next(100, 10000)}"));
-            }
-
-            // Give it just a little time to insert the rest of the records
-            await Task.Delay(1000);
-
-            var getResult = await connector.GetItemsAsync("123", new Core.Models.UIMetaData.ListRequest()
-            {
-                PageIndex = 0,
-                PageSize = 30,
-                StartDate = DateTime.UtcNow.AddDays(1).ToJSONString()
-            });
-
-            Assert.AreEqual(10, getResult.PageSize);
-            Assert.IsFalse(getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "inrange" && Convert.ToBoolean(fld.Value) == false).Any());
-            Assert.IsTrue(getResult.Successful);
-            Assert.IsFalse(getResult.HasMoreRecords);
-            WriteResult(getResult);
+            await ValidateDataFilterAfter("dev123", stream, connector);
         }
 
         [TestCleanup]

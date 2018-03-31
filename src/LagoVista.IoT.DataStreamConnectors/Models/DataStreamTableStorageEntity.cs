@@ -11,8 +11,6 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
 
     public class DataStreamTSEntity : TableEntity
     {
-        public string StreamId { get; set; }
-        public string DeviceId { get; set; }
         public Dictionary<string, object> Data { get; set; }
 
         public override IDictionary<string, EntityProperty> WriteEntity(OperationContext operationContext)
@@ -45,16 +43,19 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
             return results;
         }
 
-        public static DataStreamTSEntity FromDeviceStreamRecord(DataStreamRecord deviceStreamRecord)
+        public static DataStreamTSEntity FromDeviceStreamRecord(DataStream stream, DataStreamRecord record)
         {
-            return new DataStreamTSEntity()
+            var tsEntity = new DataStreamTSEntity()
             {
-                DeviceId = deviceStreamRecord.DeviceId,
-                StreamId = deviceStreamRecord.StreamId,
-                //  PartitionKey = deviceStreamRecord.PartitionKey,
-                Data = deviceStreamRecord.Data,
+                PartitionKey = record.DeviceId,
+                Data = record.Data,
                 RowKey = DateTime.UtcNow.ToInverseTicksRowKey(),
             };
+
+            tsEntity.Timestamp = DateTimeOffset.UtcNow;
+            tsEntity.Data.Add(stream.TimeStampFieldName, record.GetTimeStampValue(stream));
+            tsEntity.Data.Add(stream.DeviceIdFieldName, record.DeviceId);
+            return tsEntity;
         }
 
         public DataStreamResult ToDataStreamResult(DataStream stream)

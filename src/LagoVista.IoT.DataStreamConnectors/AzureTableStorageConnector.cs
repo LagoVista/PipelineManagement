@@ -75,8 +75,9 @@ namespace LagoVista.IoT.DataStreamConnectors
                 await _cloudTable.CreateIfNotExistsAsync();
                 return InvokeResult.Success;
             }
-            catch(Exception ex)
+            catch (StorageException ex)
             {
+                Console.Write(ex.Message);
                 return InvokeResult.FromException("AzureTableStorageConnector_InitAsync", ex);
             }
         }
@@ -94,12 +95,12 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public Task<InvokeResult> AddItemAsync(DataStreamRecord item)
         {
-            return ExecWithRetry(TableOperation.Insert(Models.DataStreamTSEntity.FromDeviceStreamRecord(item)));
+            var tsItem = Models.DataStreamTSEntity.FromDeviceStreamRecord(_stream, item);
+            return ExecWithRetry(TableOperation.Insert(tsItem));
         }
 
         public async Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
-
             var filter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.PartitionKey), QueryComparisons.Equal, deviceId);
 
             var dateFilter = String.Empty;
@@ -126,13 +127,12 @@ namespace LagoVista.IoT.DataStreamConnectors
                 dateFilter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.GreaterThanOrEqual, startTicks.ToString());
             }
 
-
             if (!String.IsNullOrEmpty(dateFilter))
             {
                 filter = TableQuery.CombineFilters(filter, TableOperators.And, dateFilter);
             }
 
-            var query = new TableQuery<Models.DataStreamTSEntity>().Where(filter).Take(request.PageSize);
+            var query = new TableQuery<DynamicTableEntity>().Where(filter).Take(request.PageSize);
 
             var numberRetries = 5;
             var retryCount = 0;
@@ -141,8 +141,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 try
                 {
-
-                    TableQuerySegment<Models.DataStreamTSEntity> results;
+                    TableQuerySegment<DynamicTableEntity> results;
                     if (!String.IsNullOrEmpty(request.NextPartitionKey) && !String.IsNullOrEmpty(request.NextRowKey))
                     {
                         var token = new TableContinuationToken()
@@ -151,27 +150,48 @@ namespace LagoVista.IoT.DataStreamConnectors
                             NextRowKey = request.NextRowKey
                         };
 
-                        results = await _cloudTable.ExecuteQuerySegmentedAsync<Models.DataStreamTSEntity>(query, token);
+                        results = await _cloudTable.ExecuteQuerySegmentedAsync<DynamicTableEntity>(query, token);
                     }
                     else
                     {
-                        results = await _cloudTable.ExecuteQuerySegmentedAsync<Models.DataStreamTSEntity>(query, new TableContinuationToken());
+                        results = await _cloudTable.ExecuteQuerySegmentedAsync<DynamicTableEntity>(query, new TableContinuationToken());
                     }
 
-                    var listResponse = new ListResponse<DataStreamResult>();
-                    listResponse.NextRowKey = results.ContinuationToken.NextRowKey;
-                    listResponse.NextPartitionKey = results.ContinuationToken.NextPartitionKey;
+                    var listResponse = new ListResponse<DataStreamResult>
+                    {
+                        NextRowKey = results.ContinuationToken.NextRowKey,
+                        NextPartitionKey = results.ContinuationToken.NextPartitionKey,
+                        HasMoreRecords = results.ContinuationToken != null,
+                    };
 
                     var resultSet = new List<DataStreamResult>();
 
-                    foreach(var item in results)
+                    foreach (var item in results)
                     {
-                        resultSet.Add(item.ToDataStreamResult(_stream));
+                        var result = new DataStreamResult();
+                        foreach (var property in item.Properties)
+                        {
+                            result.Fields.Add(property.Key, property.Value.PropertyAsObject);
+                        }
+
+                        switch (_stream.DateStorageFormat.Value)
+                        {
+                            case DateStorageFormats.Epoch:
+                                long epoch = Convert.ToInt64(item.Properties[_stream.TimeStampFieldName]);
+                                result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(epoch).DateTime.ToJSONString();
+                                break;
+                            case DateStorageFormats.ISO8601:
+                                result.Timestamp = item.Properties[_stream.TimeStampFieldName].ToString();
+                                break;
+                        }
+
+                        resultSet.Add(result);
                     }
 
+                  
                     listResponse.Model = resultSet;
 
-                    return listResponse; 
+                    return listResponse;
                 }
                 catch (Exception ex)
                 {

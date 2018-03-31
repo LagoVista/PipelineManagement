@@ -56,43 +56,9 @@ namespace LagoVista.IoT.DataStreamConnectors
         public async Task<InvokeResult> AddItemAsync(DataStreamRecord item)
         {
             var recordId = DateTime.UtcNow.ToInverseTicksRowKey();
-
-            DateTimeOffset recordTimeStamp;
-
-            if (String.IsNullOrEmpty(item.Timestamp))
-            {
-                recordTimeStamp = DateTime.UtcNow;
-            }
-            else
-            {
-                if (_stream.DateStorageFormat.Value == DateStorageFormats.Epoch)
-                {
-                    if (long.TryParse(item.Timestamp, out long seconds))
-                    {
-                        DateTimeOffset.FromUnixTimeSeconds(seconds);
-                    }
-                    else
-                    {
-                        return InvokeResult.FromError($"Invalid EPOCH value {item.Timestamp} on Device {item.DeviceId}");
-                    }
-                }
-                else
-                {
-                    recordTimeStamp = item.Timestamp.ToDateTime();
-                }
-            }
-
-            switch (_stream.DateStorageFormat.Value)
-            {
-                case DateStorageFormats.Epoch:
-                    item.Data.Add(_stream.TimeStampFieldName, recordTimeStamp.ToUnixTimeSeconds());
-                    break;
-                case DateStorageFormats.ISO8601:
-                    item.Data.Add(_stream.TimeStampFieldName, recordTimeStamp.DateTime.ToJSONString());
-                    break;
-            }
-
-            item.Data.Add("sortOrder", recordTimeStamp.Ticks);
+            
+            item.Data.Add(_stream.TimeStampFieldName, item.GetTimeStampValue(_stream));
+            item.Data.Add("sortOrder", item.GetTicks());
             item.Data.Add("deviceId", item.DeviceId);
             item.Data.Add("id", recordId);
             item.Data.Add("dataStreamId", _stream.Id);

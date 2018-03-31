@@ -1,8 +1,6 @@
-﻿using LagoVista.Core.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
@@ -21,6 +19,5 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [JsonExtensionData]
         public Dictionary<String, object> Data { get; set; }
-
     }
 }

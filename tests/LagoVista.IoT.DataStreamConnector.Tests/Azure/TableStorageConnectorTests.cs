@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LagoVista.Core;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
@@ -24,28 +25,38 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
     [TestClass]
     public class TableStorageConnectorTests : DataStreamConnectorTestBase
     {
+        DataStream _currentStream;
+
         private DataStream GetValidStream()
         {
-            var stream = new Pipeline.Admin.Models.DataStream()
+            if (_currentStream != null)
+            {
+                return _currentStream;
+            }
+
+            _currentStream = new Pipeline.Admin.Models.DataStream()
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureTableStorage),
                 AzureAccountId = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
-                AzureTableStorageName = "unittesttable",
+                AzureTableStorageName = "unittesttable" + Guid.NewGuid().ToId(),
             };
 
-            Assert.IsFalse(String.IsNullOrEmpty(stream.AzureAccessKey), "Access key must be provided as an Environment Variable in [AZUREACCESSKEY]");
-            Assert.IsFalse(String.IsNullOrEmpty(stream.AzureAccountId), "Account Id must be provided as an Environment Variable in [AZUREACESSKEY]");
+            Assert.IsFalse(String.IsNullOrEmpty(_currentStream.AzureAccessKey), "Access key must be provided as an Environment Variable in [AZUREACCESSKEY]");
+            Assert.IsFalse(String.IsNullOrEmpty(_currentStream.AzureAccountId), "Account Id must be provided as an Environment Variable in [AZUREACESSKEY]");
 
-            return stream;
+            return _currentStream;
         }
 
         private async Task<AzureTableStorageConnector> GetConnector(DataStream stream)
         {
             var connector = new AzureTableStorageConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
+            if (!result.Successful)
+            {
+                Assert.IsTrue(result.Successful, $"Did Not Create Connector {result.Errors.First().Message}");
+            }
             return connector;
         }
 
@@ -62,6 +73,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         [TestInitialize()]
         public void Init()
         {
+            _currentStream = null;
             var stream = GetValidStream();
             var cloudTable = GetCloudTable(stream);
             if (cloudTable.Exists())
@@ -83,6 +95,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             }
 
             Assert.IsFalse(cloudTable.Exists());
+            _currentStream = null;
         }
 
         [TestMethod]
@@ -98,17 +111,90 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         [TestMethod]
         public async Task CreateItemTest()
         {
+            var uniqueId = Guid.NewGuid().ToId();
+
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
-            var record = await AddObject(connector, "abc123", new KeyValuePair<string, object>("pointOne", 37.5),
+            var record = await AddObject(connector, stream, "abc123",
+                null,
+                new KeyValuePair<string, object>("pointOne", 37.5),
                 new KeyValuePair<string, object>("pointTwo", 58.6),
+                new KeyValuePair<string, object>("uniqueId", uniqueId),
                 new KeyValuePair<string, object>("pointThree", "testing"));
 
             var cloudTable = GetCloudTable(stream);
-            var recIdQuery = TableQuery.GenerateFilterCondition(nameof(DataStreamTSEntity.RowKey), QueryComparisons.Equal, record.Data.Where(itm => itm.Key == "id").First().Value.ToString());
-            var result = cloudTable.ExecuteQuery((new TableQuery()).Where(recIdQuery));
-            Console.WriteLine(result);
+            var recIdQuery = TableQuery.GenerateFilterCondition("uniqueId", QueryComparisons.Equal, uniqueId);
+            var result = cloudTable.ExecuteQuery((new TableQuery()).Where(recIdQuery)).First();
+            Assert.AreEqual(uniqueId, result.Properties["uniqueId"].PropertyAsObject);
+            Assert.AreEqual("abc123", result.Properties[stream.DeviceIdFieldName].PropertyAsObject);
         }
+        
+        [TestMethod]
+        public async Task AzureTS_Validate_PaginatedItems()
+        {
+            var deviceId = "dev123";
 
+            var stream = GetValidStream();
+            var cloudTable = GetCloudTable(stream);
+            var batchOper = new TableBatchOperation();
+
+            var connector = await GetConnector(stream);
+
+            for (var idx = 0; idx < 100; ++idx)
+            {
+                var uniqueId = Guid.NewGuid().ToId();
+                var record = GetRecord(stream, deviceId,
+                    DateTime.UtcNow.AddMinutes(idx).ToJSONString(),
+                    new KeyValuePair<string, object>("pointIndex", idx),
+                    new KeyValuePair<string, object>("pointOne", 37.5),
+                    new KeyValuePair<string, object>("pointTwo", 58.6),
+                    new KeyValuePair<string, object>("uniqueId", uniqueId),
+                    new KeyValuePair<string, object>("pointThree", "testing"));
+
+                batchOper.Add(TableOperation.Insert(DataStreamTSEntity.FromDeviceStreamRecord(stream, record)));
+            }
+
+            var results = cloudTable.ExecuteBatch(batchOper);
+            Assert.AreEqual(100, results.Count, "Batch result size should match insert size");
+            foreach (var result in results)
+            {
+                Assert.AreEqual(204, result.HttpStatusCode);
+            }
+
+            await Task.Delay(1500);
+
+            var getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest()
+            {
+                PageIndex = 0,
+                PageSize = 15
+            });
+            Assert.IsTrue(getResult.Successful);
+
+            Assert.AreEqual("99", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+            Assert.IsTrue(getResult.HasMoreRecords, "Should Have Records");
+            WriteResult(getResult);
+
+            getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { PageIndex = 1, PageSize = 15 });
+
+            Assert.AreEqual("84", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+            Assert.IsTrue(getResult.Successful);
+            Assert.IsTrue(getResult.HasMoreRecords);
+            WriteResult(getResult);
+
+            getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { PageIndex = 6, PageSize = 15 });
+
+            Assert.AreEqual("9", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+            Assert.AreEqual(10, getResult.PageSize);
+            Assert.IsTrue(getResult.Successful);
+            Assert.IsFalse(getResult.HasMoreRecords);
+            WriteResult(getResult);
+
+            getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { PageIndex = 7, PageSize = 15 });
+
+            Assert.AreEqual(0, getResult.PageSize);
+            Assert.IsTrue(getResult.Successful);
+            Assert.IsFalse(getResult.HasMoreRecords);
+            WriteResult(getResult);
+        }
     }
 }
