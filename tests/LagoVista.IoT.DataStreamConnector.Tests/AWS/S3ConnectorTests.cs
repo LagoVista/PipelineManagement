@@ -147,6 +147,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         }
 
         [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
         public async Task AWS_S3_GetList_Test()
         {
             var stream = GetValidStream();
@@ -154,17 +155,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             var connector = new AWSS3Connector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             await connector.InitAsync(stream);
 
-            for (var idx = 0; idx < 50; ++idx)
-            {
-                await AddObject(connector, "dev123", new KeyValuePair<string, object>("pointOne", 37.5),
-                    new KeyValuePair<string, object>("itemIndex", idx),
-                    new KeyValuePair<string, object>("pointTwo", 58.6),
-                    new KeyValuePair<string, object>("pointThree", "testing"));
-            }
-
-
-            await connector.InitAsync(stream);
-
+            await connector.GetItemsAsync("devid", new Core.Models.UIMetaData.ListRequest());
         }
 
 

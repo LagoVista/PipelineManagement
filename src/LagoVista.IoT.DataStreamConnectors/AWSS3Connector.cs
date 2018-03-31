@@ -110,15 +110,9 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
         }
 
-        public async Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
+        public Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
-            var lob = new ListObjectsV2Request()
-            {
-                BucketName = _stream.S3BucketName,
-                MaxKeys = request.PageSize
-            };
-
-            return null;
+            throw new NotSupportedException("Reading a list of items from amazon S3 is not supported.");
         }
     }
 }

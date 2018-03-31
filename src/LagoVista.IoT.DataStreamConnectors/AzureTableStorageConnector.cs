@@ -105,32 +105,36 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             var dateFilter = String.Empty;
 
-            if (!String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.StartDate))
+
+            /* FYI - less than and greater than are reversed because the data is inserted wiht row keys in descending order */
+            if (!String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.EndDate))
             {
-                var startTicks = request.StartDate.ToDateTime().Ticks;
-                var endTicks = request.EndDate.ToDateTime().Ticks;
+                var startRowKey = request.StartDate.ToDateTime().ToInverseTicksRowKey();
+                var endRowKey = request.EndDate.ToDateTime().ToInverseTicksRowKey();
 
                 dateFilter = TableQuery.CombineFilters(
-                    TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.GreaterThanOrEqual, startTicks.ToString()),
+                    TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.LessThanOrEqual, startRowKey.ToString()),
                     TableOperators.And,
-                    TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.LessThanOrEqual, endTicks.ToString())
+                    TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.GreaterThanOrEqual, endRowKey.ToString())
                     );
             }
             else if (String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.EndDate))
             {
-                var endTicks = request.EndDate.ToDateTime().Ticks;
-                dateFilter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.LessThanOrEqual, endTicks.ToString());
+                var endRowKey = request.EndDate.ToDateTime().ToInverseTicksRowKey();
+                dateFilter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.GreaterThanOrEqual, endRowKey.ToString());
             }
             else if (String.IsNullOrEmpty(request.EndDate) && !String.IsNullOrEmpty(request.StartDate))
             {
-                var startTicks = request.StartDate.ToDateTime().Ticks;
-                dateFilter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.GreaterThanOrEqual, startTicks.ToString());
+                var startRowKey = request.StartDate.ToDateTime().ToInverseTicksRowKey();
+                dateFilter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.LessThanOrEqual, startRowKey.ToString());
             }
 
             if (!String.IsNullOrEmpty(dateFilter))
             {
                 filter = TableQuery.CombineFilters(filter, TableOperators.And, dateFilter);
             }
+
+            Console.WriteLine(filter);
 
             var query = new TableQuery<DynamicTableEntity>().Where(filter).Take(request.PageSize);
 
@@ -159,8 +163,9 @@ namespace LagoVista.IoT.DataStreamConnectors
 
                     var listResponse = new ListResponse<DataStreamResult>
                     {
-                        NextRowKey = results.ContinuationToken.NextRowKey,
-                        NextPartitionKey = results.ContinuationToken.NextPartitionKey,
+                        NextRowKey = results.ContinuationToken == null ? null : results.ContinuationToken.NextRowKey,
+                        NextPartitionKey = results.ContinuationToken == null ? null : results.ContinuationToken.NextPartitionKey,
+                        PageSize = results.Count(),
                         HasMoreRecords = results.ContinuationToken != null,
                     };
 
@@ -197,11 +202,11 @@ namespace LagoVista.IoT.DataStreamConnectors
                 {
                     if (retryCount == numberRetries)
                     {
-                        _instanceLogger.AddException("PEMTableStorage_UpdateMessageAsync", ex);
+                        _instanceLogger.AddException("AzureTableStorageConnector_GetItemsAsync", ex);
                     }
                     else
                     {
-                        _instanceLogger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "PEMTableStorage_UpdateMessageAsync", "Exception writing PEM, will retry", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
+                        _instanceLogger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureTableStorageConnector_GetItemsAsync", "", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
                     }
                     await Task.Delay(retryCount * 250);
                 }

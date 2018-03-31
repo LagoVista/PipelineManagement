@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
+
+    /* For Future Expansion.... */
     public class AzureDataLakeConnector : IDataStreamConnector
     {
         DataStream _stream;

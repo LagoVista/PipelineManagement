@@ -45,11 +45,16 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
 
         public static DataStreamTSEntity FromDeviceStreamRecord(DataStream stream, DataStreamRecord record)
         {
+            if(String.IsNullOrEmpty(record.Timestamp))
+            {
+                record.Timestamp = DateTime.UtcNow.ToJSONString();
+            }
+
             var tsEntity = new DataStreamTSEntity()
             {
                 PartitionKey = record.DeviceId,
                 Data = record.Data,
-                RowKey = DateTime.UtcNow.ToInverseTicksRowKey(),
+                RowKey = record.Timestamp.ToDateTime().ToInverseTicksRowKey(),
             };
 
             tsEntity.Timestamp = DateTimeOffset.UtcNow;
@@ -61,12 +66,12 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
         public DataStreamResult ToDataStreamResult(DataStream stream)
         {
             var result = new DataStreamResult();
-            foreach(var item in Data)
+            foreach (var item in Data)
             {
                 result.Fields.Add(item.Key, item.Value);
             }
 
-            switch(stream.DateStorageFormat.Value)
+            switch (stream.DateStorageFormat.Value)
             {
                 case DateStorageFormats.Epoch:
                     long epoch = Convert.ToInt64(Data[stream.TimeStampFieldName]);
@@ -76,7 +81,7 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
                     result.Timestamp = Data[stream.TimeStampFieldName].ToString();
                     break;
             }
-     
+
             return result;
         }
 

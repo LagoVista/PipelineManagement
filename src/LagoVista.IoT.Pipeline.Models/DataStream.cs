@@ -19,14 +19,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AzureBlob,
         [EnumLabel(DataStream.StreamType_AzureBlob_Managed, PipelineAdminResources.Names.DataStream_StreamType_AzureBlob_Managed, typeof(PipelineAdminResources))]
         AzureBlob_Managed,
+        [EnumLabel(DataStream.StreamType_AzureEventHub, PipelineAdminResources.Names.DataStream_StreamType_AzureEventHub, typeof(PipelineAdminResources))]
+        AzureEventHub,
         [EnumLabel(DataStream.StreamType_AzureTableStorage, PipelineAdminResources.Names.DataStream_StreamType_TableStorage, typeof(PipelineAdminResources))]
         AzureTableStorage,
         [EnumLabel(DataStream.StreamType_AzureTableStorage_Managed, PipelineAdminResources.Names.DataStream_StreamType_TableStorage_Managed, typeof(PipelineAdminResources))]
         AzureTableStorage_Managed,
-        [EnumLabel(DataStream.StreamType_DataLake, PipelineAdminResources.Names.DataStream_StreamType_DataLake, typeof(PipelineAdminResources))]
-        AzureDataLake,
+        //[EnumLabel(DataStream.StreamType_DataLake, PipelineAdminResources.Names.DataStream_StreamType_DataLake, typeof(PipelineAdminResources))]
+        //AzureDataLake,
         [EnumLabel(DataStream.StreamType_SQLServer, PipelineAdminResources.Names.DataStream_StreamType_SQLServer, typeof(PipelineAdminResources))]
         SQLServer
+
+           
     }
 
     public enum DateStorageFormats
@@ -45,9 +49,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string StreamType_AzureBlob = "azureblob";
         public const string StreamType_AzureBlob_Managed = "azureblobmanaged";
         public const string StreamType_AzureTableStorage = "azuretablestorage";
+        public const string StreamType_AzureEventHub = "azureeventhub";
         public const string StreamType_AzureTableStorage_Managed = "azuretablestoragemanaged";
-        public const string StreamType_DataLake = "azuredatalake";
         public const string StreamType_SQLServer = "sqlserver";
+
+        //public const string StreamType_DataLake = "azuredatalake";
+
 
         public const string StreamType_Epcoh = "expoch";
         public const string StreamType_ISO8601 = "iso8601";
@@ -121,9 +128,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public string AzureTableStorageName { get; set; }
 
-        public string AzureBlobStorageName { get; set; }
-
+        
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[a-z0-9]+(-[a-z0-9]+)*$", FieldType: FieldTypes.Text,
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]
         public string AzureBlobStoragePath { get; set; }
+
+        public string AzureEventHubName { get; set; }
+
+        public string AzureEventHubEntityPath { get; set; }
         #endregion
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}@$#_]{0,127}$", FieldType: FieldTypes.Text,
@@ -136,6 +148,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<DataStreamField> Fields { get; set; }
+
 
 
         public new DataStreamSummary CreateSummary()

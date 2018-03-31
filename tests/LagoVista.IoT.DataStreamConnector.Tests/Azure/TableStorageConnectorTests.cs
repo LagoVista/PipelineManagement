@@ -99,7 +99,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestMethod]
-        public async Task AzureTS_DataStream_CreateTable()
+        public async Task Azure_TS_DataStream_CreateTable()
         {
             var stream = GetValidStream();
             await GetConnector(stream);
@@ -128,9 +128,10 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             Assert.AreEqual(uniqueId, result.Properties["uniqueId"].PropertyAsObject);
             Assert.AreEqual("abc123", result.Properties[stream.DeviceIdFieldName].PropertyAsObject);
         }
-        
+
+       
         [TestMethod]
-        public async Task AzureTS_Validate_PaginatedItems()
+        public async Task Azure_TS_Validate_PaginatedItems()
         {
             var deviceId = "dev123";
 
@@ -139,16 +140,15 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var batchOper = new TableBatchOperation();
 
             var connector = await GetConnector(stream);
-
+            
             for (var idx = 0; idx < 100; ++idx)
             {
-                var uniqueId = Guid.NewGuid().ToId();
                 var record = GetRecord(stream, deviceId,
                     DateTime.UtcNow.AddMinutes(idx).ToJSONString(),
                     new KeyValuePair<string, object>("pointIndex", idx),
                     new KeyValuePair<string, object>("pointOne", 37.5),
                     new KeyValuePair<string, object>("pointTwo", 58.6),
-                    new KeyValuePair<string, object>("uniqueId", uniqueId),
+                    new KeyValuePair<string, object>("uniqueId", Guid.NewGuid().ToId()),
                     new KeyValuePair<string, object>("pointThree", "testing"));
 
                 batchOper.Add(TableOperation.Insert(DataStreamTSEntity.FromDeviceStreamRecord(stream, record)));
@@ -161,40 +161,93 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 Assert.AreEqual(204, result.HttpStatusCode);
             }
 
-            await Task.Delay(1500);
+            var getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest(){PageSize = 15});
 
-            var getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest()
-            {
-                PageIndex = 0,
-                PageSize = 15
-            });
             Assert.IsTrue(getResult.Successful);
+            WriteResult(getResult);
 
             Assert.AreEqual("99", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
             Assert.IsTrue(getResult.HasMoreRecords, "Should Have Records");
             WriteResult(getResult);
 
-            getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { PageIndex = 1, PageSize = 15 });
+            for (var idx = 0; idx < 5; ++idx)
+            {
+                getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { NextPartitionKey = getResult.NextPartitionKey, NextRowKey = getResult.NextRowKey, PageSize = 15 });
 
-            Assert.AreEqual("84", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+                Assert.AreEqual((84 - (idx * 15)).ToString(), getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+                Assert.IsTrue(getResult.Successful);
+                Assert.IsTrue(getResult.HasMoreRecords);
+                WriteResult(getResult);
+            }
+
+            getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { NextPartitionKey = getResult.NextPartitionKey, NextRowKey = getResult.NextRowKey, PageSize = 15 });
             Assert.IsTrue(getResult.Successful);
-            Assert.IsTrue(getResult.HasMoreRecords);
             WriteResult(getResult);
-
-            getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { PageIndex = 6, PageSize = 15 });
 
             Assert.AreEqual("9", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
             Assert.AreEqual(10, getResult.PageSize);
-            Assert.IsTrue(getResult.Successful);
             Assert.IsFalse(getResult.HasMoreRecords);
-            WriteResult(getResult);
 
-            getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { PageIndex = 7, PageSize = 15 });
-
-            Assert.AreEqual(0, getResult.PageSize);
-            Assert.IsTrue(getResult.Successful);
-            Assert.IsFalse(getResult.HasMoreRecords);
             WriteResult(getResult);
+        }
+
+        private async Task BulkInsert(IDataStreamConnector connector, DataStream stream, string deviceType, QueryRangeType rangeType)
+        {
+            var batchOper = new TableBatchOperation();
+            var cloudTable = GetCloudTable(stream);
+            var records = GetRecordsToInsert(stream, "dev123", rangeType);
+            foreach (var record in records)
+            {
+                var tsRecord = DataStreamTSEntity.FromDeviceStreamRecord(stream, record);
+                batchOper.Add(TableOperation.Insert(tsRecord));
+                Console.WriteLine(tsRecord.RowKey);
+            }
+
+            var results = cloudTable.ExecuteBatch(batchOper);
+            Assert.AreEqual(records.Count, results.Count, "Batch result size should match insert size");
+            foreach (var result in results)
+            {
+                Assert.AreEqual(204, result.HttpStatusCode);
+            }
+            // Give it just a little time to insert the rest of the records
+            await Task.Delay(1000);
+        }
+
+
+        [TestMethod]
+        public async Task Azure_TS_DateFiltereBefore()
+        {
+            var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";            
+
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForBeforeQuery);
+
+            await ValidateDataFilterBefore(deviceId, stream, connector);
+        }
+
+        [TestMethod]
+        public async Task Azure_TS_DateFilteredInRange()
+        {
+            var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
+
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForInRangeQuery);
+
+            await ValidateDataFilterInRange("dev123", stream, connector);
+        }
+
+        [TestMethod]
+        public async Task Azure_TS_DateFilteredAfter()
+        {
+            var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
+
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForAfterQuery);
+
+            await ValidateDataFilterAfter("dev123", stream, connector);
         }
     }
 }
