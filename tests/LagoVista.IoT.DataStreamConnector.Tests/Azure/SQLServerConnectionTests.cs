@@ -12,7 +12,22 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
     /* 
      * To run these tests ensure that the SQL Server parameters as described below are environment variables
      * The database should also have a table named "unittest" with the following schema
-     */
+     
+CCREATE TABLE [dbo].[unittest](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[deviceId] [varchar](128) NOT NULL,
+	[timeStamp] [datetime] NOT NULL,
+	[value1] [int] NOT NULL,
+	[value2] [int] NULL,
+	[value3] [float] NULL,
+	[location] [geography] NULL,
+ CONSTRAINT [PK__unittest__3214EC070EB089E8] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF)
+)
+        
+       * */
 
     [TestClass]
     public class SQLServerConnectionTests : DataStreamConnectorTestBase

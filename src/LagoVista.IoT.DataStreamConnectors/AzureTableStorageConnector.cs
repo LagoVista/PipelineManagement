@@ -60,6 +60,13 @@ namespace LagoVista.IoT.DataStreamConnectors
             return InvokeResult.Success;
         }
 
+        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        {
+            var result = new ValidationResult();
+
+            return Task.FromResult(result);
+        }
+
         public async Task<InvokeResult> InitAsync(DataStream stream)
         {
             var credentials = new StorageCredentials(stream.AzureAccountId, stream.AzureAccessKey);

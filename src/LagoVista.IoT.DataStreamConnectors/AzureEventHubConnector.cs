@@ -40,6 +40,13 @@ namespace LagoVista.IoT.DataStreamConnectors
             return Task<InvokeResult>.FromResult(InvokeResult.Success);
         }
 
+        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        {
+            var result = new ValidationResult();
+
+            return Task.FromResult(result);
+        }
+
         public Task<InvokeResult> AddItemAsync(DataStreamRecord item, EntityHeader org, EntityHeader user)
         {
             item.Data.Add("orgId", org.Id);

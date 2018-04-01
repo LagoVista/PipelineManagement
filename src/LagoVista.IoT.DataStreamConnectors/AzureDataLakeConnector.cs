@@ -20,6 +20,13 @@ namespace LagoVista.IoT.DataStreamConnectors
             throw new NotImplementedException();
         }
 
+        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        {
+            var result = new ValidationResult();
+
+            return Task.FromResult(result);
+        }
+
         public Task<InvokeResult> AddItemAsync(DataStreamRecord item, LagoVista.Core.Models.EntityHeader org, LagoVista.Core.Models.EntityHeader user)
         {
             throw new NotImplementedException();

@@ -27,6 +27,13 @@ namespace LagoVista.IoT.DataStreamConnectors
             _instanceLogger = instanceLogger;
         }
 
+        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        {
+            var result = new ValidationResult();
+
+            return Task.FromResult(result);
+        }
+
         public async Task<InvokeResult> InitAsync(DataStream stream)
         {
             _stream = stream;
