@@ -47,7 +47,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                 return result;
             }
 
-            if (!metaData.IsRequired && !field.IsRequired) result.AddUserError($"{field.FieldName} on database is required, but it is not required on the data stream.");
+            if (metaData.IsRequired && !field.IsRequired) result.AddUserError($"{field.FieldName} on database is required, but it is not required on the data stream.");
 
             List<string> validColumnTypes = null;
 
@@ -70,8 +70,24 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public static ValidationResult ValidateSQLSeverMetaData(this DataStream stream, List<SQLServerConnector.SQLFieldMetaData> sqlMeteaData)
         {
+            /* Make a copy so  we can add the device and time stamp fields */
+            var fields = new List<DataStreamField>(stream.Fields);
+            fields.Add(new DataStreamField()
+            {
+                FieldName = stream.DeviceIdFieldName,
+                IsRequired = true,
+                FieldType = Core.Models.EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.String)
+            });
+
+            fields.Add(new DataStreamField()
+            {
+                FieldName = stream.TimeStampFieldName,
+                IsRequired = true,
+                FieldType = Core.Models.EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.DateTime)
+            });
+
             var result = new ValidationResult();
-            foreach (var fld in stream.Fields)
+            foreach (var fld in fields)
             {
                 var sqlField = sqlMeteaData.Where(sqlFld => sqlFld.ColumnName.ToLower() == fld.FieldName.ToLower()).FirstOrDefault();
                 result.Concat(fld.ValidationSQLServerMetaDataField(sqlField));
@@ -79,8 +95,8 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             foreach (var fld in sqlMeteaData)
             {
-                var dsFld = stream.Fields.Where(strFld => strFld.FieldName.ToLower() == fld.ColumnName).FirstOrDefault();
-                if(dsFld == null && fld.IsRequired) result.AddUserError($"{fld.ColumnName} is required on the SQL Server table but it is not present on the data stream field.");
+                var dsFld = fields.Where(strFld => strFld.FieldName.ToLower() == fld.ColumnName.ToLower()).FirstOrDefault();
+                if(dsFld == null && fld.IsRequired && !fld.IsIdentity && (fld.DefaultValue != null && !fld.DefaultValue.ToLower().Contains("newid"))) result.AddUserError($"{fld.ColumnName} is required on the SQL Server table but it is not present on the data stream field.");
             }
 
             return result;

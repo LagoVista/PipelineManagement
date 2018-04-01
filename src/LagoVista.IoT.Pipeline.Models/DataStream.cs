@@ -78,10 +78,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         #region Data Formatting Properties
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, HelpResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}_]{3,32}$", HelpResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string TimeStampFieldName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName, HelpResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}_]{3,32}$", HelpResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public string DeviceIdFieldName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DateStorageFormat, EnumType: (typeof(DateStorageFormats)), HelpResource: PipelineAdminResources.Names.DataStream_DateStorageFormat,
