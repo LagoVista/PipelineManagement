@@ -96,7 +96,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             foreach (var fld in sqlMeteaData)
             {
                 var dsFld = fields.Where(strFld => strFld.FieldName.ToLower() == fld.ColumnName.ToLower()).FirstOrDefault();
-                if(dsFld == null && fld.IsRequired && !fld.IsIdentity && (fld.DefaultValue != null && !fld.DefaultValue.ToLower().Contains("newid"))) result.AddUserError($"{fld.ColumnName} is required on the SQL Server table but it is not present on the data stream field.");
+                if(dsFld == null && fld.IsRequired && !fld.IsIdentity && (fld.DefaultValue == null || !fld.DefaultValue.ToLower().Contains("newid"))) result.AddUserError($"{fld.ColumnName} is required on the SQL Server table but it is not present on the data stream field.");
             }
 
             return result;

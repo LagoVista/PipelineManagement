@@ -13,7 +13,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="1.3.0-beta2" />
     <PackageReference Include="MSTest.TestFramework" Version="1.3.0-beta2" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
-    <PackageReference Include="LagoVista.Core" Version="1.2.319-alpha0633" />
+    <PackageReference Include="LagoVista.Core" Version="1.2.319-alpha1208" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.1.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

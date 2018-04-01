@@ -159,20 +159,24 @@ CCREATE TABLE [dbo].[unittest](
         public async Task SQLServer_CouldNotOpenDB_DoesNotExists_Invalid()
         {
             var stream = GetValidStream();
+            var oldDbName = stream.DBName;
             stream.DBName = "does not exist";
 
             var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             AssertInvalidError((await connector.InitAsync(stream)), "Could not access SQL Server: Cannot open database \"does not exist\" requested by the login. The login failed.");
+            stream.DBName = oldDbName;
         }
 
         [TestMethod]
         public async Task SQLServer_TableDoesNotExistOnDB_Invalid()
         {
             var stream = GetValidStream();
+            var oldName = stream.DBTableName;
             stream.DBTableName = "does not exist";
 
             var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             AssertInvalidError((await connector.InitAsync(stream)), "Table [does not exist] name not found on SQL Server database [UnitTestDB] on server [nuviot-dev.database.windows.net.");
+            stream.DBTableName = oldName;
         }
 
         [TestMethod]

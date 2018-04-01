@@ -17,39 +17,36 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         {
             Console.WriteLine("Errors (at least some are expected)");
 
-            foreach(var err in result.Errors)
+            foreach (var err in result.Errors)
             {
                 Console.WriteLine(err.Message);
             }
-
-            Assert.IsFalse(result.Successful);
-            foreach(var err in errs)
+            
+            foreach (var err in errs)
             {
                 Assert.IsTrue(result.Errors.Where(msg => msg.Message == err).Any());
             }
+
+            Assert.IsFalse(result.Successful);
         }
 
-        [TestMethod]
-        public void SQLServer_FieldValidation_MissingFromDataSet_AllowNull_Valid()
+        private void AssertSuccessful(ValidationResult result)
         {
-            var stream = new DataStream();
-
-            var sqlMetaData = new List<SQLServerConnector.SQLFieldMetaData>();
-            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
+            if (result.Errors.Any())
             {
-                IsRequired = false,
-                ColumnName = "field1",
-                DataType = "varchar"
-            });
+                Console.WriteLine("unexpected errors");
+            }
 
-            Assert.IsTrue(stream.ValidateSQLSeverMetaData(sqlMetaData).Successful);
+            foreach (var err in result.Errors)
+            {
+                Console.WriteLine("\t" + err.Message);
+            }
+
+            Assert.IsTrue(result.Successful);
         }
 
-        [TestMethod]
-        public void SQLServer_FieldValidation_MissingFromDataSet_DoesNotAllowNull_Invalid()
+        private List<SQLServerConnector.SQLFieldMetaData> GetDataDescription()
         {
-            var stream = new DataStream();
-
             var sqlMetaData = new List<SQLServerConnector.SQLFieldMetaData>();
             sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
             {
@@ -58,6 +55,44 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
                 DataType = "varchar"
             });
 
+            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
+            {
+                IsRequired = true,
+                ColumnName = "timeStamp",
+                DataType = "datetime"
+            });
+
+            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
+            {
+                IsRequired = true,
+                ColumnName = "deviceId",
+                DataType = "varchar"
+            });
+
+            return sqlMetaData;
+        }
+
+        [TestMethod]
+        public void SQLServer_FieldValidation_MissingFromDataSet_AllowNull_Valid()
+        {
+            var stream = new DataStream();
+            stream.Fields.Add(new DataStreamField()
+            {
+                FieldName = "field1",
+                FieldType = Core.Models.EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.String),
+                IsRequired = true,
+            });
+
+
+            var sqlMetaData = GetDataDescription();
+            AssertSuccessful(stream.ValidateSQLSeverMetaData(sqlMetaData));
+        }
+
+        [TestMethod]
+        public void SQLServer_FieldValidation_MissingFromDataSet_DoesNotAllowNull_Invalid()
+        {
+            var stream = new DataStream();
+            var sqlMetaData = GetDataDescription();
             AssertInvalidError(stream.ValidateSQLSeverMetaData(sqlMetaData), "field1 is required on the SQL Server table but it is not present on the data stream field.");
         }
 
@@ -88,38 +123,27 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
                 IsRequired = true,
             });
 
-            var sqlMetaData = new List<SQLServerConnector.SQLFieldMetaData>();
-            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
-            {
-                IsRequired = true,
-                ColumnName = "field1",
-                DataType = "varchar"
-            });
+            var sqlMetaData = GetDataDescription();
 
-            Assert.IsTrue(stream.ValidateSQLSeverMetaData(sqlMetaData).Successful);
+            AssertSuccessful(stream.ValidateSQLSeverMetaData(sqlMetaData));
         }
 
         [TestMethod]
         public void SQLServer_FieldValidation_String_Number_Invalid()
         {
             var stream = new DataStream();
+            var sqlMetaData = GetDataDescription();
+
             stream.Fields.Add(new DataStreamField()
             {
-                Name = "First Field",
+                Name = "Field1",
                 FieldName = "field1",
-                FieldType = Core.Models.EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.String),
+                FieldType = Core.Models.EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
                 IsRequired = true,
             });
 
-            var sqlMetaData = new List<SQLServerConnector.SQLFieldMetaData>();
-            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
-            {
-                IsRequired = true,
-                ColumnName = "field1",
-                DataType = "int"
-            });
 
-            AssertInvalidError(stream.ValidateSQLSeverMetaData(sqlMetaData), "Type mismatch on field [First Field], Data Stream Type: String - SQL Data Type: int.");
+            AssertInvalidError(stream.ValidateSQLSeverMetaData(sqlMetaData), "Type mismatch on field [Field1], Data Stream Type: Integer - SQL Data Type: varchar.");
         }
 
     }
