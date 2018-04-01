@@ -29,11 +29,11 @@ namespace LagoVista.IoT.DataStreamConnectors
             return recordTimeStamp.Ticks;
         }
 
-        private static List<string> sqlDateTypes = new List<string>() { "datetime", "datetime2", "datetimeoffset"};
+        private static List<string> sqlDateTypes = new List<string>() { "datetime", "datetime2", "datetimeoffset" };
         private static List<string> sqlDecimalTypes = new List<string>() { "decimal", "numeric", "real", "float" };
         private static List<string> sqlLocationDateTypes = new List<string>() { "geography" };
         private static List<string> sqlIntegerDateTypes = new List<string>() { "tinyint", "smallint", "int", "bigint", "decimal", "numeric", "real", "float" };
-        private static List<string> sqlBooleanDataTypes = new List<string>() { "tinyint", "smallint",  "bit", "int", "bigint" };
+        private static List<string> sqlBooleanDataTypes = new List<string>() { "tinyint", "smallint", "bit", "int", "bigint" };
         private static List<string> sqlStringDataTypes = new List<string>() { "char", "varchar", "nchar", "nvarchar" };
         private static List<string> sqlStatesAndEnums = new List<string>() { "char", "varchar", "nchar", "nvarchar" };
 
@@ -43,7 +43,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             var result = new ValidationResult();
             if (metaData == null)
             {
-                result.AddUserError($"{field.FieldName} is present on data strea, but not on SQL table.");
+                result.AddUserError($"{field.FieldName} is present on data stream, but not on SQL table.");
                 return result;
             }
 
@@ -51,7 +51,7 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             List<string> validColumnTypes = null;
 
-            switch(field.FieldType.Value)
+            switch (field.FieldType.Value)
             {
                 case DeviceAdmin.Models.ParameterTypes.DateTime: validColumnTypes = sqlDateTypes; break;
                 case DeviceAdmin.Models.ParameterTypes.Decimal: validColumnTypes = sqlDecimalTypes; break;
@@ -60,7 +60,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                 case DeviceAdmin.Models.ParameterTypes.State: validColumnTypes = sqlStatesAndEnums; break;
                 case DeviceAdmin.Models.ParameterTypes.String: validColumnTypes = sqlStringDataTypes; break;
                 case DeviceAdmin.Models.ParameterTypes.TrueFalse: validColumnTypes = sqlBooleanDataTypes; break;
-                case DeviceAdmin.Models.ParameterTypes.ValueWithUnit:validColumnTypes = sqlDecimalTypes;break;
+                case DeviceAdmin.Models.ParameterTypes.ValueWithUnit: validColumnTypes = sqlDecimalTypes; break;
             }
 
             if (!validColumnTypes.Contains(metaData.DataType)) result.AddUserError($"Type mismatch on field [{field.Name}], Data Stream Type: {field.FieldType.Text} - SQL Data Type: {metaData.DataType}.");
@@ -68,35 +68,56 @@ namespace LagoVista.IoT.DataStreamConnectors
             return result;
         }
 
-        public static ValidationResult ValidateSQLSeverMetaData(this DataStream stream, List<SQLServerConnector.SQLFieldMetaData> sqlMeteaData)
+        public static ValidationResult ValidateSQLSeverMetaData(this DataStream stream, List<SQLServerConnector.SQLFieldMetaData> sqlMetaData)
         {
-            /* Make a copy so  we can add the device and time stamp fields */
-            var fields = new List<DataStreamField>(stream.Fields);
-            fields.Add(new DataStreamField()
-            {
-                FieldName = stream.DeviceIdFieldName,
-                IsRequired = true,
-                FieldType = Core.Models.EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.String)
-            });
-
-            fields.Add(new DataStreamField()
-            {
-                FieldName = stream.TimeStampFieldName,
-                IsRequired = true,
-                FieldType = Core.Models.EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.DateTime)
-            });
-
             var result = new ValidationResult();
-            foreach (var fld in fields)
+
+            var timeStampColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.TimeStampFieldName.ToLower()).FirstOrDefault();
+            var deviceIdColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.DeviceIdFieldName.ToLower()).FirstOrDefault();
+
+            if (timeStampColumn == null)
             {
-                var sqlField = sqlMeteaData.Where(sqlFld => sqlFld.ColumnName.ToLower() == fld.FieldName.ToLower()).FirstOrDefault();
+                result.AddUserError($"SQL Server Table must contain the time stamp field [{stream.TimeStampFieldName}] but it does not.");
+            }
+            else if (!sqlDateTypes.Contains(timeStampColumn.DataType))
+            {
+                result.AddUserError($"Data Type on SQL Server Table for field [{stream.TimeStampFieldName}] (the time stamp field) must be one of the following: datetime, datetime2, datetimeoffset.");
+            }
+            else
+            {
+                /* Already validated it so we don't want to look for it on the data stream fields */
+                sqlMetaData.Remove(timeStampColumn);
+            }
+
+            if (deviceIdColumn == null)
+            {
+                result.AddUserError($"SQL Server Table must contain the device id field [{stream.DeviceIdFieldName}] but it does not.");
+            }
+            else if (!sqlStringDataTypes.Contains(deviceIdColumn.DataType))
+            {
+                result.AddUserError($"Data Type on SQL Server Table for field [{stream.DeviceIdFieldName}] (the device id field) must be one of the following: char, varchar, nchar or nvarchar.");
+            }
+            else
+            {
+                /* Already validated it so we don't want to look for it on the data stream fields */
+                sqlMetaData.Remove(deviceIdColumn);
+            }
+
+            if(!result.Successful)
+            {
+                return result;
+            }
+
+            foreach (var fld in stream.Fields)
+            {
+                var sqlField = sqlMetaData.Where(sqlFld => sqlFld.ColumnName.ToLower() == fld.FieldName.ToLower()).FirstOrDefault();
                 result.Concat(fld.ValidationSQLServerMetaDataField(sqlField));
             }
 
-            foreach (var fld in sqlMeteaData)
+            foreach (var fld in sqlMetaData)
             {
-                var dsFld = fields.Where(strFld => strFld.FieldName.ToLower() == fld.ColumnName.ToLower()).FirstOrDefault();
-                if(dsFld == null && fld.IsRequired && !fld.IsIdentity && (fld.DefaultValue == null || !fld.DefaultValue.ToLower().Contains("newid"))) result.AddUserError($"{fld.ColumnName} is required on the SQL Server table but it is not present on the data stream field.");
+                var dsFld = stream.Fields.Where(strFld => strFld.FieldName.ToLower() == fld.ColumnName.ToLower()).FirstOrDefault();
+                if (dsFld == null && fld.IsRequired && !fld.IsIdentity && (fld.DefaultValue == null || !fld.DefaultValue.ToLower().Contains("newid"))) result.AddUserError($"{fld.ColumnName} is required on the SQL Server table but it is not present on the data stream field.");
             }
 
             return result;

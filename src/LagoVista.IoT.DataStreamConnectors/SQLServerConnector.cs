@@ -75,7 +75,7 @@ from sysobjects a
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     result.AddUserError($"Could not access SQL Server: {ex.Message}.");
                     return result;
@@ -108,7 +108,7 @@ from sysobjects a
             if (stream.DBValidateSchema)
             {
                 var result = await ValidationConnection(stream);
-                if(!result.Successful)
+                if (!result.Successful)
                 {
                     _instanceLogger.AddError("SQLServerConnecction", "Could not validate SQL Connection", result.Errors.First().Message.ToKVP("firstError"));
                     return result.ToInvokeResult();
@@ -142,15 +142,13 @@ from sysobjects a
                 if (!Validator.Validate(fld).Successful) throw new Exception($"Invalid field name {fld.FieldName}");
 
                 fields += String.IsNullOrEmpty(fields) ? $"{fld.FieldName}" : $",{fld.FieldName}";
-                values += String.IsNullOrEmpty(values) ? $"@{fld.FieldName}" : $",@{fld.FieldName}";                
+                values += String.IsNullOrEmpty(values) ? $"@{fld.FieldName}" : $",@{fld.FieldName}";
             }
 
             fields += $",{_stream.DeviceIdFieldName},{_stream.TimeStampFieldName}";
             values += $",@{_stream.DeviceIdFieldName},@{_stream.TimeStampFieldName}";
 
             var sql = $"insert into [{_stream.DBTableName}] ({fields}) values ({values})";
-
-            Console.WriteLine(sql);
 
             using (var cn = new System.Data.SqlClient.SqlConnection(_connectionString))
             using (var cmd = new System.Data.SqlClient.SqlCommand(sql, cn))
@@ -161,10 +159,10 @@ from sysobjects a
                 {
                     object value = System.DBNull.Value;
 
-                    if(item.Data.ContainsKey(field.FieldName))
+                    if (item.Data.ContainsKey(field.FieldName))
                     {
                         value = item.Data[field.FieldName];
-                        if(value == null)
+                        if (value == null)
                         {
                             value = System.DBNull.Value;
                         }
@@ -192,7 +190,7 @@ from sysobjects a
                     }
                 }
 
-                if(String.IsNullOrEmpty(item.Timestamp))
+                if (String.IsNullOrEmpty(item.Timestamp))
                 {
                     item.Timestamp = DateTime.UtcNow.ToJSONString();
                 }
@@ -209,7 +207,78 @@ from sysobjects a
 
         public async Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
-            throw new NotImplementedException();
+
+            var sql = new StringBuilder("select ");
+            if (request.PageSize == 0) request.PageSize = 50;
+
+            sql.Append($"[{_stream.TimeStampFieldName}]");
+            foreach (var fld in _stream.Fields)
+            {
+                sql.Append($", [{fld.FieldName}]");
+            }
+
+            sql.AppendLine();
+            sql.AppendLine($"  from  [{_stream.DBTableName}]");
+            sql.AppendLine($"  where [{_stream.DeviceIdFieldName}] = @deviceId");
+
+            if (!String.IsNullOrEmpty(request.NextRowKey))
+            {
+                sql.AppendLine($"  and {_stream.TimeStampFieldName} < @lastDateStamp");
+            }
+
+            if (!String.IsNullOrEmpty(request.StartDate)) sql.AppendLine($"  and {_stream.TimeStampFieldName} >= @startDateStamp");
+            if (!String.IsNullOrEmpty(request.EndDate)) sql.AppendLine($"  and {_stream.TimeStampFieldName} <= @endDateStamp");
+
+            sql.AppendLine($"  order by [{_stream.TimeStampFieldName}] desc");
+            sql.AppendLine("   OFFSET @PageSize * @PageIndex ROWS");
+            sql.AppendLine("   FETCH NEXT @PageSize ROWS ONLY ");
+
+            Console.WriteLine(sql.ToString());
+
+            var responseItems = new List<DataStreamResult>();
+
+            using (var cn = new System.Data.SqlClient.SqlConnection(_connectionString))
+            using (var cmd = new System.Data.SqlClient.SqlCommand(sql.ToString(), cn))
+            {
+                cmd.Parameters.AddWithValue("@deviceId", deviceId);
+                cmd.Parameters.AddWithValue("@PageSize", request.PageSize);
+                cmd.Parameters.AddWithValue("@PageIndex", request.PageIndex);
+
+                if (!String.IsNullOrEmpty(request.NextRowKey)) cmd.Parameters.AddWithValue($"@lastDateStamp", request.NextRowKey.ToDateTime());
+                if (!String.IsNullOrEmpty(request.StartDate)) cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
+                if (!String.IsNullOrEmpty(request.EndDate)) cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                await cmd.Connection.OpenAsync();
+                using (var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    while (rdr.Read())
+                    {
+                        var resultItem = new DataStreamResult();
+                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimeStampFieldName]).ToJSONString();
+
+                        foreach(var fld in _stream.Fields)
+                        {
+                            resultItem.Fields.Add(fld.FieldName, rdr[fld.FieldName]);
+                        }
+
+                        responseItems.Add(resultItem);
+                    }
+                }
+            }
+
+            var response = new Core.Models.UIMetaData.ListResponse<DataStreamResult>();
+            response.Model = responseItems;
+            response.PageSize = responseItems.Count;
+            response.PageIndex = request.PageIndex;
+            response.HasMoreRecords = responseItems.Count == request.PageSize;
+            if (response.HasMoreRecords)
+            {
+                response.NextRowKey = responseItems.Last().Timestamp;
+            }
+
+            return response;
         }
     }
 }

@@ -24,6 +24,7 @@ CCREATE TABLE [dbo].[unittest](
 	[value3] [float] NULL,
 	[location] [geography] NULL,
 	[genguid] [uniqueidentifier] NOT NULL,
+    [pointindex] INT NOT NULL, 
  CONSTRAINT [PK__unittest__3214EC070EB089E8] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -116,6 +117,15 @@ CCREATE TABLE [dbo].[unittest](
                 Key = "key5"
             });
 
+            _stream.Fields.Add(new DataStreamField()
+            {
+                FieldName = "pointIndex",
+                FieldType = Core.Models.EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
+                Name = "name6",
+                IsRequired = true,
+                Key = "key6"
+            });
+
             return _stream;
         }
 
@@ -179,21 +189,25 @@ CCREATE TABLE [dbo].[unittest](
             stream.DBTableName = oldName;
         }
 
+        private async Task<Pipeline.Admin.IDataStreamConnector> GetConnector(DataStream stream)
+        {
+            var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
+            Assert.IsTrue((await connector.InitAsync(stream)).Successful, "Invalid table schema");
+            return connector;
+        }
+
         [TestMethod]
         public async Task SQLServer_Init()
         {
             var stream = GetValidStream();
-
-            var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            Assert.IsTrue((await connector.InitAsync(stream)).Successful);
+            await GetConnector(stream);
         }
 
         [TestMethod]
         public async Task SQLServer_InsertRecord()
         {
             var stream = GetValidStream();
-            var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            Assert.IsTrue((await connector.InitAsync(stream)).Successful, "Invalid table schema");
+            var connector = await GetConnector(stream);
 
             var timeStamp = DateTime.Now.ToJSONString();
 
@@ -203,6 +217,7 @@ CCREATE TABLE [dbo].[unittest](
                 new KeyValuePair<string, object>("value1", 50),
                 new KeyValuePair<string, object>("customid", customId),
                 new KeyValuePair<string, object>("value2", 75),
+                new KeyValuePair<string, object>("pointIndex", 50),
                 new KeyValuePair<string, object>("value3", 88.6),
                 new KeyValuePair<string, object>("location", "-28.700123,100.443322"));
 
@@ -219,5 +234,127 @@ CCREATE TABLE [dbo].[unittest](
                 Assert.AreEqual(timeStamp.ToDateTime().ToString(), rdr["timestamp"].ToString());
             }
         }
+
+        [TestMethod]
+        public async Task SQLServer_Insert100Records()
+        {
+            var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+
+            for(var idx = 0; idx < 100; ++idx)
+            {
+                var customId = Guid.NewGuid().ToId();
+                var timeStamp = DateTime.Now.AddMinutes(idx - 50).ToJSONString();
+                await AddObject(connector, stream, "device001", timeStamp,
+                    new KeyValuePair<string, object>("value1", idx),
+                    new KeyValuePair<string, object>("customid", customId),
+                    new KeyValuePair<string, object>("pointIndex", idx),
+                    new KeyValuePair<string, object>("value2", 75),
+                    new KeyValuePair<string, object>("value3", 88.6),
+                    new KeyValuePair<string, object>("location", "-28.700123,100.443322"));
+            }
+
+            using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
+            using (var cmd = new System.Data.SqlClient.SqlCommand($"select count(*) from {stream.DBTableName}", cn))
+            {
+                cn.Open();
+                var rdr = await cmd.ExecuteReaderAsync();
+                Assert.IsTrue(rdr.Read());
+                Assert.AreEqual(100, rdr.GetInt32(0));
+            }
+        }
+
+        private async Task BulkInsert(Pipeline.Admin.IDataStreamConnector connector, DataStream stream, string deviceId, QueryRangeType rangeType)
+        {
+            var records = base.GetRecordsToInsert(stream, deviceId, rangeType);
+            var insertCommand = "insert into [unittest] (value1,value2,value3,customid,location,deviceId,timeStamp,pointindex) values (@value1,@value2,@value3,@customid,@location,@deviceId,@timeStamp,@pointindex)";
+            using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
+            using (var cmd = new System.Data.SqlClient.SqlCommand(insertCommand, cn))
+            {
+                cmd.Parameters.AddWithValue("value1", 100);
+                cmd.Parameters.AddWithValue("value2", 100);
+                cmd.Parameters.AddWithValue("value3", 100);
+                cmd.Parameters.AddWithValue("pointindex", 0);
+                cmd.Parameters.AddWithValue("customid", Guid.NewGuid().ToId());
+                cmd.Parameters.AddWithValue("deviceid", deviceId);
+                cmd.Parameters.AddWithValue("location", $"POINT(23.4 -85.5)");                
+                cmd.Parameters.AddWithValue("timestamp", string.Empty);
+
+                cn.Open();
+
+                var idx = -0;
+
+                foreach(var record in records)
+                {
+                    if (rangeType == QueryRangeType.Records_100)
+                    {
+                        cmd.Parameters["timestamp"].Value = DateTime.Now.AddDays(idx - 50);
+                    }
+                    else
+                    {
+                        cmd.Parameters["timestamp"].Value = record.Timestamp.ToDateTime();
+                    }
+                    cmd.Parameters["pointindex"].Value = idx++;
+                    await cmd.ExecuteNonQueryAsync();
+                }
+
+                cmd.Parameters.Clear();
+                cmd.CommandText = $"select count(*) from {stream.DBTableName}";
+                Assert.AreEqual(records.Count, Convert.ToInt32(cmd.ExecuteScalar()));
+            }
+        }
+
+        [TestMethod]
+        public async Task SQLServer_DateFiltereBefore()
+        {
+            var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
+
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForBeforeQuery);
+
+            await ValidateDataFilterBefore(deviceId, stream, connector);
+        }
+
+
+        /* Note if this method fails, was Microsoft.SQLServer.Types updated?  It needs to be at V10.0.5 to be in sync with latest SQLClient (or we need a new approach) */
+        [TestMethod]
+        public async Task SQLServer_PaginatedRecordGet()
+        {
+            var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
+
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.Records_100);
+
+            await ValidatePaginatedRecordSet(deviceId, connector);
+        }
+
+        [TestMethod]
+        public async Task SQLServer_DateFilteredInRange()
+        {
+            var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
+
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForInRangeQuery);
+
+            await ValidateDataFilterInRange(deviceId, stream, connector);
+        }
+
+        [TestMethod]
+        public async Task SQLServer_DateFilteredAfter()
+        {
+            var stream = GetValidStream();
+            var connector = await GetConnector(stream);
+            var deviceId = "dev123";
+
+            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForAfterQuery);
+
+            await ValidateDataFilterAfter(deviceId, stream, connector);
+        }
+
+
+
     }
 }

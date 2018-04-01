@@ -1,18 +1,14 @@
-﻿using Amazon;
-using Amazon.Runtime.CredentialManagement;
+﻿using Amazon.Runtime.CredentialManagement;
 using Amazon.S3;
 using Amazon.S3.Model;
+using LagoVista.Core;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Newtonsoft.Json;
 using System;
-using LagoVista.Core;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using LagoVista.Core.Validation;
-using LagoVista.IoT.DataStreamConnectors;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {

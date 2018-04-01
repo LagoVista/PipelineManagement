@@ -18,7 +18,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
             var idx = 1;
             foreach (var item in response.Model)
             {
-                Console.WriteLine($"Record {idx++}");
+                Console.WriteLine($"Record {idx++} - {item.Timestamp}");
 
                 foreach (var fld in item.Fields)
                 {
@@ -104,40 +104,53 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
 
         protected async Task ValidateDataFilterBefore(string deviceId, DataStream stream, IDataStreamConnector connector)
         {
+            var endDate = DateTime.UtcNow.AddDays(-1).ToJSONString();
+
             var getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest()
             {
                 PageIndex = 0,
                 PageSize = 30,
-                EndDate = DateTime.UtcNow.AddDays(-1).ToJSONString(),
+                EndDate = endDate,
             });
+
+            Console.WriteLine($"All Date Values should be smaller than {endDate}");
 
             Assert.IsTrue(getResult.Successful, getResult.Successful ? "Success" : $"Could not get result {getResult.Errors.First().Message}");
 
-            WriteResult(getResult);
+            WriteResult(getResult);            
 
             Assert.IsFalse(getResult.HasMoreRecords);
-            Assert.AreEqual(10, getResult.PageSize);
-            Assert.IsFalse(getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "inrange" && Convert.ToBoolean(fld.Value) == false).Any());
+            Assert.AreEqual(getResult.PageSize, getResult.Model.Count(), "Page size should match model count");
+            Assert.AreEqual(10, getResult.PageSize, "Page size does not match");
+            Assert.IsFalse(getResult.Model.Where(rec =>  String.Compare(rec.Timestamp, endDate) > 0).Any());
         }
 
         protected async Task ValidateDataFilterInRange(string deviceId, DataStream stream, IDataStreamConnector connector)
         {
+            var startDate = DateTime.UtcNow.AddDays(-1).ToJSONString();
+            var endDate = DateTime.UtcNow.AddDays(1).ToJSONString();
+
             var getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest()
             {
                 PageIndex = 0,
                 PageSize = 30,
-                StartDate = DateTime.UtcNow.AddDays(-1).ToJSONString(),
-                EndDate = DateTime.UtcNow.AddDays(1).ToJSONString(),
+                StartDate = startDate,
+                EndDate = endDate,
             });
 
             Assert.IsTrue(getResult.Successful, getResult.Successful ? "Success" : $"Could not get result {getResult.Errors.First().Message}");
 
+            Console.WriteLine($"All Date Values should be larger than {startDate} and smaller than {endDate}");
+
             WriteResult(getResult);
 
             Assert.IsTrue(getResult.Successful);
+            Assert.AreEqual(getResult.PageSize, getResult.Model.Count(), "Page size should match model count");
             Assert.IsFalse(getResult.HasMoreRecords);
             Assert.AreEqual(10, getResult.PageSize);
-            Assert.IsFalse(getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "inrange" && Convert.ToBoolean(fld.Value) == false).Any());
+            Assert.IsFalse(getResult.Model.Where(rec => 
+                    String.Compare(rec.Timestamp, startDate) < 0 && 
+                    String.Compare(rec.Timestamp, endDate) > 0).Any());
         }
 
         protected enum QueryRangeType
@@ -151,17 +164,23 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
 
         protected async Task ValidateDataFilterAfter(string deviceId, DataStream stream, IDataStreamConnector connector)
         {
+            var startDate = DateTime.UtcNow.AddDays(1).ToJSONString();
+
             var getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest()
             {
                 PageIndex = 0,
                 PageSize = 30,
-                StartDate = DateTime.UtcNow.AddDays(1).ToJSONString()
+                StartDate = startDate
             });
+
+            Console.WriteLine($"All Date Values should be larger than {startDate}");
 
             Assert.IsTrue(getResult.Successful, getResult.Successful ? "Success" : $"Could not get result {getResult.Errors.First().Message}");
 
+            
+            Assert.AreEqual(getResult.PageSize, getResult.Model.Count(), "Page size should match model count");
             Assert.AreEqual(10, getResult.PageSize);
-            Assert.IsFalse(getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "inrange" && Convert.ToBoolean(fld.Value) == false).Any());
+            Assert.IsFalse(getResult.Model.Where(rec => String.Compare(rec.Timestamp, startDate) < 0).Any());
             Assert.IsTrue(getResult.Successful);
             Assert.IsFalse(getResult.HasMoreRecords);
             WriteResult(getResult);

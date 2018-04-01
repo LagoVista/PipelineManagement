@@ -84,7 +84,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
             catch (StorageException ex)
             {
-                Console.Write(ex.Message);
+                _instanceLogger.AddException("AzureTableStorageConnector_InitAsync", ex);
                 return InvokeResult.FromException("AzureTableStorageConnector_InitAsync", ex);
             }
         }
@@ -141,8 +141,6 @@ namespace LagoVista.IoT.DataStreamConnectors
                 filter = TableQuery.CombineFilters(filter, TableOperators.And, dateFilter);
             }
 
-            Console.WriteLine(filter);
-
             var query = new TableQuery<DynamicTableEntity>().Where(filter).Take(request.PageSize);
 
             var numberRetries = 5;
@@ -193,7 +191,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                                 result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(epoch).DateTime.ToJSONString();
                                 break;
                             case DateStorageFormats.ISO8601:
-                                result.Timestamp = item.Properties[_stream.TimeStampFieldName].ToString();
+                                result.Timestamp = item.Properties[_stream.TimeStampFieldName].StringValue.ToDateTime().ToJSONString();
                                 break;
                         }
 
