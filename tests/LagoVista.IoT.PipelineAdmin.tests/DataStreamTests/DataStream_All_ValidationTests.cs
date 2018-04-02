@@ -9,7 +9,7 @@ using LagoVista.IoT.Pipeline.Admin.Models;
 namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
 {
     [TestClass]
-    public class DataStreaamValidationTests
+    public class DataStream_All_ValidationTests
     {
         private void AssertValidModel(ValidationResult result)
         {

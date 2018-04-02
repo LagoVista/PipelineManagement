@@ -12,7 +12,7 @@ using LagoVista.Core.Validation;
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
     [TestClass]
-    public class DataStreamAWSValidation
+    public class DataStream_AWS_S3_ValidationTests
     {
         private void AssertValidModel(ValidationResult result)
         {
@@ -72,7 +72,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 
 
         [TestMethod]
-        public void AWS_DataStream_S3_Insert_Valid()
+        public void DataStreams_AWS_S3_Insert_Valid()
         {
             var stream = GetValidStream();
 
@@ -80,7 +80,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void AWS_DataStream_S3_Update_Valid()
+        public void DataStreams_AWS_S3_Update_Valid()
         {
             var stream = GetValidStream();
             stream.AWSSecretKey = null;
@@ -89,7 +89,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void AWS_DataStream_S3_Insert_Invalid_MissingBucketName()
+        public void DataStreams_AWS_S3_Insert_Invalid_MissingBucketName()
         {
             var stream = GetValidStream();
             stream.S3BucketName = null;
@@ -98,7 +98,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void AWS_DataStream_S3_Insert_Invalid_BucketName()
+        public void DataStreams_AWS_S3_Insert_Invalid_BucketName()
         {
             var stream = GetValidStream();
             stream.S3BucketName = "ABC 123";
@@ -107,7 +107,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void AWS_DataStream_S3_Insert_Invalid_MissingSecretKeyOnUpdate()
+        public void DataStreams_AWS_S3_Insert_Invalid_MissingSecretKeyOnUpdate()
         {
             var stream = GetValidStream();
             stream.AWSSecretKey = null;
@@ -117,7 +117,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void AWS_DataStream_S3_Insert_Invalid_MissingAccessKey()
+        public void DataStreams_AWS_S3_Insert_Invalid_MissingAccessKey()
         {
             var stream = GetValidStream();
             stream.AWSAccessKey = null;
@@ -126,7 +126,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void AWS_DataStream_S3_Insert_Invalid_MissingRegionName()
+        public void DataStreams_AWS_S3_Insert_Invalid_MissingRegionName()
         {
             var stream = GetValidStream();
             stream.AWSRegion = null;
@@ -135,7 +135,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void AWS_DataStream_S3_Insert_Invalid_InvalidRegionname()
+        public void DataStreams_AWS_S3_Insert_Invalid_InvalidRegionname()
         {
             var stream = GetValidStream();
             stream.AWSRegion = "SOMETHINGELSE";

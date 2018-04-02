@@ -75,7 +75,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
 
         [TestMethod]
-        public async Task AWS_E3_Insert_Record()
+        public async Task DataStreams_AWS_E3_Insert_Record()
         {
             var stream = GetValidStream();
 
@@ -94,7 +94,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
 
         [TestMethod]
-        public async Task AWS_E3_Insert_100_Records()
+        public async Task DataStreams_AWS_E3_Insert_100_Records()
         {
             var stream = GetValidStream();
 
@@ -127,7 +127,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         }
 
         [TestMethod]
-        public async Task AWS_E3_PaginatedRecordGet()
+        public async Task DataStreams_AWS_E3_PaginatedRecordGet()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -140,7 +140,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
 
         [TestMethod]
-        public async Task AWS_E3_DateFiltereBefore()
+        public async Task DataStreams_AWS_E3_DateFiltereBefore()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -152,7 +152,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         }
 
         [TestMethod]
-        public async Task AWS_E3_DateFilteredInRange()
+        public async Task DataStreams_AWS_E3_DateFilteredInRange()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -164,7 +164,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         }
 
         [TestMethod]
-        public async Task AWS_E3_DateFilteredAfter()
+        public async Task DataStreams_AWS_E3_DateFilteredAfter()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);

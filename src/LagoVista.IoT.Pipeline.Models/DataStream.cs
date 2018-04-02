@@ -287,7 +287,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     }
                     else if (StreamType.Value == DataStreamTypes.AWSElasticSearch)
                     {
-                        if (!AWSUtils.AWSS3Regions.Contains(AWSRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS  Region, Region [{AWSRegion}] could not be found."));
+                        if (!AWSUtils.AWSESRegions.Contains(AWSRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AWSRegion}] could not be found."));
                     }
                 }
             }

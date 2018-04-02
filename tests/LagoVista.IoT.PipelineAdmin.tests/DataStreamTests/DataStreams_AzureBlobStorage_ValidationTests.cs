@@ -7,7 +7,7 @@ using System;
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
     [TestClass]
-    public class AzureBlobStorageValidationTests : ValidationBase
+    public class DataStreams_AzureBlobStorage_ValidationTests : ValidationBase
     {
         private DataStream GetDataStream(DeviceAdmin.Models.ParameterTypes fieldType)
         {

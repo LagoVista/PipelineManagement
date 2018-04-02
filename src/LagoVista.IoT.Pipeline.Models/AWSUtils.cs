@@ -68,7 +68,7 @@ namespace LagoVista.IoT.Pipeline.Models
             }
         }
 
-        public static List<string> AWSES3Regions
+        public static List<string> AWSESRegions
         {
             get
             {

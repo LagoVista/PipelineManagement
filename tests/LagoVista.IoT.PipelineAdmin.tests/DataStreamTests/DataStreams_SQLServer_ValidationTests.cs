@@ -10,7 +10,7 @@ using LagoVista.Core;
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
     [TestClass]
-    public class SQLServerFieldValidation : ValidationBase
+    public class DataStreams_SQLServer_ValidationTests : ValidationBase
     {
 
         private List<SQLServerConnector.SQLFieldMetaData> GetDataDescription()
@@ -70,7 +70,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_FieldValidation_MissingFromDataSet_AllowNull_Valid()
+        public void DataStreams_SQLServer_FieldValidation_MissingFromDataSet_AllowNull_Valid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             var sqlMetaData = GetDataDescription();
@@ -78,7 +78,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_FieldValidation_MissingFromDataSet_DoesNotAllowNull_Invalid()
+        public void DataStreams_SQLServer_FieldValidation_MissingFromDataSet_DoesNotAllowNull_Invalid()
         {
             var stream = new DataStream();
             var sqlMetaData = GetDataDescription();
@@ -86,7 +86,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_FieldValidation_MissingInTable_Present_In_DataStream()
+        public void DataStreams_SQLServer_FieldValidation_MissingInTable_Present_In_DataStream()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             var sqlMetaData = new List<SQLServerConnector.SQLFieldMetaData>();
@@ -109,7 +109,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_FieldValidation_String_Varchar_Valid()
+        public void DataStreams_SQLServer_FieldValidation_String_Varchar_Valid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             var sqlMetaData = GetDataDescription();
@@ -118,7 +118,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_FieldValidation_String_Number_Invalid()
+        public void DataStreams_SQLServer_FieldValidation_String_Number_Invalid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.Integer);
             var sqlMetaData = GetDataDescription();            
@@ -126,7 +126,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_TimestampFieldDoesNotExist()
+        public void DataStreams_SQLServer_TimestampFieldDoesNotExist()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.TimeStampFieldName = "missingsfield";
@@ -138,7 +138,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_TimestampFieldWrongType()
+        public void DataStreams_SQLServer_TimestampFieldWrongType()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             var sqlMetaData = GetDataDescription();
@@ -148,7 +148,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_DeviceIdFieldsNotExist()
+        public void DataStreams_DataStreams_SQLServer_DeviceIdFieldsNotExist()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DeviceIdFieldName = "missingdevidfld";
@@ -158,7 +158,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_DeviceIdFieldWrongType()
+        public void DataStreams_SQLServer_DeviceIdFieldWrongType()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             var sqlMetaData = GetDataDescription();
@@ -168,7 +168,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 
 
         [TestMethod]
-        public void SQLServer_ServerUrlMissing_Invalid()
+        public void DataStreams_SQLServer_ServerUrlMissing_Invalid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DbURL = null;
@@ -177,7 +177,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_ServerUrlInvalidFormat_Invalid()
+        public void DataStreams_SQLServer_ServerUrlInvalidFormat_Invalid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DbURL = "123.234.$@";
@@ -186,7 +186,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_DatabaseNameMissing_Invalid()
+        public void DataStreams_SQLServer_DatabaseNameMissing_Invalid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DbName = null;
@@ -195,7 +195,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_PasswordMissingOnInsert_InValid()
+        public void DataStreams_SQLServer_PasswordMissingOnInsert_InValid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DbPassword = null;
@@ -204,7 +204,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_PasswordAndSecretMissingOnUpdate_InValid()
+        public void DataStreams_SQLServer_PasswordAndSecretMissingOnUpdate_InValid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DbPassword = null;
@@ -214,7 +214,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_UserNameRequired()
+        public void DataStreams_SQLServer_UserNameRequired()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DbUserName = null;
@@ -224,7 +224,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 
 
         [TestMethod]
-        public void SQLServer_PasswordDbTableNameMissing_InValid()
+        public void DataStreams_SQLServer_PasswordDbTableNameMissing_InValid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DbTableName = null;
@@ -233,7 +233,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void SQLServer_PasswordDbTableNameRegExFalure_InValid()
+        public void DataStreams_SQLServer_PasswordDbTableNameRegExFalure_InValid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DbTableName = "$@FASF";

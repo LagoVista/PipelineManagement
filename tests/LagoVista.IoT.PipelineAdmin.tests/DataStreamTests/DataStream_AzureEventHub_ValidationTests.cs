@@ -1,14 +1,19 @@
-﻿using LagoVista.Core;
-using LagoVista.Core.Validation;
-using LagoVista.IoT.Pipeline.Admin.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using LagoVista.IoT.Pipeline.Admin.Models;
+using LagoVista.Core;
+using LagoVista.Core.Validation;
 
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
     [TestClass]
-    public class TableStorageValidationTests : ValidationBase
+    public class DataStream_AzureEventHub_ValidationTests : ValidationBase
     {
+
         private DataStream GetDataStream(DeviceAdmin.Models.ParameterTypes fieldType)
         {
             var stream = new DataStream();
@@ -16,13 +21,13 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.Name = "mystream";
             stream.Key = "streamkey";
             stream.AzureAccessKey = "accesskey";
-            stream.AzureTableStorageName = "tablestoragename";
+            stream.AzureEventHubName = "myeventhub";
+            stream.AzureEventHubEntityPath = "thepath";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = Core.Models.EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
-            stream.OwnerOrganization = Core.Models.EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "owner");
-            stream.StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureTableStorage);
+            stream.StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureEventHub);
 
             stream.Fields.Add(new DataStreamField()
             {
@@ -37,15 +42,34 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void DataStream_TableStorage_Valid()
+        public void DataStream_EventHub_Valid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+
             var result = Validator.Validate(stream, Actions.Create);
             AssertSuccessful(result);
         }
 
         [TestMethod]
-        public void DataStream_TableStorage_MissingAccessKey_Insert_InValid()
+        public void DataStream_EventHub_MissingEHName_InValid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.AzureEventHubName = null;
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result, "Name of event hub is a required field.");
+        }
+
+        [TestMethod]
+        public void DataStream_EventHub_InvalidEHPName_InValid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.AzureEventHubName = "$@#$@. #";
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result, "The event hub name must be between 6 and 50 characters and can contain only letters, numbers, periods, hyphens and underscores. The name must start and end with a letter or number.");
+        }
+
+        [TestMethod]
+        public void DataStream_EventHub_MissingAccessKey_Insert_InValid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.AzureAccessKey = null;
@@ -54,17 +78,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void DataStream_TableStorage_SecretPresent_Update_Valid()
-        {
-            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
-            stream.AzureAccessKey = null;
-            stream.AzureAccessKeySecureId = "214456";
-            var result = Validator.Validate(stream, Actions.Create);
-            AssertInvalidError(result, "Azure Access Key is required");
-        }
-
-        [TestMethod]
-        public void DataStream_TableStorage_MissingAccessKeyAndSecret_Update_InValid()
+        public void DataStream_EventHub_MissingAccessKeyAndSecret_Update_InValid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.AzureAccessKey = null;
@@ -74,53 +88,30 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         }
 
         [TestMethod]
-        public void DataStream_TableStorage_KeepsTableName_Valid()
+        public void DataStream_EventHub_SecretPresent_Update_Valid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
-            var tableName = stream.AzureTableStorageName;
-
-            var result = Validator.Validate(stream, Actions.Create);
-            AssertSuccessful(result);
-            Assert.AreEqual(tableName, stream.AzureTableStorageName);
-        }
-
-        [TestMethod]
-        public void DataStream_TableStorageManaged_Valid()
-        {
-            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
-            stream.StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureTableStorage_Managed);
-            stream.AzureTableStorageName = null;
-            var result = Validator.Validate(stream, Actions.Create);
-            AssertSuccessful(result);
-        }
-
-        [TestMethod]
-        public void DataStream_TableStorageManagedGeneratesTableName_Valid()
-        {
-            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
-            stream.StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureTableStorage_Managed);
-            stream.AzureTableStorageName = null;
-            var result = Validator.Validate(stream, Actions.Create);
-            AssertSuccessful(result);
-            Assert.AreEqual($"DataStream{stream.OwnerOrganization.Id}{stream.Key}",stream.AzureTableStorageName);
-        }
-
-        [TestMethod]
-        public void DataStream_TableStorageNameMissing_Invalid()
-        {
-            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
-            stream.AzureTableStorageName = null;
+            stream.AzureAccessKeySecureId = null;
             var result = Validator.Validate(stream, Actions.Update);
-            AssertInvalidError(result, "Table Name for Table Storage Account is a Required Field");
+            AssertSuccessful(result);
         }
 
         [TestMethod]
-        public void DataStream_TableStorageNameInvalidFormat_Invalid()
+        public void DataStream_EventHub_MissingEHPath_InValid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
-            stream.AzureTableStorageName = "$@#$@$4234";
-            var result = Validator.Validate(stream, Actions.Update);
-            AssertInvalidError(result, "Invalid table storage name, your name must contain only upper and lower case letters and numbers and be between 3 and 63 characters.");
+            stream.AzureEventHubEntityPath = null;
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result, "Entity path on event hub is a required field.");
+        }
+
+        [TestMethod]
+        public void DataStream_EventHub_InvalidEHPathName_InValid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.AzureEventHubEntityPath = "$@#$@. #";
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result, "The event hub entity path name can contain only letters, numbers, periods, hyphens and underscores. The name must start and end with a letter or number.");
         }
     }
 }
