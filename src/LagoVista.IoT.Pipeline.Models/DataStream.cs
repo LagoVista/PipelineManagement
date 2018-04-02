@@ -81,10 +81,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         #region Data Formatting Properties
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}_]{3,32}$", HelpResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$", 
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_TimeStamp_InvalidFormat,
+            HelpResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string TimeStampFieldName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}_]{3,32}$", HelpResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$", 
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_DeviceId_InvalidFormat,
+            HelpResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string DeviceIdFieldName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DateStorageFormat, EnumType: (typeof(DateStorageFormats)), HelpResource: PipelineAdminResources.Names.DataStream_DateStorageFormat,
@@ -103,30 +107,30 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         #region AWS Elastic Search Properties
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESDomainName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z-]{2,100}$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_ESDomainName_Invalid, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public string ESDomainName { get; set; }
+        public string ElasticSearchDomainName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESIndexName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z@$#_-]{2,100}$",
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESIndexName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_ESIndexName_Invalid, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public string ESIndexName { get; set; }
+        public string ElasticSearchIndexName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESTypeName, ValidationRegEx: @"^[a-zA-Z0-9_-]{3,100}$",
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESTypeName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_ESTypeNameInvalid, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public string ESTypeName { get; set; }
+        public string ElasticSearchTypeName { get; set; }
         #endregion
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public string AWSAccessKey { get; set; }
+        public string AwsAccessKey { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSRegion, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public string AWSRegion { get; set; }
+        public string AwsRegion { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSSecretKey, HelpResource: PipelineAdminResources.Names.DataStream_AWSSecretKey_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public string AWSSecretKey { get; set; }
+        public string AwsSecretKey { get; set; }
         #endregion
 
         #region Azure Properties
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccountId, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public string AzureAccountId { get; set; }
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureStorageName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string AzureStorageAccountName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccessKey, HelpResource: PipelineAdminResources.Names.DataStream_AzureAccessKeyHelp, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureAccessKey { get; set; }
@@ -203,17 +207,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             };
         }
 
-        [CustomValidator]
-        public void Validate(ValidationResult result, Actions action)
+        [PreValidation]
+        public void PreValidate(Actions action)
         {
-            /* full validation will happen somewhere else, if not valid, just skip */
-            if (result.Errors.Count > 0) return;
-
             //TODO: Need to add localized error messages
-            if (Fields.Select(fld => fld.Key).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Keys on fields must be unique."));
-            if (Fields.Select(fld => fld.FieldName).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Field Names on fields must be unique."));
-
-            if (StreamType.Value != DataStreamTypes.AzureBlob && 
+            if (StreamType.Value != DataStreamTypes.AzureBlob &&
                 StreamType.Value != DataStreamTypes.AzureTableStorage &&
                 StreamType.Value != DataStreamTypes.AzureEventHub &&
                 StreamType.Value != DataStreamTypes.AzureTableStorage_Managed)
@@ -224,9 +222,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
             if (StreamType.Value != DataStreamTypes.AWSS3 && StreamType.Value != DataStreamTypes.AWSElasticSearch)
             {
-                AWSRegion = null;
-                AWSSecretKey = null;
-                AWSAccessKey = null;
+                AwsRegion = null;
+                AwsSecretKey = null;
+                AwsAccessKey = null;
                 AWSSecretKeySecureId = null;
             }
 
@@ -247,7 +245,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 AzureEventHubName = null;
             }
 
-            if (StreamType.Value != DataStreamTypes.AzureTableStorage && 
+            if (StreamType.Value != DataStreamTypes.AzureTableStorage &&
                 StreamType.Value != DataStreamTypes.AzureTableStorage_Managed)
             {
                 AzureTableStorageName = null;
@@ -257,25 +255,36 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 AzureBlobStorageContainerName = null;
             }
+        }
+
+        [CustomValidator]
+        public void Validate(ValidationResult result, Actions action)
+        {
+            /* full validation will happen somewhere else, if not valid, just skip */
+            if (result.Errors.Count > 0) return;
+
+            if (Fields.Select(fld => fld.Key).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Keys on fields must be unique."));
+            if (Fields.Select(fld => fld.FieldName).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Field Names on fields must be unique."));
+
 
             #region AWS Types
             if (StreamType.Value == DataStreamTypes.AWSElasticSearch ||
                 StreamType.Value == DataStreamTypes.AWSS3)
             {
-                if (string.IsNullOrEmpty(AWSAccessKey)) result.Errors.Add(new ErrorMessage("AWS Acceess Key is required for AWS Data Streams."));
-                if ((action == Actions.Update) && string.IsNullOrEmpty(AWSSecretKey) && string.IsNullOrEmpty(AWSSecretKeySecureId)) result.Errors.Add(new ErrorMessage("AWS Secret Key or SecretKeyId are required for AWS Data Streams, if you are updating and replacing the key you should provide the new AWSSecretKey otherwise you could return the original secret key id."));
-                if ((action == Actions.Create) && string.IsNullOrEmpty(AWSSecretKey)) result.Errors.Add(new ErrorMessage("AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest)."));
+                if (string.IsNullOrEmpty(AwsAccessKey)) result.Errors.Add(new ErrorMessage("AWS Acceess Key is required for AWS Data Streams."));
+                if ((action == Actions.Update) && string.IsNullOrEmpty(AwsSecretKey) && string.IsNullOrEmpty(AWSSecretKeySecureId)) result.Errors.Add(new ErrorMessage("AWS Secret Key or SecretKeyId are required for AWS Data Streams, if you are updating and replacing the key you should provide the new AWSSecretKey otherwise you could return the original secret key id."));
+                if ((action == Actions.Create) && string.IsNullOrEmpty(AwsSecretKey)) result.Errors.Add(new ErrorMessage("AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest)."));
 
                 if (StreamType.Value == DataStreamTypes.AWSS3 && string.IsNullOrEmpty(S3BucketName)) result.Errors.Add(new ErrorMessage("Please Provide an S3 Bucket Name."));
 
                 if (StreamType.Value == DataStreamTypes.AWSElasticSearch)
                 {
-                    if (string.IsNullOrEmpty(ESDomainName)) result.Errors.Add(new ErrorMessage("Elastic Search Domain Name is required."));
-                    if (string.IsNullOrEmpty(ESIndexName)) result.Errors.Add(new ErrorMessage("Elastic Search Index Name is required."));
-                    if (string.IsNullOrEmpty(ESTypeName)) result.Errors.Add(new ErrorMessage("Elastic Search Type Name is required."));
+                    if (string.IsNullOrEmpty(ElasticSearchDomainName)) result.Errors.Add(new ErrorMessage("Elastic Search Domain Name is required."));
+                    if (string.IsNullOrEmpty(ElasticSearchIndexName)) result.Errors.Add(new ErrorMessage("Elastic Search Index Name is required."));
+                    if (string.IsNullOrEmpty(ElasticSearchTypeName)) result.Errors.Add(new ErrorMessage("Elastic Search Type Name is required."));
                 }
 
-                if (string.IsNullOrEmpty(AWSRegion))
+                if (string.IsNullOrEmpty(AwsRegion))
                 {
                     result.Errors.Add(new ErrorMessage("AWS Region is a required field for AWS Data Streams."));
                 }
@@ -283,11 +292,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 {
                     if (StreamType.Value == DataStreamTypes.AWSS3)
                     {
-                        if (!AWSUtils.AWSS3Regions.Contains(AWSRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AWSRegion}] could not be found."));
+                        if (!AWSUtils.AWSS3Regions.Contains(AwsRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AwsRegion}] could not be found."));
                     }
                     else if (StreamType.Value == DataStreamTypes.AWSElasticSearch)
                     {
-                        if (!AWSUtils.AWSESRegions.Contains(AWSRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AWSRegion}] could not be found."));
+                        if (!AWSUtils.AWSESRegions.Contains(AwsRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AwsRegion}] could not be found."));
                     }
                 }
             }

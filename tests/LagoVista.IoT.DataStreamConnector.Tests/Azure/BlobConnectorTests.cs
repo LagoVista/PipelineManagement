@@ -27,7 +27,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureBlob),
-                AzureAccountId = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID"),
+                AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
                 AzureBlobStorageContainerName = "unittest" + Guid.NewGuid().ToId().ToLower()
             };
@@ -39,10 +39,10 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         {
             var stream = GetValidStream();
 
-            var baseuri = $"https://{stream.AzureAccountId}.blob.core.windows.net";
+            var baseuri = $"https://{stream.AzureStorageAccountName}.blob.core.windows.net";
 
             var uri = new Uri(baseuri);
-            var client = new CloudBlobClient(uri, new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(stream.AzureAccountId, stream.AzureAccessKey));
+            var client = new CloudBlobClient(uri, new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(stream.AzureStorageAccountName, stream.AzureAccessKey));
 
             return client.GetContainerReference(_stream.AzureBlobStorageContainerName);
         }

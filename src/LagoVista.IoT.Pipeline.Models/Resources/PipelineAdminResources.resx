@@ -872,7 +872,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Field Name</value>
   </data>
   <data name="DataStreamField_FieldName_Help" xml:space="preserve">
-    <value>The field name will be how the field will be identified in the output format (usually the JSON field name)</value>
+    <value>The field name will be how the field will be identified in the output, this can be the name of the database column or the name of a JSON property</value>
   </data>
   <data name="DataStreamField_Help" xml:space="preserve">
     <value>A data stream value defines a field that will be used as a data point within a data stream.</value>
@@ -1013,7 +1013,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Device Id Field Name</value>
   </data>
   <data name="DataStream_DeviceIdFieldName_Help" xml:space="preserve">
-    <value>This will be the name of the device id field that will be appended to the output document</value>
+    <value>The Device Id Field Name is the name of the column in the datbase or the JSON property that is associated with the device that generated the values for the data stream.</value>
   </data>
   <data name="DataStream_InvalidBucketName" xml:space="preserve">
     <value>Invalid name for S3 bucket, please check AWS documentation results for valid bucket names.</value>
@@ -1025,13 +1025,13 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>S3 Bucket Name</value>
   </data>
   <data name="DataStream_TableName" xml:space="preserve">
-    <value>SQL Server Table Name</value>
+    <value>Database Table Name</value>
   </data>
   <data name="DataStream_TimeStampFieldName" xml:space="preserve">
     <value>Time Stamp Field Name</value>
   </data>
   <data name="DataStream_TimeStampFieldName_Help" xml:space="preserve">
-    <value>This will be the name of the time stamp field that will be appended to the output document</value>
+    <value>The Time Stamp Field Name is the name of the column in a database or the JSON property that is associated with the time stamp for the data stream record.</value>
   </data>
   <data name="DataStream_AWSSecretKey_Help" xml:space="preserve">
     <value>Enter your AWS Secret key, this is required for creating a new data stream and will be encrypted at rest.  When you edit your data stream your original secret key will not be displayed, however if you enter a new one, the original one will be replaced.</value>
@@ -1076,13 +1076,13 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Valdating the scema will ensure that the fields, time stamp field and device id field are compatible with your database, however it requires the user name you provided has additional privelages</value>
   </data>
   <data name="DataStream_ESDomainName" xml:space="preserve">
-    <value>Elastic Storage Domain Name</value>
+    <value>Elastic Search Domain Name</value>
   </data>
   <data name="DataStream_ESIndexName" xml:space="preserve">
-    <value>Index Name</value>
+    <value>Elastic Search Index Name</value>
   </data>
   <data name="DataStream_ESTypeName" xml:space="preserve">
-    <value>Data Type Name</value>
+    <value>Elastic Search Data Type Name</value>
   </data>
   <data name="DataStream_TableStorageName" xml:space="preserve">
     <value>Table Storage Name</value>
@@ -1110,5 +1110,17 @@ This is a list of parsers that are executed in the order they appear, if a match
   </data>
   <data name="DataStream_BlobStorage_InvalidName" xml:space="preserve">
     <value>Container names can only contain lower case letters, numbers, and hyphens, and must begin with a letter or number. The name can't contain consecutive hypens.</value>
+  </data>
+  <data name="DataStreamField_FieldName_Invalid" xml:space="preserve">
+    <value>Invalid format on the name used for your data stream field.  The name must be between 3 and 64 characters and include upper and lower case letters and numbers, it must start with a letter.</value>
+  </data>
+  <data name="DataStream_DeviceId_InvalidFormat" xml:space="preserve">
+    <value>Invalid format on date stamp field name.  The timestamp field name may be between 3 and 64 characters and include upper and lower case letters and numbers, it must start with a letter.</value>
+  </data>
+  <data name="DataStream_TimeStamp_InvalidFormat" xml:space="preserve">
+    <value>Invalid format on time stamp field name.  The timestamp field name may be between 3 and 64 characters and include upper and lower case letters and numbers, it must start with a letter.</value>
+  </data>
+  <data name="DataStream_AzureStorageName" xml:space="preserve">
+    <value>Azure Storage Name</value>
   </data>
 </root>

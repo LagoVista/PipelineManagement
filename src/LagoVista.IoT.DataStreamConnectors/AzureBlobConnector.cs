@@ -20,10 +20,10 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         private CloudBlobClient CreateBlobClient(DataStream stream)
         {
-            var baseuri = $"https://{stream.AzureAccountId}.blob.core.windows.net";
+            var baseuri = $"https://{stream.AzureStorageAccountName}.blob.core.windows.net";
 
             var uri = new Uri(baseuri);
-            return new CloudBlobClient(uri, new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(stream.AzureAccountId, stream.AzureAccessKey));
+            return new CloudBlobClient(uri, new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(stream.AzureStorageAccountName, stream.AzureAccessKey));
         }
 
         public AzureBlobConnector(IInstanceLogger instanceLogger)

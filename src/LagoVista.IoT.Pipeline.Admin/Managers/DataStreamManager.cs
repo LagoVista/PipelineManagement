@@ -51,12 +51,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             else if (stream.StreamType.Value == DataStreamTypes.AWSS3 ||
                 stream.StreamType.Value == DataStreamTypes.AWSElasticSearch)
             {
-                if (!String.IsNullOrEmpty(stream.AWSSecretKey))
+                if (!String.IsNullOrEmpty(stream.AwsSecretKey))
                 {
-                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.AWSSecretKey);
+                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.AwsSecretKey);
                     if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                     stream.AWSSecretKeySecureId = addSecretResult.Result;
-                    stream.AWSSecretKey = null;
+                    stream.AwsSecretKey = null;
                 }
                 else
                 {
@@ -161,9 +161,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             else if (stream.StreamType.Value == DataStreamTypes.AWSS3 ||
                stream.StreamType.Value == DataStreamTypes.AWSElasticSearch)
             {
-                if(!String.IsNullOrEmpty(stream.AWSSecretKey))
+                if(!String.IsNullOrEmpty(stream.AwsSecretKey))
                 {
-                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.AWSSecretKey);
+                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.AwsSecretKey);
                     if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
 
                     if (!string.IsNullOrEmpty(stream.AWSSecretKeySecureId))
@@ -172,7 +172,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     }
 
                     stream.AWSSecretKeySecureId = addSecretResult.Result;
-                    stream.AWSSecretKey = null;
+                    stream.AwsSecretKey = null;
                 }
             }
             else if(stream.StreamType.Value == DataStreamTypes.SQLServer)

@@ -82,10 +82,10 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
                 StreamType =Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3),
-                AWSAccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
-                AWSSecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET"),
+                AwsAccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
+                AwsSecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET"),
                 S3BucketName = BUCKET_NAME,
-                AWSRegion = "USEast1"
+                AwsRegion = "USEast1"
             };
 
             return stream;

@@ -69,7 +69,7 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public async Task<InvokeResult> InitAsync(DataStream stream)
         {
-            var credentials = new StorageCredentials(stream.AzureAccountId, stream.AzureAccessKey);
+            var credentials = new StorageCredentials(stream.AzureStorageAccountName, stream.AzureAccessKey);
             var account = new CloudStorageAccount(credentials, true);
 
             _stream = stream;

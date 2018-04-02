@@ -38,13 +38,13 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureTableStorage),
-                AzureAccountId = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID"),
+                AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
                 AzureTableStorageName = "unittesttable" + Guid.NewGuid().ToId(),
             };
 
             Assert.IsFalse(String.IsNullOrEmpty(_currentStream.AzureAccessKey), "Access key must be provided as an Environment Variable in [AZUREACCESSKEY]");
-            Assert.IsFalse(String.IsNullOrEmpty(_currentStream.AzureAccountId), "Account Id must be provided as an Environment Variable in [AZUREACESSKEY]");
+            Assert.IsFalse(String.IsNullOrEmpty(_currentStream.AzureStorageAccountName), "Account Id must be provided as an Environment Variable in [AZUREACESSKEY]");
 
             return _currentStream;
         }
@@ -62,7 +62,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
         private CloudTable GetCloudTable(DataStream stream)
         {
-            var credentials = new StorageCredentials(stream.AzureAccountId, stream.AzureAccessKey);
+            var credentials = new StorageCredentials(stream.AzureStorageAccountName, stream.AzureAccessKey);
             var account = new CloudStorageAccount(credentials, true);
 
             var tableClient = account.CreateCloudTableClient();

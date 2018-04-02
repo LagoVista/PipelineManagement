@@ -9,6 +9,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.DataStreamField_Title, PipelineAdminResources.Names.DataStreamField_Help, PipelineAdminResources.Names.DataStreamField_Help, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
     public class DataStreamField : IValidateable
     {
+        [Newtonsoft.Json.JsonProperty("id")]
+        public string Id { get; set; }
+
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string Name { get; set;}
 
@@ -21,8 +24,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Notes, FieldType: FieldTypes.MultiLineText,  ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string Notes { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_FieldName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}_]{3,32}$",
-            HelpResource: PipelineAdminResources.Names.DataStreamField_FieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_FieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
+             RegExValidationMessageResource: PipelineAdminResources.Names.DataStreamField_FieldName_Invalid, HelpResource: PipelineAdminResources.Names.DataStreamField_FieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string FieldName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_DataType, EnumType: (typeof(ParameterTypes)), HelpResource: PipelineAdminResources.Names.DataStreamField_DataType_Help, FieldType: FieldTypes.Picker, WaterMark:PipelineAdminResources.Names.DataStreamField_DataType_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]

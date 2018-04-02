@@ -128,7 +128,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         [HttpGet("/api/datastreamfield/factory")]
         public DetailResponse<DataStreamField> CreateDataStreamField()
         {
-            return DetailResponse<DataStreamField>.Create();
+            var field = DetailResponse<DataStreamField>.Create();
+            field.Model.Id = Guid.NewGuid().ToId();
+            return field;
         }        
     }
 }

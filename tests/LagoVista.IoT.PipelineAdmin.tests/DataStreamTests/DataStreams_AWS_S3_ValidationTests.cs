@@ -53,9 +53,9 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         {
             var stream = new DataStream()
             {
-                AWSAccessKey = "1234",
-                AWSSecretKey = "MySecret",
-                AWSRegion = "USEast1",
+                AwsAccessKey = "1234",
+                AwsSecretKey = "MySecret",
+                AwsRegion = "USEast1",
                 S3BucketName = "nuviot-test",
                 Id = "A8A087E53D2043538F32FB18C2CA67F7",
                 Name = "mystream",
@@ -83,7 +83,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         public void DataStreams_AWS_S3_Update_Valid()
         {
             var stream = GetValidStream();
-            stream.AWSSecretKey = null;
+            stream.AwsSecretKey = null;
             stream.AWSSecretKeySecureId = "ABC134";
             AssertValidModel(Validator.Validate(stream, Actions.Update));
         }
@@ -110,7 +110,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         public void DataStreams_AWS_S3_Insert_Invalid_MissingSecretKeyOnUpdate()
         {
             var stream = GetValidStream();
-            stream.AWSSecretKey = null;
+            stream.AwsSecretKey = null;
             stream.AWSSecretKeySecureId = null;
 
             AssertInvalidModel(Validator.Validate(stream, Actions.Create), "AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest).");
@@ -120,7 +120,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         public void DataStreams_AWS_S3_Insert_Invalid_MissingAccessKey()
         {
             var stream = GetValidStream();
-            stream.AWSAccessKey = null;
+            stream.AwsAccessKey = null;
 
             AssertInvalidModel(Validator.Validate(stream, Actions.Create), "AWS Acceess Key is required for AWS Data Streams.");
         }
@@ -129,7 +129,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         public void DataStreams_AWS_S3_Insert_Invalid_MissingRegionName()
         {
             var stream = GetValidStream();
-            stream.AWSRegion = null;
+            stream.AwsRegion = null;
 
             AssertInvalidModel(Validator.Validate(stream, Actions.Create), "AWS Region is a required field for AWS Data Streams.");
         }
@@ -138,7 +138,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         public void DataStreams_AWS_S3_Insert_Invalid_InvalidRegionname()
         {
             var stream = GetValidStream();
-            stream.AWSRegion = "SOMETHINGELSE";
+            stream.AwsRegion = "SOMETHINGELSE";
 
             AssertInvalidModel(Validator.Validate(stream, Actions.Create), "Invalid AWS Region, Region [SOMETHINGELSE] could not be found.");
         }

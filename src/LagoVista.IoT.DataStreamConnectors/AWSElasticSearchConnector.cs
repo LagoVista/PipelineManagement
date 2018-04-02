@@ -36,13 +36,13 @@ namespace LagoVista.IoT.DataStreamConnectors
         public Task<InvokeResult> InitAsync(DataStream stream)
         {
             _stream = stream;
-            _connection = new AwsHttpConnection(stream.AWSRegion, new StaticCredentialsProvider(new AwsCredentials
+            _connection = new AwsHttpConnection(stream.AwsRegion, new StaticCredentialsProvider(new AwsCredentials
             {
-                AccessKey = stream.AWSAccessKey,
-                SecretKey = stream.AWSSecretKey
+                AccessKey = stream.AwsAccessKey,
+                SecretKey = stream.AwsSecretKey
             }));
 
-            var pool = new SingleNodeConnectionPool(new Uri(stream.ESDomainName));
+            var pool = new SingleNodeConnectionPool(new Uri(stream.ElasticSearchDomainName));
             var config = new ConnectionSettings(pool, _connection);
             _client = new ElasticClient(config);
 
@@ -72,8 +72,8 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             var result = await _client.IndexAsync(item.Data,
                    idx => idx
-                   .Index(_stream.ESIndexName)
-                   .Type(_stream.ESTypeName)
+                   .Index(_stream.ElasticSearchIndexName)
+                   .Type(_stream.ElasticSearchTypeName)
                    .Id(recordId));
 
             if (result.IsValid)
@@ -100,8 +100,8 @@ namespace LagoVista.IoT.DataStreamConnectors
             if (String.IsNullOrEmpty(request.StartDate) && String.IsNullOrEmpty(request.EndDate))
             {
                 result = await _client.SearchAsync<Dictionary<string, object>>(src => src.From(0)
-                       .Index(_stream.ESIndexName)
-                       .Type(_stream.ESTypeName)
+                       .Index(_stream.ElasticSearchIndexName)
+                       .Type(_stream.ElasticSearchTypeName)
                        .From(request.PageIndex * request.PageSize)
                        .Size(request.PageSize)
                        .Sort(srt => srt.Descending(new Field("sortOrder"))));
@@ -110,8 +110,8 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 var endTicks = request.EndDate.ToDateTime().Ticks;
                 result = await _client.SearchAsync<Dictionary<string, object>>(src => src.From(0)
-                       .Index(_stream.ESIndexName)
-                       .Type(_stream.ESTypeName)
+                       .Index(_stream.ElasticSearchIndexName)
+                       .Type(_stream.ElasticSearchTypeName)
                        .Query(qry =>
                             qry.Range(rng => rng
                             .Field("sortOrder")
@@ -126,8 +126,8 @@ namespace LagoVista.IoT.DataStreamConnectors
                 var startTicks = request.StartDate.ToDateTime().Ticks;
 
                 result = await _client.SearchAsync<Dictionary<string, object>>(src => src.From(0)
-                       .Index(_stream.ESIndexName)
-                       .Type(_stream.ESTypeName)
+                       .Index(_stream.ElasticSearchIndexName)
+                       .Type(_stream.ElasticSearchTypeName)
                        .Query(qry =>
                             qry.Range(rng => rng
                             .Field("sortOrder")
@@ -143,8 +143,8 @@ namespace LagoVista.IoT.DataStreamConnectors
                 var endTicks = request.EndDate.ToDateTime().Ticks;
 
                 result = await _client.SearchAsync<Dictionary<string, object>>(src => src.From(0)
-                       .Index(_stream.ESIndexName)
-                       .Type(_stream.ESTypeName)
+                       .Index(_stream.ElasticSearchIndexName)
+                       .Type(_stream.ElasticSearchTypeName)
                        .Query(qry =>
                             qry.Range(rng => rng
                             .Field("sortOrder")

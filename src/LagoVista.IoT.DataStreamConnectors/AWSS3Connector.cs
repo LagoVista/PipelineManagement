@@ -35,8 +35,8 @@ namespace LagoVista.IoT.DataStreamConnectors
             _stream = stream;
             var options = new CredentialProfileOptions
             {
-                AccessKey = stream.AWSAccessKey,
-                SecretKey = stream.AWSSecretKey
+                AccessKey = stream.AwsAccessKey,
+                SecretKey = stream.AwsSecretKey
             };
 
             var profile = new Amazon.Runtime.CredentialManagement.CredentialProfile($"awsprofile_{stream.Id}", options);
@@ -47,7 +47,7 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             try
             {
-                _s3Client = new AmazonS3Client(creds, AWSRegionMappings.MapRegion(stream.AWSRegion));
+                _s3Client = new AmazonS3Client(creds, AWSRegionMappings.MapRegion(stream.AwsRegion));
                 await _s3Client.EnsureBucketExistsAsync(stream.S3BucketName);
             }
             catch (AmazonS3Exception amazonS3Exception)

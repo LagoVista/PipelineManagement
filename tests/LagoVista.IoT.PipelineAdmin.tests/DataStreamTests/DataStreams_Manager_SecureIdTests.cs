@@ -58,38 +58,38 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             switch (type)
             {
                 case DataStreamTypes.AWSElasticSearch:
-                    stream.AWSAccessKey = "accesskey";
-                    stream.AWSSecretKey = "accesskey";
-                    stream.AWSRegion = "us-west-1";
-                    stream.ESDomainName = "domain";
-                    stream.ESIndexName = "index";
-                    stream.ESTypeName = "type";
+                    stream.AwsAccessKey = "accesskey";
+                    stream.AwsSecretKey = "accesskey";
+                    stream.AwsRegion = "us-west-1";
+                    stream.ElasticSearchDomainName = "domain";
+                    stream.ElasticSearchIndexName = "index";
+                    stream.ElasticSearchTypeName = "type";
                     break;
                 case DataStreamTypes.AWSS3:
-                    stream.AWSAccessKey = "accesskey";
-                    stream.AWSSecretKey = "accesskey";
-                    stream.AWSRegion = "USWest1";
+                    stream.AwsAccessKey = "accesskey";
+                    stream.AwsSecretKey = "accesskey";
+                    stream.AwsRegion = "USWest1";
                     stream.S3BucketName = "mybucket";
                     break;
                 case DataStreamTypes.AzureBlob:
                     stream.AzureAccessKey = "accesskey";
-                    stream.AzureAccountId = "accountid";
+                    stream.AzureStorageAccountName = "accountid";
                     stream.AzureBlobStorageContainerName = "blobcontainer";
                     break;
                 case DataStreamTypes.AzureEventHub:
                     stream.AzureAccessKey = "accesskey";
-                    stream.AzureAccountId = "accountid";
+                    stream.AzureStorageAccountName = "accountid";
                     stream.AzureEventHubName = "ehname";
                     stream.AzureEventHubEntityPath = "path";
                     break;
                 case DataStreamTypes.AzureTableStorage:
                     stream.AzureAccessKey = "accesskey";
-                    stream.AzureAccountId = "accountid";
+                    stream.AzureStorageAccountName = "accountid";
                     stream.AzureTableStorageName = "tablestorage";
                     break;
                 case DataStreamTypes.AzureTableStorage_Managed:
                     stream.AzureAccessKey = "accesskey";
-                    stream.AzureAccountId = "accountid";
+                    stream.AzureStorageAccountName = "accountid";
                     stream.AzureTableStorageName = "tablestorage";
                     break;
                 case DataStreamTypes.SQLServer:
@@ -106,13 +106,13 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         private async Task AWSInsertAsync(DataStreamTypes streamType)
         {
             var stream = GetDataStream(streamType);
-            var originalSecretKey = stream.AWSSecretKey;
+            var originalSecretKey = stream.AwsSecretKey;
             var result = await _dataStreamManager.AddDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
 
             _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(originalSecretKey), Times.Once);
 
-            Assert.IsNull(stream.AWSSecretKey);
+            Assert.IsNull(stream.AwsSecretKey);
             Assert.AreEqual(GENERATD_SECURE_ID_VALUE, stream.AWSSecretKeySecureId);
         }
 
@@ -120,14 +120,14 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         {
             var stream = GetDataStream(streamType);
             stream.AWSSecretKeySecureId = OLD_SECURE_ID_VALUE;
-            stream.AWSSecretKey = null;
+            stream.AwsSecretKey = null;
             var result = await _dataStreamManager.UpdateDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
 
             _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(It.IsAny<string>()), Times.Never);
             _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(It.IsAny<string>()), Times.Never);
 
-            Assert.IsNull(stream.AWSSecretKey);
+            Assert.IsNull(stream.AwsSecretKey);
             Assert.AreEqual(OLD_SECURE_ID_VALUE, stream.AWSSecretKeySecureId);
         }
 
@@ -136,14 +136,14 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             var updatedSecretKey = "newlycreatedaccesskey";
             var stream = GetDataStream(streamType);
             stream.AWSSecretKeySecureId = OLD_SECURE_ID_VALUE;
-            stream.AWSSecretKey = updatedSecretKey;
+            stream.AwsSecretKey = updatedSecretKey;
             var result = await _dataStreamManager.UpdateDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
 
             _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(updatedSecretKey), Times.Once);
             _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(OLD_SECURE_ID_VALUE), Times.Once);
 
-            Assert.IsNull(stream.AWSSecretKey);
+            Assert.IsNull(stream.AwsSecretKey);
             Assert.AreEqual(GENERATD_SECURE_ID_VALUE, stream.AWSSecretKeySecureId);
         }
 

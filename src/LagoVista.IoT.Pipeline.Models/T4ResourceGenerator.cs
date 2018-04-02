@@ -176,6 +176,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_AzureEventHubPath
 
 		public static string DataStream_AzureEventHubPath { get { return GetResourceString("DataStream_AzureEventHubPath"); } }
+//Resources:PipelineAdminResources:DataStream_AzureStorageName
+
+		public static string DataStream_AzureStorageName { get { return GetResourceString("DataStream_AzureStorageName"); } }
 //Resources:PipelineAdminResources:DataStream_BlobStorage_InvalidName
 
 		public static string DataStream_BlobStorage_InvalidName { get { return GetResourceString("DataStream_BlobStorage_InvalidName"); } }
@@ -230,6 +233,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_Description
 
 		public static string DataStream_Description { get { return GetResourceString("DataStream_Description"); } }
+//Resources:PipelineAdminResources:DataStream_DeviceId_InvalidFormat
+
+		public static string DataStream_DeviceId_InvalidFormat { get { return GetResourceString("DataStream_DeviceId_InvalidFormat"); } }
 //Resources:PipelineAdminResources:DataStream_DeviceIdFieldName
 
 		public static string DataStream_DeviceIdFieldName { get { return GetResourceString("DataStream_DeviceIdFieldName"); } }
@@ -320,6 +326,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_TableStorageName
 
 		public static string DataStream_TableStorageName { get { return GetResourceString("DataStream_TableStorageName"); } }
+//Resources:PipelineAdminResources:DataStream_TimeStamp_InvalidFormat
+
+		public static string DataStream_TimeStamp_InvalidFormat { get { return GetResourceString("DataStream_TimeStamp_InvalidFormat"); } }
 //Resources:PipelineAdminResources:DataStream_TimeStampFieldName
 
 		public static string DataStream_TimeStampFieldName { get { return GetResourceString("DataStream_TimeStampFieldName"); } }
@@ -347,6 +356,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStreamField_FieldName_Help
 
 		public static string DataStreamField_FieldName_Help { get { return GetResourceString("DataStreamField_FieldName_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_FieldName_Invalid
+
+		public static string DataStreamField_FieldName_Invalid { get { return GetResourceString("DataStreamField_FieldName_Invalid"); } }
 //Resources:PipelineAdminResources:DataStreamField_Help
 
 		public static string DataStreamField_Help { get { return GetResourceString("DataStreamField_Help"); } }
@@ -1087,6 +1099,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_AzureAccountId = "DataStream_AzureAccountId";
 			public const string DataStream_AzureEventHubName = "DataStream_AzureEventHubName";
 			public const string DataStream_AzureEventHubPath = "DataStream_AzureEventHubPath";
+			public const string DataStream_AzureStorageName = "DataStream_AzureStorageName";
 			public const string DataStream_BlobStorage_InvalidName = "DataStream_BlobStorage_InvalidName";
 			public const string DataStream_BlobStoragePath = "DataStream_BlobStoragePath";
 			public const string DataStream_ConnectionString = "DataStream_ConnectionString";
@@ -1105,6 +1118,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_DbValidateSchema = "DataStream_DbValidateSchema";
 			public const string DataStream_DbValidateSchema_Help = "DataStream_DbValidateSchema_Help";
 			public const string DataStream_Description = "DataStream_Description";
+			public const string DataStream_DeviceId_InvalidFormat = "DataStream_DeviceId_InvalidFormat";
 			public const string DataStream_DeviceIdFieldName = "DataStream_DeviceIdFieldName";
 			public const string DataStream_DeviceIdFieldName_Help = "DataStream_DeviceIdFieldName_Help";
 			public const string DataStream_ESDomainName = "DataStream_ESDomainName";
@@ -1135,6 +1149,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_TableName = "DataStream_TableName";
 			public const string DataStream_TableStorage_InvalidName = "DataStream_TableStorage_InvalidName";
 			public const string DataStream_TableStorageName = "DataStream_TableStorageName";
+			public const string DataStream_TimeStamp_InvalidFormat = "DataStream_TimeStamp_InvalidFormat";
 			public const string DataStream_TimeStampFieldName = "DataStream_TimeStampFieldName";
 			public const string DataStream_TimeStampFieldName_Help = "DataStream_TimeStampFieldName_Help";
 			public const string DataStream_Title = "DataStream_Title";
@@ -1144,6 +1159,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStreamField_Description = "DataStreamField_Description";
 			public const string DataStreamField_FieldName = "DataStreamField_FieldName";
 			public const string DataStreamField_FieldName_Help = "DataStreamField_FieldName_Help";
+			public const string DataStreamField_FieldName_Invalid = "DataStreamField_FieldName_Invalid";
 			public const string DataStreamField_Help = "DataStreamField_Help";
 			public const string DataStreamField_IsRequired = "DataStreamField_IsRequired";
 			public const string DataStreamField_IsRequired_Help = "DataStreamField_IsRequired_Help";

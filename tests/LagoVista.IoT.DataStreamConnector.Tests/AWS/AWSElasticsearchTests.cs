@@ -33,14 +33,14 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
                 Key = "mydatastream",
-                ESIndexName = "unittestindex",
-                ESTypeName = "unittestdata",
+                ElasticSearchIndexName = "unittestindex",
+                ElasticSearchTypeName = "unittestdata",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3),
-                AWSAccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
-                AWSSecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET"),
+                AwsAccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
+                AwsSecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET"),
                 //AWSRegion = "USEast1",
-                AWSRegion = "us-east-1",
-                ESDomainName = "https://search-nuviot-test-fsibnpqsw3mt7cjapjdqzbt3sq.us-east-1.es.amazonaws.com/"
+                AwsRegion = "us-east-1",
+                ElasticSearchDomainName = "https://search-nuviot-test-fsibnpqsw3mt7cjapjdqzbt3sq.us-east-1.es.amazonaws.com/"
             };
 
             return stream;
@@ -57,18 +57,18 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         public void Init()
         {
             var stream = GetValidStream();
-            var connection = new AwsHttpConnection(stream.AWSRegion, new StaticCredentialsProvider(new AwsCredentials
+            var connection = new AwsHttpConnection(stream.AwsRegion, new StaticCredentialsProvider(new AwsCredentials
             {
-                AccessKey = stream.AWSAccessKey,
-                SecretKey = stream.AWSSecretKey
+                AccessKey = stream.AwsAccessKey,
+                SecretKey = stream.AwsSecretKey
             }));
 
-            var pool = new SingleNodeConnectionPool(new Uri(stream.ESDomainName));
+            var pool = new SingleNodeConnectionPool(new Uri(stream.ElasticSearchDomainName));
             var config = new Nest.ConnectionSettings(pool, connection);
             var client = new ElasticClient(config);
-            if (client.IndexExists(stream.ESIndexName).Exists)
+            if (client.IndexExists(stream.ElasticSearchIndexName).Exists)
             {
-                var res = client.DeleteIndex(stream.ESIndexName);
+                var res = client.DeleteIndex(stream.ElasticSearchIndexName);
                 Console.WriteLine(res.DebugInformation);
             }
         }
@@ -179,13 +179,13 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         public void TestCleanup()
         {
             var stream = GetValidStream();
-            var connection = new AwsHttpConnection(stream.AWSRegion, new StaticCredentialsProvider(new AwsCredentials
+            var connection = new AwsHttpConnection(stream.AwsRegion, new StaticCredentialsProvider(new AwsCredentials
             {
-                AccessKey = stream.AWSAccessKey,
-                SecretKey = stream.AWSSecretKey
+                AccessKey = stream.AwsAccessKey,
+                SecretKey = stream.AwsSecretKey
             }));
 
-            var pool = new SingleNodeConnectionPool(new Uri(stream.ESDomainName));
+            var pool = new SingleNodeConnectionPool(new Uri(stream.ElasticSearchDomainName));
             var config = new Nest.ConnectionSettings(pool, connection);
             var client = new ElasticClient(config);
             /*if (client.IndexExists(stream.ESIndexName).Exists)
