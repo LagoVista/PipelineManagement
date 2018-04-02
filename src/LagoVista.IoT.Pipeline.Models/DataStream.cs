@@ -17,8 +17,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AWSS3,
         [EnumLabel(DataStream.StreamType_AzureBlob, PipelineAdminResources.Names.DataStream_StreamType_AzureBlob, typeof(PipelineAdminResources))]
         AzureBlob,
-        [EnumLabel(DataStream.StreamType_AzureBlob_Managed, PipelineAdminResources.Names.DataStream_StreamType_AzureBlob_Managed, typeof(PipelineAdminResources))]
-        AzureBlob_Managed,
+        //[EnumLabel(DataStream.StreamType_AzureBlob_Managed, PipelineAdminResources.Names.DataStream_StreamType_AzureBlob_Managed, typeof(PipelineAdminResources))]
+        //AzureBlob_Managed,
         [EnumLabel(DataStream.StreamType_AzureEventHub, PipelineAdminResources.Names.DataStream_StreamType_AzureEventHub, typeof(PipelineAdminResources))]
         AzureEventHub,
         [EnumLabel(DataStream.StreamType_AzureTableStorage, PipelineAdminResources.Names.DataStream_StreamType_TableStorage, typeof(PipelineAdminResources))]
@@ -101,8 +101,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         #endregion
 
         #region AWS Elastic Search Properties
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESDomainName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z-]{2,100}$", 
-            RegExValidationMessageResource:PipelineAdminResources.Names.DataStream_ESDomainName_Invalid,  FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESDomainName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z-]{2,100}$",
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_ESDomainName_Invalid, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string ESDomainName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESIndexName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z@$#_-]{2,100}$",
@@ -134,15 +134,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableStorageName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureTableStorageName { get; set; }
 
-
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_BlobStoragePath, ValidationRegEx: @"^[a-z0-9]+(-[a-z0-9]+)*$", FieldType: FieldTypes.Text,
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]
         public string AzureBlobStorageContainerName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureEventHubName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureEventHubName, FieldType: FieldTypes.Text, ValidationRegEx: @"^[a-zA-Z0-9][a-zA-Z0-9.\-_]{5,49}$",
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidEHName, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureEventHubName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureEventHubPath, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureEventHubPath, FieldType: FieldTypes.Text, ValidationRegEx: @"^[a-zA-Z0-9][a-zA-Z0-9.\-_]{0,127}$",
+             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidEHPathName, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureEventHubEntityPath { get; set; }
         #endregion
 
@@ -159,7 +160,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbValidateSchema, HelpResource: PipelineAdminResources.Names.DataStream_DbValidateSchema_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public bool DbValidateSchema { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbURL, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbURL, ValidationRegEx: @"[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)",
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_DbUrl_InvalidUrl, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbURL { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}@$#_]{0,127}$", FieldType: FieldTypes.Text,
@@ -210,6 +212,52 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             if (Fields.Select(fld => fld.Key).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Keys on fields must be unique."));
             if (Fields.Select(fld => fld.FieldName).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Field Names on fields must be unique."));
 
+            if (StreamType.Value != DataStreamTypes.AzureBlob && 
+                StreamType.Value != DataStreamTypes.AzureTableStorage &&
+                StreamType.Value != DataStreamTypes.AzureEventHub &&
+                StreamType.Value != DataStreamTypes.AzureTableStorage_Managed)
+            {
+                AzureAccessKey = null;
+                AzureAccessKeySecureId = null;
+            }
+
+            if (StreamType.Value != DataStreamTypes.AWSS3 && StreamType.Value != DataStreamTypes.AWSElasticSearch)
+            {
+                AWSRegion = null;
+                AWSSecretKey = null;
+                AWSAccessKey = null;
+                AWSSecretKeySecureId = null;
+            }
+
+            if (StreamType.Value != DataStreamTypes.SQLServer)
+            {
+                DbName = null;
+                DbPassword = null;
+                DBPasswordSecureId = null;
+                DbTableName = null;
+                DbURL = null;
+                DbUserName = null;
+                DbValidateSchema = false;
+            }
+
+            if (StreamType.Value != DataStreamTypes.AzureEventHub)
+            {
+                AzureEventHubEntityPath = null;
+                AzureEventHubName = null;
+            }
+
+            if (StreamType.Value != DataStreamTypes.AzureTableStorage && 
+                StreamType.Value != DataStreamTypes.AzureTableStorage_Managed)
+            {
+                AzureTableStorageName = null;
+            }
+
+            if (StreamType.Value != DataStreamTypes.AzureBlob)
+            {
+                AzureBlobStorageContainerName = null;
+            }
+
+            #region AWS Types
             if (StreamType.Value == DataStreamTypes.AWSElasticSearch ||
                 StreamType.Value == DataStreamTypes.AWSS3)
             {
@@ -242,17 +290,49 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     }
                 }
             }
+            #endregion
 
             if (StreamType.Value == DataStreamTypes.SQLServer)
             {
                 if (string.IsNullOrEmpty(DbURL)) result.Errors.Add(new ErrorMessage("URL of database server is required for a database data stream."));
-                if (string.IsNullOrEmpty(DbUserName)) result.Errors.Add(new ErrorMessage("Dtabase User Name is required for a database data stream."));
+                if (string.IsNullOrEmpty(DbUserName)) result.Errors.Add(new ErrorMessage("Database User Name is required for a database data stream."));
                 if (string.IsNullOrEmpty(DbName)) result.Errors.Add(new ErrorMessage("Database Name is required for a database data stream."));
                 if (string.IsNullOrEmpty(DbTableName)) result.Errors.Add(new ErrorMessage("Database Table Name is required for a database data stream."));
 
                 if ((action == Actions.Create) && string.IsNullOrEmpty(DbPassword)) result.Errors.Add(new ErrorMessage("Database Password is required for a database data streams"));
                 if ((action == Actions.Update) && string.IsNullOrEmpty(DbPassword) && string.IsNullOrEmpty(DBPasswordSecureId)) result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
             }
+
+
+            #region Azure Type
+            if (StreamType.Value == DataStreamTypes.AzureTableStorage)                
+            {
+                if (string.IsNullOrEmpty(AzureTableStorageName)) result.Errors.Add(new ErrorMessage("Table Name for Table Storage Account is a Required Field"));
+            }
+
+            if (StreamType.Value == DataStreamTypes.AzureTableStorage_Managed)
+            {
+                AzureTableStorageName = $"DataStream{OwnerOrganization.Id}{Key}";
+            }
+
+            if (StreamType.Value == DataStreamTypes.AzureBlob)
+            {
+                if (string.IsNullOrEmpty(AzureBlobStorageContainerName)) result.Errors.Add(new ErrorMessage("Name of Azure Blob Container is required."));
+            }
+
+            if (StreamType.Value == DataStreamTypes.AzureEventHub)
+            {
+                if (string.IsNullOrEmpty(AzureEventHubName)) result.Errors.Add(new ErrorMessage("Name of event hub is a required field."));
+                if (string.IsNullOrEmpty(AzureEventHubEntityPath)) result.Errors.Add(new ErrorMessage("Entity path on event hub is a required field."));
+            }
+
+            if (StreamType.Value == DataStreamTypes.AzureEventHub || StreamType.Value == DataStreamTypes.AzureBlob || StreamType.Value == DataStreamTypes.AzureTableStorage)
+            {
+                if ((action == Actions.Create) && string.IsNullOrEmpty(AzureAccessKey)) result.Errors.Add(new ErrorMessage("Azure Access Key is required"));
+                if ((action == Actions.Update) && string.IsNullOrEmpty(AzureAccessKey) && string.IsNullOrEmpty(AzureAccessKeySecureId)) result.Errors.Add(new ErrorMessage("Azure Access Key or SecretKeyId are required for azure resources, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
+            }
+            #endregion
+
         }
     }
 

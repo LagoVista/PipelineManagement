@@ -5,45 +5,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LagoVista.Core;
 
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
     [TestClass]
-    public class SQLServerFieldValidation
+    public class SQLServerFieldValidation : ValidationBase
     {
-        private void AssertInvalidError(ValidationResult result, params string[] errs)
-        {
-            Console.WriteLine("Errors (at least some are expected)");
-
-            foreach (var err in result.Errors)
-            {
-                Console.WriteLine(err.Message);
-            }
-            
-            foreach (var err in errs)
-            {
-                Assert.IsTrue(result.Errors.Where(msg => msg.Message == err).Any(),$"Could not find error [{err}]");
-            }
-
-            Assert.IsFalse(result.Successful, "Validated as successful but should have failed.");
-        }
-
-        private void AssertSuccessful(ValidationResult result)
-        {
-            if (result.Errors.Any())
-            {
-                Console.WriteLine("unexpected errors");
-            }
-
-            foreach (var err in result.Errors)
-            {
-                Console.WriteLine("\t" + err.Message);
-            }
-
-            Assert.IsTrue(result.Successful);
-        }
 
         private List<SQLServerConnector.SQLFieldMetaData> GetDataDescription()
         {
@@ -75,9 +43,24 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         private DataStream GetDataStream(DeviceAdmin.Models.ParameterTypes fieldType)
         {
             var stream = new DataStream();
+            stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
+            stream.Name = "mystream";
+            stream.Key = "streamkey";
+            stream.DbURL = "database.sqlserver.com";
+            stream.DbName = "mydatabase";
+            stream.DbUserName = "myusername";
+            stream.DbPassword = "mypassword";
+            stream.DbTableName = "users";
+            stream.CreationDate = DateTime.Now.ToJSONString();
+            stream.LastUpdatedDate = DateTime.Now.ToJSONString();
+            stream.CreatedBy = Core.Models.EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
+            stream.LastUpdatedBy = stream.CreatedBy;
+            stream.StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
+
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Field1",
+                Key="field1",
                 FieldName = "field1",
                 FieldType = Core.Models.EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(fieldType),
                 IsRequired = true,
@@ -183,5 +166,79 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             AssertInvalidError(stream.ValidateSQLSeverMetaData(sqlMetaData), "Data Type on SQL Server Table for field [deviceId] (the device id field) must be one of the following: char, varchar, nchar or nvarchar.");
         }
 
+
+        [TestMethod]
+        public void SQLServer_ServerUrlMissing_Invalid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.DbURL = null;
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result.ToInvokeResult(), "URL of database server is required for a database data stream.");
+        }
+
+        [TestMethod]
+        public void SQLServer_ServerUrlInvalidFormat_Invalid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.DbURL = "123.234.$@";
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result.ToInvokeResult(), "URL of database server is an invalid URL.");
+        }
+
+        [TestMethod]
+        public void SQLServer_DatabaseNameMissing_Invalid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.DbName = null;
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result.ToInvokeResult(), "Database Name is required for a database data stream.");
+        }
+
+        [TestMethod]
+        public void SQLServer_PasswordMissingOnInsert_InValid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.DbPassword = null;
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result.ToInvokeResult(), "Database Password is required for a database data streams");
+        }
+
+        [TestMethod]
+        public void SQLServer_PasswordAndSecretMissingOnUpdate_InValid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.DbPassword = null;
+            stream.DBPasswordSecureId = null;
+            var result = Validator.Validate(stream, Actions.Update);
+            AssertInvalidError(result.ToInvokeResult(), "Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id.");
+        }
+
+        [TestMethod]
+        public void SQLServer_UserNameRequired()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.DbUserName = null;
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result.ToInvokeResult(), "Database User Name is required for a database data stream.");
+        }
+
+
+        [TestMethod]
+        public void SQLServer_PasswordDbTableNameMissing_InValid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.DbTableName = null;
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result.ToInvokeResult(), "Database Table Name is required for a database data stream.");
+        }
+
+        [TestMethod]
+        public void SQLServer_PasswordDbTableNameRegExFalure_InValid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.DbTableName = "$@FASF";
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result.ToInvokeResult(), "Invalid table name, please check an online reference for your database server.");
+        }
     }
 }

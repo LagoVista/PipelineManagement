@@ -140,7 +140,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             var stream = GetValidStream();
             stream.AWSRegion = "SOMETHINGELSE";
 
-            AssertInvalidModel(Validator.Validate(stream, Actions.Create), "Invalid AWSRegion, Region [SOMETHINGELSE] is invalid.");
+            AssertInvalidModel(Validator.Validate(stream, Actions.Create), "Invalid AWS Region, Region [SOMETHINGELSE] could not be found.");
         }
     }
 }

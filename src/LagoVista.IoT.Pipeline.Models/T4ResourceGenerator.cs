@@ -212,6 +212,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_DbURL
 
 		public static string DataStream_DbURL { get { return GetResourceString("DataStream_DbURL"); } }
+//Resources:PipelineAdminResources:DataStream_DbUrl_InvalidUrl
+
+		public static string DataStream_DbUrl_InvalidUrl { get { return GetResourceString("DataStream_DbUrl_InvalidUrl"); } }
 //Resources:PipelineAdminResources:DataStream_DbUserName
 
 		public static string DataStream_DbUserName { get { return GetResourceString("DataStream_DbUserName"); } }
@@ -257,6 +260,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_InvalidBucketName
 
 		public static string DataStream_InvalidBucketName { get { return GetResourceString("DataStream_InvalidBucketName"); } }
+//Resources:PipelineAdminResources:DataStream_InvalidEHName
+
+		public static string DataStream_InvalidEHName { get { return GetResourceString("DataStream_InvalidEHName"); } }
+//Resources:PipelineAdminResources:DataStream_InvalidEHPathName
+
+		public static string DataStream_InvalidEHPathName { get { return GetResourceString("DataStream_InvalidEHPathName"); } }
 //Resources:PipelineAdminResources:DataStream_InvalidTableName
 
 		public static string DataStream_InvalidTableName { get { return GetResourceString("DataStream_InvalidTableName"); } }
@@ -1084,6 +1093,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_DbPassword = "DataStream_DbPassword";
 			public const string DataStream_DbPassword_Help = "DataStream_DbPassword_Help";
 			public const string DataStream_DbURL = "DataStream_DbURL";
+			public const string DataStream_DbUrl_InvalidUrl = "DataStream_DbUrl_InvalidUrl";
 			public const string DataStream_DbUserName = "DataStream_DbUserName";
 			public const string DataStream_DbValidateSchema = "DataStream_DbValidateSchema";
 			public const string DataStream_DbValidateSchema_Help = "DataStream_DbValidateSchema_Help";
@@ -1099,6 +1109,8 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_Fields = "DataStream_Fields";
 			public const string DataStream_Help = "DataStream_Help";
 			public const string DataStream_InvalidBucketName = "DataStream_InvalidBucketName";
+			public const string DataStream_InvalidEHName = "DataStream_InvalidEHName";
+			public const string DataStream_InvalidEHPathName = "DataStream_InvalidEHPathName";
 			public const string DataStream_InvalidTableName = "DataStream_InvalidTableName";
 			public const string DataStream_S3_BucketName = "DataStream_S3_BucketName";
 			public const string DataStream_StreamType = "DataStream_StreamType";

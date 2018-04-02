@@ -46,36 +46,38 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             Assert.IsFalse(result.Successful);
         }
 
-        [TestMethod]
-        public void DataStream_Basic_Valid()
+
+        private DataStream GetValidDataStream()
         {
             var stream = new DataStream();
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
+            stream.DbURL = "database.sqlserver.com";
+            stream.DbName = "mydatabase";
+            stream.DbUserName = "myusername";
+            stream.DbPassword = "mypassword";
             stream.DbTableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
             stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
-           
+            return stream;
+        }
+
+        [TestMethod]
+        public void DataStream_Basic_Valid()
+        {
+            var stream = GetValidDataStream();           
             AssertValidModel(Validator.Validate(stream));
         }
 
         [TestMethod]
         public void DataStream_WithFields_Valid()
         {
-            var stream = new DataStream();
-            stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
-            stream.Name = "mystream";
-            stream.Key = "streamkey";
-            stream.DbTableName = "users";
-            stream.CreationDate = DateTime.Now.ToJSONString();
-            stream.LastUpdatedDate = DateTime.Now.ToJSONString();
-            stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
-            stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
+            var stream = GetValidDataStream();
+
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",
@@ -98,16 +100,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
         [TestMethod]
         public void DataStream_WithFields_Invalid_DuplicateKeyOnFields()
         {
-            var stream = new DataStream();
-            stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
-            stream.Name = "mystream";
-            stream.Key = "streamkey";
-            stream.DbTableName = "users";
-            stream.CreationDate = DateTime.Now.ToJSONString();
-            stream.LastUpdatedDate = DateTime.Now.ToJSONString();
-            stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
-            stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
+            var stream = GetValidDataStream();
+
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",
@@ -130,16 +124,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
         [TestMethod]
         public void DataStream_WithFields_Invalid_DuplicateFieldNamesOnFields()
         {
-            var stream = new DataStream();
-            stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
-            stream.Name = "mystream";
-            stream.Key = "streamkey";
-            stream.DbTableName = "users";
-            stream.CreationDate = DateTime.Now.ToJSONString();
-            stream.LastUpdatedDate = DateTime.Now.ToJSONString();
-            stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
-            stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
+            var stream = GetValidDataStream();
+
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",
@@ -162,16 +148,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
         [TestMethod]
         public void DataStream_WithFields_Invalid_MissingStateSet()
         {
-            var stream = new DataStream();
-            stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
-            stream.Name = "mystream";
-            stream.Key = "streamkey";
-            stream.DbTableName = "users";
-            stream.CreationDate = DateTime.Now.ToJSONString();
-            stream.LastUpdatedDate = DateTime.Now.ToJSONString();
-            stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
-            stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
+            var stream = GetValidDataStream();
+
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",
@@ -194,16 +172,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
         [TestMethod]
         public void DataStream_WithFields_Invalid_MissingUnitSetSet()
         {
-            var stream = new DataStream();
-            stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
-            stream.Name = "mystream";
-            stream.Key = "streamkey";
-            stream.DbTableName = "users";
-            stream.CreationDate = DateTime.Now.ToJSONString();
-            stream.LastUpdatedDate = DateTime.Now.ToJSONString();
-            stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
-            stream.LastUpdatedBy = stream.CreatedBy;
-            stream.StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);
+            var stream = GetValidDataStream();
+
             stream.Fields.Add(new DataStreamField()
             {
                 Name = "Name1",
