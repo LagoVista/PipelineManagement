@@ -136,7 +136,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string AzureTableStorageName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_BlobStoragePath, ValidationRegEx: @"^[a-z0-9]+(-[a-z0-9]+)*$", FieldType: FieldTypes.Text,
-            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_BlobStorage_InvalidName, ResourceType: typeof(PipelineAdminResources))]
         public string AzureBlobStorageContainerName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureEventHubName, FieldType: FieldTypes.Text, ValidationRegEx: @"^[a-zA-Z0-9][a-zA-Z0-9.\-_]{5,49}$",

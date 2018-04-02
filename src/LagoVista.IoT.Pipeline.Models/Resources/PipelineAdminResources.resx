@@ -1108,4 +1108,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStream_TableStorage_InvalidName" xml:space="preserve">
     <value>Invalid table storage name, your name must contain only upper and lower case letters and numbers and be between 3 and 63 characters.</value>
   </data>
+  <data name="DataStream_BlobStorage_InvalidName" xml:space="preserve">
+    <value>Container names can only contain lower case letters, numbers, and hyphens, and must begin with a letter or number. The name can't contain consecutive hypens.</value>
+  </data>
 </root>

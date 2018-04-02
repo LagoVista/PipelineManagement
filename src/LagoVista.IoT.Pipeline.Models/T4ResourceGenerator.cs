@@ -176,6 +176,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_AzureEventHubPath
 
 		public static string DataStream_AzureEventHubPath { get { return GetResourceString("DataStream_AzureEventHubPath"); } }
+//Resources:PipelineAdminResources:DataStream_BlobStorage_InvalidName
+
+		public static string DataStream_BlobStorage_InvalidName { get { return GetResourceString("DataStream_BlobStorage_InvalidName"); } }
 //Resources:PipelineAdminResources:DataStream_BlobStoragePath
 
 		public static string DataStream_BlobStoragePath { get { return GetResourceString("DataStream_BlobStoragePath"); } }
@@ -1084,6 +1087,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_AzureAccountId = "DataStream_AzureAccountId";
 			public const string DataStream_AzureEventHubName = "DataStream_AzureEventHubName";
 			public const string DataStream_AzureEventHubPath = "DataStream_AzureEventHubPath";
+			public const string DataStream_BlobStorage_InvalidName = "DataStream_BlobStorage_InvalidName";
 			public const string DataStream_BlobStoragePath = "DataStream_BlobStoragePath";
 			public const string DataStream_ConnectionString = "DataStream_ConnectionString";
 			public const string DataStream_ConnectionString_Help = "DataStream_ConnectionString_Help";

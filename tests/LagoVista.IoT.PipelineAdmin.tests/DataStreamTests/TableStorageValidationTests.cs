@@ -1,9 +1,8 @@
-﻿using System;
-
-using LagoVista.Core;
+﻿using LagoVista.Core;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
@@ -17,7 +16,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.Name = "mystream";
             stream.Key = "streamkey";
             stream.AzureAccessKey = "accesskey";
-            stream.AzureTableStorageName = "myeventhub";
+            stream.AzureTableStorageName = "tablestoragename";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = Core.Models.EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
