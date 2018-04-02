@@ -158,6 +158,27 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_AWSSecretKey
 
 		public static string DataStream_AWSSecretKey { get { return GetResourceString("DataStream_AWSSecretKey"); } }
+//Resources:PipelineAdminResources:DataStream_AWSSecretKey_Help
+
+		public static string DataStream_AWSSecretKey_Help { get { return GetResourceString("DataStream_AWSSecretKey_Help"); } }
+//Resources:PipelineAdminResources:DataStream_AzureAccessKey
+
+		public static string DataStream_AzureAccessKey { get { return GetResourceString("DataStream_AzureAccessKey"); } }
+//Resources:PipelineAdminResources:DataStream_AzureAccessKeyHelp
+
+		public static string DataStream_AzureAccessKeyHelp { get { return GetResourceString("DataStream_AzureAccessKeyHelp"); } }
+//Resources:PipelineAdminResources:DataStream_AzureAccountId
+
+		public static string DataStream_AzureAccountId { get { return GetResourceString("DataStream_AzureAccountId"); } }
+//Resources:PipelineAdminResources:DataStream_AzureEventHubName
+
+		public static string DataStream_AzureEventHubName { get { return GetResourceString("DataStream_AzureEventHubName"); } }
+//Resources:PipelineAdminResources:DataStream_AzureEventHubPath
+
+		public static string DataStream_AzureEventHubPath { get { return GetResourceString("DataStream_AzureEventHubPath"); } }
+//Resources:PipelineAdminResources:DataStream_BlobStoragePath
+
+		public static string DataStream_BlobStoragePath { get { return GetResourceString("DataStream_BlobStoragePath"); } }
 //Resources:PipelineAdminResources:DataStream_ConnectionString
 
 		public static string DataStream_ConnectionString { get { return GetResourceString("DataStream_ConnectionString"); } }
@@ -179,6 +200,27 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_DateStorageFormat_Type_ISO8601
 
 		public static string DataStream_DateStorageFormat_Type_ISO8601 { get { return GetResourceString("DataStream_DateStorageFormat_Type_ISO8601"); } }
+//Resources:PipelineAdminResources:DataStream_DbName
+
+		public static string DataStream_DbName { get { return GetResourceString("DataStream_DbName"); } }
+//Resources:PipelineAdminResources:DataStream_DbPassword
+
+		public static string DataStream_DbPassword { get { return GetResourceString("DataStream_DbPassword"); } }
+//Resources:PipelineAdminResources:DataStream_DbPassword_Help
+
+		public static string DataStream_DbPassword_Help { get { return GetResourceString("DataStream_DbPassword_Help"); } }
+//Resources:PipelineAdminResources:DataStream_DbURL
+
+		public static string DataStream_DbURL { get { return GetResourceString("DataStream_DbURL"); } }
+//Resources:PipelineAdminResources:DataStream_DbUserName
+
+		public static string DataStream_DbUserName { get { return GetResourceString("DataStream_DbUserName"); } }
+//Resources:PipelineAdminResources:DataStream_DbValidateSchema
+
+		public static string DataStream_DbValidateSchema { get { return GetResourceString("DataStream_DbValidateSchema"); } }
+//Resources:PipelineAdminResources:DataStream_DbValidateSchema_Help
+
+		public static string DataStream_DbValidateSchema_Help { get { return GetResourceString("DataStream_DbValidateSchema_Help"); } }
 //Resources:PipelineAdminResources:DataStream_Description
 
 		public static string DataStream_Description { get { return GetResourceString("DataStream_Description"); } }
@@ -188,6 +230,24 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_DeviceIdFieldName_Help
 
 		public static string DataStream_DeviceIdFieldName_Help { get { return GetResourceString("DataStream_DeviceIdFieldName_Help"); } }
+//Resources:PipelineAdminResources:DataStream_ESDomainName
+
+		public static string DataStream_ESDomainName { get { return GetResourceString("DataStream_ESDomainName"); } }
+//Resources:PipelineAdminResources:DataStream_ESDomainName_Invalid
+
+		public static string DataStream_ESDomainName_Invalid { get { return GetResourceString("DataStream_ESDomainName_Invalid"); } }
+//Resources:PipelineAdminResources:DataStream_ESIndexName
+
+		public static string DataStream_ESIndexName { get { return GetResourceString("DataStream_ESIndexName"); } }
+//Resources:PipelineAdminResources:DataStream_ESIndexName_Invalid
+
+		public static string DataStream_ESIndexName_Invalid { get { return GetResourceString("DataStream_ESIndexName_Invalid"); } }
+//Resources:PipelineAdminResources:DataStream_ESTypeName
+
+		public static string DataStream_ESTypeName { get { return GetResourceString("DataStream_ESTypeName"); } }
+//Resources:PipelineAdminResources:DataStream_ESTypeNameInvalid
+
+		public static string DataStream_ESTypeNameInvalid { get { return GetResourceString("DataStream_ESTypeNameInvalid"); } }
 //Resources:PipelineAdminResources:DataStream_Fields
 
 		public static string DataStream_Fields { get { return GetResourceString("DataStream_Fields"); } }
@@ -242,6 +302,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_TableName
 
 		public static string DataStream_TableName { get { return GetResourceString("DataStream_TableName"); } }
+//Resources:PipelineAdminResources:DataStream_TableStorageName
+
+		public static string DataStream_TableStorageName { get { return GetResourceString("DataStream_TableStorageName"); } }
 //Resources:PipelineAdminResources:DataStream_TimeStampFieldName
 
 		public static string DataStream_TimeStampFieldName { get { return GetResourceString("DataStream_TimeStampFieldName"); } }
@@ -1003,6 +1066,13 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_AWSAccessKey = "DataStream_AWSAccessKey";
 			public const string DataStream_AWSRegion = "DataStream_AWSRegion";
 			public const string DataStream_AWSSecretKey = "DataStream_AWSSecretKey";
+			public const string DataStream_AWSSecretKey_Help = "DataStream_AWSSecretKey_Help";
+			public const string DataStream_AzureAccessKey = "DataStream_AzureAccessKey";
+			public const string DataStream_AzureAccessKeyHelp = "DataStream_AzureAccessKeyHelp";
+			public const string DataStream_AzureAccountId = "DataStream_AzureAccountId";
+			public const string DataStream_AzureEventHubName = "DataStream_AzureEventHubName";
+			public const string DataStream_AzureEventHubPath = "DataStream_AzureEventHubPath";
+			public const string DataStream_BlobStoragePath = "DataStream_BlobStoragePath";
 			public const string DataStream_ConnectionString = "DataStream_ConnectionString";
 			public const string DataStream_ConnectionString_Help = "DataStream_ConnectionString_Help";
 			public const string DataStream_DateStorageFormat = "DataStream_DateStorageFormat";
@@ -1010,9 +1080,22 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_DateStorageFormat_Select = "DataStream_DateStorageFormat_Select";
 			public const string DataStream_DateStorageFormat_Type_Epoch = "DataStream_DateStorageFormat_Type_Epoch";
 			public const string DataStream_DateStorageFormat_Type_ISO8601 = "DataStream_DateStorageFormat_Type_ISO8601";
+			public const string DataStream_DbName = "DataStream_DbName";
+			public const string DataStream_DbPassword = "DataStream_DbPassword";
+			public const string DataStream_DbPassword_Help = "DataStream_DbPassword_Help";
+			public const string DataStream_DbURL = "DataStream_DbURL";
+			public const string DataStream_DbUserName = "DataStream_DbUserName";
+			public const string DataStream_DbValidateSchema = "DataStream_DbValidateSchema";
+			public const string DataStream_DbValidateSchema_Help = "DataStream_DbValidateSchema_Help";
 			public const string DataStream_Description = "DataStream_Description";
 			public const string DataStream_DeviceIdFieldName = "DataStream_DeviceIdFieldName";
 			public const string DataStream_DeviceIdFieldName_Help = "DataStream_DeviceIdFieldName_Help";
+			public const string DataStream_ESDomainName = "DataStream_ESDomainName";
+			public const string DataStream_ESDomainName_Invalid = "DataStream_ESDomainName_Invalid";
+			public const string DataStream_ESIndexName = "DataStream_ESIndexName";
+			public const string DataStream_ESIndexName_Invalid = "DataStream_ESIndexName_Invalid";
+			public const string DataStream_ESTypeName = "DataStream_ESTypeName";
+			public const string DataStream_ESTypeNameInvalid = "DataStream_ESTypeNameInvalid";
 			public const string DataStream_Fields = "DataStream_Fields";
 			public const string DataStream_Help = "DataStream_Help";
 			public const string DataStream_InvalidBucketName = "DataStream_InvalidBucketName";
@@ -1031,6 +1114,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_StreamType_TableStorage = "DataStream_StreamType_TableStorage";
 			public const string DataStream_StreamType_TableStorage_Managed = "DataStream_StreamType_TableStorage_Managed";
 			public const string DataStream_TableName = "DataStream_TableName";
+			public const string DataStream_TableStorageName = "DataStream_TableStorageName";
 			public const string DataStream_TimeStampFieldName = "DataStream_TimeStampFieldName";
 			public const string DataStream_TimeStampFieldName_Help = "DataStream_TimeStampFieldName_Help";
 			public const string DataStream_Title = "DataStream_Title";

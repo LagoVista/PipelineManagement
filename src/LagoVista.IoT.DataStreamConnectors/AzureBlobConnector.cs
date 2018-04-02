@@ -43,10 +43,10 @@ namespace LagoVista.IoT.DataStreamConnectors
             _stream = stream;
 
             _cloudBlobClient = CreateBlobClient(_stream);
-            _container = _cloudBlobClient.GetContainerReference(_stream.AzureBlobStoragePath);
+            _container = _cloudBlobClient.GetContainerReference(_stream.AzureBlobStorageContainerName);
             try
             {
-                Microsoft.WindowsAzure.Storage.NameValidator.ValidateContainerName(_stream.AzureBlobStoragePath);
+                Microsoft.WindowsAzure.Storage.NameValidator.ValidateContainerName(_stream.AzureBlobStorageContainerName);
 
                 await _container.CreateIfNotExistsAsync();
 

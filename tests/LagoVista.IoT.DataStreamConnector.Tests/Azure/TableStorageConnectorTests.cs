@@ -109,7 +109,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestMethod]
-        public async Task CreateItemTest()
+        public async Task Azure_TS_CreateRecord()
         {
             var uniqueId = Guid.NewGuid().ToId();
 

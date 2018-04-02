@@ -31,12 +31,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             await AuthorizeAsync(stream, AuthorizeResult.AuthorizeActions.Create, user, org);
             ValidationCheck(stream, Actions.Create);
 
-            if (!String.IsNullOrEmpty(stream.ConnectionString))
+            if (!String.IsNullOrEmpty(stream.AzureAccessKey))
             {
-                var addSecretResult = await _secureStorage.AddSecretAsync(stream.ConnectionString);
+                var addSecretResult = await _secureStorage.AddSecretAsync(stream.AzureAccessKey);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
-                stream.SecureConnectionStringId = addSecretResult.Result;
-                stream.ConnectionString = null;
+                stream.AzureAccessKeySecureId = addSecretResult.Result;
+                stream.AzureAccessKey = null;
             }
 
             await _dataStreamRepo.AddDataStreamAsync(stream);
@@ -96,18 +96,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             await AuthorizeAsync(stream, AuthorizeResult.AuthorizeActions.Update, user, org);
             ValidationCheck(stream, Actions.Update);
 
-            if (!String.IsNullOrEmpty(stream.ConnectionString))
+            if (!String.IsNullOrEmpty(stream.AzureAccessKey))
             {
-                var addSecretResult = await _secureStorage.AddSecretAsync(stream.ConnectionString);
+                var addSecretResult = await _secureStorage.AddSecretAsync(stream.AzureAccessKey);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
 
-                if (!string.IsNullOrEmpty(stream.SecureConnectionStringId))
+                if (!string.IsNullOrEmpty(stream.AzureAccessKeySecureId))
                 {
-                    await _secureStorage.RemoveSecretAsync(stream.SecureConnectionStringId);
+                    await _secureStorage.RemoveSecretAsync(stream.AzureAccessKeySecureId);
                 }
 
-                stream.SecureConnectionStringId = addSecretResult.Result;
-                stream.ConnectionString = null;
+                stream.AzureAccessKeySecureId = addSecretResult.Result;
+                stream.AzureAccessKey = null;
             }
 
             await _dataStreamRepo.UpdateDataStreamAsync(stream);

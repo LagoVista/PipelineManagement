@@ -29,7 +29,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 AzureEventHubEntityPath = "unittesteh",
                 AzureEventHubName = "nuviot-dev",
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREEHACCESSKEY"),
-                AzureBlobStoragePath = "unittest" + Guid.NewGuid().ToId().ToLower()
+                AzureBlobStorageContainerName = "unittest" + Guid.NewGuid().ToId().ToLower()
             };
 
             return _stream;

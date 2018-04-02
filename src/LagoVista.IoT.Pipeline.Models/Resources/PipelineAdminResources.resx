@@ -1033,4 +1033,67 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStream_TimeStampFieldName_Help" xml:space="preserve">
     <value>This will be the name of the time stamp field that will be appended to the output document</value>
   </data>
+  <data name="DataStream_AWSSecretKey_Help" xml:space="preserve">
+    <value>Enter your AWS Secret key, this is required for creating a new data stream and will be encrypted at rest.  When you edit your data stream your original secret key will not be displayed, however if you enter a new one, the original one will be replaced.</value>
+  </data>
+  <data name="DataStream_AzureAccessKey" xml:space="preserve">
+    <value>Azure Access Key</value>
+  </data>
+  <data name="DataStream_AzureAccessKeyHelp" xml:space="preserve">
+    <value>Enter your Azure Access key, this is required for creating a new data stream and will be encrypted at rest.  When you edit your data stream your original access key will not be displayed, however if you enter a new one, the original one will be replaced.</value>
+  </data>
+  <data name="DataStream_AzureAccountId" xml:space="preserve">
+    <value>Azure Account Id</value>
+  </data>
+  <data name="DataStream_AzureEventHubName" xml:space="preserve">
+    <value>Azure Event Hub Name</value>
+  </data>
+  <data name="DataStream_AzureEventHubPath" xml:space="preserve">
+    <value>Azure Event Hub Entity Path</value>
+  </data>
+  <data name="DataStream_BlobStoragePath" xml:space="preserve">
+    <value>Blob Container Name</value>
+  </data>
+  <data name="DataStream_DbName" xml:space="preserve">
+    <value>Database Name</value>
+  </data>
+  <data name="DataStream_DbPassword" xml:space="preserve">
+    <value>Database Password</value>
+  </data>
+  <data name="DataStream_DbPassword_Help" xml:space="preserve">
+    <value>Enter your databases password, this is required for creating a new data stream and will be encrypted at rest.  When you edit your data stream your original password will not be displayed, however if you enter a new one, the original one will be replaced.</value>
+  </data>
+  <data name="DataStream_DbURL" xml:space="preserve">
+    <value>Database Url</value>
+  </data>
+  <data name="DataStream_DbUserName" xml:space="preserve">
+    <value>Database User Name</value>
+  </data>
+  <data name="DataStream_DbValidateSchema" xml:space="preserve">
+    <value>Validate Schema</value>
+  </data>
+  <data name="DataStream_DbValidateSchema_Help" xml:space="preserve">
+    <value>Valdating the scema will ensure that the fields, time stamp field and device id field are compatible with your database, however it requires the user name you provided has additional privelages</value>
+  </data>
+  <data name="DataStream_ESDomainName" xml:space="preserve">
+    <value>Elastic Storage Domain Name</value>
+  </data>
+  <data name="DataStream_ESIndexName" xml:space="preserve">
+    <value>Index Name</value>
+  </data>
+  <data name="DataStream_ESTypeName" xml:space="preserve">
+    <value>Data Type Name</value>
+  </data>
+  <data name="DataStream_TableStorageName" xml:space="preserve">
+    <value>Table Storage Name</value>
+  </data>
+  <data name="DataStream_ESDomainName_Invalid" xml:space="preserve">
+    <value>Invalid Elastic Search Domain Name, Domain name must be between 3 and 64 characters, must start with a letter and include only lower case letters and numbers and a hypen (-)</value>
+  </data>
+  <data name="DataStream_ESIndexName_Invalid" xml:space="preserve">
+    <value>Invalid Elastic Search Index Name, please see AWS documentation for index names.</value>
+  </data>
+  <data name="DataStream_ESTypeNameInvalid" xml:space="preserve">
+    <value>Invalid Elastic Seach Type Name, please see AWS documentation for valid type names.</value>
+  </data>
 </root>

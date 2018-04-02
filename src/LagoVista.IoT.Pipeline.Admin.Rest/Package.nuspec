@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.IoT.Pipeline.Admin.Rest</id>
-    <version>1.2.319-alpha1208</version>
+    <version>1.2.320-alpha0708</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

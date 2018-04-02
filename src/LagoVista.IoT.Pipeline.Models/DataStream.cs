@@ -30,7 +30,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [EnumLabel(DataStream.StreamType_SQLServer, PipelineAdminResources.Names.DataStream_StreamType_SQLServer, typeof(PipelineAdminResources))]
         SQLServer
 
-           
+
     }
 
     public enum DateStorageFormats
@@ -67,10 +67,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             DateStorageFormat = EntityHeader<DateStorageFormats>.Create(DateStorageFormats.ISO8601);
         }
 
-        public string AWSSecretKeyId { get; set; }
-        public string SecureConnectionStringId { get; set; }
-        public override string ModuleType => PipelineModuleType_DataStream;
+        public string AWSSecretKeySecureId { get; set; }
+        public string AzureAccessKeySecureId { get; set; }
+        public string DBPasswordSecureId { get; set; }
 
+
+
+        public override string ModuleType => PipelineModuleType_DataStream;
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_StreamType, EnumType: typeof(DataStreamTypes), FieldType: FieldTypes.Picker, RegExValidationMessageResource: PipelineAdminResources.Names.Common_Key_Validation, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.DataStream_StreamType_Select, IsRequired: true)]
@@ -89,9 +92,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public EntityHeader<DateStorageFormats> DateStorageFormat { get; set; }
         #endregion
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ConnectionString, HelpResource: PipelineAdminResources.Names.DataStream_ConnectionString_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public string ConnectionString { get; set; }
-
 
         #region Amazon Properties
         #region AWS S3 Properties
@@ -101,13 +101,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         #endregion
 
         #region AWS Elastic Search Properties
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESDomainName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z-]{2,100}$", 
+            RegExValidationMessageResource:PipelineAdminResources.Names.DataStream_ESDomainName_Invalid,  FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string ESDomainName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESIndexName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z@$#_-]{2,100}$",
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_ESIndexName_Invalid, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string ESIndexName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESTypeName, ValidationRegEx: @"^[a-zA-Z0-9_-]{3,100}$",
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_ESTypeNameInvalid, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string ESTypeName { get; set; }
         #endregion
 
@@ -117,47 +120,60 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSRegion, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AWSRegion { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSAccessKey, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSSecretKey, HelpResource: PipelineAdminResources.Names.DataStream_AWSSecretKey_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AWSSecretKey { get; set; }
         #endregion
 
         #region Azure Properties
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccountId, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureAccountId { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccessKey, HelpResource: PipelineAdminResources.Names.DataStream_AzureAccessKeyHelp, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureAccessKey { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableStorageName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureTableStorageName { get; set; }
 
-        
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[a-z0-9]+(-[a-z0-9]+)*$", FieldType: FieldTypes.Text,
-            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]
-        public string AzureBlobStoragePath { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_BlobStoragePath, ValidationRegEx: @"^[a-z0-9]+(-[a-z0-9]+)*$", FieldType: FieldTypes.Text,
+            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]
+        public string AzureBlobStorageContainerName { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureEventHubName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureEventHubName { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureEventHubPath, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureEventHubEntityPath { get; set; }
         #endregion
 
         #region RDBMSProperties
-        public string DBUserName { get; set; }
-        public string DBPassword { get; set; }
-        public string DBPasswordSecureId { get; set; }
-        public string DBName { get; set; }
-        public bool DBValidateSchema { get; set; }
-        public string DBURL { get; set; }
-        #endregion
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbUserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string DbUserName { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbPassword, HelpResource: PipelineAdminResources.Names.DataStream_DbPassword_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string DbPassword { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string DbName { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbValidateSchema, HelpResource: PipelineAdminResources.Names.DataStream_DbValidateSchema_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public bool DbValidateSchema { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbURL, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string DbURL { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}@$#_]{0,127}$", FieldType: FieldTypes.Text,
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]
-        public string DBTableName { get; set; }
+        public string DbTableName { get; set; }
 
+        /* Currently not implemented */
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AutoCreateTable, HelpResource: PipelineAdminResources.Names.DataStream_AutoCreateTable_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool AutoCreateSQLTable { get; set; }
+        #endregion
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<DataStreamField> Fields { get; set; }
-
 
 
         public new DataStreamSummary CreateSummary()
@@ -198,10 +214,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 StreamType.Value == DataStreamTypes.AWSS3)
             {
                 if (string.IsNullOrEmpty(AWSAccessKey)) result.Errors.Add(new ErrorMessage("AWS Acceess Key is required for AWS Data Streams."));
-                if ((action == Actions.Update) && string.IsNullOrEmpty(AWSSecretKey) && string.IsNullOrEmpty(AWSSecretKeyId)) result.Errors.Add(new ErrorMessage("AWS Secret Key or SecretKeyId are required for AWS Data Streams, if you are updating and replacing the key you should provide the new AWSSecretKey otherwise you could return the original secret key id."));
+                if ((action == Actions.Update) && string.IsNullOrEmpty(AWSSecretKey) && string.IsNullOrEmpty(AWSSecretKeySecureId)) result.Errors.Add(new ErrorMessage("AWS Secret Key or SecretKeyId are required for AWS Data Streams, if you are updating and replacing the key you should provide the new AWSSecretKey otherwise you could return the original secret key id."));
                 if ((action == Actions.Create) && string.IsNullOrEmpty(AWSSecretKey)) result.Errors.Add(new ErrorMessage("AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest)."));
 
                 if (StreamType.Value == DataStreamTypes.AWSS3 && string.IsNullOrEmpty(S3BucketName)) result.Errors.Add(new ErrorMessage("Please Provide an S3 Bucket Name."));
+
+                if (StreamType.Value == DataStreamTypes.AWSElasticSearch)
+                {
+                    if (string.IsNullOrEmpty(ESDomainName)) result.Errors.Add(new ErrorMessage("Elastic Search Domain Name is required."));
+                    if (string.IsNullOrEmpty(ESIndexName)) result.Errors.Add(new ErrorMessage("Elastic Search Index Name is required."));
+                    if (string.IsNullOrEmpty(ESTypeName)) result.Errors.Add(new ErrorMessage("Elastic Search Type Name is required."));
+                }
 
                 if (string.IsNullOrEmpty(AWSRegion))
                 {
@@ -209,13 +232,26 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 }
                 else
                 {
-                    if (!AWSUtils.AWSRegions.Contains(AWSRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWSRegion, Region [{AWSRegion}] is invalid."));
+                    if (StreamType.Value == DataStreamTypes.AWSS3)
+                    {
+                        if (!AWSUtils.AWSS3Regions.Contains(AWSRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AWSRegion}] could not be found."));
+                    }
+                    else if (StreamType.Value == DataStreamTypes.AWSElasticSearch)
+                    {
+                        if (!AWSUtils.AWSS3Regions.Contains(AWSRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS  Region, Region [{AWSRegion}] could not be found."));
+                    }
                 }
             }
 
             if (StreamType.Value == DataStreamTypes.SQLServer)
             {
-                if (string.IsNullOrEmpty(DBTableName)) result.Errors.Add(new ErrorMessage("SQL Server Table Name is Required for SQL Server Data Streams"));
+                if (string.IsNullOrEmpty(DbURL)) result.Errors.Add(new ErrorMessage("URL of database server is required for a database data stream."));
+                if (string.IsNullOrEmpty(DbUserName)) result.Errors.Add(new ErrorMessage("Dtabase User Name is required for a database data stream."));
+                if (string.IsNullOrEmpty(DbName)) result.Errors.Add(new ErrorMessage("Database Name is required for a database data stream."));
+                if (string.IsNullOrEmpty(DbTableName)) result.Errors.Add(new ErrorMessage("Database Table Name is required for a database data stream."));
+
+                if ((action == Actions.Create) && string.IsNullOrEmpty(DbPassword)) result.Errors.Add(new ErrorMessage("Database Password is required for a database data streams"));
+                if ((action == Actions.Update) && string.IsNullOrEmpty(DbPassword) && string.IsNullOrEmpty(DBPasswordSecureId)) result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
             }
         }
     }

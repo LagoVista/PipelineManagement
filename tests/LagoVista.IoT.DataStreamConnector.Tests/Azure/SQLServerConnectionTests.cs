@@ -63,14 +63,14 @@ CCREATE TABLE [dbo].[unittest](
             _stream = new Pipeline.Admin.Models.DataStream()
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
-                DBValidateSchema = true,
+                DbValidateSchema = true,
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer),
-                DBUserName = System.Environment.GetEnvironmentVariable("SQLSERVERUID"),
-                DBName = System.Environment.GetEnvironmentVariable("SQLSERVERDB"),
-                DBURL = System.Environment.GetEnvironmentVariable("SQLSERVERURL"),
-                DBPassword = System.Environment.GetEnvironmentVariable("SQLSERVERPWD"),
+                DbUserName = System.Environment.GetEnvironmentVariable("SQLSERVERUID"),
+                DbName = System.Environment.GetEnvironmentVariable("SQLSERVERDB"),
+                DbURL = System.Environment.GetEnvironmentVariable("SQLSERVERURL"),
+                DbPassword = System.Environment.GetEnvironmentVariable("SQLSERVERPWD"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
-                DBTableName = "unittest",
+                DbTableName = "unittest",
                 DeviceIdFieldName = "deviceId",
                 TimeStampFieldName= "timeStamp",
             };
@@ -132,10 +132,10 @@ CCREATE TABLE [dbo].[unittest](
         private string GetConnectionString(DataStream stream)
         {
             var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
-            builder.Add("Data Source", stream.DBURL);
-            builder.Add("Initial Catalog", stream.DBName);
-            builder.Add("User Id", stream.DBUserName);
-            builder.Add("Password", stream.DBPassword);
+            builder.Add("Data Source", stream.DbURL);
+            builder.Add("Initial Catalog", stream.DbName);
+            builder.Add("User Id", stream.DbUserName);
+            builder.Add("Password", stream.DbPassword);
             return builder.ConnectionString;
         }
 
@@ -145,7 +145,7 @@ CCREATE TABLE [dbo].[unittest](
             var stream = GetValidStream();
 
             using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
-            using (var cmd = new System.Data.SqlClient.SqlCommand($"delete from {stream.DBTableName}", cn))
+            using (var cmd = new System.Data.SqlClient.SqlCommand($"delete from {stream.DbTableName}", cn))
             {
                 cn.Open();
                 cmd.ExecuteNonQuery();
@@ -158,7 +158,7 @@ CCREATE TABLE [dbo].[unittest](
             var stream = GetValidStream();
 
             using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
-            using (var cmd = new System.Data.SqlClient.SqlCommand($"delete from {stream.DBTableName}", cn))
+            using (var cmd = new System.Data.SqlClient.SqlCommand($"delete from {stream.DbTableName}", cn))
             {
                 cn.Open();
                 cmd.ExecuteNonQuery();
@@ -169,24 +169,24 @@ CCREATE TABLE [dbo].[unittest](
         public async Task SQLServer_CouldNotOpenDB_DoesNotExists_Invalid()
         {
             var stream = GetValidStream();
-            var oldDbName = stream.DBName;
-            stream.DBName = "does not exist";
+            var oldDbName = stream.DbName;
+            stream.DbName = "does not exist";
 
             var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             AssertInvalidError((await connector.InitAsync(stream)), "Could not access SQL Server: Cannot open database \"does not exist\" requested by the login. The login failed.");
-            stream.DBName = oldDbName;
+            stream.DbName = oldDbName;
         }
 
         [TestMethod]
         public async Task SQLServer_TableDoesNotExistOnDB_Invalid()
         {
             var stream = GetValidStream();
-            var oldName = stream.DBTableName;
-            stream.DBTableName = "does not exist";
+            var oldName = stream.DbTableName;
+            stream.DbTableName = "does not exist";
 
             var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             AssertInvalidError((await connector.InitAsync(stream)), "Table [does not exist] name not found on SQL Server database [UnitTestDB] on server [nuviot-dev.database.windows.net.");
-            stream.DBTableName = oldName;
+            stream.DbTableName = oldName;
         }
 
         private async Task<Pipeline.Admin.IDataStreamConnector> GetConnector(DataStream stream)
@@ -222,7 +222,7 @@ CCREATE TABLE [dbo].[unittest](
                 new KeyValuePair<string, object>("location", "-28.700123,100.443322"));
 
             using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
-            using (var cmd = new System.Data.SqlClient.SqlCommand($"select * from {stream.DBTableName} where customid = @customid", cn))
+            using (var cmd = new System.Data.SqlClient.SqlCommand($"select * from {stream.DbTableName} where customid = @customid", cn))
             {
                 cmd.Parameters.AddWithValue("@customid", customId);
                 cn.Open();
@@ -255,7 +255,7 @@ CCREATE TABLE [dbo].[unittest](
             }
 
             using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
-            using (var cmd = new System.Data.SqlClient.SqlCommand($"select count(*) from {stream.DBTableName}", cn))
+            using (var cmd = new System.Data.SqlClient.SqlCommand($"select count(*) from {stream.DbTableName}", cn))
             {
                 cn.Open();
                 var rdr = await cmd.ExecuteReaderAsync();
@@ -299,7 +299,7 @@ CCREATE TABLE [dbo].[unittest](
                 }
 
                 cmd.Parameters.Clear();
-                cmd.CommandText = $"select count(*) from {stream.DBTableName}";
+                cmd.CommandText = $"select count(*) from {stream.DbTableName}";
                 Assert.AreEqual(records.Count, Convert.ToInt32(cmd.ExecuteScalar()));
             }
         }

@@ -56,7 +56,7 @@ from sysobjects a
             using (var cn = new System.Data.SqlClient.SqlConnection(_connectionString))
             using (var cmd = new System.Data.SqlClient.SqlCommand(sql, cn))
             {
-                cmd.Parameters.AddWithValue("@tableName", stream.DBTableName);
+                cmd.Parameters.AddWithValue("@tableName", stream.DbTableName);
                 try
                 {
                     await cn.OpenAsync();
@@ -84,7 +84,7 @@ from sysobjects a
 
             if (fields.Count == 0)
             {
-                result.AddUserError($"Table [{stream.DBTableName}] name not found on SQL Server database [{stream.DBName}] on server [{stream.DBURL}.");
+                result.AddUserError($"Table [{stream.DbTableName}] name not found on SQL Server database [{stream.DbName}] on server [{stream.DbURL}.");
             }
             else
             {
@@ -99,13 +99,13 @@ from sysobjects a
             _stream = stream;
 
             var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
-            builder.Add("Data Source", stream.DBURL);
-            builder.Add("Initial Catalog", stream.DBName);
-            builder.Add("User Id", stream.DBUserName);
-            builder.Add("Password", stream.DBPassword);
+            builder.Add("Data Source", stream.DbURL);
+            builder.Add("Initial Catalog", stream.DbName);
+            builder.Add("User Id", stream.DbUserName);
+            builder.Add("Password", stream.DbPassword);
             _connectionString = builder.ConnectionString;
 
-            if (stream.DBValidateSchema)
+            if (stream.DbValidateSchema)
             {
                 var result = await ValidationConnection(stream);
                 if (!result.Successful)
@@ -148,7 +148,7 @@ from sysobjects a
             fields += $",{_stream.DeviceIdFieldName},{_stream.TimeStampFieldName}";
             values += $",@{_stream.DeviceIdFieldName},@{_stream.TimeStampFieldName}";
 
-            var sql = $"insert into [{_stream.DBTableName}] ({fields}) values ({values})";
+            var sql = $"insert into [{_stream.DbTableName}] ({fields}) values ({values})";
 
             using (var cn = new System.Data.SqlClient.SqlConnection(_connectionString))
             using (var cmd = new System.Data.SqlClient.SqlCommand(sql, cn))
@@ -218,7 +218,7 @@ from sysobjects a
             }
 
             sql.AppendLine();
-            sql.AppendLine($"  from  [{_stream.DBTableName}]");
+            sql.AppendLine($"  from  [{_stream.DbTableName}]");
             sql.AppendLine($"  where [{_stream.DeviceIdFieldName}] = @deviceId");
 
             if (!String.IsNullOrEmpty(request.NextRowKey))

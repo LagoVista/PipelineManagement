@@ -53,7 +53,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
-            stream.DBTableName = "users";
+            stream.DbTableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
@@ -70,7 +70,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
-            stream.DBTableName = "users";
+            stream.DbTableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
@@ -102,7 +102,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
-            stream.DBTableName = "users";
+            stream.DbTableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
@@ -134,7 +134,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
-            stream.DBTableName = "users";
+            stream.DbTableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
@@ -166,7 +166,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
-            stream.DBTableName = "users";
+            stream.DbTableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
@@ -198,7 +198,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
-            stream.DBTableName = "users";
+            stream.DbTableName = "users";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
             stream.CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");

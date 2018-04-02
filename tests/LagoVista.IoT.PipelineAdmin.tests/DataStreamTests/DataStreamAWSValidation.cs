@@ -84,7 +84,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         {
             var stream = GetValidStream();
             stream.AWSSecretKey = null;
-            stream.AWSSecretKeyId = "ABC134";
+            stream.AWSSecretKeySecureId = "ABC134";
             AssertValidModel(Validator.Validate(stream, Actions.Update));
         }
 
@@ -111,7 +111,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         {
             var stream = GetValidStream();
             stream.AWSSecretKey = null;
-            stream.AWSSecretKeyId = null;
+            stream.AWSSecretKeySecureId = null;
 
             AssertInvalidModel(Validator.Validate(stream, Actions.Create), "AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest).");
         }
