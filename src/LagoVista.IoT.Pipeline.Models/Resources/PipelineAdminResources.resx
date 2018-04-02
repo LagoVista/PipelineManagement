@@ -971,7 +971,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Azure Table Storage</value>
   </data>
   <data name="DataStream_StreamType_TableStorage_Managed" xml:space="preserve">
-    <value>Azure Table Storage Managed</value>
+    <value>Built In Data Stream Storage</value>
   </data>
   <data name="DataStream_Title" xml:space="preserve">
     <value>Data Stream</value>
@@ -1104,5 +1104,8 @@ This is a list of parsers that are executed in the order they appear, if a match
   </data>
   <data name="DataStream_InvalidEHPathName" xml:space="preserve">
     <value>The event hub entity path name can contain only letters, numbers, periods, hyphens and underscores. The name must start and end with a letter or number.</value>
+  </data>
+  <data name="DataStream_TableStorage_InvalidName" xml:space="preserve">
+    <value>Invalid table storage name, your name must contain only upper and lower case letters and numbers and be between 3 and 63 characters.</value>
   </data>
 </root>

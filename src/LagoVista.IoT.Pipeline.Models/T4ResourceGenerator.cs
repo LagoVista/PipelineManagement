@@ -311,6 +311,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_TableName
 
 		public static string DataStream_TableName { get { return GetResourceString("DataStream_TableName"); } }
+//Resources:PipelineAdminResources:DataStream_TableStorage_InvalidName
+
+		public static string DataStream_TableStorage_InvalidName { get { return GetResourceString("DataStream_TableStorage_InvalidName"); } }
 //Resources:PipelineAdminResources:DataStream_TableStorageName
 
 		public static string DataStream_TableStorageName { get { return GetResourceString("DataStream_TableStorageName"); } }
@@ -1126,6 +1129,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_StreamType_TableStorage = "DataStream_StreamType_TableStorage";
 			public const string DataStream_StreamType_TableStorage_Managed = "DataStream_StreamType_TableStorage_Managed";
 			public const string DataStream_TableName = "DataStream_TableName";
+			public const string DataStream_TableStorage_InvalidName = "DataStream_TableStorage_InvalidName";
 			public const string DataStream_TableStorageName = "DataStream_TableStorageName";
 			public const string DataStream_TimeStampFieldName = "DataStream_TimeStampFieldName";
 			public const string DataStream_TimeStampFieldName_Help = "DataStream_TimeStampFieldName_Help";
