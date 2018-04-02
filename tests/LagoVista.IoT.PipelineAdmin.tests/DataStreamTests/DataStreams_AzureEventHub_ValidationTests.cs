@@ -11,7 +11,7 @@ using LagoVista.Core.Validation;
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
     [TestClass]
-    public class DataStream_AzureEventHub_ValidationTests : ValidationBase
+    public class DataStreams_AzureEventHub_ValidationTests : ValidationBase
     {
 
         private DataStream GetDataStream(DeviceAdmin.Models.ParameterTypes fieldType)

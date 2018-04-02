@@ -12,7 +12,7 @@ using LagoVista.Core.Validation;
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
     [TestClass]
-    public class DataStream_AWS_S3_ValidationTests
+    public class DataStreams_AWS_S3_ValidationTests
     {
         private void AssertValidModel(ValidationResult result)
         {
