@@ -1,20 +1,16 @@
 ﻿using Elasticsearch.Net;
 using Elasticsearch.Net.Aws;
-using LagoVista.Core.Models;
-using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.DataStreamConnectors;
+using LagoVista.IoT.Logging.Loggers;
+using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nest;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core;
-using LagoVista.IoT.Logging.Loggers;
-using System.Threading;
-using LagoVista.IoT.Pipeline.Admin;
+using LagoVista.Core.Models;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 {
@@ -35,7 +31,12 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
                 Key = "mydatastream",
                 ElasticSearchIndexName = "unittestindex",
                 ElasticSearchTypeName = "unittestdata",
-                StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3),
+                CreationDate = DateTime.UtcNow.ToJSONString(),
+                LastUpdatedDate = DateTime.UtcNow.ToJSONString(),
+                Name = "DataStream",
+                CreatedBy = EntityHeader.Create("06A0754DB67945E7BAD5614B097C61F5", "user"),
+                LastUpdatedBy = EntityHeader.Create("06A0754DB67945E7BAD5614B097C61F5", "user"),
+                StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSElasticSearch),
                 AwsAccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
                 AwsSecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET"),
                 //AWSRegion = "USEast1",
@@ -75,7 +76,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
 
         [TestMethod]
-        public async Task DataStreams_AWS_E3_Insert_Record()
+        public async Task DataStreams_AWS_ElasticSearch_Insert_Record()
         {
             var stream = GetValidStream();
 
@@ -94,7 +95,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
 
         [TestMethod]
-        public async Task DataStreams_AWS_E3_Insert_100_Records()
+        public async Task DataStreams_AWS_ElasticSearch_Insert_100_Records()
         {
             var stream = GetValidStream();
 
@@ -127,7 +128,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         }
 
         [TestMethod]
-        public async Task DataStreams_AWS_E3_PaginatedRecordGet()
+        public async Task DataStreams_AWS_ElasticSearch_PaginatedRecordGet()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -140,7 +141,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
 
         [TestMethod]
-        public async Task DataStreams_AWS_E3_DateFiltereBefore()
+        public async Task DataStreams_AWS_ElasticSearch_DateFiltereBefore()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -152,7 +153,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         }
 
         [TestMethod]
-        public async Task DataStreams_AWS_E3_DateFilteredInRange()
+        public async Task DataStreams_AWS_ElasticSearch_DateFilteredInRange()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -164,7 +165,33 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         }
 
         [TestMethod]
-        public async Task DataStreams_AWS_E3_DateFilteredAfter()
+        public async Task DataStream_AWS_ElasticSearch_ValidateConnection_Valid()
+        {
+            var stream = GetValidStream();
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertSuccessful(validationResult);
+        }
+
+        [TestMethod]
+        public async Task DataStream_AWS_ElasticSearch_ValidateConnection_BadCredentials_Invalid()
+        {
+            var stream = GetValidStream();
+            stream.AwsSecretKey = "isnottherightone";
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.");
+        }
+
+        [TestMethod]
+        public async Task DataStream_AWS_ElasticSearch_ValidateConnection_InvalidURI_Invalid()
+        {
+            var stream = GetValidStream();
+            stream.ElasticSearchDomainName = "https://search-nuviot-test-aaaaabbbbbbccccc.us-east-1.es.amazonaws.com/";
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertInvalidError(validationResult, "The remote name could not be resolved: 'search-nuviot-test-aaaaabbbbbbccccc.us-east-1.es.amazonaws.com'");
+        }
+
+        [TestMethod]
+        public async Task DataStreams_AWS_ElasticSearch_DateFilteredAfter()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -188,11 +215,11 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             var pool = new SingleNodeConnectionPool(new Uri(stream.ElasticSearchDomainName));
             var config = new Nest.ConnectionSettings(pool, connection);
             var client = new ElasticClient(config);
-            /*if (client.IndexExists(stream.ESIndexName).Exists)
+            if (client.IndexExists(stream.ElasticSearchIndexName).Exists)
             {
-                var res = client.DeleteIndex(stream.ESIndexName);
+                var res = client.DeleteIndex(stream.ElasticSearchIndexName);
                 Console.WriteLine(res.DebugInformation);
-            }*/
+            }
         }
     }
 }

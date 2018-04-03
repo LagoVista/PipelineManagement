@@ -12,19 +12,25 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.PlatformSupport;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
     public class AzureTableStorageConnector : IDataStreamConnector
     {
         DataStream _stream;
-        IInstanceLogger _instanceLogger;
+        ILogger _logger;
         CloudTableClient _tableClient;
         CloudTable _cloudTable;
 
         public AzureTableStorageConnector(IInstanceLogger logger)
         {
-            _instanceLogger = logger;
+            _logger = logger;
+        }
+
+        public AzureTableStorageConnector(IAdminLogger logger)
+        {
+            _logger = logger;
         }
 
         protected async Task<InvokeResult> ExecWithRetry(TableOperation operation, int numberRetries = 5)
@@ -39,19 +45,19 @@ namespace LagoVista.IoT.DataStreamConnectors
                     completed = (execResult.HttpStatusCode == 200 || execResult.HttpStatusCode == 204);
                     if (!completed)
                     {
-                        _instanceLogger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "PEMTableStorage_UpdateMessageAsync", "HTTP Error Adding PEM", execResult.HttpStatusCode.ToString().ToKVP("httpStatusCode"), retryCount.ToString().ToKVP("retryCount"));
+                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "PEMTableStorage_UpdateMessageAsync", "HTTP Error Adding PEM", execResult.HttpStatusCode.ToString().ToKVP("httpStatusCode"), retryCount.ToString().ToKVP("retryCount"));
                     }
                 }
                 catch (Exception ex)
                 {
                     if (retryCount == numberRetries)
                     {
-                        _instanceLogger.AddException("PEMTableStorage_UpdateMessageAsync", ex);
+                        _logger.AddException("PEMTableStorage_UpdateMessageAsync", ex);
                         return InvokeResult.FromException("AzureTableStorageConnector_ExecWithRetyr", ex);
                     }
                     else
                     {
-                        _instanceLogger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "PEMTableStorage_UpdateMessageAsync", "Exception writing PEM, will retry", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
+                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "PEMTableStorage_UpdateMessageAsync", "Exception writing PEM, will retry", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
                     }
                     await Task.Delay(retryCount * 250);
                 }
@@ -60,11 +66,9 @@ namespace LagoVista.IoT.DataStreamConnectors
             return InvokeResult.Success;
         }
 
-        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        public Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
         {
-            var result = new ValidationResult();
-
-            return Task.FromResult(result);
+            return InitAsync(stream);
         }
 
         public async Task<InvokeResult> InitAsync(DataStream stream)
@@ -79,12 +83,17 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             try
             {
+                var opContext = new OperationContext();
+                var options = new TableRequestOptions()
+                {
+                    ServerTimeout = TimeSpan.FromSeconds(15)
+                };
                 await _cloudTable.CreateIfNotExistsAsync();
                 return InvokeResult.Success;
             }
             catch (StorageException ex)
             {
-                _instanceLogger.AddException("AzureTableStorageConnector_InitAsync", ex);
+                _logger.AddException("AzureTableStorageConnector_InitAsync", ex);
                 return InvokeResult.FromException("AzureTableStorageConnector_InitAsync", ex);
             }
         }
@@ -207,11 +216,11 @@ namespace LagoVista.IoT.DataStreamConnectors
                 {
                     if (retryCount == numberRetries)
                     {
-                        _instanceLogger.AddException("AzureTableStorageConnector_GetItemsAsync", ex);
+                        _logger.AddException("AzureTableStorageConnector_GetItemsAsync", ex);
                     }
                     else
                     {
-                        _instanceLogger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureTableStorageConnector_GetItemsAsync", "", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
+                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureTableStorageConnector_GetItemsAsync", "", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
                     }
                     await Task.Delay(retryCount * 250);
                 }

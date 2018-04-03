@@ -4,6 +4,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Models;
 using LagoVista.IoT.Pipeline.Models.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -81,12 +82,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         #region Data Formatting Properties
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$", 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_TimeStamp_InvalidFormat,
             HelpResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string TimeStampFieldName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$", 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_DeviceId_InvalidFormat,
             HelpResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string DeviceIdFieldName { get; set; }
@@ -105,8 +106,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         #endregion
 
         #region AWS Elastic Search Properties
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESDomainName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z-]{2,100}$",
-            RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_ESDomainName_Invalid, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESDomainName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string ElasticSearchDomainName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_ESIndexName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
@@ -210,6 +210,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [PreValidation]
         public void PreValidate(Actions action)
         {
+            if (StreamType.Value == DataStreamTypes.AzureTableStorage_Managed && action == Actions.Create)
+            {
+                AzureTableStorageName = $"DataStream{OwnerOrganization.Id}{Key}";
+            }
+
             //TODO: Need to add localized error messages
             if (StreamType.Value != DataStreamTypes.AzureBlob &&
                 StreamType.Value != DataStreamTypes.AzureTableStorage &&
@@ -272,16 +277,32 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 StreamType.Value == DataStreamTypes.AWSS3)
             {
                 if (string.IsNullOrEmpty(AwsAccessKey)) result.Errors.Add(new ErrorMessage("AWS Acceess Key is required for AWS Data Streams."));
-                if ((action == Actions.Update) && string.IsNullOrEmpty(AwsSecretKey) && string.IsNullOrEmpty(AWSSecretKeySecureId)) result.Errors.Add(new ErrorMessage("AWS Secret Key or SecretKeyId are required for AWS Data Streams, if you are updating and replacing the key you should provide the new AWSSecretKey otherwise you could return the original secret key id."));
-                if ((action == Actions.Create) && string.IsNullOrEmpty(AwsSecretKey)) result.Errors.Add(new ErrorMessage("AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest)."));
+
+                if ((action == Actions.Create) && string.IsNullOrEmpty(AwsSecretKey))
+                {
+                    result.Errors.Add(new ErrorMessage("AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest)."));
+                }
+                else if(string.IsNullOrEmpty(AwsSecretKey) && string.IsNullOrEmpty(AWSSecretKeySecureId))
+                {
+                    result.Errors.Add(new ErrorMessage("AWS Secret Key or SecretKeyId are required for AWS Data Streams, if you are updating and replacing the key you should provide the new AWSSecretKey otherwise you could return the original secret key id."));
+                }
 
                 if (StreamType.Value == DataStreamTypes.AWSS3 && string.IsNullOrEmpty(S3BucketName)) result.Errors.Add(new ErrorMessage("Please Provide an S3 Bucket Name."));
 
                 if (StreamType.Value == DataStreamTypes.AWSElasticSearch)
                 {
-                    if (string.IsNullOrEmpty(ElasticSearchDomainName)) result.Errors.Add(new ErrorMessage("Elastic Search Domain Name is required."));
+                    if (string.IsNullOrEmpty(ElasticSearchDomainName))
+                    {
+                        result.Errors.Add(new ErrorMessage("Elastic Search Domain Name is required."));
+                    }
+                    else
+                    {
+                        if (!Uri.IsWellFormedUriString(ElasticSearchDomainName, UriKind.Absolute)) result.Errors.Add(new ErrorMessage(PipelineAdminResources.DataStream_ESDomainName_Invalid));
+                    }
                     if (string.IsNullOrEmpty(ElasticSearchIndexName)) result.Errors.Add(new ErrorMessage("Elastic Search Index Name is required."));
                     if (string.IsNullOrEmpty(ElasticSearchTypeName)) result.Errors.Add(new ErrorMessage("Elastic Search Type Name is required."));
+
+
                 }
 
                 if (string.IsNullOrEmpty(AwsRegion))
@@ -309,20 +330,22 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 if (string.IsNullOrEmpty(DbName)) result.Errors.Add(new ErrorMessage("Database Name is required for a database data stream."));
                 if (string.IsNullOrEmpty(DbTableName)) result.Errors.Add(new ErrorMessage("Database Table Name is required for a database data stream."));
 
-                if ((action == Actions.Create) && string.IsNullOrEmpty(DbPassword)) result.Errors.Add(new ErrorMessage("Database Password is required for a database data streams"));
-                if ((action == Actions.Update) && string.IsNullOrEmpty(DbPassword) && string.IsNullOrEmpty(DBPasswordSecureId)) result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
+                if ((action == Actions.Create) && string.IsNullOrEmpty(DbPassword))
+                {
+                    result.Errors.Add(new ErrorMessage("Database Password is required for a database data streams"));
+                }
+                else if (string.IsNullOrEmpty(DbPassword) && string.IsNullOrEmpty(DBPasswordSecureId))
+                {
+                    result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
+                }
+
             }
 
 
             #region Azure Type
-            if (StreamType.Value == DataStreamTypes.AzureTableStorage)                
+            if (StreamType.Value == DataStreamTypes.AzureTableStorage)
             {
                 if (string.IsNullOrEmpty(AzureTableStorageName)) result.Errors.Add(new ErrorMessage("Table Name for Table Storage Account is a Required Field"));
-            }
-
-            if (StreamType.Value == DataStreamTypes.AzureTableStorage_Managed)
-            {
-                AzureTableStorageName = $"DataStream{OwnerOrganization.Id}{Key}";
             }
 
             if (StreamType.Value == DataStreamTypes.AzureBlob)
@@ -336,10 +359,21 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 if (string.IsNullOrEmpty(AzureEventHubEntityPath)) result.Errors.Add(new ErrorMessage("Entity path on event hub is a required field."));
             }
 
+            if (StreamType.Value == DataStreamTypes.AzureBlob || StreamType.Value == DataStreamTypes.AzureTableStorage)
+            {
+                if (string.IsNullOrEmpty(AzureStorageAccountName)) result.Errors.Add(new ErrorMessage("Name of Azure Storage Account is Required."));
+            }
+
             if (StreamType.Value == DataStreamTypes.AzureEventHub || StreamType.Value == DataStreamTypes.AzureBlob || StreamType.Value == DataStreamTypes.AzureTableStorage)
             {
-                if ((action == Actions.Create) && string.IsNullOrEmpty(AzureAccessKey)) result.Errors.Add(new ErrorMessage("Azure Access Key is required"));
-                if ((action == Actions.Update) && string.IsNullOrEmpty(AzureAccessKey) && string.IsNullOrEmpty(AzureAccessKeySecureId)) result.Errors.Add(new ErrorMessage("Azure Access Key or SecretKeyId are required for azure resources, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
+                if ((action == Actions.Create) && string.IsNullOrEmpty(AzureAccessKey))
+                {
+                    result.Errors.Add(new ErrorMessage("Azure Access Key is required"));
+                }
+                else if (string.IsNullOrEmpty(AzureAccessKey) && string.IsNullOrEmpty(AzureAccessKeySecureId))
+                {
+                    result.Errors.Add(new ErrorMessage("Azure Access Key or SecretKeyId are required for azure resources, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
+                }
             }
             #endregion
 

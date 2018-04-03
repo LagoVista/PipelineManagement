@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.Core.PlatformSupport;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -17,20 +18,43 @@ namespace LagoVista.IoT.DataStreamConnectors
     {
         DataStream _stream;
         AwsHttpConnection _connection;
-        IInstanceLogger _instanceLogger;
+        ILogger _logger;
 
         ElasticClient _client;
 
-        public AWSElasticSearchConnector(IInstanceLogger instanceLogger)
+        public AWSElasticSearchConnector(IAdminLogger adminLogger)
         {
-            _instanceLogger = instanceLogger;
+            _logger = adminLogger;
         }
 
-        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        public AWSElasticSearchConnector(IInstanceLogger instanceLogger)
         {
-            var result = new ValidationResult();
+            _logger = instanceLogger;
+        }
 
-            return Task.FromResult(result);
+        public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
+        {
+            var result = await InitAsync(stream);
+            if (!result.Successful) return result;
+
+            try
+            {
+                var existsResult = await _client.IndexExistsAsync("dontcare");
+                if(existsResult.IsValid) return InvokeResult.Success;
+
+                if(existsResult.OriginalException != null)
+                {
+                    return InvokeResult.FromError(existsResult.OriginalException.Message);
+                }
+                else
+                {
+                    return InvokeResult.FromError("Could not validate AWS Elastic Search Connection, no data returned");
+                }
+            }
+            catch(Exception ex)
+            {
+                return InvokeResult.FromException("AWSElasticSearchConnector_ValidateConnection", ex);
+            }
         }
 
         public Task<InvokeResult> InitAsync(DataStream stream)

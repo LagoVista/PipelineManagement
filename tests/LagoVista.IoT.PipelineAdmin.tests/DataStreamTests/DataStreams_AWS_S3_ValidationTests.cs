@@ -8,11 +8,13 @@ using System.Text;
 using LagoVista.Core;
 using System.Threading.Tasks;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.DataStreamConnectors;
+using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
     [TestClass]
-    public class DataStreams_AWS_S3_ValidationTests
+    public class DataStreams_AWS_S3_ValidationTests : ValidationBase
     {
         private void AssertValidModel(ValidationResult result)
         {
@@ -141,6 +143,6 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.AwsRegion = "SOMETHINGELSE";
 
             AssertInvalidModel(Validator.Validate(stream, Actions.Create), "Invalid AWS Region, Region [SOMETHINGELSE] could not be found.");
-        }
+        }      
     }
 }

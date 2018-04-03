@@ -16,6 +16,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.Name = "mystream";
             stream.Key = "streamkey";
             stream.AzureAccessKey = "accesskey";
+            stream.AzureStorageAccountName = "nuviotdev";
             stream.AzureBlobStorageContainerName = "blobstorage-name";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();
@@ -60,6 +61,15 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.AzureBlobStorageContainerName = "$@#$@#$";
             var result = Validator.Validate(stream);
             AssertInvalidError(result, "Container names can only contain lower case letters, numbers, and hyphens, and must begin with a letter or number. The name can't contain consecutive hypens.");
+        }
+
+        [TestMethod]
+        public void DataStream_BlobStorage_MissingAzureStorageAccountName_Missing_Insert_InValid()
+        {
+            var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
+            stream.AzureStorageAccountName = null;
+            var result = Validator.Validate(stream, Actions.Create);
+            AssertInvalidError(result, "Name of Azure Storage Account is Required.");
         }
 
         [TestMethod]

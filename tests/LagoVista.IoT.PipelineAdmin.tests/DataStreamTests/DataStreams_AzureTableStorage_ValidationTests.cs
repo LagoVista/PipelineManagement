@@ -16,6 +16,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.Name = "mystream";
             stream.Key = "streamkey";
             stream.AzureAccessKey = "accesskey";
+            stream.AzureStorageAccountName = "nuviotdev";
             stream.AzureTableStorageName = "tablestoragename";
             stream.CreationDate = DateTime.Now.ToJSONString();
             stream.LastUpdatedDate = DateTime.Now.ToJSONString();

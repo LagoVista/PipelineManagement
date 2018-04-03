@@ -2,6 +2,7 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using LagoVista.Core;
+using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin;
@@ -15,19 +16,23 @@ namespace LagoVista.IoT.DataStreamConnectors
     public class AWSS3Connector : IDataStreamConnector
     {
         IAmazonS3 _s3Client;
-        IInstanceLogger _instanceLogger;
+        ILogger _logger;
+
         DataStream _stream;
 
         public AWSS3Connector(IInstanceLogger instanceLogger)
         {
-            _instanceLogger = instanceLogger;
+            _logger = instanceLogger;
         }
 
-        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        public AWSS3Connector(IAdminLogger instanceLogger)
         {
-            var result = new ValidationResult();
+            _logger = instanceLogger;
+        }
 
-            return Task.FromResult(result);
+        public Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
+        {
+            return InitAsync(stream);
         }
 
         public async Task<InvokeResult> InitAsync(DataStream stream)
@@ -52,7 +57,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
-                _instanceLogger.AddException("AWSS3Connector_InitAsync", amazonS3Exception);
+                _logger.AddException("AWSS3Connector_InitAsync", amazonS3Exception);
                 return InvokeResult.FromException("AWSS3Connector_InitAsync", amazonS3Exception);
             }
 
@@ -108,7 +113,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
-                _instanceLogger.AddException("AWSS3Connector_AddItem", amazonS3Exception);
+                _logger.AddException("AWSS3Connector_AddItem", amazonS3Exception);
                 return InvokeResult.FromException("AWSS3Connector_AddItem", amazonS3Exception);
             }
         }

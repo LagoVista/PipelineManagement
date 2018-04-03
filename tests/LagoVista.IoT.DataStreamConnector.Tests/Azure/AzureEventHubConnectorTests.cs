@@ -8,6 +8,7 @@ using LagoVista.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.DataStreamConnectors;
+using LagoVista.Core.Models;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 {
@@ -25,11 +26,16 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             _stream = new Pipeline.Admin.Models.DataStream()
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
-                StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureBlob),
+                Key = "mykey",
+                Name = "My Name",
+                StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureEventHub),
                 AzureEventHubEntityPath = "unittesteh",
                 AzureEventHubName = "nuviot-dev",
+                CreationDate = DateTime.Now.ToJSONString(),
+                LastUpdatedDate = DateTime.Now.ToJSONString(),
+                CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
+                LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREEHACCESSKEY"),
-                AzureBlobStorageContainerName = "unittest" + Guid.NewGuid().ToId().ToLower()
             };
 
             return _stream;
@@ -49,7 +55,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
 
         [TestMethod]
-        public async Task Azure_EventHub_Init()
+        public async Task DataStream_Azure_EventHub__Init()
         {
             var stream = GetValidStream();
 
@@ -58,7 +64,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestMethod]
-        public async Task Azure_EventHub_Send()
+        public async Task DataStream_Azure_EventHub__Send()
         {
             var stream = GetValidStream();
 
@@ -68,8 +74,23 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var record = await AddObject(connector, stream, "dev123", null, new KeyValuePair<string, object>("pointOne", 37.5),
              new KeyValuePair<string, object>("pointTwo", 58.6),
              new KeyValuePair<string, object>("pointThree", "testing"));
-
         }
 
+        [TestMethod]
+        public async Task DataStream_Azure_EventHub_ValidateConnection_Valid()
+        {
+            var stream = GetValidStream();
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertSuccessful(validationResult);
+        }
+
+        [TestMethod]
+        public async Task DataStream_Azure_EventHub_ValidateConnection_BadCredentials_Invalid()
+        {
+            var stream = GetValidStream();
+            stream.AzureAccessKey = "isnottherightone";
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertInvalidError(validationResult, "Put token failed. status-code: 401, status-description: InvalidSignature: The token has an invalid signature..");
+        }
     }
 }

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using LagoVista.Core;
 using System.Threading.Tasks;
+using LagoVista.Core.Models;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 {
@@ -37,7 +38,13 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             _currentStream = new Pipeline.Admin.Models.DataStream()
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
+                Key = "mykey",
+                Name = "My Name",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureTableStorage),
+                CreationDate = DateTime.Now.ToJSONString(),
+                LastUpdatedDate = DateTime.Now.ToJSONString(),
+                CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
+                LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
                 AzureTableStorageName = "unittesttable" + Guid.NewGuid().ToId(),
@@ -88,6 +95,9 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         public void Cleanup()
         {
             var stream = GetValidStream();
+            stream.AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID");
+            stream.AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY");
+
             var cloudTable = GetCloudTable(stream);
             if (cloudTable.Exists())
             {
@@ -99,7 +109,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestMethod]
-        public async Task Azure_TS_DataStream_CreateTable()
+        public async Task DataStream_Azure_TableStorage_DataStream_CreateTable()
         {
             var stream = GetValidStream();
             await GetConnector(stream);
@@ -109,7 +119,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestMethod]
-        public async Task Azure_TS_CreateRecord()
+        public async Task DataStream_Azure_TableStorage_CreateRecord()
         {
             var uniqueId = Guid.NewGuid().ToId();
 
@@ -131,7 +141,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
        
         [TestMethod]
-        public async Task Azure_TS_Validate_PaginatedItems()
+        public async Task DataStream_Azure_TableStorage_Validate_PaginatedItems()
         {
             var deviceId = "dev123";
 
@@ -215,7 +225,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
 
         [TestMethod]
-        public async Task Azure_TS_DateFiltereBefore()
+        public async Task DataStream_Azure_TableStorage_DateFiltereBefore()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -227,7 +237,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestMethod]
-        public async Task Azure_TS_DateFilteredInRange()
+        public async Task DataStream_Azure_TableStorage_DateFilteredInRange()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -239,7 +249,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestMethod]
-        public async Task Azure_TS_DateFilteredAfter()
+        public async Task DataStream_Azure_TableStorage_DateFilteredAfter()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -249,5 +259,31 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
             await ValidateDataFilterAfter("dev123", stream, connector);
         }
+
+        [TestMethod]
+        public async Task DataStream_Azure_TableStorage_ValidateConnection_Valid()
+        {
+            var stream = GetValidStream();
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertSuccessful(validationResult);
+        }
+
+        [TestMethod]
+        public async Task DataStream_Azure_TableStorage_ValidateConnection_BadCredentials_Invalid()
+        {
+            var stream = GetValidStream();
+            stream.AzureAccessKey = "isnottherightone";
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.");
+        }
+
+        [TestMethod]
+        public async Task DataStream_Azure_TableStorage_ValidateConnection_InvalidAccountId_Invalid()
+        {
+            var stream = GetValidStream();
+            stream.AzureStorageAccountName = "isnottherightone";
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertInvalidError(validationResult, "The remote name could not be resolved: 'isnottherightone.table.core.windows.net'");
+        }       
     }
 }

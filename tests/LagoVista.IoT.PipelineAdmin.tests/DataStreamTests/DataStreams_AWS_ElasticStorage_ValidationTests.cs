@@ -7,7 +7,7 @@ using System;
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
     [TestClass]
-    public class DataStreams_ES_ValidationTests : ValidationBase
+    public class DataStreams_AWS_ElasticStorage_ValidationTests : ValidationBase
     {
         private DataStream GetDataStream(DeviceAdmin.Models.ParameterTypes fieldType)
         {
@@ -20,7 +20,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.AwsSecretKey = "MySecret";
             stream.AwsRegion = "us-east-1";
 
-            stream.ElasticSearchDomainName = "mydomain";
+            stream.ElasticSearchDomainName = "http://www.foo.com";
             stream.ElasticSearchIndexName = "myindex";
             stream.ElasticSearchTypeName = "mytype";
 

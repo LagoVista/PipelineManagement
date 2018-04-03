@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin;
@@ -16,15 +17,21 @@ namespace LagoVista.IoT.DataStreamConnectors
     public class AzureEventHubConnector : IDataStreamConnector
     {
         DataStream _stream;
-        IInstanceLogger _instanceLogger;
+        ILogger _logger;
 
         const string EhConnectionString = "Endpoint=sb://{0}.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={1}";
         EventHubClient _eventHubClient;
 
         public AzureEventHubConnector(IInstanceLogger instanceLogger)
         {
-            _instanceLogger = instanceLogger;
+            _logger = instanceLogger;
         }
+
+        public AzureEventHubConnector(IAdminLogger adminLogger)
+        {
+            _logger = adminLogger;
+        }
+
 
         public Task<InvokeResult> InitAsync(DataStream stream)
         {
@@ -40,11 +47,14 @@ namespace LagoVista.IoT.DataStreamConnectors
             return Task<InvokeResult>.FromResult(InvokeResult.Success);
         }
 
-        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
         {
-            var result = new ValidationResult();
+            var result = await InitAsync(stream);
 
-            return Task.FromResult(result);
+            return await AddItemAsync(new DataStreamRecord()
+            {
+                DeviceId = "ignoreme",
+            });
         }
 
         public Task<InvokeResult> AddItemAsync(DataStreamRecord item, EntityHeader org, EntityHeader user)
@@ -85,12 +95,12 @@ namespace LagoVista.IoT.DataStreamConnectors
                 {
                     if (retryCount == numberRetries)
                     {
-                        _instanceLogger.AddException("AzureTableStorageConnector_GetItemsAsync", ex);
+                        _logger.AddException("AzureTableStorageConnector_GetItemsAsync", ex);
                         return InvokeResult.FromException("AzureBlobConnector_AddItemAsync", ex);
                     }
                     else
                     {
-                        _instanceLogger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureTableStorageConnector_GetItemsAsync", "", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
+                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureTableStorageConnector_GetItemsAsync", "", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
                     }
                     await Task.Delay(retryCount * 250);
                 }

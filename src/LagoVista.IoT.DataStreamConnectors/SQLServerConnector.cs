@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using LagoVista.Core;
 using System.Data.SqlClient;
 using System.Data;
+using LagoVista.Core.PlatformSupport;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
     public class SQLServerConnector : IDataStreamConnector
     {
         DataStream _stream;
-        Logging.Loggers.IInstanceLogger _instanceLogger;
+        ILogger _logger;
         string _connectionString;
 
         public class SQLFieldMetaData
@@ -29,12 +30,24 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public SQLServerConnector(Logging.Loggers.IInstanceLogger instanceLogger)
         {
-            _instanceLogger = instanceLogger;
+            _logger = instanceLogger;
         }
 
-        public async Task<ValidationResult> ValidationConnection(DataStream stream)
+        public SQLServerConnector(Logging.Loggers.IAdminLogger logger)
         {
-            var result = new ValidationResult();
+            _logger = logger;
+        }
+
+        public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
+        {
+            var result = new InvokeResult();
+
+            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            builder.Add("Data Source", stream.DbURL);
+            builder.Add("Initial Catalog", stream.DbName);
+            builder.Add("User Id", stream.DbUserName);
+            builder.Add("Password", stream.DbPassword);
+            _connectionString = builder.ConnectionString;
 
             /* be careful when updating the SQL below, the rdr uses field indexes,
              * if this wasn't so small and self contained, I probably wouldn't be so lazy,
@@ -77,7 +90,7 @@ from sysobjects a
                 }
                 catch (Exception ex)
                 {
-                    result.AddUserError($"Could not access SQL Server: {ex.Message}.");
+                    result.AddUserError($"Could not access SQL Server: {ex.Message}");
                     return result;
                 }
             }
@@ -107,10 +120,10 @@ from sysobjects a
 
             if (stream.DbValidateSchema)
             {
-                var result = await ValidationConnection(stream);
+                var result = await ValidateConnectionAsync(stream);
                 if (!result.Successful)
                 {
-                    _instanceLogger.AddError("SQLServerConnecction", "Could not validate SQL Connection", result.Errors.First().Message.ToKVP("firstError"));
+                    _logger.AddCustomEvent(LogLevel.Error,"SQLServerConnecction", "Could not validate SQL Connection", result.Errors.First().Message.ToKVP("firstError"));
                     return result.ToInvokeResult();
                 }
             }

@@ -20,9 +20,9 @@ namespace LagoVista.IoT.DataStreamConnectors
             throw new NotImplementedException();
         }
 
-        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        public Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
         {
-            var result = new ValidationResult();
+            var result = new InvokeResult();
 
             return Task.FromResult(result);
         }
@@ -37,7 +37,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             throw new NotImplementedException();
         }
 
-        public async Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
+        public  Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core;
+using LagoVista.Core.Models;
 using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
@@ -26,9 +27,16 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             _stream = new Pipeline.Admin.Models.DataStream()
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
+                Key = "mykey",
+                Name = "My Name",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureBlob),
                 AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
+                CreationDate = DateTime.Now.ToJSONString(),
+                LastUpdatedDate = DateTime.Now.ToJSONString(),
+                CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
+                LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
+
                 AzureBlobStorageContainerName = "unittest" + Guid.NewGuid().ToId().ToLower()
             };
 
@@ -64,6 +72,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         public async Task TestCleanup()
         {
             var stream = GetValidStream();
+            stream.AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID");
+            stream.AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY");
             var container = GetBlobContainer(stream);
             if (await container.ExistsAsync())
             {
@@ -74,7 +84,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestMethod]
-        public async Task Azure_Blob_Init()
+        public async Task DataStream_Azure_Blob_Init()
         {
             var stream = GetValidStream();
 
@@ -83,7 +93,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }        
 
         [TestMethod]
-        public async Task Azure_Blob_Insert()
+        public async Task DataStream_Azure_Blob_Insert()
         {
             var stream = GetValidStream();
             var connector = new AzureBlobConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
@@ -113,7 +123,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public async Task Azure_Blob_Get_Test()
+        public async Task DataStream_Azure_Blob_Get_Test()
         {
             var stream = GetValidStream();
 
@@ -121,6 +131,33 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             await connector.InitAsync(stream);
 
             await connector.GetItemsAsync("devid", new Core.Models.UIMetaData.ListRequest());
+        }
+
+        [TestMethod]
+        public async Task DataStream_Azure_Blob_ValidateConnection_Valid()
+        {
+            var stream = GetValidStream();
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertSuccessful(validationResult);
+        }
+
+        [TestMethod]
+        public async Task DataStream_Azure_Blob_ValidateConnection_BadCredentials_Invalid()
+        {
+            var stream = GetValidStream();
+            stream.AzureAccessKey = "isnottherightone";
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.");
+        }
+
+         /* Test passes, but takes 50 seconds to run, not really critical */
+        [TestMethod]
+        public async Task DataStream_Azure_Blob_ValidateConnection_InvalidAccountId_Invalid()
+        {
+            var stream = GetValidStream();
+            stream.AzureStorageAccountName = "isnottherightone";
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertInvalidError(validationResult, "The remote name could not be resolved: 'isnottherightone.blob.core.windows.net'");
         }
     }
 }

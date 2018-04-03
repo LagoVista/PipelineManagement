@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.DataStreamConnectors;
+using LagoVista.IoT.Logging.Loggers;
+using LagoVista.Core.Models;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 {
@@ -36,22 +39,6 @@ CCREATE TABLE [dbo].[unittest](
     [TestClass]
     public class SQLServerConnectionTests : DataStreamConnectorTestBase
     {
-        private void AssertInvalidError(InvokeResult result, params string[] errs)
-        {
-            Console.WriteLine("Errors (at least some are expected)");
-
-            foreach (var err in result.Errors)
-            {
-                Console.WriteLine(err.Message);
-            }
-
-            Assert.IsFalse(result.Successful);
-            foreach (var err in errs)
-            {
-                Assert.IsTrue(result.Errors.Where(msg => msg.Message.Contains(err)).Any());
-            }
-        }
-
         DataStream _stream;
         private DataStream GetValidStream()
         {
@@ -64,15 +51,21 @@ CCREATE TABLE [dbo].[unittest](
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
                 DbValidateSchema = true,
+                Key = "mykey",
+                Name = "My Name",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer),
                 DbUserName = System.Environment.GetEnvironmentVariable("SQLSERVERUID"),
                 DbName = System.Environment.GetEnvironmentVariable("SQLSERVERDB"),
                 DbURL = System.Environment.GetEnvironmentVariable("SQLSERVERURL"),
                 DbPassword = System.Environment.GetEnvironmentVariable("SQLSERVERPWD"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
+                CreationDate = DateTime.Now.ToJSONString(),
+                LastUpdatedDate = DateTime.Now.ToJSONString(),
+                CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
+                LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 DbTableName = "unittest",
                 DeviceIdFieldName = "deviceId",
-                TimeStampFieldName= "timeStamp",
+                TimeStampFieldName = "timeStamp",
             };
 
             _stream.Fields.Add(new DataStreamField()
@@ -131,6 +124,11 @@ CCREATE TABLE [dbo].[unittest](
 
         private string GetConnectionString(DataStream stream)
         {
+            stream.DbUserName = System.Environment.GetEnvironmentVariable("SQLSERVERUID");
+            stream.DbName = System.Environment.GetEnvironmentVariable("SQLSERVERDB");
+            stream.DbURL = System.Environment.GetEnvironmentVariable("SQLSERVERURL");
+            stream.DbPassword = System.Environment.GetEnvironmentVariable("SQLSERVERPWD");
+
             var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
             builder.Add("Data Source", stream.DbURL);
             builder.Add("Initial Catalog", stream.DbName);
@@ -156,6 +154,7 @@ CCREATE TABLE [dbo].[unittest](
         public void TestCleanup()
         {
             var stream = GetValidStream();
+            stream.DbPassword = System.Environment.GetEnvironmentVariable("SQLSERVERPWD");
 
             using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
             using (var cmd = new System.Data.SqlClient.SqlCommand($"delete from {stream.DbTableName}", cn))
@@ -166,19 +165,19 @@ CCREATE TABLE [dbo].[unittest](
         }
 
         [TestMethod]
-        public async Task SQLServer_CouldNotOpenDB_DoesNotExists_Invalid()
+        public async Task DataStream_SQLServer_CouldNotOpenDB_DoesNotExists_Invalid()
         {
             var stream = GetValidStream();
-            var oldDbName = stream.DbName;
             stream.DbName = "does not exist";
 
             var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            AssertInvalidError((await connector.InitAsync(stream)), "Could not access SQL Server: Cannot open database \"does not exist\" requested by the login. The login failed.");
-            stream.DbName = oldDbName;
+            
+            AssertInvalidError((await connector.InitAsync(stream)), @"Could not access SQL Server: Cannot open database ""does not exist"" requested by the login. The login failed.
+Login failed for user 'nuviotadmin'.");
         }
 
         [TestMethod]
-        public async Task SQLServer_TableDoesNotExistOnDB_Invalid()
+        public async Task DataStream_SQLServer_TableDoesNotExistOnDB_Invalid()
         {
             var stream = GetValidStream();
             var oldName = stream.DbTableName;
@@ -197,14 +196,14 @@ CCREATE TABLE [dbo].[unittest](
         }
 
         [TestMethod]
-        public async Task SQLServer_Init()
+        public async Task DataStream_SQLServer_Init()
         {
             var stream = GetValidStream();
             await GetConnector(stream);
         }
 
         [TestMethod]
-        public async Task SQLServer_InsertRecord()
+        public async Task DataStream_SQLServer_InsertRecord()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -236,12 +235,12 @@ CCREATE TABLE [dbo].[unittest](
         }
 
         [TestMethod]
-        public async Task SQLServer_Insert100Records()
+        public async Task DataStream_SQLServer_Insert100Records()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
 
-            for(var idx = 0; idx < 100; ++idx)
+            for (var idx = 0; idx < 100; ++idx)
             {
                 var customId = Guid.NewGuid().ToId();
                 var timeStamp = DateTime.Now.AddMinutes(idx - 50).ToJSONString();
@@ -277,14 +276,14 @@ CCREATE TABLE [dbo].[unittest](
                 cmd.Parameters.AddWithValue("pointindex", 0);
                 cmd.Parameters.AddWithValue("customid", Guid.NewGuid().ToId());
                 cmd.Parameters.AddWithValue("deviceid", deviceId);
-                cmd.Parameters.AddWithValue("location", $"POINT(23.4 -85.5)");                
+                cmd.Parameters.AddWithValue("location", $"POINT(23.4 -85.5)");
                 cmd.Parameters.AddWithValue("timestamp", string.Empty);
 
                 cn.Open();
 
                 var idx = -0;
 
-                foreach(var record in records)
+                foreach (var record in records)
                 {
                     if (rangeType == QueryRangeType.Records_100)
                     {
@@ -305,7 +304,7 @@ CCREATE TABLE [dbo].[unittest](
         }
 
         [TestMethod]
-        public async Task SQLServer_DateFiltereBefore()
+        public async Task DataStream_SQLServer_DateFiltereBefore()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -319,7 +318,7 @@ CCREATE TABLE [dbo].[unittest](
 
         /* Note if this method fails, was Microsoft.SQLServer.Types updated?  It needs to be at V10.0.5 to be in sync with latest SQLClient (or we need a new approach) */
         [TestMethod]
-        public async Task SQLServer_PaginatedRecordGet()
+        public async Task DataStream_SQLServer_PaginatedRecordGet()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -331,7 +330,7 @@ CCREATE TABLE [dbo].[unittest](
         }
 
         [TestMethod]
-        public async Task SQLServer_DateFilteredInRange()
+        public async Task DataStream_SQLServer_DateFilteredInRange()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -343,7 +342,7 @@ CCREATE TABLE [dbo].[unittest](
         }
 
         [TestMethod]
-        public async Task SQLServer_DateFilteredAfter()
+        public async Task DataStream_SQLServer_DateFilteredAfter()
         {
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
@@ -354,7 +353,21 @@ CCREATE TABLE [dbo].[unittest](
             await ValidateDataFilterAfter(deviceId, stream, connector);
         }
 
+        [TestMethod]
+        public async Task DataStream_SQLServer_ValidateConnection_Valid()
+        {
+            var stream = GetValidStream();
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertSuccessful(validationResult);
+        }
 
-
+        [TestMethod]
+        public async Task DataStream_SQLServer_ValidateConnection_BadCredentials_Invalid()
+        {
+            var stream = GetValidStream();
+            stream.DbPassword = "isnottherightone";
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertInvalidError(validationResult, "Could not access SQL Server: Login failed for user 'nuviotadmin'.");
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core;
+using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin;
@@ -14,7 +15,7 @@ namespace LagoVista.IoT.DataStreamConnectors
     public class AzureBlobConnector : IDataStreamConnector
     {
         DataStream _stream;
-        IInstanceLogger _instanceLogger;
+        ILogger _logger;
         CloudBlobClient _cloudBlobClient;
         CloudBlobContainer _container;
 
@@ -28,14 +29,17 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public AzureBlobConnector(IInstanceLogger instanceLogger)
         {
-            _instanceLogger = instanceLogger;
+            _logger = instanceLogger;
         }
 
-        public Task<ValidationResult> ValidationConnection(DataStream stream)
+        public AzureBlobConnector(IAdminLogger adminLogger)
         {
-            var result = new ValidationResult();
+            _logger = adminLogger;
+        }
 
-            return Task.FromResult(result);
+        public Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
+        {
+            return InitAsync(stream);
         }
 
         public async Task<InvokeResult> InitAsync(DataStream stream)
@@ -48,19 +52,27 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 Microsoft.WindowsAzure.Storage.NameValidator.ValidateContainerName(_stream.AzureBlobStorageContainerName);
 
-                await _container.CreateIfNotExistsAsync();
+                var options = new BlobRequestOptions()
+                {
+                    MaximumExecutionTime = TimeSpan.FromSeconds(15)
+                };
+
+                var opContext = new OperationContext();
+                await _container.CreateIfNotExistsAsync(options, opContext);
 
                 return InvokeResult.Success;
             }
             catch (ArgumentException ex)
             {
-                _instanceLogger.AddException("AzureBlobConnector_InitAsync", ex);
-                return InvokeResult.FromException("AzureBlobConnector_InitAsync", ex);
+                _logger.AddException("AzureBlobConnector_InitAsync", ex);
+                var result = InvokeResult.FromException("AzureBlobConnector_InitAsync", ex);
+                return result;
             }
             catch (StorageException ex)
             {
-                _instanceLogger.AddException("AzureBlobConnector_InitAsync", ex);
-                return InvokeResult.FromException("AzureBlobConnector_InitAsync", ex);
+                _logger.AddException("AzureBlobConnector_InitAsync", ex);
+                var result = InvokeResult.FromException("AzureBlobConnector_InitAsync", ex);
+                return result;
             }
         }
 
@@ -105,12 +117,12 @@ namespace LagoVista.IoT.DataStreamConnectors
                 {
                     if (retryCount == numberRetries)
                     {
-                        _instanceLogger.AddException("AzureBlobConnector_AddItemAsync", ex);
+                        _logger.AddException("AzureBlobConnector_AddItemAsync", ex);
                         return InvokeResult.FromException("AzureBlobConnector_AddItemAsync",ex);
                     }
                     else
                     {
-                        _instanceLogger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureBlobConnector_AddItemAsync", "", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
+                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureBlobConnector_AddItemAsync", "", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
                     }
                     await Task.Delay(retryCount * 250);
                 }

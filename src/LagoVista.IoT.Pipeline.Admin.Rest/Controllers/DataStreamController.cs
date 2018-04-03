@@ -2,6 +2,7 @@
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Web.Common.Controllers;
@@ -21,10 +22,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
     public class DataStreamController : LagoVistaBaseController
     {
         IDataStreamManager _dataStreamManager;
+        IAdminLogger _adminlogger;
 
-        public DataStreamController(IDataStreamManager dataStreamManager, UserManager<AppUser> userManager, IAdminLogger logger) : base(userManager, logger)
+        public DataStreamController(IDataStreamManager dataStreamManager, UserManager<AppUser> userManager,  IAdminLogger logger) : base(userManager, logger)
         {
             _dataStreamManager = dataStreamManager;
+            _adminlogger = logger;
         }
 
         /// <summary>
@@ -103,6 +106,27 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         public Task<InvokeResult> DeleteDataStreamAsync(string id)
         {
             return _dataStreamManager.DeleteDatStreamAsync(id, OrgEntityHeader, UserEntityHeader);
+        }
+
+        /// <summary>
+        /// Data Stream - Validate connection by id
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/api/datastream/{id}/testconnection")]
+        public async Task<InvokeResult> ValidateDataStreamStreamAsync(string id)
+        {
+            var stream = await _dataStreamManager.GetDataStreamAsync(id, OrgEntityHeader, UserEntityHeader);
+            return await DataStreamValidator.ValidateDataStreamAsync(stream, _adminlogger);
+        }
+
+        /// <summary>
+        /// Data Stream - Validate by post
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("/api/datastream/testconnection")]
+        public async Task<InvokeResult> ValidateDataStreamStreamAsync([FromBody] DataStream stream)
+        {
+            return await DataStreamValidator.ValidateDataStreamAsync(stream, _adminlogger);
         }
 
         /// <summary>

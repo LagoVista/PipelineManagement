@@ -2,6 +2,7 @@
 using Amazon.Runtime.CredentialManagement;
 using Amazon.S3;
 using Amazon.S3.Model;
+using LagoVista.Core.Models;
 using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
@@ -13,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LagoVista.Core;
 
 /* To Run Tests:
  * 1) Add the three ENV variables that have access to S3 and Elastic Search on the account used for testing *
@@ -23,7 +25,7 @@ using System.Threading.Tasks;
 namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 {
     [TestClass]
-    public class S3ConnectorTests
+    public class S3ConnectorTests : DataStreamConnectorTestBase
     {
         const string BUCKET_NAME = "nuviot-testbucket";
 
@@ -81,6 +83,12 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             var stream = new Pipeline.Admin.Models.DataStream()
             {
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
+                Name = "mystream",
+                Key = "streamkey",
+                CreationDate = DateTime.Now.ToJSONString(),
+                LastUpdatedDate = DateTime.Now.ToJSONString(),
+                CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
+                LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 StreamType =Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AWSS3),
                 AwsAccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
                 AwsSecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET"),
@@ -164,14 +172,35 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         {          
             using (var s3Client = GetS3Client())
             {
-                var items = s3Client.ListObjects(BUCKET_NAME);
-                foreach(var item in items.S3Objects)
+                try
                 {
-                    s3Client.DeleteObject(BUCKET_NAME, item.Key);
-                }
+                    var items = s3Client.ListObjects(BUCKET_NAME);
+                    foreach (var item in items.S3Objects)
+                    {
+                        s3Client.DeleteObject(BUCKET_NAME, item.Key);
+                    }
 
-                s3Client.DeleteBucket(BUCKET_NAME);
+                    s3Client.DeleteBucket(BUCKET_NAME);
+                }
+                catch(AmazonS3Exception) {  /* bucket may not exist, that's ok */}
             }
+        }
+
+        [TestMethod]
+        public async Task DataStream_AWS_S3_ValidateConnection_Valid()
+        {
+            var stream = GetValidStream();
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertSuccessful(validationResult);
+        }
+
+        [TestMethod]
+        public async Task DataStream_AWS_S3_ValidateConnection_BadCredentials_Invalid()
+        {
+            var stream = GetValidStream();
+            stream.AwsSecretKey = "isnottherightone";
+            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.", "The request signature we calculated does not match the signature you provided. Check your key and signing method.");
         }
     }
 }

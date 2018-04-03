@@ -10,6 +10,7 @@ using LagoVista.Core;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin.Models;
+using LagoVista.Core.Models;
 
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
@@ -19,6 +20,8 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         Mock<IDataStreamRepo> _repo = new Moq.Mock<IDataStreamRepo>();
         Mock<ISecureStorage> _secureStorage = new Moq.Mock<ISecureStorage>();
 
+        Mock<IDefaultInternalDataStreamConnectionSettings> _mockSettings = new Moq.Mock<IDefaultInternalDataStreamConnectionSettings>();
+
         IDataStreamManager _dataStreamManager;
 
         Core.Models.EntityHeader _org;
@@ -27,11 +30,18 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         const string GENERATD_SECURE_ID_VALUE = "FB4AE20FE1B841D78804E2C056661079";
         const string OLD_SECURE_ID_VALUE = "8DBA4F3CD1414F08BB6E1DA843FCA8F3";
 
+        const string DEFAULT_TS_ACCOUNT_ID = "TSACCOUNTID";
+        const string DEFAULT_TS_ACCESS_KEY = "TSACCESSKEY";
+
 
         [TestInitialize]
         public void TestInit()
         {
-            _dataStreamManager = new DataStreamManager(_repo.Object, new Logging.Loggers.AdminLogger(new Utils.LogWriter()), _secureStorage.Object, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, new Mock<ISecurity>().Object);
+
+
+            _dataStreamManager = new DataStreamManager(_repo.Object, _mockSettings.Object, new Logging.Loggers.AdminLogger(new Utils.LogWriter()), _secureStorage.Object, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, new Mock<ISecurity>().Object);
+
+            _mockSettings.Setup(ms => ms.DefaultInternalDataStreamConnectionSettingsTableStorage).Returns(new ConnectionSettings() { AccessKey = DEFAULT_TS_ACCESS_KEY, AccountId = DEFAULT_TS_ACCOUNT_ID });
 
             _secureStorage.Setup<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(It.IsAny<string>())).ReturnsAsync(InvokeResult<string>.Create(GENERATD_SECURE_ID_VALUE));
             _secureStorage.Setup<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(It.IsAny<string>())).ReturnsAsync(InvokeResult.Success);
@@ -61,7 +71,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
                     stream.AwsAccessKey = "accesskey";
                     stream.AwsSecretKey = "accesskey";
                     stream.AwsRegion = "us-west-1";
-                    stream.ElasticSearchDomainName = "domain";
+                    stream.ElasticSearchDomainName = "https://www.foo.com";
                     stream.ElasticSearchIndexName = "index";
                     stream.ElasticSearchTypeName = "type";
                     break;
@@ -88,8 +98,6 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
                     stream.AzureTableStorageName = "tablestorage";
                     break;
                 case DataStreamTypes.AzureTableStorage_Managed:
-                    stream.AzureAccessKey = "accesskey";
-                    stream.AzureStorageAccountName = "accountid";
                     stream.AzureTableStorageName = "tablestorage";
                     break;
                 case DataStreamTypes.SQLServer:
@@ -174,7 +182,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         [TestMethod]
         public async Task DataStream_Manager_AWS_S3_Update_Valid()
         {
-            await  AWSUpdateAsync(DataStreamTypes.AWSS3);
+            await AWSUpdateAsync(DataStreamTypes.AWSS3);
         }
 
         [TestMethod]
@@ -189,8 +197,19 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             var originalAccessKey = stream.AzureAccessKey;
             var result = await _dataStreamManager.AddDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(originalAccessKey), Times.Once);
+
+            if (streamType == DataStreamTypes.AzureTableStorage_Managed)
+            {
+                Assert.AreEqual(DEFAULT_TS_ACCOUNT_ID, stream.AzureStorageAccountName);
+                _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(DEFAULT_TS_ACCESS_KEY), Times.Once);
+            }
+            else
+            {
+                _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(originalAccessKey), Times.Once);
+            }
+
             Assert.IsNull(stream.AzureAccessKey);
+
             Assert.AreEqual(GENERATD_SECURE_ID_VALUE, stream.AzureAccessKeySecureId);
         }
 

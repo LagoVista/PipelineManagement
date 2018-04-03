@@ -22,6 +22,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LagoVista.IoT.DataStreamConnectors\LagoVista.IoT.DataStreamConnectors.csproj" />
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.Admin\LagoVista.IoT.Pipeline.Admin.csproj" />
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.CloudRepos\LagoVista.IoT.Pipeline.CloudRepos.csproj" />
   </ItemGroup>

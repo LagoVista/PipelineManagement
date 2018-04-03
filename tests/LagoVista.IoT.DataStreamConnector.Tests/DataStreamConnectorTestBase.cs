@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using LagoVista.Core;
 using System.Threading.Tasks;
+using LagoVista.Core.Validation;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests
 {
@@ -27,6 +28,40 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
                 Console.WriteLine("----");
                 Console.WriteLine();
             }
+        }
+
+        protected void AssertInvalidError(InvokeResult result, params string[] errs)
+        {
+            Console.WriteLine("Errors (at least some are expected)");
+
+            foreach (var err in result.Errors)
+            {
+                Console.WriteLine(err.Message);
+            }
+
+            foreach (var err in errs)
+            {
+                Assert.IsTrue(result.Errors.Where(msg => msg.Message == err).Any(), $"Could not find error [{err}]");
+            }
+
+            Assert.AreEqual(errs.Length, result.Errors.Count, "Validation error mismatch between");
+
+            Assert.IsFalse(result.Successful, "Validated as successful but should have failed.");
+        }
+
+        protected void AssertSuccessful(InvokeResult result)
+        {
+            if (result.Errors.Any())
+            {
+                Console.WriteLine("unexpected errors");
+            }
+
+            foreach (var err in result.Errors)
+            {
+                Console.WriteLine("\t" + err.Message);
+            }
+
+            Assert.IsTrue(result.Successful);
         }
 
         protected DataStreamRecord GetRecord(DataStream stream, string deviceId, string timeStamp, params KeyValuePair<string, object>[] items)

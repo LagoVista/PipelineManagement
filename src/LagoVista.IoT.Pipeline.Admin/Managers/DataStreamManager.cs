@@ -18,17 +18,25 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
     {
         IDataStreamRepo _dataStreamRepo;
         ISecureStorage _secureStorage;
+        IDefaultInternalDataStreamConnectionSettings _defaultConnectionSettings;
 
-        public DataStreamManager(IDataStreamRepo dataStreamRepo, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
+        public DataStreamManager(IDataStreamRepo dataStreamRepo, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
             base(logger, appConfig, depmanager, security)
         {
             _dataStreamRepo = dataStreamRepo;
             _secureStorage = secureStorage;
+            _defaultConnectionSettings = defaultConnectionSettings;
         }
 
         public async Task<InvokeResult> AddDataStreamAsync(DataStream stream, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(stream, AuthorizeResult.AuthorizeActions.Create, user, org);
+            if(stream.StreamType.Value == DataStreamTypes.AzureTableStorage_Managed)
+            {
+                stream.AzureStorageAccountName = _defaultConnectionSettings.DefaultInternalDataStreamConnectionSettingsTableStorage.AccountId;
+                stream.AzureAccessKey = _defaultConnectionSettings.DefaultInternalDataStreamConnectionSettingsTableStorage.AccessKey;
+            }
+
             ValidationCheck(stream, Actions.Create);
 
             if (stream.StreamType.Value == DataStreamTypes.AzureBlob ||
@@ -81,6 +89,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             {
                 throw new Exception("New data stream type was added, should likely add something here to store credentials.");
             }
+
+
+
 
             await _dataStreamRepo.AddDataStreamAsync(stream);
             return InvokeResult.Success;
