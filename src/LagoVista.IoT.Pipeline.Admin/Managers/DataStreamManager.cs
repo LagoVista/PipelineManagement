@@ -6,6 +6,7 @@ using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
@@ -205,6 +206,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
                 await _dataStreamRepo.UpdateDataStreamAsync(stream);
             return InvokeResult.Success;
+        }
+
+        public async Task<ListResponse<DataStreamResult>> GetStreamDataAsync(DataStream stream, IDataStreamConnector connector, string deviceId,  EntityHeader org, EntityHeader user, ListRequest request)
+        {
+            await AuthorizeAsync(stream, AuthorizeResult.AuthorizeActions.Read, user, org, "ReadDeviceData");
+
+            await connector.InitAsync(stream);
+            return await connector.GetItemsAsync(deviceId, request);
         }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
-using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.DataStreamConnectors
@@ -20,25 +17,13 @@ namespace LagoVista.IoT.DataStreamConnectors
                 return validationResult.ToInvokeResult();
             }
 
-            IDataStreamConnector _streamConnector = null;
+            var result = DataStreamServices.GetConnector(stream.StreamType.Value, logger);
 
-            switch (stream.StreamType.Value)
-            {
-                case DataStreamTypes.AWSElasticSearch: _streamConnector = new AWSElasticSearchConnector(logger); break;
-                case DataStreamTypes.AWSS3: _streamConnector = new AWSS3Connector(logger); break;
-                case DataStreamTypes.AzureBlob: _streamConnector = new AzureBlobConnector(logger); break;
-                case DataStreamTypes.AzureEventHub: _streamConnector = new AzureEventHubConnector(logger); break;
-                case DataStreamTypes.AzureTableStorage: 
-                case DataStreamTypes.AzureTableStorage_Managed: _streamConnector = new AzureTableStorageConnector(logger); break;
-                case DataStreamTypes.SQLServer: _streamConnector = new SQLServerConnector(logger); break;
-            }
-
-            if(_streamConnector == null) return InvokeResult.FromError("Unsupported Stream Type");
-
+            if (!result.Successful) return result.ToInvokeResult();
+            
             try
             {
-                var result =  await _streamConnector.ValidateConnectionAsync(stream);
-                return result;
+                return await result.Result.ValidateConnectionAsync(stream);
             }
             catch(Exception ex)
             {

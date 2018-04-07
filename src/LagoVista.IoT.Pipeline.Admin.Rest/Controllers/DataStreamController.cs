@@ -46,7 +46,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns>A Data Stream</returns>
         [HttpGet("/api/datastream/{id}")]
-        public async Task<DetailResponse<DataStream>> DataDataStreamAsync(string id)
+        public async Task<DetailResponse<DataStream>> GetDataStreamAsync(string id)
         {
             var dataStream = await _dataStreamManager.GetDataStreamAsync(id, OrgEntityHeader, UserEntityHeader);
             return DetailResponse<DataStream>.Create(dataStream);
@@ -113,7 +113,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/datastream/{id}/testconnection")]
-        public async Task<InvokeResult> ValidateDataStreamStreamAsync(string id)
+        public async Task<InvokeResult> ValidateDataStreamAsync(string id)
         {
             var stream = await _dataStreamManager.GetDataStreamAsync(id, OrgEntityHeader, UserEntityHeader);
             return await DataStreamValidator.ValidateDataStreamAsync(stream, _adminlogger);
@@ -124,9 +124,25 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("/api/datastream/testconnection")]
-        public async Task<InvokeResult> ValidateDataStreamStreamAsync([FromBody] DataStream stream)
+        public async Task<InvokeResult> ValidateDataStreamAsync([FromBody] DataStream stream)
         {
             return await DataStreamValidator.ValidateDataStreamAsync(stream, _adminlogger);
+        }
+
+        /// <summary>
+        /// Data Stream - Get Data for Device
+        /// </summary>
+        /// <param name="datastreamid"></param>
+        /// <param name="deviceid"></param>
+        /// <returns></returns>
+        [HttpGet("/api/datastream/{datastreamid}/data/{deviceid}")]
+        public async Task<ListResponse<DataStreamResult>> GetDataAsync(string datastreamid, string deviceid)
+        {
+            var dataStream = await _dataStreamManager.GetDataStreamAsync(datastreamid, OrgEntityHeader, UserEntityHeader);
+
+            var connectorResult = DataStreamServices.GetConnector(dataStream.StreamType.Value, _adminlogger);
+
+            return await _dataStreamManager.GetStreamDataAsync(dataStream, connectorResult.Result, deviceid, OrgEntityHeader, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>
