@@ -45,19 +45,19 @@ namespace LagoVista.IoT.DataStreamConnectors
                     completed = (execResult.HttpStatusCode == 200 || execResult.HttpStatusCode == 204);
                     if (!completed)
                     {
-                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "PEMTableStorage_UpdateMessageAsync", "HTTP Error Adding PEM", execResult.HttpStatusCode.ToString().ToKVP("httpStatusCode"), retryCount.ToString().ToKVP("retryCount"));
+                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureTableStorageConnector_ExecWithRetry", "HTTP Error Adding PEM", execResult.HttpStatusCode.ToString().ToKVP("httpStatusCode"), retryCount.ToString().ToKVP("retryCount"));
                     }
                 }
                 catch (Exception ex)
                 {
                     if (retryCount == numberRetries)
                     {
-                        _logger.AddException("PEMTableStorage_UpdateMessageAsync", ex);
+                        _logger.AddException("AzureTableStorageConnector_ExecWithRetry", ex);
                         return InvokeResult.FromException("AzureTableStorageConnector_ExecWithRetyr", ex);
                     }
                     else
                     {
-                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "PEMTableStorage_UpdateMessageAsync", "Exception writing PEM, will retry", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
+                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureTableStorageConnector_ExecWithRetry", "Exception writing PEM, will retry", ex.Message.ToKVP("exceptionMessage"), ex.GetType().Name.ToKVP("exceptionType"), retryCount.ToString().ToKVP("retryCount"));
                     }
                     await Task.Delay(retryCount * 250);
                 }

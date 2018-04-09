@@ -98,11 +98,57 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult<DataStream>> LoadFullDataStreamConfigurationAsync(String id)
+        public async Task<InvokeResult<DataStream>> LoadFullDataStreamConfigurationAsync(String id, EntityHeader org, EntityHeader user)
         {
             try
             {
-                return InvokeResult<DataStream>.Create(await _dataStreamRepo.GetDataStreamAsync(id));
+                var stream = await _dataStreamRepo.GetDataStreamAsync(id);
+
+
+
+                if (stream.StreamType.Value == DataStreamTypes.AzureBlob ||
+                    stream.StreamType.Value == DataStreamTypes.AzureEventHub ||
+                    stream.StreamType.Value == DataStreamTypes.AzureTableStorage ||
+                    stream.StreamType.Value == DataStreamTypes.AzureTableStorage_Managed)
+                {
+                    if (String.IsNullOrEmpty(stream.AzureAccessKeySecureId))
+                    {
+                        return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
+                    }
+
+                    var azureSecretKeyResult = await _secureStorage.GetSecretAsync(stream.AzureAccessKeySecureId, user, org);
+                    if (!azureSecretKeyResult.Successful) return InvokeResult<DataStream>.FromInvokeResult(azureSecretKeyResult.ToInvokeResult());
+
+                    stream.AzureAccessKey = azureSecretKeyResult.Result;
+                }
+                else if (stream.StreamType.Value == DataStreamTypes.AWSS3 ||
+                    stream.StreamType.Value == DataStreamTypes.AWSElasticSearch)
+                {
+                    if (String.IsNullOrEmpty(stream.AWSSecretKeySecureId))
+                    {
+                        return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
+                    }
+
+                    var awsSecretKeyResult = await _secureStorage.GetSecretAsync(stream.AWSSecretKeySecureId, user, org);
+                    if (!awsSecretKeyResult.Successful) return InvokeResult<DataStream>.FromInvokeResult(awsSecretKeyResult.ToInvokeResult());
+
+                    stream.AwsSecretKey = awsSecretKeyResult.Result;
+                }
+                else if (stream.StreamType.Value == DataStreamTypes.SQLServer)
+                {
+                    if (String.IsNullOrEmpty(stream.DBPasswordSecureId))
+                    {
+                        return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
+                    }
+
+                    var dbSecretKeyResult = await _secureStorage.GetSecretAsync(stream.DBPasswordSecureId, user, org);
+                    if (!dbSecretKeyResult.Successful) return InvokeResult<DataStream>.FromInvokeResult(dbSecretKeyResult.ToInvokeResult());
+
+                    stream.DbPassword = dbSecretKeyResult.Result;
+                }
+
+
+                return InvokeResult<DataStream>.Create(stream);
             }
             catch (RecordNotFoundException)
             {

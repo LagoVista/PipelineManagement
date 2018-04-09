@@ -138,11 +138,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         [HttpGet("/api/datastream/{datastreamid}/data/{deviceid}")]
         public async Task<ListResponse<DataStreamResult>> GetDataAsync(string datastreamid, string deviceid)
         {
-            var dataStream = await _dataStreamManager.GetDataStreamAsync(datastreamid, OrgEntityHeader, UserEntityHeader);
+            var dataStream = await _dataStreamManager.LoadFullDataStreamConfigurationAsync(datastreamid, OrgEntityHeader, UserEntityHeader);
+            
+            var connectorResult = DataStreamServices.GetConnector(dataStream.Result.StreamType.Value, _adminlogger);
 
-            var connectorResult = DataStreamServices.GetConnector(dataStream.StreamType.Value, _adminlogger);
-
-            return await _dataStreamManager.GetStreamDataAsync(dataStream, connectorResult.Result, deviceid, OrgEntityHeader, UserEntityHeader, GetListRequestFromHeader());
+            return await _dataStreamManager.GetStreamDataAsync(dataStream.Result, connectorResult.Result, deviceid, OrgEntityHeader, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>
