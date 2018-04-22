@@ -109,8 +109,6 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 try
                 {
-
-
                     await blob.UploadTextAsync(json);
                 }
                 catch (Exception ex)
