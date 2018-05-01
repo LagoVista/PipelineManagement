@@ -68,7 +68,7 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
             var result = new DataStreamResult();
             foreach (var item in Data)
             {
-                result.Fields.Add(item.Key, item.Value);
+                result.Add(item.Key, item.Value);
             }
 
             switch (stream.DateStorageFormat.Value)

@@ -21,7 +21,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
             {
                 Console.WriteLine($"Record {idx++} - {item.Timestamp}");
 
-                foreach (var fld in item.Fields)
+                foreach (var fld in item)
                 {
                     Console.WriteLine($"\t{fld.Key} - {fld.Value}");
                 }
@@ -110,20 +110,20 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
             });
             Assert.IsTrue(getResult.Successful);
 
-            Assert.AreEqual("99", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+            Assert.AreEqual("99", getResult.Model.ToArray()[0].Where(fld => fld.Key == "pointIndex").First().Value.ToString());
             Assert.IsTrue(getResult.HasMoreRecords, "Should Have Records");
             WriteResult(getResult);
 
             getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { PageIndex = 1, PageSize = 15 });
 
-            Assert.AreEqual("84", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+            Assert.AreEqual("84", getResult.Model.ToArray()[0].Where(fld => fld.Key == "pointIndex").First().Value.ToString());
             Assert.IsTrue(getResult.Successful);
             Assert.IsTrue(getResult.HasMoreRecords);
             WriteResult(getResult);
 
             getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { PageIndex = 6, PageSize = 15 });
 
-            Assert.AreEqual("9", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+            Assert.AreEqual("9", getResult.Model.ToArray()[0].Where(fld => fld.Key == "pointIndex").First().Value.ToString());
             Assert.AreEqual(10, getResult.PageSize);
             Assert.IsTrue(getResult.Successful);
             Assert.IsFalse(getResult.HasMoreRecords);

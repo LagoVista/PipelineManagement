@@ -176,7 +176,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             Assert.IsTrue(getResult.Successful);
             WriteResult(getResult);
 
-            Assert.AreEqual("99", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+            Assert.AreEqual("99", getResult.Model.ToArray()[0].Where(fld => fld.Key == "pointIndex").First().Value.ToString());
             Assert.IsTrue(getResult.HasMoreRecords, "Should Have Records");
             WriteResult(getResult);
 
@@ -184,7 +184,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             {
                 getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { NextPartitionKey = getResult.NextPartitionKey, NextRowKey = getResult.NextRowKey, PageSize = 15 });
 
-                Assert.AreEqual((84 - (idx * 15)).ToString(), getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+                Assert.AreEqual((84 - (idx * 15)).ToString(), getResult.Model.ToArray()[0].Where(fld => fld.Key == "pointIndex").First().Value.ToString());
                 Assert.IsTrue(getResult.Successful);
                 Assert.IsTrue(getResult.HasMoreRecords);
                 WriteResult(getResult);
@@ -194,7 +194,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             Assert.IsTrue(getResult.Successful);
             WriteResult(getResult);
 
-            Assert.AreEqual("9", getResult.Model.ToArray()[0].Fields.Where(fld => fld.Key == "pointIndex").First().Value.ToString());
+            Assert.AreEqual("9", getResult.Model.ToArray()[0].Where(fld => fld.Key == "pointIndex").First().Value.ToString());
             Assert.AreEqual(10, getResult.PageSize);
             Assert.IsFalse(getResult.HasMoreRecords);
 

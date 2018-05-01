@@ -273,7 +273,7 @@ from sysobjects a
 
                         foreach(var fld in _stream.Fields)
                         {
-                            resultItem.Fields.Add(fld.FieldName, rdr[fld.FieldName]);
+                            resultItem.Add(fld.FieldName, rdr[fld.FieldName]);
                         }
 
                         responseItems.Add(resultItem);

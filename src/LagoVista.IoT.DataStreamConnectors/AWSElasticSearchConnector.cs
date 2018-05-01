@@ -185,12 +185,18 @@ namespace LagoVista.IoT.DataStreamConnectors
                 var records = new List<DataStreamResult>();
                 foreach (var record in result.Documents)
                 {
-                    records.Add(new DataStreamResult()
+                    var streamResult = new DataStreamResult()
                     {
                         /* Newtonsoft assumes the value is date time for something that looks like a date, time this dual conversion gets our standard ISO8601 date string */
                         Timestamp = record[_stream.TimeStampFieldName].ToString().ToDateTime().ToJSONString(),
-                        Fields = record
-                    });
+                    };
+
+                    foreach(var key in record.Keys)
+                    {
+                        streamResult.Add(key, record[key]);
+                    }
+
+                    records.Add(streamResult);
                 }
 
                 var response = Core.Models.UIMetaData.ListResponse<DataStreamResult>.Create(records);

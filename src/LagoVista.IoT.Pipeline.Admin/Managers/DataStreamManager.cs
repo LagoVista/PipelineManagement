@@ -27,7 +27,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             _dataStreamRepo = dataStreamRepo;
             _secureStorage = secureStorage;
             _defaultConnectionSettings = defaultConnectionSettings;
-        }
+        }        
 
         public async Task<InvokeResult> AddDataStreamAsync(DataStream stream, EntityHeader org, EntityHeader user)
         {

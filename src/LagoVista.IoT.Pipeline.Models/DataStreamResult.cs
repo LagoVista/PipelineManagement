@@ -4,15 +4,15 @@ using System.Text;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
-    public class DataStreamResult
+    public class DataStreamResult : Dictionary<string, object>
     {
         public DataStreamResult()
         {
-            Fields = new Dictionary<string, object>();
+//            Fields = new Dictionary<string, object>();
         }
 
         public string Timestamp { get; set; }
-        public Dictionary<string, object> Fields { get; set; }
+        //public Dictionary<string, object> Fields { get; set; }
 
     }
 }
