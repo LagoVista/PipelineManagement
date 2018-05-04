@@ -103,7 +103,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public override string ModuleType => PipelineModuleType_Transmitter;
 
         [CustomValidator]
-        public void Validate(ValidationResult result)
+        public void Validate(ValidationResult result, Actions action)
         {
             if (EntityHeader.IsNullOrEmpty(TransmitterType))
             {
@@ -116,20 +116,24 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 case TransmitterTypes.AzureEventHub:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
                     if (string.IsNullOrEmpty(HubName)) result.AddUserError("Hub Name is a Required Field.");
-                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
+                    if (string.IsNullOrEmpty(AccessKeyName)) result.AddUserError("Access Key Name is a Required Field.");
+                    if (action == Actions.Create && string.IsNullOrEmpty(AccessKey)) result.AddUserError("Access Key is Required for an Azure Event Hub.");
+                    if (action == Actions.Update && string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for an Azure Event Hub.");
                     if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
                     break;
                 case TransmitterTypes.AzureIoTHub:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
                     if (string.IsNullOrEmpty(AccessKeyName)) result.AddUserError("Access Key Name is a Required Field.");
-                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
+                    if (action == Actions.Create && string.IsNullOrEmpty(AccessKey)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
+                    if (action == Actions.Update && string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for Azure IoT Event Hub.");
                     if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
                     break;
                 case TransmitterTypes.AzureServiceBus:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is a Required Field.");
                     if (string.IsNullOrEmpty(Queue)) result.AddUserError("Queue is a Required Field.");
                     if (string.IsNullOrEmpty(AccessKeyName)) result.AddUserError("Access Key Name is a Required Field.");
-                    if (string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for an Azure Service Bus Transmitter.");
+                    if (action == Actions.Create && string.IsNullOrEmpty(AccessKey)) result.AddUserError("Access Key is Required for an Azure Service Bus Transmitter.");
+                    if (action == Actions.Update && string.IsNullOrEmpty(AccessKey) && string.IsNullOrEmpty(SecureAccessKeyId)) result.AddUserError("Access Key is Required for an Azure Service Bus Transmitter.");
                     if (!string.IsNullOrEmpty(AccessKey) && !Utils.StringValidationHelper.IsBase64String(AccessKey)) result.AddUserError("Access Key does not appear to be a Base 64 string and is likely incorrect.");
                     break;
                 case TransmitterTypes.MQTTClient:
@@ -138,7 +142,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (!Anonymous)
                     {
                         if (String.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required for non-Anonymous Connections.");
-                        if (String.IsNullOrEmpty(Password)) result.AddUserError("Password is Required for non-Anonymous Connections");
+                        if (action == Actions.Create)
+                        {
+                            if (String.IsNullOrEmpty(Password)) result.AddUserError("Password is Required for non-Anonymous Connections");
+                        }
+                        else if (action == Actions.Update)
+                        {
+                            if (String.IsNullOrEmpty(Password) && String.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required for non-Anonymous Connections");
+                        }
                     }
                     else
                     {
@@ -154,7 +165,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (!Anonymous)
                     {
                         if (String.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required for non-Anonymous Connections.");
-                        if (String.IsNullOrEmpty(Password)) result.AddUserError("Password is Required for non-Anonymous Connections");
+                        if (String.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required for non-Anonymous Connections.");
+                        if (action == Actions.Create)
+                        {
+                            if (String.IsNullOrEmpty(Password)) result.AddUserError("Password is Required for non-Anonymous Connections");
+                        }
+                        else if (action == Actions.Update)
+                        {
+                            if (String.IsNullOrEmpty(Password) && String.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required for non-Anonymous Connections");
+                        }
                     }
                     else
                     {
