@@ -479,6 +479,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Listener_ConsumerGroup_Help
 
 		public static string Listener_ConsumerGroup_Help { get { return GetResourceString("Listener_ConsumerGroup_Help"); } }
+//Resources:PipelineAdminResources:Listener_DefaultResponse
+
+		public static string Listener_DefaultResponse { get { return GetResourceString("Listener_DefaultResponse"); } }
 //Resources:PipelineAdminResources:Listener_DelimitedWithSOH_EOT
 
 		public static string Listener_DelimitedWithSOH_EOT { get { return GetResourceString("Listener_DelimitedWithSOH_EOT"); } }
@@ -500,6 +503,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Listener_EventHub_ConsumerGroup
 
 		public static string Listener_EventHub_ConsumerGroup { get { return GetResourceString("Listener_EventHub_ConsumerGroup"); } }
+//Resources:PipelineAdminResources:Listener_FailedResponse
+
+		public static string Listener_FailedResponse { get { return GetResourceString("Listener_FailedResponse"); } }
 //Resources:PipelineAdminResources:Listener_Help
 
 		public static string Listener_Help { get { return GetResourceString("Listener_Help"); } }
@@ -1200,6 +1206,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Listener_ConnectSSLTLS = "Listener_ConnectSSLTLS";
 			public const string Listener_ConnectToPort = "Listener_ConnectToPort";
 			public const string Listener_ConsumerGroup_Help = "Listener_ConsumerGroup_Help";
+			public const string Listener_DefaultResponse = "Listener_DefaultResponse";
 			public const string Listener_DelimitedWithSOH_EOT = "Listener_DelimitedWithSOH_EOT";
 			public const string Listener_DelimitedWithSOH_EOT_Help = "Listener_DelimitedWithSOH_EOT_Help";
 			public const string Listener_Description = "Listener_Description";
@@ -1207,6 +1214,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Listener_EndMessageSequence_Help = "Listener_EndMessageSequence_Help";
 			public const string Listener_Endpoint = "Listener_Endpoint";
 			public const string Listener_EventHub_ConsumerGroup = "Listener_EventHub_ConsumerGroup";
+			public const string Listener_FailedResponse = "Listener_FailedResponse";
 			public const string Listener_Help = "Listener_Help";
 			public const string Listener_HostName = "Listener_HostName";
 			public const string Listener_HubName = "Listener_HubName";

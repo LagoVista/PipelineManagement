@@ -177,7 +177,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string Topic { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Queue, HelpResource: PipelineAdminResources.Names.Listener_Queue_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-         public string Queue { get; set; }
+        public string Queue { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Endpoint, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
@@ -206,7 +206,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Origin, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources))]
         public string Origin { get; set; }
-            
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_DefaultResponse, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources))]
+        public string DefaultResponse {get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_FailedResponse, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources))]
+        public string FailedResponse { get; set; }
+
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_KeepAliveToSendReply, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public bool KeepAliveToSendReply { get; set; }

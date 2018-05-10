@@ -1123,4 +1123,10 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStream_AzureStorageName" xml:space="preserve">
     <value>Azure Storage Name</value>
   </data>
+  <data name="Listener_DefaultResponse" xml:space="preserve">
+    <value>Default Response</value>
+  </data>
+  <data name="Listener_FailedResponse" xml:space="preserve">
+    <value>Failed Response</value>
+  </data>
 </root>
