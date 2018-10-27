@@ -12,6 +12,7 @@
     <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.526-beta0717" />
     <PackageReference Include="Microsoft.Azure.EventHubs" Version="2.1.0" />
     <PackageReference Include="NEST" Version="6.2.0" />
+    <PackageReference Include="Npgsql" Version="4.0.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.0" />
   </ItemGroup>

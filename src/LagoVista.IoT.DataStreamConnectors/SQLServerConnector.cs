@@ -220,7 +220,6 @@ from sysobjects a
 
         public async Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
-
             var sql = new StringBuilder("select ");
             if (request.PageSize == 0) request.PageSize = 50;
 

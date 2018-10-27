@@ -179,6 +179,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         /* Currently not implemented */
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AutoCreateTable, HelpResource: PipelineAdminResources.Names.DataStream_AutoCreateTable_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool AutoCreateSQLTable { get; set; }
+
+    
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_CreateTableDDL, HelpResource: PipelineAdminResources.Names.DataStream_CreateTableDDL_Help,  FieldType: FieldTypes.MultiLineText, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string CreateTableDDL { get; set; }
+
         #endregion
 
 

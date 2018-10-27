@@ -191,6 +191,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_ConnectionString_Help
 
 		public static string DataStream_ConnectionString_Help { get { return GetResourceString("DataStream_ConnectionString_Help"); } }
+//Resources:PipelineAdminResources:DataStream_CreateTableDDL
+
+		public static string DataStream_CreateTableDDL { get { return GetResourceString("DataStream_CreateTableDDL"); } }
+//Resources:PipelineAdminResources:DataStream_CreateTableDDL_Help
+
+		public static string DataStream_CreateTableDDL_Help { get { return GetResourceString("DataStream_CreateTableDDL_Help"); } }
 //Resources:PipelineAdminResources:DataStream_DateStorageFormat
 
 		public static string DataStream_DateStorageFormat { get { return GetResourceString("DataStream_DateStorageFormat"); } }
@@ -365,6 +371,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStreamField_Help
 
 		public static string DataStreamField_Help { get { return GetResourceString("DataStreamField_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_IsKey
+
+		public static string DataStreamField_IsKey { get { return GetResourceString("DataStreamField_IsKey"); } }
+//Resources:PipelineAdminResources:DataStreamField_IsKey_Description
+
+		public static string DataStreamField_IsKey_Description { get { return GetResourceString("DataStreamField_IsKey_Description"); } }
 //Resources:PipelineAdminResources:DataStreamField_IsRequired
 
 		public static string DataStreamField_IsRequired { get { return GetResourceString("DataStreamField_IsRequired"); } }
@@ -1113,6 +1125,8 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_BlobStoragePath = "DataStream_BlobStoragePath";
 			public const string DataStream_ConnectionString = "DataStream_ConnectionString";
 			public const string DataStream_ConnectionString_Help = "DataStream_ConnectionString_Help";
+			public const string DataStream_CreateTableDDL = "DataStream_CreateTableDDL";
+			public const string DataStream_CreateTableDDL_Help = "DataStream_CreateTableDDL_Help";
 			public const string DataStream_DateStorageFormat = "DataStream_DateStorageFormat";
 			public const string DataStream_DateStorageFormat_Help = "DataStream_DateStorageFormat_Help";
 			public const string DataStream_DateStorageFormat_Select = "DataStream_DateStorageFormat_Select";
@@ -1171,6 +1185,8 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStreamField_FieldName_Help = "DataStreamField_FieldName_Help";
 			public const string DataStreamField_FieldName_Invalid = "DataStreamField_FieldName_Invalid";
 			public const string DataStreamField_Help = "DataStreamField_Help";
+			public const string DataStreamField_IsKey = "DataStreamField_IsKey";
+			public const string DataStreamField_IsKey_Description = "DataStreamField_IsKey_Description";
 			public const string DataStreamField_IsRequired = "DataStreamField_IsRequired";
 			public const string DataStreamField_IsRequired_Help = "DataStreamField_IsRequired_Help";
 			public const string DataStreamField_MaxValue = "DataStreamField_MaxValue";

@@ -1132,4 +1132,16 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStream_StreamType_PostgreSQL" xml:space="preserve">
     <value>PostgreSQL</value>
   </data>
+  <data name="DataStreamField_IsKey" xml:space="preserve">
+    <value>Is Key Field</value>
+  </data>
+  <data name="DataStreamField_IsKey_Description" xml:space="preserve">
+    <value>Field should be treated as a unique key.</value>
+  </data>
+  <data name="DataStream_CreateTableDDL" xml:space="preserve">
+    <value>Create Table DDL</value>
+  </data>
+  <data name="DataStream_CreateTableDDL_Help" xml:space="preserve">
+    <value>You can provide DDL that will be executed on the target RDBMS to create the table. This will only be executed one. Currently does not support updating table structure.</value>
+  </data>
 </root>
