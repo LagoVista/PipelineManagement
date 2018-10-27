@@ -1130,7 +1130,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Failed Response</value>
   </data>
   <data name="DataStream_StreamType_PostgreSQL" xml:space="preserve">
-    <value>PostgreSQL</value>
+    <value>Postgresql</value>
   </data>
   <data name="DataStreamField_IsKey" xml:space="preserve">
     <value>Is Key Field</value>

@@ -29,16 +29,16 @@ namespace LagoVista.IoT.DataStreamConnectors
             return recordTimeStamp.Ticks;
         }
 
-        private static List<string> sqlDateTypes = new List<string>() { "datetime", "datetime2", "datetimeoffset" };
-        private static List<string> sqlDecimalTypes = new List<string>() { "decimal", "numeric", "real", "float" };
-        private static List<string> sqlLocationDateTypes = new List<string>() { "geography" };
-        private static List<string> sqlIntegerDateTypes = new List<string>() { "tinyint", "smallint", "int", "bigint", "decimal", "numeric", "real", "float" };
-        private static List<string> sqlBooleanDataTypes = new List<string>() { "tinyint", "smallint", "bit", "int", "bigint" };
-        private static List<string> sqlStringDataTypes = new List<string>() { "char", "varchar", "nchar", "nvarchar" };
-        private static List<string> sqlStatesAndEnums = new List<string>() { "char", "varchar", "nchar", "nvarchar" };
+        private static List<string> _sqlServerDateTypes = new List<string>() { "datetime", "datetime2", "datetimeoffset" };
+        private static List<string> _sqlServerDecimalTypes = new List<string>() { "decimal", "numeric", "real", "float" };
+        private static List<string> _sqlServerLocationDateTypes = new List<string>() { "geography" };
+        private static List<string> _sqlServerIntegerDateTypes = new List<string>() { "tinyint", "smallint", "int", "bigint", "decimal", "numeric", "real", "float" };
+        private static List<string> _sqlServerBooleanDataTypes = new List<string>() { "tinyint", "smallint", "bit", "int", "bigint" };
+        private static List<string> _sqlServerStringDataTypes = new List<string>() { "char", "varchar", "nchar", "nvarchar" };
+        private static List<string> _sqlServerStatesAndEnums = new List<string>() { "char", "varchar", "nchar", "nvarchar" };
 
         //TODO: Need to add localization
-        public static ValidationResult ValidationSQLServerMetaDataField(this DataStreamField field, SQLServerConnector.SQLFieldMetaData metaData)
+        public static ValidationResult ValidatioRDBMSMetaDataField(this DataStreamField field, SQLFieldMetaData metaData)
         {
             var result = new ValidationResult();
             if (metaData == null)
@@ -53,14 +53,14 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             switch (field.FieldType.Value)
             {
-                case DeviceAdmin.Models.ParameterTypes.DateTime: validColumnTypes = sqlDateTypes; break;
-                case DeviceAdmin.Models.ParameterTypes.Decimal: validColumnTypes = sqlDecimalTypes; break;
-                case DeviceAdmin.Models.ParameterTypes.GeoLocation: validColumnTypes = sqlLocationDateTypes; break;
-                case DeviceAdmin.Models.ParameterTypes.Integer: validColumnTypes = sqlIntegerDateTypes; break;
-                case DeviceAdmin.Models.ParameterTypes.State: validColumnTypes = sqlStatesAndEnums; break;
-                case DeviceAdmin.Models.ParameterTypes.String: validColumnTypes = sqlStringDataTypes; break;
-                case DeviceAdmin.Models.ParameterTypes.TrueFalse: validColumnTypes = sqlBooleanDataTypes; break;
-                case DeviceAdmin.Models.ParameterTypes.ValueWithUnit: validColumnTypes = sqlDecimalTypes; break;
+                case DeviceAdmin.Models.ParameterTypes.DateTime: validColumnTypes = _sqlServerDateTypes; break;
+                case DeviceAdmin.Models.ParameterTypes.Decimal: validColumnTypes = _sqlServerDecimalTypes; break;
+                case DeviceAdmin.Models.ParameterTypes.GeoLocation: validColumnTypes = _sqlServerLocationDateTypes; break;
+                case DeviceAdmin.Models.ParameterTypes.Integer: validColumnTypes = _sqlServerIntegerDateTypes; break;
+                case DeviceAdmin.Models.ParameterTypes.State: validColumnTypes = _sqlServerStatesAndEnums; break;
+                case DeviceAdmin.Models.ParameterTypes.String: validColumnTypes = _sqlServerStringDataTypes; break;
+                case DeviceAdmin.Models.ParameterTypes.TrueFalse: validColumnTypes = _sqlServerBooleanDataTypes; break;
+                case DeviceAdmin.Models.ParameterTypes.ValueWithUnit: validColumnTypes = _sqlServerDecimalTypes; break;
             }
 
             if (!validColumnTypes.Contains(metaData.DataType)) result.AddUserError($"Type mismatch on field [{field.Name}], Data Stream Type: {field.FieldType.Text} - SQL Data Type: {metaData.DataType}.");
@@ -68,7 +68,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             return result;
         }
 
-        public static ValidationResult ValidateSQLSeverMetaData(this DataStream stream, List<SQLServerConnector.SQLFieldMetaData> sqlMetaData)
+        public static ValidationResult ValidateSQLSeverMetaData(this DataStream stream, List<SQLFieldMetaData> sqlMetaData)
         {
             var result = new ValidationResult();
 
@@ -79,7 +79,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 result.AddUserError($"SQL Server Table must contain the time stamp field [{stream.TimeStampFieldName}] but it does not.");
             }
-            else if (!sqlDateTypes.Contains(timeStampColumn.DataType))
+            else if (!_sqlServerDateTypes.Contains(timeStampColumn.DataType))
             {
                 result.AddUserError($"Data Type on SQL Server Table for field [{stream.TimeStampFieldName}] (the time stamp field) must be one of the following: datetime, datetime2, datetimeoffset.");
             }
@@ -93,7 +93,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 result.AddUserError($"SQL Server Table must contain the device id field [{stream.DeviceIdFieldName}] but it does not.");
             }
-            else if (!sqlStringDataTypes.Contains(deviceIdColumn.DataType))
+            else if (!_sqlServerStringDataTypes.Contains(deviceIdColumn.DataType))
             {
                 result.AddUserError($"Data Type on SQL Server Table for field [{stream.DeviceIdFieldName}] (the device id field) must be one of the following: char, varchar, nchar or nvarchar.");
             }
@@ -111,7 +111,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             foreach (var fld in stream.Fields)
             {
                 var sqlField = sqlMetaData.Where(sqlFld => sqlFld.ColumnName.ToLower() == fld.FieldName.ToLower()).FirstOrDefault();
-                result.Concat(fld.ValidationSQLServerMetaDataField(sqlField));
+                result.Concat(fld.ValidatioRDBMSMetaDataField(sqlField));
             }
 
             foreach (var fld in sqlMetaData)
@@ -122,5 +122,59 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             return result;
         }
+
+
+        public static ValidationResult ValidatePostSQLSeverMetaData(this DataStream stream, List<SQLFieldMetaData> sqlMetaData)
+        {
+            var result = new ValidationResult();
+
+            var timeStampColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.TimeStampFieldName.ToLower()).FirstOrDefault();
+            var deviceIdColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.DeviceIdFieldName.ToLower()).FirstOrDefault();
+
+            if (timeStampColumn == null)
+            {
+                result.AddUserError($"Postgress Server Table must contain the time stamp field [{stream.TimeStampFieldName}] but it does not.");
+            }
+            else if (!timeStampColumn.DataType.Contains("time") && !timeStampColumn.DataType.Contains("date"))
+            {
+                result.AddUserError($"Data Type on SQL Server Table for field [{stream.TimeStampFieldName}] (the time stamp field) must time based field.");
+            }
+            else
+            {
+                /* Already validated it so we don't want to look for it on the data stream fields */
+                sqlMetaData.Remove(timeStampColumn);
+            }
+
+            if (deviceIdColumn == null)
+            {
+                result.AddUserError($"SQL Server Table must contain the device id field [{stream.DeviceIdFieldName}] but it does not.");
+            }
+            else if (!deviceIdColumn.DataType.Contains("text") && !deviceIdColumn.DataType.Contains("char"))
+            {
+                result.AddUserError($"Data Type on SQL Server Table for field [{stream.DeviceIdFieldName}] (the device id field) must be a text based field.");
+            }
+            else
+            {
+                /* Already validated it so we don't want to look for it on the data stream fields */
+                sqlMetaData.Remove(deviceIdColumn);
+            }
+
+            if (!result.Successful)
+            {
+                return result;
+            }
+
+            foreach (var fld in stream.Fields)
+            {
+                var sqlField = sqlMetaData.Where(sqlFld => sqlFld.ColumnName.ToLower() == fld.FieldName.ToLower()).FirstOrDefault();
+                if(sqlField == null)
+                {
+                    result.AddUserError($"Missing field [{fld.Name}] of data type [{fld.FieldType.Text}] on the postgress table.");
+                }
+            }
+
+            return result;
+        }
+
     }
 }

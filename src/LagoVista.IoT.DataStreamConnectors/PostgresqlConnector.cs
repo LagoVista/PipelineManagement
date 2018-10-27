@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static LagoVista.IoT.DataStreamConnectors.SQLServerConnector;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -389,7 +390,7 @@ namespace LagoVista.IoT.DataStreamConnectors
    AND    table_name = @table
    );";
 
-                    using (var conn = OpenConnection())
+                    using (var conn = OpenConnection(stream.DbName))
                     using (var cmd = new NpgsqlCommand())
                     {
                         cmd.Parameters.AddWithValue("@dbschema", stream.DbSchema);
@@ -397,10 +398,11 @@ namespace LagoVista.IoT.DataStreamConnectors
                         cmd.Connection = conn;
                         cmd.CommandText = tableExistQuery;
                         var existsResult = (await cmd.ExecuteScalarAsync()) as bool?;
-                        if (existsResult.HasValue && !existsResult.Value == false)
+                        if (existsResult.HasValue && existsResult.Value == false)
                         {
                             cmd.Parameters.Clear();
                             cmd.CommandText = stream.CreateTableDDL;
+                            var result = await cmd.ExecuteNonQueryAsync();
                         }
                     }
                 }
@@ -414,6 +416,8 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
             catch (Exception ex)
             {
+                _logger.AddException("Postgresql_Init", ex, stream.Id.ToKVP("DataStreamId"));
+
                 return InvokeResult.FromException("Postgresql_InitAsync", ex);
             }
         }
@@ -422,15 +426,17 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             var getTableSchemaQuery = @"SELECT column_name, data_type, is_nullable
 FROM information_schema.columns
-WHERE table_schema = @schema
+WHERE table_schema = @dbschema
   AND table_name   = @tablename";
 
 
-            using (var conn = OpenConnection())
+            var fields = new List<SQLFieldMetaData>();
+
+            using (var conn = OpenConnection(stream.DbName))
             using (var cmd = new NpgsqlCommand())
             {
                 cmd.Parameters.AddWithValue("@dbschema", stream.DbSchema);
-                cmd.Parameters.AddWithValue("@table", stream.DbTableName);
+                cmd.Parameters.AddWithValue("@tablename", stream.DbTableName);
                 cmd.Connection = conn;
                 cmd.CommandText = getTableSchemaQuery;
 
@@ -438,16 +444,29 @@ WHERE table_schema = @schema
                 {
                     while (rdr.Read())
                     {
-                        var colName = rdr["column_name"].ToString();
-                        var dataType = rdr["data_type"].ToString();
-                        var isNullable = (bool)rdr["is_nullable"];
 
-                        Console.WriteLine($"{colName},{dataType},{isNullable}");
+                        fields.Add(new SQLFieldMetaData()
+                        {
+                            ColumnName = rdr["column_name"].ToString(),
+                            DataType = rdr["data_type"].ToString(),
+                            IsRequired = rdr["is_nullable"].ToString().ToUpper() == "NO"
+                        });
                     }
                 }
             }
 
-            throw new NotImplementedException();
+            var result = InvokeResult.Success;
+
+            if (fields.Count == 0)
+            {
+                result.AddUserError($"Table [{stream.DbTableName}] name not found on SQL Server database [{stream.DbName}] on server [{stream.DbURL}.");
+            }
+            else
+            {
+                result.Concat(stream.ValidatePostSQLSeverMetaData(fields));
+            }
+
+            return result;
         }
     }
 }

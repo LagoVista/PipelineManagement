@@ -13,20 +13,11 @@ using LagoVista.Core.PlatformSupport;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
-    public class SQLServerConnector : IDataStreamConnector
+    public partial class SQLServerConnector : IDataStreamConnector
     {
         DataStream _stream;
         ILogger _logger;
         string _connectionString;
-
-        public class SQLFieldMetaData
-        {
-            public string ColumnName { get; set; }
-            public Boolean IsRequired { get; set; }
-            public string DataType { get; set; }
-            public Boolean IsIdentity { get; set; }
-            public string DefaultValue { get; set; }
-        }
 
         public SQLServerConnector(Logging.Loggers.IInstanceLogger instanceLogger)
         {

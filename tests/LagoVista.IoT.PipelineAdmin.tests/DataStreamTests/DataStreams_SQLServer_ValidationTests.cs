@@ -13,24 +13,24 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
     public class DataStreams_SQLServer_ValidationTests : ValidationBase
     {
 
-        private List<SQLServerConnector.SQLFieldMetaData> GetDataDescription()
+        private List<SQLFieldMetaData> GetDataDescription()
         {
-            var sqlMetaData = new List<SQLServerConnector.SQLFieldMetaData>();
-            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
+            var sqlMetaData = new List<SQLFieldMetaData>();
+            sqlMetaData.Add(new SQLFieldMetaData()
             {
                 IsRequired = true,
                 ColumnName = "field1",
                 DataType = "varchar"
             });
 
-            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
+            sqlMetaData.Add(new SQLFieldMetaData()
             {
                 IsRequired = true,
                 ColumnName = "timeStamp",
                 DataType = "datetime"
             });
 
-            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
+            sqlMetaData.Add(new SQLFieldMetaData()
             {
                 IsRequired = true,
                 ColumnName = "deviceId",
@@ -89,16 +89,16 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         public void DataStreams_SQLServer_FieldValidation_MissingInTable_Present_In_DataStream()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
-            var sqlMetaData = new List<SQLServerConnector.SQLFieldMetaData>();
+            var sqlMetaData = new List<SQLFieldMetaData>();
 
-            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
+            sqlMetaData.Add(new SQLFieldMetaData()
             {
                 IsRequired = true,
                 ColumnName = "timeStamp",
                 DataType = "datetime"
             });
 
-            sqlMetaData.Add(new SQLServerConnector.SQLFieldMetaData()
+            sqlMetaData.Add(new SQLFieldMetaData()
             {
                 IsRequired = true,
                 ColumnName = "deviceId",

@@ -1,11 +1,13 @@
 ﻿using LagoVista.Core;
 using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.Other
@@ -38,13 +40,15 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                 AutoCreateSQLTable = true,
                 CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
-                DbURL = System.Environment.GetEnvironmentVariable("PS_DB_URL"),
-                DbName = System.Environment.GetEnvironmentVariable("PS_DB_NAME"),
+                DbURL = System.Environment.GetEnvironmentVariable("PS_DB_URL"),                
                 DbUserName = System.Environment.GetEnvironmentVariable("PS_DB_USER_NAME"),
                 DbPassword = System.Environment.GetEnvironmentVariable("PS_DB_PASSWORD"),
+                DbName = "testing",
                 DbSchema = "public",
                 DbTableName = "information",
-                CreateTableDDL = @"CREATE TABLE if not exists information (
+                CreateTableDDL = @"
+CREATE EXTENSION postgis;
+CREATE TABLE if not exists public.information (
 	id SERIAL,
     deviceId text not null,
 	timeStamp timestamp not null,
@@ -140,9 +144,10 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
 
             using (var conn = new NpgsqlConnection(connString))
             {
-                conn.Open();
+                
                 using (var cmd = new NpgsqlCommand())
                 {
+                    conn.Open();
                     cmd.Connection = conn;
                     cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
                     cmd.Parameters.AddWithValue("@dbname", stream.DbName);
@@ -159,62 +164,44 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                     result = await cmd.ExecuteScalarAsync();
                     Assert.IsNull(result);
                 }
+                conn.Close();
             }
         }
 
-
-        [TestMethod]
-        public async Task Postgres_InitTest_NoDB()
+        [TestInitialize]
+        public async Task Init()
         {
             await RemoveDatabase();
-
-            var stream = GetValidStream();
-
-            var connector = new PostgresqlConnector(_logger);
-            var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
-        }
-
-        [TestMethod]
-        public async Task Postgres_InitTest_ExistingDB()
-        {
-            // will clear it and make sure one is created.
-            await Postgres_InitTest_NoDB();
-
-            var stream = GetValidStream();
-            var connector = new PostgresqlConnector(_logger);
-            //Now do an init again when the DB is created 
-            var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
-        }
-
-        [TestMethod]
-        public async Task Postgres_CreateTable_Test()
-        {
-            var stream = GetValidStream();
-            var connector = new PostgresqlConnector(_logger);
-            //Now do an init again when the DB is created 
-            var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
-
-            var dropResult = await connector.ExecuteNonQuery($"drop table if exists {stream.DbTableName}");
-            Assert.IsTrue(dropResult.Successful);
-
-            var createResult = await connector.ExecuteNonQuery(stream.CreateTableDDL);
-            Assert.IsTrue(createResult.Successful);
         }
 
 
         [TestMethod]
-        public async Task Postgres_AddRecord_Test()
+        public async Task DataStream_Postgres_InitTest_NoDB()
         {
             var stream = GetValidStream();
-            var connector = new PostgresqlConnector(_logger);
-            //Now do an init again when the DB is created 
-            var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
 
-            var record = GetRecord(stream, "devoo1", DateTime.Now.ToJSONString(),
+            var connector = new PostgresqlConnector(_logger);
+            AssertSuccessful(await connector.InitAsync(stream));
+        }
+
+        [TestMethod]
+        public async Task DataStream_Postgres_InitTest_ExistingDB()
+        {            
+            var stream = GetValidStream();
+
+            /* First time through it will create the DB */
+            var connector1 = new PostgresqlConnector(_logger);
+            AssertSuccessful(await connector1.InitAsync(stream));
+
+            /* this time it's already it shouldn't create the db and table but should still succeed */
+            var connector2 = new PostgresqlConnector(_logger);
+            //Now do an init again when the DB is created 
+            AssertSuccessful(await connector2.InitAsync(stream));
+        }
+
+        private async Task<InvokeResult> AddRecord(PostgresqlConnector connector, DataStream stream, String deviceId, int int1, int int2)
+        {
+            var record = GetRecord(stream, deviceId, DateTime.Now.ToJSONString(),
                 new System.Collections.Generic.KeyValuePair<string, object>("int1", 200),
                 new System.Collections.Generic.KeyValuePair<string, object>("int2", 300),
                 new System.Collections.Generic.KeyValuePair<string, object>("datetime1", DateTime.Now.ToJSONString()),
@@ -224,26 +211,37 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                 new System.Collections.Generic.KeyValuePair<string, object>("pointindex1", 1000)
                );
 
-            await connector.AddItemAsync(record);
+            return await connector.AddItemAsync(record);
         }
 
+
         [TestMethod]
-        public async Task Postgres_GetData_Test()
+        public async Task DataStream_Postgres_AddRecord_Test()
         {
             var stream = GetValidStream();
             var connector = new PostgresqlConnector(_logger);
-            //Now do an init again when the DB is created 
-            var result = await connector.InitAsync(stream);
-            Assert.IsTrue(result.Successful);
-            var results = await connector.GetItemsAsync("devoo1", new Core.Models.UIMetaData.ListRequest());
-            foreach(var row in results.Model)
+            AssertSuccessful( await connector.InitAsync(stream));
+            AssertSuccessful(await AddRecord(connector, stream, "DEV001", 100, 100));
+        }
+
+        [TestMethod]
+        public async Task DataStream_Postgres_GetData_Test()
+        {
+            var stream = GetValidStream();
+            var connector = new PostgresqlConnector(_logger);
+            AssertSuccessful(await connector.InitAsync(stream));
+
+
+            var deviceId = "DEV001";
+            const int rowcount = 20;
+
+            for(var idx = 0; idx < rowcount; ++idx)
             {
-                foreach(var key in row.Keys)
-                {
-                    Console.WriteLine($"{key} = {row[key]}");
-                }
+                AssertSuccessful(await AddRecord(connector, stream, deviceId, idx, idx + 100));
             }
 
+            var results = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest());
+            Assert.AreEqual(rowcount, results.Model.Count());
         }
     }
 }
