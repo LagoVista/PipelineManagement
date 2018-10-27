@@ -9,11 +9,11 @@
     <None Remove="LagoVista\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="2.1.459-beta0844" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.459-beta0844" />
-    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="2.1.459-beta0844" />
-    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="2.1.459-beta0844" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.459-beta0844" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.526-beta0717" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.526-beta0717" />
+    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="2.1.526-beta0717" />
+    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="2.1.526-beta0717" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.526-beta0717" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>

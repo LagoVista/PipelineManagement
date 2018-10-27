@@ -26,6 +26,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AzureTableStorage,
         [EnumLabel(DataStream.StreamType_AzureTableStorage_Managed, PipelineAdminResources.Names.DataStream_StreamType_TableStorage_Managed, typeof(PipelineAdminResources))]
         AzureTableStorage_Managed,
+        [EnumLabel(DataStream.StreamType_PostgreSQL, PipelineAdminResources.Names.DataStream_StreamType_PostgreSQL, typeof(PipelineAdminResources))]
+        Postgresql,
         //[EnumLabel(DataStream.StreamType_DataLake, PipelineAdminResources.Names.DataStream_StreamType_DataLake, typeof(PipelineAdminResources))]
         //AzureDataLake,
         [EnumLabel(DataStream.StreamType_SQLServer, PipelineAdminResources.Names.DataStream_StreamType_SQLServer, typeof(PipelineAdminResources))]
@@ -53,6 +55,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string StreamType_AzureEventHub = "azureeventhub";
         public const string StreamType_AzureTableStorage_Managed = "azuretablestoragemanaged";
         public const string StreamType_SQLServer = "sqlserver";
+        public const string StreamType_PostgreSQL = "postgresql";
 
         //public const string StreamType_DataLake = "azuredatalake";
 
@@ -323,7 +326,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             }
             #endregion
 
-            if (StreamType.Value == DataStreamTypes.SQLServer)
+            if (StreamType.Value == DataStreamTypes.SQLServer ||
+                StreamType.Value == DataStreamTypes.Postgresql)
             {
                 if (string.IsNullOrEmpty(DbURL)) result.Errors.Add(new ErrorMessage("URL of database server is required for a database data stream."));
                 if (string.IsNullOrEmpty(DbUserName)) result.Errors.Add(new ErrorMessage("Database User Name is required for a database data stream."));
@@ -338,9 +342,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 {
                     result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
                 }
-
             }
-
 
             #region Azure Type
             if (StreamType.Value == DataStreamTypes.AzureTableStorage)

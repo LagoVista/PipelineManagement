@@ -305,6 +305,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_StreamType_DataLake
 
 		public static string DataStream_StreamType_DataLake { get { return GetResourceString("DataStream_StreamType_DataLake"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_PostgreSQL
+
+		public static string DataStream_StreamType_PostgreSQL { get { return GetResourceString("DataStream_StreamType_PostgreSQL"); } }
 //Resources:PipelineAdminResources:DataStream_StreamType_Select
 
 		public static string DataStream_StreamType_Select { get { return GetResourceString("DataStream_StreamType_Select"); } }
@@ -1148,6 +1151,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_StreamType_AzureEventHub = "DataStream_StreamType_AzureEventHub";
 			public const string DataStream_StreamType_AzureEventHub_Managegd = "DataStream_StreamType_AzureEventHub_Managegd";
 			public const string DataStream_StreamType_DataLake = "DataStream_StreamType_DataLake";
+			public const string DataStream_StreamType_PostgreSQL = "DataStream_StreamType_PostgreSQL";
 			public const string DataStream_StreamType_Select = "DataStream_StreamType_Select";
 			public const string DataStream_StreamType_SQLServer = "DataStream_StreamType_SQLServer";
 			public const string DataStream_StreamType_TableStorage = "DataStream_StreamType_TableStorage";
