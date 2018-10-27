@@ -221,6 +221,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_DbPassword_Help
 
 		public static string DataStream_DbPassword_Help { get { return GetResourceString("DataStream_DbPassword_Help"); } }
+//Resources:PipelineAdminResources:DataStream_DbSchema
+
+		public static string DataStream_DbSchema { get { return GetResourceString("DataStream_DbSchema"); } }
 //Resources:PipelineAdminResources:DataStream_DbURL
 
 		public static string DataStream_DbURL { get { return GetResourceString("DataStream_DbURL"); } }
@@ -1135,6 +1138,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_DbName = "DataStream_DbName";
 			public const string DataStream_DbPassword = "DataStream_DbPassword";
 			public const string DataStream_DbPassword_Help = "DataStream_DbPassword_Help";
+			public const string DataStream_DbSchema = "DataStream_DbSchema";
 			public const string DataStream_DbURL = "DataStream_DbURL";
 			public const string DataStream_DbUrl_InvalidUrl = "DataStream_DbUrl_InvalidUrl";
 			public const string DataStream_DbUserName = "DataStream_DbUserName";

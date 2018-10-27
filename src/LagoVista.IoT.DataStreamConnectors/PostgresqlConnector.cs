@@ -105,7 +105,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             using (var cn = OpenConnection(_stream.DbName))
             using (var cmd = new NpgsqlCommand())
             {
-                cmd.CommandText = $"insert into {_stream.DbTableName} ({fields}) values ({values})";
+                cmd.CommandText = $"insert into {_stream.DbSchema}.{_stream.DbTableName} ({fields}) values ({values})";
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.Connection = cn;
                 foreach (var field in _stream.Fields)
@@ -179,7 +179,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             sql.Append($"{_stream.TimeStampFieldName}");
             foreach (var fld in _stream.Fields)
             {
-                switch(fld.FieldType.Value)
+                switch (fld.FieldType.Value)
                 {
                     case DeviceAdmin.Models.ParameterTypes.GeoLocation:
                         sql.Append($", ST_AsText({fld.FieldName}) out_{fld.FieldName}");
@@ -191,7 +191,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
 
             sql.AppendLine();
-            sql.AppendLine($"  from  {_stream.DbTableName}");
+            sql.AppendLine($"  from  {_stream.DbSchema}.{_stream.DbTableName}");
             sql.AppendLine($"  where {_stream.DeviceIdFieldName} = @deviceId");
 
             if (!String.IsNullOrEmpty(request.NextRowKey))
@@ -272,7 +272,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                                     }
 
 
-                                    if(!resultItem.Keys.Contains(fld.FieldName))
+                                    if (!resultItem.Keys.Contains(fld.FieldName))
                                     {
                                         resultItem.Add(fld.FieldName, null);
                                     }
@@ -282,7 +282,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                                 case DeviceAdmin.Models.ParameterTypes.DateTime:
                                     {
                                         var dtValue = rdr[fld.FieldName] as DateTime?;
-                                        if(dtValue.HasValue)
+                                        if (dtValue.HasValue)
                                         {
                                             resultItem.Add(fld.FieldName, dtValue.Value.ToJSONString());
                                         }
@@ -336,6 +336,12 @@ namespace LagoVista.IoT.DataStreamConnectors
                 return InvokeResult.FromError($"Missing DBName in Postgres Data Stream [{stream.DbName}]");
             }
 
+
+            if (String.IsNullOrEmpty(stream.DbSchema))
+            {
+                return InvokeResult.FromError($"Missing DBSchema Table Name in Postgres Data Stream [{stream.DbName}]");
+            }
+
             if (String.IsNullOrEmpty(stream.DbTableName))
             {
                 return InvokeResult.FromError($"Missing DBName Table Name in Postgres Data Stream [{stream.DbName}]");
@@ -374,6 +380,35 @@ namespace LagoVista.IoT.DataStreamConnectors
 
                 }
 
+                if (stream.AutoCreateSQLTable && !String.IsNullOrEmpty(stream.CreateTableDDL))
+                {
+                    var tableExistQuery = @"SELECT EXISTS (
+   SELECT 1
+   FROM   information_schema.tables 
+   WHERE  table_schema = @dbschema
+   AND    table_name = @table
+   );";
+
+                    using (var conn = OpenConnection())
+                    using (var cmd = new NpgsqlCommand())
+                    {
+                        cmd.Parameters.AddWithValue("@dbschema", stream.DbSchema);
+                        cmd.Parameters.AddWithValue("@table", stream.DbTableName);
+                        cmd.Connection = conn;
+                        cmd.CommandText = tableExistQuery;
+                        var existsResult = (await cmd.ExecuteScalarAsync()) as bool?;
+                        if (existsResult.HasValue && !existsResult.Value == false)
+                        {
+                            cmd.Parameters.Clear();
+                            cmd.CommandText = stream.CreateTableDDL;
+                        }
+                    }
+                }
+
+                if (stream.DbValidateSchema)
+                {
+                    return await ValidateConnectionAsync(stream);
+                }
 
                 return InvokeResult.Success;
             }
@@ -383,8 +418,35 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
         }
 
-        public Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
+        public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
         {
+            var getTableSchemaQuery = @"SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_schema = @schema
+  AND table_name   = @tablename";
+
+
+            using (var conn = OpenConnection())
+            using (var cmd = new NpgsqlCommand())
+            {
+                cmd.Parameters.AddWithValue("@dbschema", stream.DbSchema);
+                cmd.Parameters.AddWithValue("@table", stream.DbTableName);
+                cmd.Connection = conn;
+                cmd.CommandText = getTableSchemaQuery;
+
+                using (var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    while (rdr.Read())
+                    {
+                        var colName = rdr["column_name"].ToString();
+                        var dataType = rdr["data_type"].ToString();
+                        var isNullable = (bool)rdr["is_nullable"];
+
+                        Console.WriteLine($"{colName},{dataType},{isNullable}");
+                    }
+                }
+            }
+
             throw new NotImplementedException();
         }
     }

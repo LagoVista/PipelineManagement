@@ -1144,4 +1144,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStream_CreateTableDDL_Help" xml:space="preserve">
     <value>You can provide DDL that will be executed on the target RDBMS to create the table. This will only be executed one. Currently does not support updating table structure.</value>
   </data>
+  <data name="DataStream_DbSchema" xml:space="preserve">
+    <value>Database Schema</value>
+  </data>
 </root>

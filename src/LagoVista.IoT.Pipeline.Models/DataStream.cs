@@ -32,8 +32,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         //AzureDataLake,
         [EnumLabel(DataStream.StreamType_SQLServer, PipelineAdminResources.Names.DataStream_StreamType_SQLServer, typeof(PipelineAdminResources))]
         SQLServer
-
-
     }
 
     public enum DateStorageFormats
@@ -75,8 +73,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string AzureAccessKeySecureId { get; set; }
         public string DBPasswordSecureId { get; set; }
 
-
-
         public override string ModuleType => PipelineModuleType_DataStream;
 
 
@@ -99,7 +95,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.DataStreamField_DataType_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public EntityHeader<DateStorageFormats> DateStorageFormat { get; set; }
         #endregion
-
 
         #region Amazon Properties
         #region AWS S3 Properties
@@ -161,6 +156,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbPassword, HelpResource: PipelineAdminResources.Names.DataStream_DbPassword_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbPassword { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbSchema, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string DbSchema { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbName { get; set; }
@@ -348,6 +346,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
                 }
             }
+
+            if (StreamType.Value == DataStreamTypes.Postgresql)
+            {
+                if (string.IsNullOrEmpty(DbSchema)) result.Errors.Add(new ErrorMessage("Database Schema is required for a Postgres database."));
+            }
+
 
             #region Azure Type
             if (StreamType.Value == DataStreamTypes.AzureTableStorage)
