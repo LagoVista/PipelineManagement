@@ -27,12 +27,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             _dataStreamRepo = dataStreamRepo;
             _secureStorage = secureStorage;
             _defaultConnectionSettings = defaultConnectionSettings;
-        }        
+        }
 
         public async Task<InvokeResult> AddDataStreamAsync(DataStream stream, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(stream, AuthorizeResult.AuthorizeActions.Create, user, org);
-            if(stream.StreamType.Value == DataStreamTypes.AzureTableStorage_Managed)
+            if (stream.StreamType.Value == DataStreamTypes.AzureTableStorage_Managed)
             {
                 stream.AzureStorageAccountName = _defaultConnectionSettings.DefaultInternalDataStreamConnectionSettingsTableStorage.AccountId;
                 stream.AzureAccessKey = _defaultConnectionSettings.DefaultInternalDataStreamConnectionSettingsTableStorage.AccessKey;
@@ -72,7 +72,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     throw new Exception("Validation should have cut null or empty AWSSecretKey, but it did not.");
                 }
             }
-            else if (stream.StreamType.Value == DataStreamTypes.SQLServer)
+            else if (stream.StreamType.Value == DataStreamTypes.SQLServer ||
+                     stream.StreamType.Value == DataStreamTypes.Postgresql)
             {
                 if (!String.IsNullOrEmpty(stream.DbPassword))
                 {
@@ -88,7 +89,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             }
             else
             {
-                throw new Exception("New data stream type was added, should likely add something here to store credentials.");
+                throw new Exception("New data stream Type was added, should likely add something here to store credentials.");
             }
 
 
@@ -103,8 +104,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             try
             {
                 var stream = await _dataStreamRepo.GetDataStreamAsync(id);
-
-
 
                 if (stream.StreamType.Value == DataStreamTypes.AzureBlob ||
                     stream.StreamType.Value == DataStreamTypes.AzureEventHub ||
@@ -134,7 +133,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
                     stream.AwsSecretKey = awsSecretKeyResult.Result;
                 }
-                else if (stream.StreamType.Value == DataStreamTypes.SQLServer)
+                else if (stream.StreamType.Value == DataStreamTypes.SQLServer ||
+                         stream.StreamType.Value == DataStreamTypes.Postgresql)
                 {
                     if (String.IsNullOrEmpty(stream.DBPasswordSecureId))
                     {
@@ -233,7 +233,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     stream.AwsSecretKey = null;
                 }
             }
-            else if(stream.StreamType.Value == DataStreamTypes.SQLServer)
+            else if(stream.StreamType.Value == DataStreamTypes.SQLServer ||
+                    stream.StreamType.Value == DataStreamTypes.Postgresql)
             {
                 if (!String.IsNullOrEmpty(stream.DbPassword))
                 {

@@ -170,7 +170,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_DbUrl_InvalidUrl, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbURL { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[\p{L}_][\p{L}\p{N}@$#_]{0,127}$", FieldType: FieldTypes.Text,
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableName, ValidationRegEx: @"^[a-zA-Z0-9_]{0,127}$", FieldType: FieldTypes.Text,
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]
         public string DbTableName { get; set; }
 
@@ -239,7 +239,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 AWSSecretKeySecureId = null;
             }
 
-            if (StreamType.Value != DataStreamTypes.SQLServer)
+            if (StreamType.Value != DataStreamTypes.SQLServer &&
+                StreamType.Value != DataStreamTypes.Postgresql)
             {
                 DbName = null;
                 DbPassword = null;

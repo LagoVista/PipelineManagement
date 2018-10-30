@@ -46,6 +46,11 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         private NpgsqlConnection OpenConnection(String dbName = null)
         {
+            if(_stream == null)
+            {
+                throw new Exception("Please call init before attempting to open a connection.");
+            }
+
             var connString = $"Host={_stream.DbURL};Username={_stream.DbUserName};Password={_stream.DbPassword};";// ;
             if (!String.IsNullOrEmpty(dbName))
             {
@@ -319,33 +324,33 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             if (String.IsNullOrEmpty(stream.DbURL))
             {
-                return InvokeResult.FromError($"Missing DbUrl in Postgres Data Stream [{stream.DbName}]");
+                return InvokeResult.FromError($"Missing DbUrl in Postgres Data Stream [{stream.Name}]");
             }
 
             if (String.IsNullOrEmpty(stream.DbUserName))
             {
-                return InvokeResult.FromError($"Missing DbUserName in Postgres Data Stream [{stream.DbName}]");
+                return InvokeResult.FromError($"Missing DbUserName in Postgres Data Stream [{stream.Name}]");
             }
 
             if (String.IsNullOrEmpty(stream.DbPassword))
             {
-                return InvokeResult.FromError($"Missing DBPassword in Postgres Data Stream [{stream.DbName}]");
+                return InvokeResult.FromError($"Missing DBPassword in Postgres Data Stream [{stream.Name}]");
             }
 
             if (String.IsNullOrEmpty(stream.DbName))
             {
-                return InvokeResult.FromError($"Missing DBName in Postgres Data Stream [{stream.DbName}]");
+                return InvokeResult.FromError($"Missing DBName in Postgres Data Stream [{stream.Name}]");
             }
 
 
             if (String.IsNullOrEmpty(stream.DbSchema))
             {
-                return InvokeResult.FromError($"Missing DBSchema Table Name in Postgres Data Stream [{stream.DbName}]");
+                return InvokeResult.FromError($"Missing DBSchema Table Name in Postgres Data Stream [{stream.Name}]");
             }
 
             if (String.IsNullOrEmpty(stream.DbTableName))
             {
-                return InvokeResult.FromError($"Missing DBName Table Name in Postgres Data Stream [{stream.DbName}]");
+                return InvokeResult.FromError($"Missing DBName Table Name in Postgres Data Stream [{stream.Name}]");
             }
 
             _stream = stream;
@@ -409,7 +414,7 @@ namespace LagoVista.IoT.DataStreamConnectors
 
                 if (stream.DbValidateSchema)
                 {
-                    return await ValidateConnectionAsync(stream);
+                    return await PerformValidationAsync(stream);
                 }
 
                 return InvokeResult.Success;
@@ -422,7 +427,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
         }
 
-        public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
+        private async Task<InvokeResult> PerformValidationAsync(DataStream stream)
         {
             var getTableSchemaQuery = @"SELECT column_name, data_type, is_nullable
 FROM information_schema.columns
@@ -444,7 +449,6 @@ WHERE table_schema = @dbschema
                 {
                     while (rdr.Read())
                     {
-
                         fields.Add(new SQLFieldMetaData()
                         {
                             ColumnName = rdr["column_name"].ToString(),
@@ -467,6 +471,20 @@ WHERE table_schema = @dbschema
             }
 
             return result;
+        }
+
+        public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
+        {
+            var result  = await this.InitAsync(stream);
+            // If we don't automatically validate within the stream do so manually here.
+            if (!stream.DbValidateSchema)
+            {                
+                return await PerformValidationAsync(stream);
+            }
+            else
+            {
+                return result;
+            }
         }
     }
 }

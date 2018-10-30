@@ -115,8 +115,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         [HttpGet("/api/datastream/{id}/testconnection")]
         public async Task<InvokeResult> ValidateDataStreamAsync(string id)
         {
-            var stream = await _dataStreamManager.GetDataStreamAsync(id, OrgEntityHeader, UserEntityHeader);
-            return await DataStreamValidator.ValidateDataStreamAsync(stream, _adminlogger);
+            var stream = await _dataStreamManager.LoadFullDataStreamConfigurationAsync(id, OrgEntityHeader, UserEntityHeader);
+            if (!stream.Successful) return stream.ToInvokeResult();
+
+            return await DataStreamValidator.ValidateDataStreamAsync(stream.Result, _adminlogger);
         }
 
         /// <summary>
