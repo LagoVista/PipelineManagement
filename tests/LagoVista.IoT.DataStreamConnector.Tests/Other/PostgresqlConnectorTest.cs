@@ -7,6 +7,7 @@ using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
     {
         DataStream _currentStream;
         IInstanceLogger _logger;
-        
+
         private DataStream GetValidStream()
         {
             if (_currentStream != null)
@@ -40,7 +41,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                 AutoCreateSQLTable = true,
                 CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
-                DbURL = System.Environment.GetEnvironmentVariable("PS_DB_URL"),                
+                DbURL = System.Environment.GetEnvironmentVariable("PS_DB_URL"),
                 DbUserName = System.Environment.GetEnvironmentVariable("PS_DB_USER_NAME"),
                 DbPassword = System.Environment.GetEnvironmentVariable("PS_DB_PASSWORD"),
                 DbName = "testing",
@@ -144,7 +145,7 @@ CREATE TABLE if not exists public.information (
 
             using (var conn = new NpgsqlConnection(connString))
             {
-                
+
                 using (var cmd = new NpgsqlCommand())
                 {
                     conn.Open();
@@ -186,7 +187,7 @@ CREATE TABLE if not exists public.information (
 
         [TestMethod]
         public async Task DataStream_Postgres_InitTest_ExistingDB()
-        {            
+        {
             var stream = GetValidStream();
 
             /* First time through it will create the DB */
@@ -202,8 +203,8 @@ CREATE TABLE if not exists public.information (
         private async Task<InvokeResult> AddRecord(PostgresqlConnector connector, DataStream stream, String deviceId, int int1, int int2)
         {
             var record = GetRecord(stream, deviceId, DateTime.Now.ToJSONString(),
-                new System.Collections.Generic.KeyValuePair<string, object>("int1", 200),
-                new System.Collections.Generic.KeyValuePair<string, object>("int2", 300),
+                new System.Collections.Generic.KeyValuePair<string, object>("int1", int1),
+                new System.Collections.Generic.KeyValuePair<string, object>("int2", int2),
                 new System.Collections.Generic.KeyValuePair<string, object>("datetime1", DateTime.Now.ToJSONString()),
                 new System.Collections.Generic.KeyValuePair<string, object>("dec1", 12.2),
                 new System.Collections.Generic.KeyValuePair<string, object>("str1", "value"),
@@ -220,7 +221,7 @@ CREATE TABLE if not exists public.information (
         {
             var stream = GetValidStream();
             var connector = new PostgresqlConnector(_logger);
-            AssertSuccessful( await connector.InitAsync(stream));
+            AssertSuccessful(await connector.InitAsync(stream));
             AssertSuccessful(await AddRecord(connector, stream, "DEV001", 100, 100));
         }
 
@@ -235,13 +236,76 @@ CREATE TABLE if not exists public.information (
             var deviceId = "DEV001";
             const int rowcount = 20;
 
-            for(var idx = 0; idx < rowcount; ++idx)
+            for (var idx = 0; idx < rowcount; ++idx)
             {
                 AssertSuccessful(await AddRecord(connector, stream, deviceId, idx, idx + 100));
             }
 
             var results = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest());
             Assert.AreEqual(rowcount, results.Model.Count());
+        }
+
+        [TestMethod]
+        public async Task DataStream_Postgres_GetDataTest_Test()
+        {
+            var stream = GetValidStream();
+            var connector = new PostgresqlConnector(_logger);
+            AssertSuccessful(await connector.InitAsync(stream));
+
+            var deviceId = "DEV001";
+            const int rowcount = 20;
+
+            for (var idx = 0; idx < rowcount; ++idx)
+            {
+                AssertSuccessful(await AddRecord(connector, stream, deviceId, idx, idx + 100));
+            }
+
+            var filteredItems = new Dictionary<string, object>()
+            {
+                    {"int1", 5 },
+            };
+
+            var results = await connector.GetItemsAsync(deviceId, filteredItems, new Core.Models.UIMetaData.ListRequest());
+            Assert.AreEqual(1, results.Model.Count());
+            Assert.AreEqual(5, results.Model.First()["int1"]);
+        }
+
+        [TestMethod]
+        public async Task DataStream_Postgres_UpdateItem_Test()
+        {
+            var stream = GetValidStream();
+            var connector = new PostgresqlConnector(_logger);
+            AssertSuccessful(await connector.InitAsync(stream));
+
+            var deviceId = "DEV001";
+
+            AssertSuccessful(await AddRecord(connector, stream, deviceId, 100, 356));
+
+            var filteredItems = new Dictionary<string, object>()
+            {
+                    {"deviceid", deviceId },
+                    {"int2", 356 },
+            };
+
+
+            var results = await connector.GetItemsAsync(deviceId, filteredItems, new Core.Models.UIMetaData.ListRequest());
+            Assert.AreEqual(1, results.Model.Count());
+            Assert.AreEqual(100, results.Model.First()["int1"]);
+
+            var updatedItems = new Dictionary<string, object>()
+            {
+                {"int1", 53 },
+                {"dec1", 12.5 },
+                {"str1", 12.5 },
+
+            };
+
+            await connector.UpdateItem(updatedItems, filteredItems);
+
+            results = await connector.GetItemsAsync(deviceId, filteredItems, new Core.Models.UIMetaData.ListRequest());
+            Assert.AreEqual(1, results.Model.Count());
+            Assert.AreEqual(53, results.Model.First()["int1"]);
+
         }
     }
 }

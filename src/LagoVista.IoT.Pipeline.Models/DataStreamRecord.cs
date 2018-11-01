@@ -12,6 +12,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         }
 
         public string StreamId { get; set; }
+        public string StreamKey { get; set; }
 
         public string Timestamp { get; set; }
 

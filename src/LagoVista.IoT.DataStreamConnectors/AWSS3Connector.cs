@@ -2,6 +2,7 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using LagoVista.Core;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
@@ -9,6 +10,7 @@ using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.DataStreamConnectors
@@ -121,6 +123,16 @@ namespace LagoVista.IoT.DataStreamConnectors
         public Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
             throw new NotSupportedException("Reading a list of items from amazon S3 is not supported.");
+        }
+
+        public Task<InvokeResult> UpdateItem(Dictionary<string, object> item, Dictionary<string, object> recordFilter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> filter, ListRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

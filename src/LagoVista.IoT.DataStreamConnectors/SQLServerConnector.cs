@@ -10,6 +10,7 @@ using LagoVista.Core;
 using System.Data.SqlClient;
 using System.Data;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -282,6 +283,16 @@ from sysobjects a
             }
 
             return response;
+        }
+
+        public Task<InvokeResult> UpdateItem(Dictionary<string, object> item, Dictionary<string, object> recordFilter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> filter, ListRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

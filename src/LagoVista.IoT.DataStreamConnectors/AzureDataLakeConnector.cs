@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Validation;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using System;
@@ -38,6 +39,16 @@ namespace LagoVista.IoT.DataStreamConnectors
         }
 
         public  Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<InvokeResult> UpdateItem(Dictionary<string, object> item, Dictionary<string, object> recordFilter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> filter, ListRequest request)
         {
             throw new NotImplementedException();
         }

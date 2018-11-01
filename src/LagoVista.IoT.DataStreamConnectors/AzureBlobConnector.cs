@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
@@ -8,6 +9,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.DataStreamConnectors
@@ -134,5 +136,14 @@ namespace LagoVista.IoT.DataStreamConnectors
             throw new NotSupportedException("Reading a list of items from azure blob storage is not supported.");
         }
 
+        public Task<InvokeResult> UpdateItem(Dictionary<string, object> item, Dictionary<string, object> recordFilter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> filter, ListRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

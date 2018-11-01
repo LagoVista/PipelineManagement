@@ -218,5 +218,15 @@ namespace LagoVista.IoT.DataStreamConnectors
                 }
             }
         }
+
+        public Task<InvokeResult> UpdateItem(Dictionary<string, object> item, Dictionary<string, object> recordFilter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> filter, ListRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -12,7 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static LagoVista.IoT.DataStreamConnectors.SQLServerConnector;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -46,7 +45,7 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         private NpgsqlConnection OpenConnection(String dbName = null)
         {
-            if(_stream == null)
+            if (_stream == null)
             {
                 throw new Exception("Please call init before attempting to open a connection.");
             }
@@ -174,150 +173,9 @@ namespace LagoVista.IoT.DataStreamConnectors
             return InvokeResult.Success;
         }
 
-        public async Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, ListRequest request)
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, ListRequest request)
         {
-            var sql = new StringBuilder("select ");
-            if (request.PageSize == 0)
-            {
-                request.PageSize = 50;
-            }
-
-            sql.Append($"{_stream.TimeStampFieldName}");
-            foreach (var fld in _stream.Fields)
-            {
-                switch (fld.FieldType.Value)
-                {
-                    case DeviceAdmin.Models.ParameterTypes.GeoLocation:
-                        sql.Append($", ST_AsText({fld.FieldName}) out_{fld.FieldName}");
-                        break;
-                    default:
-                        sql.Append($", {fld.FieldName}");
-                        break;
-                }
-            }
-
-            sql.AppendLine();
-            sql.AppendLine($"  from  {_stream.DbSchema}.{_stream.DbTableName}");
-            sql.AppendLine($"  where {_stream.DeviceIdFieldName} = @deviceId");
-
-            if (!String.IsNullOrEmpty(request.NextRowKey))
-            {
-                sql.AppendLine($"  and {_stream.TimeStampFieldName} < @lastDateStamp");
-            }
-
-            if (!String.IsNullOrEmpty(request.StartDate))
-            {
-                sql.AppendLine($"  and {_stream.TimeStampFieldName} >= @startDateStamp");
-            }
-
-            if (!String.IsNullOrEmpty(request.EndDate))
-            {
-                sql.AppendLine($"  and {_stream.TimeStampFieldName} <= @endDateStamp");
-            }
-
-            sql.AppendLine($"  order by {_stream.TimeStampFieldName} desc");
-            sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * request.PageIndex} ");
-
-            Console.WriteLine(sql.ToString());
-
-            var responseItems = new List<DataStreamResult>();
-
-
-            using (var cn = OpenConnection(_stream.DbName))
-            using (var cmd = new NpgsqlCommand())
-            {
-                cmd.Connection = cn;
-                cmd.CommandText = sql.ToString();
-                Console.WriteLine(cmd.CommandText);
-                cmd.Parameters.AddWithValue("@deviceId", deviceId);
-
-                if (!String.IsNullOrEmpty(request.NextRowKey))
-                {
-                    cmd.Parameters.AddWithValue($"@lastDateStamp", request.NextRowKey.ToDateTime());
-                }
-
-                if (!String.IsNullOrEmpty(request.StartDate))
-                {
-                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
-                }
-
-                if (!String.IsNullOrEmpty(request.EndDate))
-                {
-                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
-                }
-
-                cmd.CommandType = System.Data.CommandType.Text;
-
-                using (var rdr = await cmd.ExecuteReaderAsync())
-                {
-                    while (rdr.Read())
-                    {
-                        var resultItem = new DataStreamResult();
-                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimeStampFieldName]).ToJSONString();
-
-                        foreach (var fld in _stream.Fields)
-                        {
-                            switch (fld.FieldType.Value)
-                            {
-                                case DeviceAdmin.Models.ParameterTypes.GeoLocation:
-                                    var result = rdr[$"out_{fld.FieldName}"] as String;
-                                    if (!String.IsNullOrEmpty(result))
-                                    {
-                                        var reg = new Regex(@"^POINT\((?'lat'[\d\.\-]{2,14}) (?'lon'[\d\.\-]{2,14})\)$");
-                                        var regMatch = reg.Match(result);
-                                        if (regMatch.Success && regMatch.Groups.Count == 3)
-                                        {
-                                            var strLat = regMatch.Groups[1];
-                                            var strLon = regMatch.Groups[2];
-                                            if (double.TryParse(strLat.Value, out double lat) &&
-                                               double.TryParse(strLat.Value, out double lon))
-                                            {
-                                                resultItem.Add(fld.FieldName, $"{lat:0.0000000},{lon:0.0000000}");
-                                            }
-                                        }
-                                    }
-
-
-                                    if (!resultItem.Keys.Contains(fld.FieldName))
-                                    {
-                                        resultItem.Add(fld.FieldName, null);
-                                    }
-
-                                    break;
-
-                                case DeviceAdmin.Models.ParameterTypes.DateTime:
-                                    {
-                                        var dtValue = rdr[fld.FieldName] as DateTime?;
-                                        if (dtValue.HasValue)
-                                        {
-                                            resultItem.Add(fld.FieldName, dtValue.Value.ToJSONString());
-                                        }
-                                    }
-
-                                    break;
-
-                                default:
-                                    resultItem.Add(fld.FieldName, rdr[fld.FieldName]);
-                                    break;
-                            }
-                        }
-
-                        responseItems.Add(resultItem);
-                    }
-                }
-            }
-
-            var response = new Core.Models.UIMetaData.ListResponse<DataStreamResult>();
-            response.Model = responseItems;
-            response.PageSize = responseItems.Count;
-            response.PageIndex = request.PageIndex;
-            response.HasMoreRecords = responseItems.Count == request.PageSize;
-            if (response.HasMoreRecords)
-            {
-                response.NextRowKey = responseItems.Last().Timestamp;
-            }
-
-            return response;
+            return GetItemsAsync(deviceId, new Dictionary<string, object>(), request);
         }
 
         public async Task<InvokeResult> InitAsync(DataStream stream)
@@ -475,16 +333,232 @@ WHERE table_schema = @dbschema
 
         public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
         {
-            var result  = await this.InitAsync(stream);
+            var result = await this.InitAsync(stream);
             // If we don't automatically validate within the stream do so manually here.
             if (!stream.DbValidateSchema)
-            {                
+            {
                 return await PerformValidationAsync(stream);
             }
             else
             {
                 return result;
             }
+        }
+
+        public async Task<InvokeResult> UpdateItem(Dictionary<string, object> items, Dictionary<string, object> recordFilter)
+        {
+            var first = true;
+            var sql = new StringBuilder();
+            sql.AppendLine($"update {_stream.DbSchema}.{_stream.DbTableName}");
+            sql.Append($"  set ");
+            foreach (var item in items)
+            {
+                if (!first)
+                {
+                    sql.Append(", ");
+                }
+
+                sql.Append($" {item.Key} = @{item.Key}");
+                first = false;
+            }
+
+            sql.AppendLine();
+
+            first = true;
+            
+            foreach(var filter in recordFilter)
+            {
+                if(first)
+                {
+                    sql.Append(@" where ");
+                }
+                else
+                {
+                    sql.Append(@" and ");
+                }
+                sql.AppendLine($" {filter.Key} = @parm{filter.Key} ");
+                first = false;
+            }
+
+            Console.WriteLine(sql.ToString());
+
+            using (var cn = OpenConnection(_stream.DbName))
+            using (var cmd = new NpgsqlCommand())
+            {
+                cmd.Connection = cn;
+                cmd.CommandText = sql.ToString();
+
+                foreach(var item in items)
+                {
+                    cmd.Parameters.AddWithValue($"@{item.Key}", item.Value);
+                }
+
+                foreach(var parm in recordFilter)
+                {
+                    cmd.Parameters.AddWithValue($"@parm{parm.Key}", parm.Value);
+                }
+
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+
+            return InvokeResult.Success;
+        }
+
+        public async Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> filter, ListRequest request)
+        {
+            var sql = new StringBuilder("select ");
+            if (request.PageSize == 0)
+            {
+                request.PageSize = 50;
+            }
+
+            sql.Append($"{_stream.TimeStampFieldName}");
+            foreach (var fld in _stream.Fields)
+            {
+                switch (fld.FieldType.Value)
+                {
+                    case DeviceAdmin.Models.ParameterTypes.GeoLocation:
+                        sql.Append($", ST_AsText({fld.FieldName}) out_{fld.FieldName}");
+                        break;
+                    default:
+                        sql.Append($", {fld.FieldName}");
+                        break;
+                }
+            }
+
+            sql.AppendLine();
+            sql.AppendLine($"  from  {_stream.DbSchema}.{_stream.DbTableName}");
+            sql.AppendLine($"  where {_stream.DeviceIdFieldName} = @deviceId");
+
+            if (!String.IsNullOrEmpty(request.NextRowKey))
+            {
+                sql.AppendLine($"  and {_stream.TimeStampFieldName} < @lastDateStamp");
+            }
+
+            if (!String.IsNullOrEmpty(request.StartDate))
+            {
+                sql.AppendLine($"  and {_stream.TimeStampFieldName} >= @startDateStamp");
+            }
+
+            if (!String.IsNullOrEmpty(request.EndDate))
+            {
+                sql.AppendLine($"  and {_stream.TimeStampFieldName} <= @endDateStamp");
+            }
+
+            foreach (var filterItem in filter)
+            {
+                sql.AppendLine($"  and {filterItem.Key} = @parm{filterItem.Key}");
+            }
+
+            sql.AppendLine($"  order by {_stream.TimeStampFieldName} desc");
+            sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * request.PageIndex} ");
+
+            Console.WriteLine(sql.ToString());
+
+            var responseItems = new List<DataStreamResult>();
+
+
+            using (var cn = OpenConnection(_stream.DbName))
+            using (var cmd = new NpgsqlCommand())
+            {
+                cmd.Connection = cn;
+                cmd.CommandText = sql.ToString();
+                Console.WriteLine(cmd.CommandText);
+                cmd.Parameters.AddWithValue("@deviceId", deviceId);
+
+                if (!String.IsNullOrEmpty(request.NextRowKey))
+                {
+                    cmd.Parameters.AddWithValue($"@lastDateStamp", request.NextRowKey.ToDateTime());
+                }
+
+                if (!String.IsNullOrEmpty(request.StartDate))
+                {
+                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
+                }
+
+                if (!String.IsNullOrEmpty(request.EndDate))
+                {
+                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+                }
+
+                foreach (var filterItem in filter)
+                {
+                    cmd.Parameters.AddWithValue($"@parm{filterItem.Key}", filterItem.Value);
+                }
+
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                using (var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    while (rdr.Read())
+                    {
+                        var resultItem = new DataStreamResult();
+                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimeStampFieldName]).ToJSONString();
+
+                        foreach (var fld in _stream.Fields)
+                        {
+                            switch (fld.FieldType.Value)
+                            {
+                                case DeviceAdmin.Models.ParameterTypes.GeoLocation:
+                                    var result = rdr[$"out_{fld.FieldName}"] as String;
+                                    if (!String.IsNullOrEmpty(result))
+                                    {
+                                        var reg = new Regex(@"^POINT\((?'lat'[\d\.\-]{2,14}) (?'lon'[\d\.\-]{2,14})\)$");
+                                        var regMatch = reg.Match(result);
+                                        if (regMatch.Success && regMatch.Groups.Count == 3)
+                                        {
+                                            var strLat = regMatch.Groups[1];
+                                            var strLon = regMatch.Groups[2];
+                                            if (double.TryParse(strLat.Value, out double lat) &&
+                                               double.TryParse(strLat.Value, out double lon))
+                                            {
+                                                resultItem.Add(fld.FieldName, $"{lat:0.0000000},{lon:0.0000000}");
+                                            }
+                                        }
+                                    }
+
+
+                                    if (!resultItem.Keys.Contains(fld.FieldName))
+                                    {
+                                        resultItem.Add(fld.FieldName, null);
+                                    }
+
+                                    break;
+
+                                case DeviceAdmin.Models.ParameterTypes.DateTime:
+                                    {
+                                        var dtValue = rdr[fld.FieldName] as DateTime?;
+                                        if (dtValue.HasValue)
+                                        {
+                                            resultItem.Add(fld.FieldName, dtValue.Value.ToJSONString());
+                                        }
+                                    }
+
+                                    break;
+
+                                default:
+                                    resultItem.Add(fld.FieldName, rdr[fld.FieldName]);
+                                    break;
+                            }
+                        }
+
+                        responseItems.Add(resultItem);
+                    }
+                }
+            }
+
+            var response = new Core.Models.UIMetaData.ListResponse<DataStreamResult>();
+            response.Model = responseItems;
+            response.PageSize = responseItems.Count;
+            response.PageIndex = request.PageIndex;
+            response.HasMoreRecords = responseItems.Count == request.PageSize;
+            if (response.HasMoreRecords)
+            {
+                response.NextRowKey = responseItems.Last().Timestamp;
+            }
+
+            return response;
         }
     }
 }

@@ -115,12 +115,21 @@ namespace LagoVista.IoT.DataStreamConnectors
             return ExecWithRetry(TableOperation.Insert(tsItem));
         }
 
-        public async Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
+        {
+            return GetItemsAsync(deviceId, new Dictionary<string, object>(), request);
+        }
+
+        public Task<InvokeResult> UpdateItem(Dictionary<string, object> item, Dictionary<string, object> recordFilter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> additionalFilter, ListRequest request)
         {
             var filter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.PartitionKey), QueryComparisons.Equal, deviceId);
 
             var dateFilter = String.Empty;
-
 
             /* FYI - less than and greater than are reversed because the data is inserted wiht row keys in descending order */
             if (!String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.EndDate))
@@ -207,7 +216,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                         resultSet.Add(result);
                     }
 
-                  
+
                     listResponse.Model = resultSet;
 
                     return listResponse;
@@ -217,6 +226,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                     if (retryCount == numberRetries)
                     {
                         _logger.AddException("AzureTableStorageConnector_GetItemsAsync", ex);
+                        return ListResponse<DataStreamResult>.FromError(ex.Message);
                     }
                     else
                     {
@@ -229,8 +239,9 @@ namespace LagoVista.IoT.DataStreamConnectors
                 }
             }
 
-            return null;
+            _logger.AddException("AzureTableStorageConnector_GetItemsAsync", new Exception("Unexpected end of method"));
+            return ListResponse<DataStreamResult>.FromError("Unexpected end of method.");
         }
-
     }
 }
+ 

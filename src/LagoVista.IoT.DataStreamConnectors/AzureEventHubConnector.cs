@@ -9,6 +9,7 @@ using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.Azure.EventHubs;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -114,5 +115,14 @@ namespace LagoVista.IoT.DataStreamConnectors
             throw new NotSupportedException("Azure Event Hub does not support reading.");
         }
 
+        public Task<InvokeResult> UpdateItem(Dictionary<string, object> item, Dictionary<string, object> recordFilter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> filter, ListRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
