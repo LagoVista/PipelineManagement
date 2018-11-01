@@ -290,7 +290,7 @@ from sysobjects a
             throw new NotImplementedException();
         }
 
-        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> filter, ListRequest request)
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(Dictionary<string, object> filter, ListRequest request)
         {
             throw new NotImplementedException();
         }

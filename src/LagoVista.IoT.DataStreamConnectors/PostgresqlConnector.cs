@@ -175,7 +175,9 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, ListRequest request)
         {
-            return GetItemsAsync(deviceId, new Dictionary<string, object>(), request);
+            var filter = new Dictionary<string, object>();
+            filter.Add(_stream.DeviceIdFieldName, deviceId);
+            return GetItemsAsync(filter, request);
         }
 
         public async Task<InvokeResult> InitAsync(DataStream stream)
@@ -405,7 +407,7 @@ WHERE table_schema = @dbschema
             return InvokeResult.Success;
         }
 
-        public async Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, Dictionary<string, object> filter, ListRequest request)
+        public async Task<ListResponse<DataStreamResult>> GetItemsAsync(Dictionary<string, object> filter, ListRequest request)
         {
             var sql = new StringBuilder("select ");
             if (request.PageSize == 0)
@@ -429,7 +431,7 @@ WHERE table_schema = @dbschema
 
             sql.AppendLine();
             sql.AppendLine($"  from  {_stream.DbSchema}.{_stream.DbTableName}");
-            sql.AppendLine($"  where {_stream.DeviceIdFieldName} = @deviceId");
+            sql.AppendLine($"  where 1 = 1"); /* just used to establish a where clause we can use by appending "and x = y" */
 
             if (!String.IsNullOrEmpty(request.NextRowKey))
             {
@@ -465,7 +467,6 @@ WHERE table_schema = @dbschema
                 cmd.Connection = cn;
                 cmd.CommandText = sql.ToString();
                 Console.WriteLine(cmd.CommandText);
-                cmd.Parameters.AddWithValue("@deviceId", deviceId);
 
                 if (!String.IsNullOrEmpty(request.NextRowKey))
                 {

@@ -265,7 +265,7 @@ CREATE TABLE if not exists public.information (
                     {"int1", 5 },
             };
 
-            var results = await connector.GetItemsAsync(deviceId, filteredItems, new Core.Models.UIMetaData.ListRequest());
+            var results = await connector.GetItemsAsync(filteredItems, new Core.Models.UIMetaData.ListRequest());
             Assert.AreEqual(1, results.Model.Count());
             Assert.AreEqual(5, results.Model.First()["int1"]);
         }
@@ -288,7 +288,7 @@ CREATE TABLE if not exists public.information (
             };
 
 
-            var results = await connector.GetItemsAsync(deviceId, filteredItems, new Core.Models.UIMetaData.ListRequest());
+            var results = await connector.GetItemsAsync(filteredItems, new Core.Models.UIMetaData.ListRequest());
             Assert.AreEqual(1, results.Model.Count());
             Assert.AreEqual(100, results.Model.First()["int1"]);
 
@@ -302,7 +302,7 @@ CREATE TABLE if not exists public.information (
 
             await connector.UpdateItem(updatedItems, filteredItems);
 
-            results = await connector.GetItemsAsync(deviceId, filteredItems, new Core.Models.UIMetaData.ListRequest());
+            results = await connector.GetItemsAsync(filteredItems, new Core.Models.UIMetaData.ListRequest());
             Assert.AreEqual(1, results.Model.Count());
             Assert.AreEqual(53, results.Model.First()["int1"]);
 
