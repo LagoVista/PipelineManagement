@@ -451,6 +451,7 @@ WHERE table_schema = @dbschema
             foreach (var filterItem in filter)
             {
                 sql.AppendLine($"  and {filterItem.Key} = @parm{filterItem.Key}");
+                
             }
 
             sql.AppendLine($"  order by {_stream.TimeStampFieldName} desc");
@@ -458,8 +459,9 @@ WHERE table_schema = @dbschema
 
             Console.WriteLine(sql.ToString());
 
-            var responseItems = new List<DataStreamResult>();
+            _logger.AddCustomEvent(LogLevel.Message, "GetItemsAsync", sql.ToString());
 
+            var responseItems = new List<DataStreamResult>();
 
             using (var cn = OpenConnection(_stream.DbName))
             using (var cmd = new NpgsqlCommand())
@@ -486,6 +488,7 @@ WHERE table_schema = @dbschema
                 foreach (var filterItem in filter)
                 {
                     cmd.Parameters.AddWithValue($"@parm{filterItem.Key}", filterItem.Value);
+                    _logger.AddCustomEvent(LogLevel.Message, "GetItemsAsync", $"{filterItem.Key} - {filterItem.Value}");
                 }
 
                 cmd.CommandType = System.Data.CommandType.Text;
