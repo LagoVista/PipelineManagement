@@ -455,11 +455,7 @@ WHERE table_schema = @dbschema
             }
 
             sql.AppendLine($"  order by {_stream.TimeStampFieldName} desc");
-            sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * request.PageIndex} ");
-
-            Console.WriteLine(sql.ToString());
-
-            _logger.AddCustomEvent(LogLevel.Message, "GetItemsAsync", sql.ToString());
+            sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * request.PageIndex - 1} ");
 
             var responseItems = new List<DataStreamResult>();
 
@@ -488,7 +484,6 @@ WHERE table_schema = @dbschema
                 foreach (var filterItem in filter)
                 {
                     cmd.Parameters.AddWithValue($"@parm{filterItem.Key}", filterItem.Value);
-                    _logger.AddCustomEvent(LogLevel.Message, "GetItemsAsync", $"{filterItem.Key} - {filterItem.Value}");
                 }
 
                 cmd.CommandType = System.Data.CommandType.Text;

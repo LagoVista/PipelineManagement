@@ -246,7 +246,7 @@ from sysobjects a
             {
                 cmd.Parameters.AddWithValue("@deviceId", deviceId);
                 cmd.Parameters.AddWithValue("@PageSize", request.PageSize);
-                cmd.Parameters.AddWithValue("@PageIndex", request.PageIndex);
+                cmd.Parameters.AddWithValue("@PageIndex", request.PageIndex - 1);
 
                 if (!String.IsNullOrEmpty(request.NextRowKey)) cmd.Parameters.AddWithValue($"@lastDateStamp", request.NextRowKey.ToDateTime());
                 if (!String.IsNullOrEmpty(request.StartDate)) cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
