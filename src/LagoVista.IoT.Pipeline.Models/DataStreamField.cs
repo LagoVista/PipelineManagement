@@ -24,7 +24,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Notes, FieldType: FieldTypes.MultiLineText,  ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string Notes { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_FieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_FieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9_-]{1,64}$",
              RegExValidationMessageResource: PipelineAdminResources.Names.DataStreamField_FieldName_Invalid, HelpResource: PipelineAdminResources.Names.DataStreamField_FieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string FieldName { get; set; }
 

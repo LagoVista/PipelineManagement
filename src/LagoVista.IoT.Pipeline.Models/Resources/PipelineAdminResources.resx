@@ -1112,7 +1112,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Container names can only contain lower case letters, numbers, and hyphens, and must begin with a letter or number. The name can't contain consecutive hypens.</value>
   </data>
   <data name="DataStreamField_FieldName_Invalid" xml:space="preserve">
-    <value>Invalid format on the name used for your data stream field.  The name must be between 3 and 64 characters and include upper and lower case letters and numbers, it must start with a letter.</value>
+    <value>Invalid format on the name used for your data stream field.  The name must be between 2 and 64 characters and include upper and lower case letters and numbers as well as - and _, it must start with a letter.</value>
   </data>
   <data name="DataStream_DeviceId_InvalidFormat" xml:space="preserve">
     <value>Invalid format on date stamp field name.  The timestamp field name may be between 3 and 64 characters and include upper and lower case letters and numbers, it must start with a letter.</value>
