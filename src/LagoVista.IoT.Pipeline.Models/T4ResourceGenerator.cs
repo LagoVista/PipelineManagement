@@ -374,6 +374,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStreamField_Help
 
 		public static string DataStreamField_Help { get { return GetResourceString("DataStreamField_Help"); } }
+//Resources:PipelineAdminResources:DataStreamField_IsDatabaseGenerated
+
+		public static string DataStreamField_IsDatabaseGenerated { get { return GetResourceString("DataStreamField_IsDatabaseGenerated"); } }
+//Resources:PipelineAdminResources:DataStreamField_IsDatabaseGenerated_Help
+
+		public static string DataStreamField_IsDatabaseGenerated_Help { get { return GetResourceString("DataStreamField_IsDatabaseGenerated_Help"); } }
 //Resources:PipelineAdminResources:DataStreamField_IsKey
 
 		public static string DataStreamField_IsKey { get { return GetResourceString("DataStreamField_IsKey"); } }
@@ -1189,6 +1195,8 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStreamField_FieldName_Help = "DataStreamField_FieldName_Help";
 			public const string DataStreamField_FieldName_Invalid = "DataStreamField_FieldName_Invalid";
 			public const string DataStreamField_Help = "DataStreamField_Help";
+			public const string DataStreamField_IsDatabaseGenerated = "DataStreamField_IsDatabaseGenerated";
+			public const string DataStreamField_IsDatabaseGenerated_Help = "DataStreamField_IsDatabaseGenerated_Help";
 			public const string DataStreamField_IsKey = "DataStreamField_IsKey";
 			public const string DataStreamField_IsKey_Description = "DataStreamField_IsKey_Description";
 			public const string DataStreamField_IsRequired = "DataStreamField_IsRequired";

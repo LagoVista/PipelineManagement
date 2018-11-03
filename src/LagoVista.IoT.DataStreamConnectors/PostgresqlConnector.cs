@@ -56,8 +56,6 @@ namespace LagoVista.IoT.DataStreamConnectors
                 connString += $"Database={_stream.DbName}";
             }
 
-            Console.WriteLine(connString);
-
             var conn = new NpgsqlConnection(connString);
             conn.Open();
             return conn;
@@ -455,7 +453,7 @@ WHERE table_schema = @dbschema
             }
 
             sql.AppendLine($"  order by {_stream.TimeStampFieldName} desc");
-            sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * (request.PageIndex - 1)} ");
+            sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * Math.Max(request.PageIndex - 1, 0)} ");
 
             _logger.AddCustomEvent(LogLevel.Message, "GetItemsAsync", sql.ToString());
 

@@ -40,6 +40,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_IsKey, HelpResource: PipelineAdminResources.Names.DataStreamField_IsKey_Description, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool IsKeyField { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_IsDatabaseGenerated, HelpResource: PipelineAdminResources.Names.DataStreamField_IsDatabaseGenerated_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
+        public bool IsDatabaseGenerated { get; set; }
+
+
         [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_IsRequired, HelpResource: PipelineAdminResources.Names.DataStreamField_IsRequired_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool IsRequired { get; set; }
 

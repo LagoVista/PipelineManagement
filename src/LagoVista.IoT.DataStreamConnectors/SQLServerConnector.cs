@@ -1,16 +1,16 @@
-﻿using LagoVista.Core.Validation;
+﻿using LagoVista.Core;
+using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LagoVista.Core;
-using System.Data.SqlClient;
-using System.Data;
-using LagoVista.Core.PlatformSupport;
-using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -115,7 +115,7 @@ from sysobjects a
                 var result = await ValidateConnectionAsync(stream);
                 if (!result.Successful)
                 {
-                    _logger.AddCustomEvent(LogLevel.Error,"SQLServerConnecction", "Could not validate SQL Connection", result.Errors.First().Message.ToKVP("firstError"));
+                    _logger.AddCustomEvent(LogLevel.Error, "SQLServerConnecction", "Could not validate SQL Connection", result.Errors.First().Message.ToKVP("firstError"));
                     return result.ToInvokeResult();
                 }
             }
@@ -144,10 +144,16 @@ from sysobjects a
                 /* validation should happen long before this point, however if someone manipulated the value, it could be very, very bad
                  * with a SQL injection attack, so error on the side of caution and never let it get through.
                  */
-                if (!Validator.Validate(fld).Successful) throw new Exception($"Invalid field name {fld.FieldName}");
+                if (!Validator.Validate(fld).Successful)
+                {
+                    throw new Exception($"Invalid field name {fld.FieldName}");
+                }
 
-                fields += String.IsNullOrEmpty(fields) ? $"{fld.FieldName}" : $",{fld.FieldName}";
-                values += String.IsNullOrEmpty(values) ? $"@{fld.FieldName}" : $",@{fld.FieldName}";
+                if (!fld.IsDatabaseGenerated)
+                {
+                    fields += String.IsNullOrEmpty(fields) ? $"{fld.FieldName}" : $",{fld.FieldName}";
+                    values += String.IsNullOrEmpty(values) ? $"@{fld.FieldName}" : $",@{fld.FieldName}";
+                }
             }
 
             fields += $",{_stream.DeviceIdFieldName},{_stream.TimeStampFieldName}";
@@ -162,36 +168,39 @@ from sysobjects a
 
                 foreach (var field in _stream.Fields)
                 {
-                    object value = System.DBNull.Value;
-
-                    if (item.Data.ContainsKey(field.FieldName))
+                    if (!field.IsDatabaseGenerated)
                     {
-                        value = item.Data[field.FieldName];
-                        if (value == null)
-                        {
-                            value = System.DBNull.Value;
-                        }
-                    }
+                        object value = System.DBNull.Value;
 
-                    if (value != System.DBNull.Value && field.FieldType.Value == DeviceAdmin.Models.ParameterTypes.GeoLocation)
-                    {
-                        var geoParts = value.ToString().Split(',');
-                        if (geoParts.Count() != 2)
+                        if (item.Data.ContainsKey(field.FieldName))
                         {
-                            return InvokeResult.FromError($"Attmept to insert invalid geo code {value}");
+                            value = item.Data[field.FieldName];
+                            if (value == null)
+                            {
+                                value = System.DBNull.Value;
+                            }
                         }
 
-                        // Note geo codes ares stored HH.MMMMMM,HH.MMMMMM where lat comes first, SQL expects those to come lon then lat
-                        var parameter = new SqlParameter($"@{field.FieldName}", $"POINT({geoParts[1]} {geoParts[0]})")
+                        if (value != System.DBNull.Value && field.FieldType.Value == DeviceAdmin.Models.ParameterTypes.GeoLocation)
                         {
-                            Direction = ParameterDirection.Input,
-                        };
+                            var geoParts = value.ToString().Split(',');
+                            if (geoParts.Count() != 2)
+                            {
+                                return InvokeResult.FromError($"Attmept to insert invalid geo code {value}");
+                            }
 
-                        cmd.Parameters.Add(parameter);
-                    }
-                    else
-                    {
-                        cmd.Parameters.AddWithValue($"@{field.FieldName}", value);
+                            // Note geo codes ares stored HH.MMMMMM,HH.MMMMMM where lat comes first, SQL expects those to come lon then lat
+                            var parameter = new SqlParameter($"@{field.FieldName}", $"POINT({geoParts[1]} {geoParts[0]})")
+                            {
+                                Direction = ParameterDirection.Input,
+                            };
+
+                            cmd.Parameters.Add(parameter);
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue($"@{field.FieldName}", value);
+                        }
                     }
                 }
 
@@ -213,7 +222,10 @@ from sysobjects a
         public async Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
             var sql = new StringBuilder("select ");
-            if (request.PageSize == 0) request.PageSize = 50;
+            if (request.PageSize == 0)
+            {
+                request.PageSize = 50;
+            }
 
             sql.Append($"[{_stream.TimeStampFieldName}]");
             foreach (var fld in _stream.Fields)
@@ -230,8 +242,15 @@ from sysobjects a
                 sql.AppendLine($"  and {_stream.TimeStampFieldName} < @lastDateStamp");
             }
 
-            if (!String.IsNullOrEmpty(request.StartDate)) sql.AppendLine($"  and {_stream.TimeStampFieldName} >= @startDateStamp");
-            if (!String.IsNullOrEmpty(request.EndDate)) sql.AppendLine($"  and {_stream.TimeStampFieldName} <= @endDateStamp");
+            if (!String.IsNullOrEmpty(request.StartDate))
+            {
+                sql.AppendLine($"  and {_stream.TimeStampFieldName} >= @startDateStamp");
+            }
+
+            if (!String.IsNullOrEmpty(request.EndDate))
+            {
+                sql.AppendLine($"  and {_stream.TimeStampFieldName} <= @endDateStamp");
+            }
 
             sql.AppendLine($"  order by [{_stream.TimeStampFieldName}] desc");
             sql.AppendLine("   OFFSET @PageSize * @PageIndex ROWS");
@@ -246,11 +265,22 @@ from sysobjects a
             {
                 cmd.Parameters.AddWithValue("@deviceId", deviceId);
                 cmd.Parameters.AddWithValue("@PageSize", request.PageSize);
-                cmd.Parameters.AddWithValue("@PageIndex", request.PageIndex - 1);
+                cmd.Parameters.AddWithValue("@PageIndex", Math.Max(request.PageIndex - 1, 0));
 
-                if (!String.IsNullOrEmpty(request.NextRowKey)) cmd.Parameters.AddWithValue($"@lastDateStamp", request.NextRowKey.ToDateTime());
-                if (!String.IsNullOrEmpty(request.StartDate)) cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
-                if (!String.IsNullOrEmpty(request.EndDate)) cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+                if (!String.IsNullOrEmpty(request.NextRowKey))
+                {
+                    cmd.Parameters.AddWithValue($"@lastDateStamp", request.NextRowKey.ToDateTime());
+                }
+
+                if (!String.IsNullOrEmpty(request.StartDate))
+                {
+                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
+                }
+
+                if (!String.IsNullOrEmpty(request.EndDate))
+                {
+                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+                }
 
                 cmd.CommandType = System.Data.CommandType.Text;
 
@@ -262,7 +292,7 @@ from sysobjects a
                         var resultItem = new DataStreamResult();
                         resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimeStampFieldName]).ToJSONString();
 
-                        foreach(var fld in _stream.Fields)
+                        foreach (var fld in _stream.Fields)
                         {
                             resultItem.Add(fld.FieldName, rdr[fld.FieldName]);
                         }

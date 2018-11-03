@@ -1147,4 +1147,10 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStream_DbSchema" xml:space="preserve">
     <value>Database Schema</value>
   </data>
+  <data name="DataStreamField_IsDatabaseGenerated" xml:space="preserve">
+    <value>Is Generated from Storage</value>
+  </data>
+  <data name="DataStreamField_IsDatabaseGenerated_Help" xml:space="preserve">
+    <value>If this is set, this value won't be inserted and can't be updated.</value>
+  </data>
 </root>
