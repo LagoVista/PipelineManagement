@@ -72,16 +72,16 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             var result = new ValidationResult();
 
-            var timeStampColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.TimeStampFieldName.ToLower()).FirstOrDefault();
+            var timeStampColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.TimestampFieldName.ToLower()).FirstOrDefault();
             var deviceIdColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.DeviceIdFieldName.ToLower()).FirstOrDefault();
 
             if (timeStampColumn == null)
             {
-                result.AddUserError($"SQL Server Table must contain the time stamp field [{stream.TimeStampFieldName}] but it does not.");
+                result.AddUserError($"SQL Server Table must contain the time stamp field [{stream.TimestampFieldName}] but it does not.");
             }
             else if (!_sqlServerDateTypes.Contains(timeStampColumn.DataType))
             {
-                result.AddUserError($"Data Type on SQL Server Table for field [{stream.TimeStampFieldName}] (the time stamp field) must be one of the following: datetime, datetime2, datetimeoffset.");
+                result.AddUserError($"Data Type on SQL Server Table for field [{stream.TimestampFieldName}] (the time stamp field) must be one of the following: datetime, datetime2, datetimeoffset.");
             }
             else
             {
@@ -128,16 +128,16 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             var result = new ValidationResult();
 
-            var timeStampColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.TimeStampFieldName.ToLower()).FirstOrDefault();
+            var timeStampColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.TimestampFieldName.ToLower()).FirstOrDefault();
             var deviceIdColumn = sqlMetaData.Where(strFld => strFld.ColumnName.ToLower() == stream.DeviceIdFieldName.ToLower()).FirstOrDefault();
 
             if (timeStampColumn == null)
             {
-                result.AddUserError($"Postgress Server Table must contain the time stamp field [{stream.TimeStampFieldName}] but it does not.");
+                result.AddUserError($"Postgress Server Table must contain the time stamp field [{stream.TimestampFieldName}] but it does not.");
             }
             else if (!timeStampColumn.DataType.Contains("time") && !timeStampColumn.DataType.Contains("date"))
             {
-                result.AddUserError($"Data Type on SQL Server Table for field [{stream.TimeStampFieldName}] (the time stamp field) must time based field.");
+                result.AddUserError($"Data Type on SQL Server Table for field [{stream.TimestampFieldName}] (the time stamp field) must time based field.");
             }
             else
             {

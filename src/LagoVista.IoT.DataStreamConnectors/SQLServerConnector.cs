@@ -156,8 +156,8 @@ from sysobjects a
                 }
             }
 
-            fields += $",{_stream.DeviceIdFieldName},{_stream.TimeStampFieldName}";
-            values += $",@{_stream.DeviceIdFieldName},@{_stream.TimeStampFieldName}";
+            fields += $",{_stream.DeviceIdFieldName},{_stream.TimestampFieldName}";
+            values += $",@{_stream.DeviceIdFieldName},@{_stream.TimestampFieldName}";
 
             var sql = $"insert into [{_stream.DbTableName}] ({fields}) values ({values})";
 
@@ -209,7 +209,7 @@ from sysobjects a
                     item.Timestamp = DateTime.UtcNow.ToJSONString();
                 }
 
-                cmd.Parameters.AddWithValue($"@{_stream.TimeStampFieldName}", item.Timestamp.ToDateTime());
+                cmd.Parameters.AddWithValue($"@{_stream.TimestampFieldName}", item.Timestamp.ToDateTime());
                 cmd.Parameters.AddWithValue($"@{_stream.DeviceIdFieldName}", item.DeviceId);
 
                 await cn.OpenAsync();
@@ -227,7 +227,7 @@ from sysobjects a
                 request.PageSize = 50;
             }
 
-            sql.Append($"[{_stream.TimeStampFieldName}]");
+            sql.Append($"[{_stream.TimestampFieldName}]");
             foreach (var fld in _stream.Fields)
             {
                 sql.Append($", [{fld.FieldName}]");
@@ -239,20 +239,20 @@ from sysobjects a
 
             if (!String.IsNullOrEmpty(request.NextRowKey))
             {
-                sql.AppendLine($"  and {_stream.TimeStampFieldName} < @lastDateStamp");
+                sql.AppendLine($"  and {_stream.TimestampFieldName} < @lastDateStamp");
             }
 
             if (!String.IsNullOrEmpty(request.StartDate))
             {
-                sql.AppendLine($"  and {_stream.TimeStampFieldName} >= @startDateStamp");
+                sql.AppendLine($"  and {_stream.TimestampFieldName} >= @startDateStamp");
             }
 
             if (!String.IsNullOrEmpty(request.EndDate))
             {
-                sql.AppendLine($"  and {_stream.TimeStampFieldName} <= @endDateStamp");
+                sql.AppendLine($"  and {_stream.TimestampFieldName} <= @endDateStamp");
             }
 
-            sql.AppendLine($"  order by [{_stream.TimeStampFieldName}] desc");
+            sql.AppendLine($"  order by [{_stream.TimestampFieldName}] desc");
             sql.AppendLine("   OFFSET @PageSize * @PageIndex ROWS");
             sql.AppendLine("   FETCH NEXT @PageSize ROWS ONLY ");
 
@@ -290,7 +290,7 @@ from sysobjects a
                     while (rdr.Read())
                     {
                         var resultItem = new DataStreamResult();
-                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimeStampFieldName]).ToJSONString();
+                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimestampFieldName]).ToJSONString();
 
                         foreach (var fld in _stream.Fields)
                         {

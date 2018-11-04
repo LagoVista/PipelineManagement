@@ -58,7 +58,7 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
             };
 
             tsEntity.Timestamp = DateTimeOffset.UtcNow;
-            tsEntity.Data.Add(stream.TimeStampFieldName, record.GetTimeStampValue(stream));
+            tsEntity.Data.Add(stream.TimestampFieldName, record.GetTimeStampValue(stream));
             tsEntity.Data.Add(stream.DeviceIdFieldName, record.DeviceId);
             return tsEntity;
         }
@@ -74,11 +74,11 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
             switch (stream.DateStorageFormat.Value)
             {
                 case DateStorageFormats.Epoch:
-                    long epoch = Convert.ToInt64(Data[stream.TimeStampFieldName]);
+                    long epoch = Convert.ToInt64(Data[stream.TimestampFieldName]);
                     result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(epoch).DateTime.ToJSONString();
                     break;
                 case DateStorageFormats.ISO8601:
-                    result.Timestamp = Data[stream.TimeStampFieldName].ToString();
+                    result.Timestamp = Data[stream.TimestampFieldName].ToString();
                     break;
             }
 

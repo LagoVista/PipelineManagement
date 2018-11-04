@@ -86,10 +86,10 @@ namespace LagoVista.IoT.DataStreamConnectors
                 switch (_stream.DateStorageFormat.Value)
                 {
                     case DateStorageFormats.Epoch:
-                        item.Data.Add(_stream.TimeStampFieldName, DateTimeOffset.Now.ToUnixTimeSeconds());
+                        item.Data.Add(_stream.TimestampFieldName, DateTimeOffset.Now.ToUnixTimeSeconds());
                         break;
                     case DateStorageFormats.ISO8601:
-                        item.Data.Add(_stream.TimeStampFieldName, DateTime.UtcNow.ToJSONString());
+                        item.Data.Add(_stream.TimestampFieldName, DateTime.UtcNow.ToJSONString());
                         break;
                 }
             }

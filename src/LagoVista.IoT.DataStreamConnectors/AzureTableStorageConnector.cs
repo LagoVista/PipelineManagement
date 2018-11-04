@@ -195,11 +195,11 @@ namespace LagoVista.IoT.DataStreamConnectors
                         switch (_stream.DateStorageFormat.Value)
                         {
                             case DateStorageFormats.Epoch:
-                                long epoch = Convert.ToInt64(item.Properties[_stream.TimeStampFieldName]);
+                                long epoch = Convert.ToInt64(item.Properties[_stream.TimestampFieldName]);
                                 result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(epoch).DateTime.ToJSONString();
                                 break;
                             case DateStorageFormats.ISO8601:
-                                result.Timestamp = item.Properties[_stream.TimeStampFieldName].StringValue.ToDateTime().ToJSONString();
+                                result.Timestamp = item.Properties[_stream.TimestampFieldName].StringValue.ToDateTime().ToJSONString();
                                 break;
                         }
 

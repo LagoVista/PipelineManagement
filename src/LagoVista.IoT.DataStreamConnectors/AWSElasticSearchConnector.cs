@@ -88,7 +88,7 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             var recordId = DateTime.UtcNow.ToInverseTicksRowKey();
 
-            item.Data.Add(_stream.TimeStampFieldName, item.GetTimeStampValue(_stream));
+            item.Data.Add(_stream.TimestampFieldName, item.GetTimeStampValue(_stream));
             item.Data.Add("sortOrder", item.GetTicks());
             item.Data.Add("deviceId", item.DeviceId);
             item.Data.Add("id", recordId);
@@ -188,7 +188,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                     var streamResult = new DataStreamResult()
                     {
                         /* Newtonsoft assumes the value is date time for something that looks like a date, time this dual conversion gets our standard ISO8601 date string */
-                        Timestamp = record[_stream.TimeStampFieldName].ToString().ToDateTime().ToJSONString(),
+                        Timestamp = record[_stream.TimestampFieldName].ToString().ToDateTime().ToJSONString(),
                     };
 
                     foreach(var key in record.Keys)

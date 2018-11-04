@@ -36,7 +36,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                 CreationDate = DateTime.Now.ToJSONString(),
                 LastUpdatedDate = DateTime.Now.ToJSONString(),
                 DeviceIdFieldName = "deviceId",
-                TimeStampFieldName = "timeStamp",
+                TimestampFieldName = "timeStamp",
                 DbValidateSchema = true,
                 AutoCreateSQLTable = true,
                 CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),

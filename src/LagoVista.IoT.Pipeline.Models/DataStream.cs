@@ -64,7 +64,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public DataStream()
         {
             Fields = new List<DataStreamField>();
-            TimeStampFieldName = "timeStamp";
+            TimestampFieldName = "timeStamp";
             DeviceIdFieldName = "deviceId";
             DateStorageFormat = EntityHeader<DateStorageFormats>.Create(DateStorageFormats.ISO8601);
         }
@@ -84,7 +84,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_TimeStamp_InvalidFormat,
             HelpResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
-        public string TimeStampFieldName { get; set; }
+        public string TimestampFieldName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_DeviceId_InvalidFormat,
@@ -199,7 +199,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 IsPublic = IsPublic,
                 Key = Key,
                 StreamType = StreamType.Text,
-                StreamTypeKey = StreamType.Id
+                StreamTypeKey = StreamType.Id,
+                DeviceIdFieldName = DeviceIdFieldName,
+                TimestampFieldName = TimestampFieldName
             };
         }
 
@@ -396,5 +398,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     {
         public string StreamType { get; set; }
         public string StreamTypeKey { get; set; }
+
+        public String TimestampFieldName { get; set; }
+        public String DeviceIdFieldName { get; set; }
     }
 }

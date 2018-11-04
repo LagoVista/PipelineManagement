@@ -65,7 +65,7 @@ CCREATE TABLE [dbo].[unittest](
                 LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 DbTableName = "unittest",
                 DeviceIdFieldName = "deviceId",
-                TimeStampFieldName = "timeStamp",
+                TimestampFieldName = "timeStamp",
             };
 
             _stream.Fields.Add(new DataStreamField()

@@ -73,7 +73,7 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             var recordId = DateTime.UtcNow.ToInverseTicksRowKey();
 
-            item.Data.Add(_stream.TimeStampFieldName, item.GetTimeStampValue(_stream));
+            item.Data.Add(_stream.TimestampFieldName, item.GetTimeStampValue(_stream));
             item.Data.Add("sortOrder", item.GetTicks());
             item.Data.Add("deviceId", item.DeviceId);
             item.Data.Add("id", recordId);

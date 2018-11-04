@@ -102,8 +102,8 @@ namespace LagoVista.IoT.DataStreamConnectors
                 values += String.IsNullOrEmpty(values) ? $"@{fld.FieldName}" : $",@{fld.FieldName}";
             }
 
-            fields += $",{_stream.DeviceIdFieldName},{_stream.TimeStampFieldName}";
-            values += $",@{_stream.DeviceIdFieldName},@{_stream.TimeStampFieldName}";
+            fields += $",{_stream.DeviceIdFieldName},{_stream.TimestampFieldName}";
+            values += $",@{_stream.DeviceIdFieldName},@{_stream.TimestampFieldName}";
 
             using (var cn = OpenConnection(_stream.DbName))
             using (var cmd = new NpgsqlCommand())
@@ -160,7 +160,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                     item.Timestamp = DateTime.UtcNow.ToJSONString();
                 }
 
-                cmd.Parameters.AddWithValue($"@{_stream.TimeStampFieldName}", item.Timestamp.ToDateTime());
+                cmd.Parameters.AddWithValue($"@{_stream.TimestampFieldName}", item.Timestamp.ToDateTime());
                 cmd.Parameters.AddWithValue($"@{_stream.DeviceIdFieldName}", item.DeviceId);
 
                 Console.WriteLine(cmd.CommandText);
@@ -413,7 +413,7 @@ WHERE table_schema = @dbschema
                 request.PageSize = 50;
             }
 
-            sql.Append($"{_stream.TimeStampFieldName}");
+            sql.Append($"{_stream.TimestampFieldName}");
             sql.Append($", {_stream.DeviceIdFieldName}");
 
             foreach (var fld in _stream.Fields)
@@ -435,17 +435,17 @@ WHERE table_schema = @dbschema
 
             if (!String.IsNullOrEmpty(request.NextRowKey))
             {
-                sql.AppendLine($"  and {_stream.TimeStampFieldName} < @lastDateStamp");
+                sql.AppendLine($"  and {_stream.TimestampFieldName} < @lastDateStamp");
             }
 
             if (!String.IsNullOrEmpty(request.StartDate))
             {
-                sql.AppendLine($"  and {_stream.TimeStampFieldName} >= @startDateStamp");
+                sql.AppendLine($"  and {_stream.TimestampFieldName} >= @startDateStamp");
             }
 
             if (!String.IsNullOrEmpty(request.EndDate))
             {
-                sql.AppendLine($"  and {_stream.TimeStampFieldName} <= @endDateStamp");
+                sql.AppendLine($"  and {_stream.TimestampFieldName} <= @endDateStamp");
             }
 
             foreach (var filterItem in filter)
@@ -454,7 +454,7 @@ WHERE table_schema = @dbschema
                 
             }
 
-            sql.AppendLine($"  order by {_stream.TimeStampFieldName} desc");
+            sql.AppendLine($"  order by {_stream.TimestampFieldName} desc");
             sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * Math.Max(request.PageIndex - 1, 0)} ");
 
             _logger.AddCustomEvent(LogLevel.Message, "GetItemsAsync", sql.ToString());
@@ -496,9 +496,9 @@ WHERE table_schema = @dbschema
                     while (rdr.Read())
                     {
                         var resultItem = new DataStreamResult();
-                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimeStampFieldName]).ToJSONString();
+                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimestampFieldName]).ToJSONString();
 
-                        resultItem.Add(_stream.TimeStampFieldName, resultItem.Timestamp);
+                        resultItem.Add(_stream.TimestampFieldName, resultItem.Timestamp);
                         resultItem.Add(_stream.DeviceIdFieldName, rdr[_stream.DeviceIdFieldName]);
 
                         foreach (var fld in _stream.Fields)

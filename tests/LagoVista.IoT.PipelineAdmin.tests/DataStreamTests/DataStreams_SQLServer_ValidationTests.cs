@@ -129,7 +129,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         public void DataStreams_SQLServer_TimestampFieldDoesNotExist()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
-            stream.TimeStampFieldName = "missingsfield";
+            stream.TimestampFieldName = "missingsfield";
             var sqlMetaData = GetDataDescription();
 
             sqlMetaData.Remove(sqlMetaData.Where(fld => fld.ColumnName == "timeStamp").First());
