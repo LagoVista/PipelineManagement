@@ -414,6 +414,8 @@ WHERE table_schema = @dbschema
             }
 
             sql.Append($"{_stream.TimeStampFieldName}");
+            sql.Append($", {_stream.DeviceIdFieldName}");
+
             foreach (var fld in _stream.Fields)
             {
                 switch (fld.FieldType.Value)
@@ -495,6 +497,9 @@ WHERE table_schema = @dbschema
                     {
                         var resultItem = new DataStreamResult();
                         resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimeStampFieldName]).ToJSONString();
+
+                        resultItem.Add(_stream.TimeStampFieldName, resultItem.Timestamp);
+                        resultItem.Add(_stream.DeviceIdFieldName, rdr[_stream.DeviceIdFieldName]);
 
                         foreach (var fld in _stream.Fields)
                         {

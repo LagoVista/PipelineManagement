@@ -242,6 +242,7 @@ CREATE TABLE if not exists public.information (
             }
 
             var results = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest());
+            Assert.AreEqual(deviceId, results.Model.First()[stream.DeviceIdFieldName].ToString());
             Assert.AreEqual(rowcount, results.Model.Count());
         }
 
