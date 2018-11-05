@@ -98,8 +98,11 @@ namespace LagoVista.IoT.DataStreamConnectors
                     throw new Exception($"Invalid field name {fld.FieldName}");
                 }
 
-                fields += String.IsNullOrEmpty(fields) ? $"{fld.FieldName}" : $",{fld.FieldName}";
-                values += String.IsNullOrEmpty(values) ? $"@{fld.FieldName}" : $",@{fld.FieldName}";
+                if (!fld.IsDatabaseGenerated)
+                {
+                    fields += String.IsNullOrEmpty(fields) ? $"{fld.FieldName}" : $",{fld.FieldName}";
+                    values += String.IsNullOrEmpty(values) ? $"@{fld.FieldName}" : $",@{fld.FieldName}";
+                }
             }
 
             fields += $",{_stream.DeviceIdFieldName},{_stream.TimestampFieldName}";
@@ -113,46 +116,48 @@ namespace LagoVista.IoT.DataStreamConnectors
                 cmd.Connection = cn;
                 foreach (var field in _stream.Fields)
                 {
-                    object value = System.DBNull.Value;
-
-                    if (item.Data.ContainsKey(field.FieldName))
+                    if (!field.IsDatabaseGenerated)
                     {
-                        value = item.Data[field.FieldName];
-                        if (value == null)
-                        {
-                            value = System.DBNull.Value;
-                        }
-                    }
+                        object value = System.DBNull.Value;
 
-                    if (value != System.DBNull.Value && field.FieldType.Value == DeviceAdmin.Models.ParameterTypes.GeoLocation)
-                    {
-                        var geoParts = value.ToString().Split(',');
-                        if (geoParts.Count() != 2)
+                        if (item.Data.ContainsKey(field.FieldName))
                         {
-                            return InvokeResult.FromError($"Attmept to insert invalid geo code {value}");
+                            value = item.Data[field.FieldName];
+                            if (value == null)
+                            {
+                                value = System.DBNull.Value;
+                            }
                         }
 
-                        if (!Double.TryParse(geoParts[0], out double lat))
+                        if (value != System.DBNull.Value && field.FieldType.Value == DeviceAdmin.Models.ParameterTypes.GeoLocation)
                         {
-                            return InvokeResult.FromError($"Attmept to insert invalid geo code {value}");
-                        }
+                            var geoParts = value.ToString().Split(',');
+                            if (geoParts.Count() != 2)
+                            {
+                                return InvokeResult.FromError($"Attmept to insert invalid geo code {value}");
+                            }
 
-                        if (!Double.TryParse(geoParts[1], out double lon))
+                            if (!Double.TryParse(geoParts[0], out double lat))
+                            {
+                                return InvokeResult.FromError($"Attmept to insert invalid geo code {value}");
+                            }
+
+                            if (!Double.TryParse(geoParts[1], out double lon))
+                            {
+                                return InvokeResult.FromError($"Attmept to insert invalid geo code {value}");
+                            }
+
+                            cmd.CommandText = cmd.CommandText.Replace($"@{field.FieldName}", $"ST_POINT({lat}, {lon})");
+                        }
+                        else if (value != System.DBNull.Value && field.FieldType.Value == DeviceAdmin.Models.ParameterTypes.DateTime)
                         {
-                            return InvokeResult.FromError($"Attmept to insert invalid geo code {value}");
+                            cmd.Parameters.AddWithValue($"@{field.FieldName}", value.ToString().ToDateTime());
                         }
-
-                        cmd.CommandText = cmd.CommandText.Replace($"@{field.FieldName}", $"ST_POINT({lat}, {lon})");
+                        else
+                        {
+                            cmd.Parameters.AddWithValue($"@{field.FieldName}", value);
+                        }
                     }
-                    else if (value != System.DBNull.Value && field.FieldType.Value == DeviceAdmin.Models.ParameterTypes.DateTime)
-                    {
-                        cmd.Parameters.AddWithValue($"@{field.FieldName}", value.ToString().ToDateTime());
-                    }
-                    else
-                    {
-                        cmd.Parameters.AddWithValue($"@{field.FieldName}", value);
-                    }
-
                 }
 
                 if (String.IsNullOrEmpty(item.Timestamp))
@@ -365,10 +370,10 @@ WHERE table_schema = @dbschema
             sql.AppendLine();
 
             first = true;
-            
-            foreach(var filter in recordFilter)
+
+            foreach (var filter in recordFilter)
             {
-                if(first)
+                if (first)
                 {
                     sql.Append(@" where ");
                 }
@@ -388,12 +393,12 @@ WHERE table_schema = @dbschema
                 cmd.Connection = cn;
                 cmd.CommandText = sql.ToString();
 
-                foreach(var item in items)
+                foreach (var item in items)
                 {
                     cmd.Parameters.AddWithValue($"@{item.Key}", item.Value);
                 }
 
-                foreach(var parm in recordFilter)
+                foreach (var parm in recordFilter)
                 {
                     cmd.Parameters.AddWithValue($"@parm{parm.Key}", parm.Value);
                 }
@@ -451,7 +456,7 @@ WHERE table_schema = @dbschema
             foreach (var filterItem in filter)
             {
                 sql.AppendLine($"  and {filterItem.Key} = @parm{filterItem.Key}");
-                
+
             }
 
             sql.AppendLine($"  order by {_stream.TimestampFieldName} desc");
