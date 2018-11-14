@@ -1153,4 +1153,46 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStreamField_IsDatabaseGenerated_Help" xml:space="preserve">
     <value>If this is set, this value won't be inserted and can't be updated.</value>
   </data>
+  <data name="Custom_AccountId" xml:space="preserve">
+    <value>Account Id</value>
+  </data>
+  <data name="Custom_AccountPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Custom_AccountPassword_Help" xml:space="preserve">
+    <value>Your password will be stored in secure storage.  When you edit your custom module you will not see the original password however if you enter a new value, that new value will be saved</value>
+  </data>
+  <data name="Custom_Uri" xml:space="preserve">
+    <value>URI</value>
+  </data>
+  <data name="Dictionary_Description" xml:space="preserve">
+    <value>Provides a simple key value pair lookup dictionary</value>
+  </data>
+  <data name="Dictionary_Help" xml:space="preserve">
+    <value>Provides a simple key value pair lookup dictionary</value>
+  </data>
+  <data name="Dictionary_Title" xml:space="preserve">
+    <value>Dictionary</value>
+  </data>
+  <data name="Dictionary_Type" xml:space="preserve">
+    <value>Dictionary Type</value>
+  </data>
+  <data name="Dictionary_Type_NuvIoT" xml:space="preserve">
+    <value>NuvIoT</value>
+  </data>
+  <data name="Dictionary_Type_Redis" xml:space="preserve">
+    <value>Redis</value>
+  </data>
+  <data name="Dictionary_Type_Select" xml:space="preserve">
+    <value>-select dictionary type-</value>
+  </data>
+  <data name="Dictionary_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Dictionary_Password_Help" xml:space="preserve">
+    <value>Your password will be stored in secure storage.  When you edit your dictionary module you will not see the original password however if you enter a new value, that new value will be saved</value>
+  </data>
+  <data name="Dictionary_Uri" xml:space="preserve">
+    <value>Uri</value>
+  </data>
 </root>
