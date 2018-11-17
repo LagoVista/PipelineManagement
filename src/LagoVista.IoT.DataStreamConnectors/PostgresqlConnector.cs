@@ -19,7 +19,6 @@ namespace LagoVista.IoT.DataStreamConnectors
     {
         DataStream _stream;
         ILogger _logger;
-        string _connectionString;
 
 
         public PostgresqlConnector(Logging.Loggers.IInstanceLogger instanceLogger)

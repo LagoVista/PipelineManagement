@@ -43,11 +43,13 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 
             _mockSettings.Setup(ms => ms.DefaultInternalDataStreamConnectionSettingsTableStorage).Returns(new ConnectionSettings() { AccessKey = DEFAULT_TS_ACCESS_KEY, AccountId = DEFAULT_TS_ACCOUNT_ID });
 
-            _secureStorage.Setup<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(It.IsAny<string>())).ReturnsAsync(InvokeResult<string>.Create(GENERATD_SECURE_ID_VALUE));
-            _secureStorage.Setup<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(It.IsAny<string>())).ReturnsAsync(InvokeResult.Success);
-
             _org = Core.Models.EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "myorg");
             _user = Core.Models.EntityHeader.Create("14AEF7E53D2043538222FB18C2CA6733", "myuser");
+
+            _secureStorage.Setup<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(_org, It.IsAny<string>())).ReturnsAsync(InvokeResult<string>.Create(GENERATD_SECURE_ID_VALUE));
+            _secureStorage.Setup<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(_org, It.IsAny<string>())).ReturnsAsync(InvokeResult.Success);
+
+            
         }
 
 
@@ -111,20 +113,20 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             return stream;
         }
 
-        private async Task AWSInsertAsync(DataStreamTypes streamType)
+        private async Task AWSInsertAsync(EntityHeader org, DataStreamTypes streamType)
         {
             var stream = GetDataStream(streamType);
             var originalSecretKey = stream.AwsSecretKey;
             var result = await _dataStreamManager.AddDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
 
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(originalSecretKey), Times.Once);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(org, originalSecretKey), Times.Once);
 
             Assert.IsNull(stream.AwsSecretKey);
             Assert.AreEqual(GENERATD_SECURE_ID_VALUE, stream.AWSSecretKeySecureId);
         }
 
-        private async Task AWSUpdateAsync(DataStreamTypes streamType)
+        private async Task AWSUpdateAsync(EntityHeader org, DataStreamTypes streamType)
         {
             var stream = GetDataStream(streamType);
             stream.AWSSecretKeySecureId = OLD_SECURE_ID_VALUE;
@@ -132,14 +134,14 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             var result = await _dataStreamManager.UpdateDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
 
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(It.IsAny<string>()), Times.Never);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(It.IsAny<string>()), Times.Never);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(It.IsAny<EntityHeader>(), It.IsAny<string>()), Times.Never);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(It.IsAny<EntityHeader>(), It.IsAny<string>()), Times.Never);
 
             Assert.IsNull(stream.AwsSecretKey);
             Assert.AreEqual(OLD_SECURE_ID_VALUE, stream.AWSSecretKeySecureId);
         }
 
-        private async Task AWSReplaceKeyAsync(DataStreamTypes streamType)
+        private async Task AWSReplaceKeyAsync(EntityHeader org, DataStreamTypes streamType)
         {
             var updatedSecretKey = "newlycreatedaccesskey";
             var stream = GetDataStream(streamType);
@@ -148,8 +150,8 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             var result = await _dataStreamManager.UpdateDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
 
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(updatedSecretKey), Times.Once);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(OLD_SECURE_ID_VALUE), Times.Once);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(org, updatedSecretKey), Times.Once);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(org, OLD_SECURE_ID_VALUE), Times.Once);
 
             Assert.IsNull(stream.AwsSecretKey);
             Assert.AreEqual(GENERATD_SECURE_ID_VALUE, stream.AWSSecretKeySecureId);
@@ -158,40 +160,40 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         [TestMethod]
         public async Task DataStream_Manager_AWS_ElasticSearch_Insert_Valid()
         {
-            await AWSInsertAsync(DataStreamTypes.AWSElasticSearch);
+            await AWSInsertAsync(_org, DataStreamTypes.AWSElasticSearch);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AWS_ElasticSearch_Update_Valid()
         {
-            await AWSUpdateAsync(DataStreamTypes.AWSElasticSearch);
+            await AWSUpdateAsync(_org, DataStreamTypes.AWSElasticSearch);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AWS_ElasticSearch_ReplaceKey_Valid()
         {
-            await AWSReplaceKeyAsync(DataStreamTypes.AWSElasticSearch);
+            await AWSReplaceKeyAsync(_org, DataStreamTypes.AWSElasticSearch);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AWS_S3_Insert_Valid()
         {
-            await AWSInsertAsync(DataStreamTypes.AWSS3);
+            await AWSInsertAsync(_org, DataStreamTypes.AWSS3);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AWS_S3_Update_Valid()
         {
-            await AWSUpdateAsync(DataStreamTypes.AWSS3);
+            await AWSUpdateAsync(_org, DataStreamTypes.AWSS3);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AWS_S3_ReplaceKey_Valid()
         {
-            await AWSUpdateAsync(DataStreamTypes.AWSS3);
+            await AWSUpdateAsync(_org, DataStreamTypes.AWSS3);
         }
 
-        private async Task AzureInsertAsync(DataStreamTypes streamType)
+        private async Task AzureInsertAsync(EntityHeader org, DataStreamTypes streamType)
         {
             var stream = GetDataStream(streamType);
             var originalAccessKey = stream.AzureAccessKey;
@@ -201,11 +203,11 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             if (streamType == DataStreamTypes.AzureTableStorage_Managed)
             {
                 Assert.AreEqual(DEFAULT_TS_ACCOUNT_ID, stream.AzureStorageAccountName);
-                _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(DEFAULT_TS_ACCESS_KEY), Times.Once);
+                _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(org, DEFAULT_TS_ACCESS_KEY), Times.Once);
             }
             else
             {
-                _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(originalAccessKey), Times.Once);
+                _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(org, originalAccessKey), Times.Once);
             }
 
             Assert.IsNull(stream.AzureAccessKey);
@@ -213,7 +215,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             Assert.AreEqual(GENERATD_SECURE_ID_VALUE, stream.AzureAccessKeySecureId);
         }
 
-        private async Task AzureUpdateAsync(DataStreamTypes streamType)
+        private async Task AzureUpdateAsync(EntityHeader org, DataStreamTypes streamType)
         {
             var stream = GetDataStream(streamType);
             stream.AzureAccessKeySecureId = OLD_SECURE_ID_VALUE;
@@ -221,14 +223,14 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             var result = await _dataStreamManager.UpdateDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
 
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(It.IsAny<string>()), Times.Never);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(It.IsAny<string>()), Times.Never);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(org, It.IsAny<string>()), Times.Never);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(org, It.IsAny<string>()), Times.Never);
 
             Assert.IsNull(stream.AzureAccessKey);
             Assert.AreEqual(OLD_SECURE_ID_VALUE, stream.AzureAccessKeySecureId);
         }
 
-        private async Task AzureReplaceKeyAsync(DataStreamTypes streamType)
+        private async Task AzureReplaceKeyAsync(EntityHeader org, DataStreamTypes streamType)
         {
             var updatedAccesKey = "newlycreatedaccesskey";
             var stream = GetDataStream(streamType);
@@ -236,8 +238,8 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.AzureAccessKey = updatedAccesKey;
             var result = await _dataStreamManager.UpdateDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(updatedAccesKey), Times.Once);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(OLD_SECURE_ID_VALUE), Times.Once);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(org, updatedAccesKey), Times.Once);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(org, OLD_SECURE_ID_VALUE), Times.Once);
             Assert.IsNull(stream.AzureAccessKey);
             Assert.AreEqual(GENERATD_SECURE_ID_VALUE, stream.AzureAccessKeySecureId);
         }
@@ -245,74 +247,74 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         [TestMethod]
         public async Task DataStream_Manager_AzureBlob_Insert_Valid()
         {
-            await AzureInsertAsync(DataStreamTypes.AzureBlob);
+            await AzureInsertAsync(_org, DataStreamTypes.AzureBlob);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureBlob_Update_Valid()
         {
-            await AzureUpdateAsync(DataStreamTypes.AzureBlob);
+            await AzureUpdateAsync(_org, DataStreamTypes.AzureBlob);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureBlob_Replace_Valid()
         {
-            await AzureReplaceKeyAsync(DataStreamTypes.AzureBlob);
+            await AzureReplaceKeyAsync(_org, DataStreamTypes.AzureBlob);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureEventHub_Insert_Valid()
         {
-            await AzureInsertAsync(DataStreamTypes.AzureEventHub);
+            await AzureInsertAsync(_org, DataStreamTypes.AzureEventHub);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureEventHub_Update_Valid()
         {
-            await AzureUpdateAsync(DataStreamTypes.AzureEventHub);
+            await AzureUpdateAsync(_org, DataStreamTypes.AzureEventHub);
         }
 
 
         [TestMethod]
         public async Task DataStream_Manager_AzureEventHub_Replaced_Valid()
         {
-            await AzureReplaceKeyAsync(DataStreamTypes.AzureEventHub);
+            await AzureReplaceKeyAsync(_org, DataStreamTypes.AzureEventHub);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureTableStorage_Insert_Valid()
         {
-            await AzureInsertAsync(DataStreamTypes.AzureTableStorage);
+            await AzureInsertAsync(_org, DataStreamTypes.AzureTableStorage);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureEventTableStorage_Update_Valid()
         {
-            await AzureUpdateAsync(DataStreamTypes.AzureTableStorage);
+            await AzureUpdateAsync(_org, DataStreamTypes.AzureTableStorage);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureEventTableStorage_Replace_Valid()
         {
-            await AzureReplaceKeyAsync(DataStreamTypes.AzureTableStorage);
+            await AzureReplaceKeyAsync(_org, DataStreamTypes.AzureTableStorage);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureTableStorageManaged_Insert_Valid()
         {
-            await AzureInsertAsync(DataStreamTypes.AzureTableStorage_Managed);
+            await AzureInsertAsync(_org, DataStreamTypes.AzureTableStorage_Managed);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureEventTableStorageManaged_Update_Valid()
         {
-            await AzureUpdateAsync(DataStreamTypes.AzureTableStorage_Managed);
+            await AzureUpdateAsync(_org, DataStreamTypes.AzureTableStorage_Managed);
         }
 
         [TestMethod]
         public async Task DataStream_Manager_AzureEventTableStorageManaged_ReplaceKey_Valid()
         {
-            await AzureReplaceKeyAsync(DataStreamTypes.AzureTableStorage_Managed);
+            await AzureReplaceKeyAsync(_org, DataStreamTypes.AzureTableStorage_Managed);
         }
 
         [TestMethod]
@@ -322,7 +324,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             var originalPassword = stream.DbPassword;
             var result = await _dataStreamManager.AddDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(originalPassword), Times.Once);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(_org, originalPassword), Times.Once);
             Assert.IsNull(stream.AzureAccessKey);
             Assert.AreEqual(GENERATD_SECURE_ID_VALUE, stream.DBPasswordSecureId);
         }
@@ -336,8 +338,8 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             var result = await _dataStreamManager.UpdateDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
 
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(It.IsAny<string>()), Times.Never);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(It.IsAny<string>()), Times.Never);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(_org, It.IsAny<string>()), Times.Never);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(_org, It.IsAny<string>()), Times.Never);
 
             Assert.IsNull(stream.DbPassword);
             Assert.AreEqual(OLD_SECURE_ID_VALUE, stream.DBPasswordSecureId);
@@ -352,8 +354,8 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.DbPassword = updatedPassword;
             var result = await _dataStreamManager.UpdateDataStreamAsync(stream, _org, _user);
             Assert.IsTrue(result.Successful);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(updatedPassword), Times.Once);
-            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(OLD_SECURE_ID_VALUE), Times.Once);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(_org, updatedPassword), Times.Once);
+            _secureStorage.Verify<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(_org, OLD_SECURE_ID_VALUE), Times.Once);
             Assert.IsNull(stream.DbPassword);
             Assert.AreEqual(GENERATD_SECURE_ID_VALUE, stream.DBPasswordSecureId);
         }

@@ -47,7 +47,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             {
                 if (!String.IsNullOrEmpty(stream.AzureAccessKey))
                 {
-                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.AzureAccessKey);
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.AzureAccessKey);
                     if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                     stream.AzureAccessKeySecureId = addSecretResult.Result;
                     stream.AzureAccessKey = null;
@@ -62,7 +62,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             {
                 if (!String.IsNullOrEmpty(stream.AwsSecretKey))
                 {
-                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.AwsSecretKey);
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.AwsSecretKey);
                     if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                     stream.AWSSecretKeySecureId = addSecretResult.Result;
                     stream.AwsSecretKey = null;
@@ -77,7 +77,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             {
                 if (!String.IsNullOrEmpty(stream.DbPassword))
                 {
-                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.DbPassword);
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.DbPassword);
                     if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                     stream.DBPasswordSecureId = addSecretResult.Result;
                     stream.DbPassword = null;
@@ -115,7 +115,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                         return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
                     }
 
-                    var azureSecretKeyResult = await _secureStorage.GetSecretAsync(stream.AzureAccessKeySecureId, user, org);
+                    var azureSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.AzureAccessKeySecureId, user);
                     if (!azureSecretKeyResult.Successful) return InvokeResult<DataStream>.FromInvokeResult(azureSecretKeyResult.ToInvokeResult());
 
                     stream.AzureAccessKey = azureSecretKeyResult.Result;
@@ -128,7 +128,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                         return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
                     }
 
-                    var awsSecretKeyResult = await _secureStorage.GetSecretAsync(stream.AWSSecretKeySecureId, user, org);
+                    var awsSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.AWSSecretKeySecureId, user);
                     if (!awsSecretKeyResult.Successful) return InvokeResult<DataStream>.FromInvokeResult(awsSecretKeyResult.ToInvokeResult());
 
                     stream.AwsSecretKey = awsSecretKeyResult.Result;
@@ -141,7 +141,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                         return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
                     }
 
-                    var dbSecretKeyResult = await _secureStorage.GetSecretAsync(stream.DBPasswordSecureId, user, org);
+                    var dbSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
                     if (!dbSecretKeyResult.Successful) return InvokeResult<DataStream>.FromInvokeResult(dbSecretKeyResult.ToInvokeResult());
 
                     stream.DbPassword = dbSecretKeyResult.Result;
@@ -204,12 +204,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             {
                 if (!String.IsNullOrEmpty(stream.AzureAccessKey))
                 {
-                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.AzureAccessKey);
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.AzureAccessKey);
                     if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
 
                     if (!string.IsNullOrEmpty(stream.AzureAccessKeySecureId))
                     {
-                        await _secureStorage.RemoveSecretAsync(stream.AzureAccessKeySecureId);
+                        await _secureStorage.RemoveSecretAsync(org, stream.AzureAccessKeySecureId);
                     }
 
                     stream.AzureAccessKeySecureId = addSecretResult.Result;
@@ -221,12 +221,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             {
                 if(!String.IsNullOrEmpty(stream.AwsSecretKey))
                 {
-                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.AwsSecretKey);
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.AwsSecretKey);
                     if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
 
                     if (!string.IsNullOrEmpty(stream.AWSSecretKeySecureId))
                     {
-                        await _secureStorage.RemoveSecretAsync(stream.AWSSecretKeySecureId);
+                        await _secureStorage.RemoveSecretAsync(org, stream.AWSSecretKeySecureId);
                     }
 
                     stream.AWSSecretKeySecureId = addSecretResult.Result;
@@ -238,12 +238,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             {
                 if (!String.IsNullOrEmpty(stream.DbPassword))
                 {
-                    var addSecretResult = await _secureStorage.AddSecretAsync(stream.DbPassword);
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.DbPassword);
                     if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
 
                     if (!string.IsNullOrEmpty(stream.DBPasswordSecureId))
                     {
-                        await _secureStorage.RemoveSecretAsync(stream.DBPasswordSecureId);
+                        await _secureStorage.RemoveSecretAsync(org, stream.DBPasswordSecureId);
                     }
 
                     stream.DBPasswordSecureId = addSecretResult.Result;

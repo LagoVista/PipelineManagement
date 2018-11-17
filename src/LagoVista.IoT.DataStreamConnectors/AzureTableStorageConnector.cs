@@ -238,7 +238,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             throw new NotImplementedException();
         }
 
-        public async Task<ListResponse<DataStreamResult>> GetItemsAsync(Dictionary<string, object> additionalFilter, ListRequest request)
+        public Task<ListResponse<DataStreamResult>> GetItemsAsync(Dictionary<string, object> additionalFilter, ListRequest request)
         {
             throw new NotImplementedException();
         }

@@ -25,6 +25,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         ICustomPipelineConfigurationRepo _customPipelineConfigurationRepo;
         ISecureStorage _secureStorage;
 
+
         public PipelineModuleManager(IListenerConfigurationRepo listenerConfigurationRep, ISecureStorage secureStorage, IInputTranslatorConfigurationRepo inputConfigurationRepo, ISentinelConfigurationRepo sentinalConfigurationRepo, IPlannerConfigurationRepo plannerConfigurationRepo,
                IOutputTranslatorConfigurationRepo outputConfigurationRepo, ITransmitterConfigurationRepo translatorConfigurationRepo, ICustomPipelineConfigurationRepo pipelineConfigrationRepo, IAdminLogger logger, IAppConfig appConfig,
                IDependencyManager depManager, ISecurity security) : base(logger, appConfig, depManager, security)
@@ -47,7 +48,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(listenerConfiguration.AccessKey))
             {
-                var addSecretResult = await _secureStorage.AddSecretAsync(listenerConfiguration.AccessKey);
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, listenerConfiguration.AccessKey);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                 listenerConfiguration.SecureAccessKeyId = addSecretResult.Result;
                 listenerConfiguration.AccessKey = null;
@@ -55,7 +56,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(listenerConfiguration.Password))
             {
-                var addSecretResult = await _secureStorage.AddSecretAsync(listenerConfiguration.Password);
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, listenerConfiguration.Password);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                 listenerConfiguration.SecurePasswordId = addSecretResult.Result;
                 listenerConfiguration.Password = null;
@@ -104,7 +105,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(transmitterConfiguration.AccessKey))
             {
-                var addSecretResult = await _secureStorage.AddSecretAsync(transmitterConfiguration.AccessKey);
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, transmitterConfiguration.AccessKey);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                 transmitterConfiguration.SecureAccessKeyId = addSecretResult.Result;
                 transmitterConfiguration.AccessKey = null;
@@ -112,7 +113,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(transmitterConfiguration.Password))
             {
-                var addSecretResult = await _secureStorage.AddSecretAsync(transmitterConfiguration.Password);
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, transmitterConfiguration.Password);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                 transmitterConfiguration.SecurePasswordId = addSecretResult.Result;
                 transmitterConfiguration.Password = null;
@@ -139,9 +140,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(listenerConfiguration.AccessKey))
             {
-                await _secureStorage.RemoveSecretAsync(listenerConfiguration.SecureAccessKeyId);
+                await _secureStorage.RemoveSecretAsync(org, listenerConfiguration.SecureAccessKeyId);
 
-                var addSecretResult = await _secureStorage.AddSecretAsync(listenerConfiguration.AccessKey);
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, listenerConfiguration.AccessKey);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                 listenerConfiguration.SecureAccessKeyId = addSecretResult.Result;
                 listenerConfiguration.AccessKey = null;
@@ -149,9 +150,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(listenerConfiguration.Password))
             {
-                await _secureStorage.RemoveSecretAsync(listenerConfiguration.SecurePasswordId);
+                await _secureStorage.RemoveSecretAsync(org, listenerConfiguration.SecurePasswordId);
 
-                var addSecretResult = await _secureStorage.AddSecretAsync(listenerConfiguration.Password);
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, listenerConfiguration.Password);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                 listenerConfiguration.SecurePasswordId = addSecretResult.Result;
                 listenerConfiguration.Password = null;
@@ -200,9 +201,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(transmitterConfiguration.AccessKey))
             {
-                await _secureStorage.RemoveSecretAsync(transmitterConfiguration.SecureAccessKeyId);
+                await _secureStorage.RemoveSecretAsync(org, transmitterConfiguration.SecureAccessKeyId);
 
-                var addSecretResult = await _secureStorage.AddSecretAsync(transmitterConfiguration.AccessKey);
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, transmitterConfiguration.AccessKey);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                 transmitterConfiguration.SecureAccessKeyId = addSecretResult.Result;
                 transmitterConfiguration.AccessKey = null;
@@ -210,9 +211,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(transmitterConfiguration.Password))
             {
-                await _secureStorage.RemoveSecretAsync(transmitterConfiguration.SecurePasswordId);
+                await _secureStorage.RemoveSecretAsync(org, transmitterConfiguration.SecurePasswordId);
 
-                var addSecretResult = await _secureStorage.AddSecretAsync(transmitterConfiguration.Password);
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, transmitterConfiguration.Password);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                 transmitterConfiguration.SecurePasswordId = addSecretResult.Result;
                 transmitterConfiguration.Password = null;
