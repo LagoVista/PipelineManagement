@@ -134,6 +134,18 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:ConnectionType_RabbitMQClient
 
 		public static string ConnectionType_RabbitMQClient { get { return GetResourceString("ConnectionType_RabbitMQClient"); } }
+//Resources:PipelineAdminResources:Custom_AccountId
+
+		public static string Custom_AccountId { get { return GetResourceString("Custom_AccountId"); } }
+//Resources:PipelineAdminResources:Custom_AccountPassword
+
+		public static string Custom_AccountPassword { get { return GetResourceString("Custom_AccountPassword"); } }
+//Resources:PipelineAdminResources:Custom_AccountPassword_Help
+
+		public static string Custom_AccountPassword_Help { get { return GetResourceString("Custom_AccountPassword_Help"); } }
+//Resources:PipelineAdminResources:Custom_Uri
+
+		public static string Custom_Uri { get { return GetResourceString("Custom_Uri"); } }
 //Resources:PipelineAdminResources:CustomModule_Description
 
 		public static string CustomModule_Description { get { return GetResourceString("CustomModule_Description"); } }
@@ -431,6 +443,36 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStreamField_UnitSet_Watermark
 
 		public static string DataStreamField_UnitSet_Watermark { get { return GetResourceString("DataStreamField_UnitSet_Watermark"); } }
+//Resources:PipelineAdminResources:Dictionary_Description
+
+		public static string Dictionary_Description { get { return GetResourceString("Dictionary_Description"); } }
+//Resources:PipelineAdminResources:Dictionary_Help
+
+		public static string Dictionary_Help { get { return GetResourceString("Dictionary_Help"); } }
+//Resources:PipelineAdminResources:Dictionary_Password
+
+		public static string Dictionary_Password { get { return GetResourceString("Dictionary_Password"); } }
+//Resources:PipelineAdminResources:Dictionary_Password_Help
+
+		public static string Dictionary_Password_Help { get { return GetResourceString("Dictionary_Password_Help"); } }
+//Resources:PipelineAdminResources:Dictionary_Title
+
+		public static string Dictionary_Title { get { return GetResourceString("Dictionary_Title"); } }
+//Resources:PipelineAdminResources:Dictionary_Type
+
+		public static string Dictionary_Type { get { return GetResourceString("Dictionary_Type"); } }
+//Resources:PipelineAdminResources:Dictionary_Type_NuvIoT
+
+		public static string Dictionary_Type_NuvIoT { get { return GetResourceString("Dictionary_Type_NuvIoT"); } }
+//Resources:PipelineAdminResources:Dictionary_Type_Redis
+
+		public static string Dictionary_Type_Redis { get { return GetResourceString("Dictionary_Type_Redis"); } }
+//Resources:PipelineAdminResources:Dictionary_Type_Select
+
+		public static string Dictionary_Type_Select { get { return GetResourceString("Dictionary_Type_Select"); } }
+//Resources:PipelineAdminResources:Dictionary_Uri
+
+		public static string Dictionary_Uri { get { return GetResourceString("Dictionary_Uri"); } }
 //Resources:PipelineAdminResources:Err_CouldNotLoadCustomModule
 
 		public static string Err_CouldNotLoadCustomModule { get { return GetResourceString("Err_CouldNotLoadCustomModule"); } }
@@ -1115,6 +1157,10 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string ConnectionType_MQTT_Listener = "ConnectionType_MQTT_Listener";
 			public const string ConnectionType_RabbitMQ = "ConnectionType_RabbitMQ";
 			public const string ConnectionType_RabbitMQClient = "ConnectionType_RabbitMQClient";
+			public const string Custom_AccountId = "Custom_AccountId";
+			public const string Custom_AccountPassword = "Custom_AccountPassword";
+			public const string Custom_AccountPassword_Help = "Custom_AccountPassword_Help";
+			public const string Custom_Uri = "Custom_Uri";
 			public const string CustomModule_Description = "CustomModule_Description";
 			public const string CustomModule_Help = "CustomModule_Help";
 			public const string CustomModule_Title = "CustomModule_Title";
@@ -1214,6 +1260,16 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStreamField_Title = "DataStreamField_Title";
 			public const string DataStreamField_UnitSet = "DataStreamField_UnitSet";
 			public const string DataStreamField_UnitSet_Watermark = "DataStreamField_UnitSet_Watermark";
+			public const string Dictionary_Description = "Dictionary_Description";
+			public const string Dictionary_Help = "Dictionary_Help";
+			public const string Dictionary_Password = "Dictionary_Password";
+			public const string Dictionary_Password_Help = "Dictionary_Password_Help";
+			public const string Dictionary_Title = "Dictionary_Title";
+			public const string Dictionary_Type = "Dictionary_Type";
+			public const string Dictionary_Type_NuvIoT = "Dictionary_Type_NuvIoT";
+			public const string Dictionary_Type_Redis = "Dictionary_Type_Redis";
+			public const string Dictionary_Type_Select = "Dictionary_Type_Select";
+			public const string Dictionary_Uri = "Dictionary_Uri";
 			public const string Err_CouldNotLoadCustomModule = "Err_CouldNotLoadCustomModule";
 			public const string Err_CouldNotLoadDataStream = "Err_CouldNotLoadDataStream";
 			public const string Err_CouldNotLoadInputTranslator = "Err_CouldNotLoadInputTranslator";
