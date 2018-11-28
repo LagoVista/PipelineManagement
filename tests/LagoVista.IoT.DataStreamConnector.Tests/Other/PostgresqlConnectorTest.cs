@@ -17,10 +17,10 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
     [TestClass]
     public class PostgresqlConnectorTest : DataStreamConnectorTestBase
     {
-        DataStream _currentStream;
-        IInstanceLogger _logger;
+        static DataStream _currentStream;
+        static IInstanceLogger _logger;
 
-        private DataStream GetValidStream()
+        private static DataStream GetValidStream()
         {
             if (_currentStream != null)
             {
@@ -48,7 +48,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                 DbSchema = "public",
                 DbTableName = "information",
                 CreateTableDDL = @"
-CREATE EXTENSION postgis;
+CREATE EXTENSION if not exists postgis;
 CREATE TABLE if not exists public.information (
 	id SERIAL,
     deviceId text not null,
@@ -137,7 +137,7 @@ CREATE TABLE if not exists public.information (
         }
 
 
-        private async Task RemoveDatabase()
+        private static async Task RemoveDatabase()
         {
             var stream = GetValidStream();
 
@@ -169,10 +169,43 @@ CREATE TABLE if not exists public.information (
             }
         }
 
+
+        [ClassInitialize]
+        public static async Task Init(TestContext ctx)
+        {
+            await RemoveDatabase();
+        }
+
         [TestInitialize]
         public async Task Init()
         {
-            await RemoveDatabase();
+            var stream = GetValidStream();
+            var connString = $"Host={stream.DbURL};Username={stream.DbUserName};Password={stream.DbPassword};";//Database={stream.DbName}";
+
+            using (var conn = new NpgsqlConnection(connString))
+            using (var cmd = new NpgsqlCommand())
+            {
+                cmd.Connection = conn;
+                await conn.OpenAsync();
+                cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
+                cmd.Parameters.AddWithValue("@dbname", stream.DbName);
+                var result = await cmd.ExecuteScalarAsync();
+                if (result == null)
+                {
+                    return;
+                }
+            }
+
+            connString = $"Host={stream.DbURL};Username={stream.DbUserName};Password={stream.DbPassword};Database={stream.DbName}";
+
+            using (var conn = new NpgsqlConnection(connString))
+            using (var cmd = new NpgsqlCommand())
+            {
+                await conn.OpenAsync();
+                cmd.Connection = conn;
+                cmd.CommandText = $"drop table if exists {stream.DbSchema}.{stream.DbTableName}";
+                await cmd.ExecuteNonQueryAsync();
+            }
         }
 
 
@@ -232,7 +265,6 @@ CREATE TABLE if not exists public.information (
             var connector = new PostgresqlConnector(_logger);
             AssertSuccessful(await connector.InitAsync(stream));
 
-
             var deviceId = "DEV001";
             const int rowcount = 20;
 
@@ -247,7 +279,7 @@ CREATE TABLE if not exists public.information (
         }
 
         [TestMethod]
-        public async Task DataStream_Postgres_GetDataTest_Test()
+        public async Task DataStream_Postgres_GetFilteredData_Test()
         {
             var stream = GetValidStream();
             var connector = new PostgresqlConnector(_logger);

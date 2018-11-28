@@ -269,7 +269,12 @@ namespace LagoVista.IoT.DataStreamConnectors
                         {
                             cmd.Parameters.Clear();
                             cmd.CommandText = stream.CreateTableDDL;
+                            Console.WriteLine($"Crreated" + cmd.CommandText);
                             var result = await cmd.ExecuteNonQueryAsync();
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Table No Exists...don't create {stream.DbSchema} - {stream.DbTableName}");
                         }
                     }
                 }

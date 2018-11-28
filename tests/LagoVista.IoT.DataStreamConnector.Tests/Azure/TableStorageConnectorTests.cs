@@ -78,33 +78,33 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestInitialize()]
-        public void Init()
+        public async Task Init()
         {
             _currentStream = null;
             var stream = GetValidStream();
             var cloudTable = GetCloudTable(stream);
-            if (cloudTable.Exists())
+            if (await cloudTable.ExistsAsync())
             {
-                cloudTable.Delete();
+                await cloudTable.DeleteAsync();
             }
 
-            Assert.IsFalse(cloudTable.Exists());
+            Assert.IsFalse(await cloudTable.ExistsAsync());
         }
 
         [TestCleanup]
-        public void Cleanup()
+        public async Task Cleanup()
         {
             var stream = GetValidStream();
             stream.AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID");
             stream.AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY");
 
             var cloudTable = GetCloudTable(stream);
-            if (cloudTable.Exists())
+            if (await cloudTable.ExistsAsync())
             {
-                cloudTable.Delete();
+                await cloudTable.DeleteAsync();
             }
 
-            Assert.IsFalse(cloudTable.Exists());
+            Assert.IsFalse(await cloudTable.ExistsAsync());
             _currentStream = null;
         }
 
@@ -134,9 +134,14 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
             var cloudTable = GetCloudTable(stream);
             var recIdQuery = TableQuery.GenerateFilterCondition("uniqueId", QueryComparisons.Equal, uniqueId);
-            var result = cloudTable.ExecuteQuery((new TableQuery()).Where(recIdQuery)).First();
-            Assert.AreEqual(uniqueId, result.Properties["uniqueId"].PropertyAsObject);
-            Assert.AreEqual("abc123", result.Properties[stream.DeviceIdFieldName].PropertyAsObject);
+
+            var query = new TableQuery().Where(recIdQuery);
+           
+            var queryResult = (await cloudTable.ExecuteQuerySegmentedAsync(query, new TableContinuationToken()));                
+                
+                
+            Assert.AreEqual(uniqueId, queryResult.First().Properties["uniqueId"].PropertyAsObject);
+            Assert.AreEqual("abc123", queryResult.First().Properties[stream.DeviceIdFieldName].PropertyAsObject);
         }
 
        
@@ -164,7 +169,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 batchOper.Add(TableOperation.Insert(DataStreamTSEntity.FromDeviceStreamRecord(stream, record)));
             }
 
-            var results = cloudTable.ExecuteBatch(batchOper);
+            var results = await cloudTable.ExecuteBatchAsync(batchOper);
             Assert.AreEqual(100, results.Count, "Batch result size should match insert size");
             foreach (var result in results)
             {
@@ -213,7 +218,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 Console.WriteLine(tsRecord.RowKey);
             }
 
-            var results = cloudTable.ExecuteBatch(batchOper);
+            var results = await cloudTable.ExecuteBatchAsync(batchOper);
             Assert.AreEqual(records.Count, results.Count, "Batch result size should match insert size");
             foreach (var result in results)
             {
@@ -274,7 +279,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var stream = GetValidStream();
             stream.AzureAccessKey = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.");
+            AssertInvalidError(validationResult, "Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly including the signature.");
         }
 
         [TestMethod]
@@ -283,7 +288,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var stream = GetValidStream();
             stream.AzureStorageAccountName = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "The remote name could not be resolved: 'isnottherightone.table.core.windows.net'");
+            AssertInvalidError(validationResult, "No such host is known");
         }       
     }
 }

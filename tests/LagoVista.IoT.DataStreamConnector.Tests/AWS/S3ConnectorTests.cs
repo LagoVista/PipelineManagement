@@ -66,11 +66,11 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         }
 
         [TestInitialize]
-        public void Init()
+        public async Task Init()
         {
             using (var client = GetS3Client())
             {
-                if(client.ListBuckets().Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Any())
+                if((await client.ListBucketsAsync()).Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Any())
                 {
                     RemoveBucket();
                 }
@@ -104,7 +104,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         {
             using (var client = GetS3Client())
             {
-                Assert.AreEqual(0, client.ListBuckets().Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Count());
+                Assert.AreEqual(0, (await client.ListBucketsAsync()).Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Count());
             }
 
             var stream = GetValidStream();
@@ -114,7 +114,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
             using (var client = GetS3Client())
             {
-                Assert.AreEqual(1, client.ListBuckets().Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Count());
+                Assert.AreEqual(1, (await client.ListBucketsAsync()).Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Count());
             }
         }
 
@@ -168,19 +168,19 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 
 
         [TestCleanup]
-        public void RemoveBucket()
+        public async Task RemoveBucket()
         {          
             using (var s3Client = GetS3Client())
             {
                 try
                 {
-                    var items = s3Client.ListObjects(BUCKET_NAME);
+                    var items = await s3Client.ListObjectsAsync(BUCKET_NAME);
                     foreach (var item in items.S3Objects)
                     {
-                        s3Client.DeleteObject(BUCKET_NAME, item.Key);
+                        s3Client.DeleteObjectAsync(BUCKET_NAME, item.Key);
                     }
 
-                    s3Client.DeleteBucket(BUCKET_NAME);
+                    await s3Client.DeleteBucketAsync(BUCKET_NAME);
                 }
                 catch(AmazonS3Exception) {  /* bucket may not exist, that's ok */}
             }
