@@ -43,6 +43,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 }
 
                 cache.PasswordSecretId = addSecretResult.Result;
+                cache.Password = null;
             }
 
             await _applicationCacheRepo.AddApplicationCacheAsync(cache);
