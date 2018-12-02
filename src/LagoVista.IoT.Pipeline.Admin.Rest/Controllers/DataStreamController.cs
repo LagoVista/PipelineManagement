@@ -5,6 +5,7 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
+using LagoVista.IoT.Web.Common.Attributes;
 using LagoVista.IoT.Web.Common.Controllers;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
     /// Device Stream Controller
     /// </summary>
     [Authorize]
+    [AppBuilder]
     public class DataStreamController : LagoVistaBaseController
     {
         IDataStreamManager _dataStreamManager;
@@ -36,7 +38,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// <param name="datastream"></param>
         /// <returns></returns>
         [HttpPost("/api/datastream")]
-        public Task<InvokeResult> AddHostAsync([FromBody] DataStream datastream)
+        public Task<InvokeResult> AddDataStream([FromBody] DataStream datastream)
         {
             return _dataStreamManager.AddDataStreamAsync(datastream, OrgEntityHeader, UserEntityHeader);
         }

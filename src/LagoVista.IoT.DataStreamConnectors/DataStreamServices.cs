@@ -23,6 +23,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                 case DataStreamTypes.AzureTableStorage:
                 case DataStreamTypes.AzureTableStorage_Managed: _streamConnector = new AzureTableStorageConnector(logger); break;
                 case DataStreamTypes.SQLServer: _streamConnector = new SQLServerConnector(logger); break;
+                case DataStreamTypes.Redis: _streamConnector = new RedisConnector(logger); break;
                 case DataStreamTypes.Postgresql: _streamConnector = new PostgresqlConnector(logger); break;
             }
 

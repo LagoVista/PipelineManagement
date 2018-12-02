@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Reflection;
 
-//Resources:PipelineAdminResources:Common_Description
+//Resources:PipelineAdminResources:AppCache_CacheType
 namespace LagoVista.IoT.Pipeline.Models.Resources
 {
 	public class PipelineAdminResources
@@ -55,6 +55,39 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			return new HtmlString(str);
         }*/
 		
+		public static string AppCache_CacheType { get { return GetResourceString("AppCache_CacheType"); } }
+//Resources:PipelineAdminResources:AppCache_CacheType_NuvIoT
+
+		public static string AppCache_CacheType_NuvIoT { get { return GetResourceString("AppCache_CacheType_NuvIoT"); } }
+//Resources:PipelineAdminResources:AppCache_CacheType_Redis
+
+		public static string AppCache_CacheType_Redis { get { return GetResourceString("AppCache_CacheType_Redis"); } }
+//Resources:PipelineAdminResources:AppCache_Description
+
+		public static string AppCache_Description { get { return GetResourceString("AppCache_Description"); } }
+//Resources:PipelineAdminResources:AppCache_Help
+
+		public static string AppCache_Help { get { return GetResourceString("AppCache_Help"); } }
+//Resources:PipelineAdminResources:AppCache_Password
+
+		public static string AppCache_Password { get { return GetResourceString("AppCache_Password"); } }
+//Resources:PipelineAdminResources:AppCache_Password_Help
+
+		public static string AppCache_Password_Help { get { return GetResourceString("AppCache_Password_Help"); } }
+//Resources:PipelineAdminResources:AppCache_SelectCacheType
+
+		public static string AppCache_SelectCacheType { get { return GetResourceString("AppCache_SelectCacheType"); } }
+//Resources:PipelineAdminResources:AppCache_Title
+
+		public static string AppCache_Title { get { return GetResourceString("AppCache_Title"); } }
+//Resources:PipelineAdminResources:AppCache_Uri
+
+		public static string AppCache_Uri { get { return GetResourceString("AppCache_Uri"); } }
+//Resources:PipelineAdminResources:AppCache_Uri_Help
+
+		public static string AppCache_Uri_Help { get { return GetResourceString("AppCache_Uri_Help"); } }
+//Resources:PipelineAdminResources:Common_Description
+
 		public static string Common_Description { get { return GetResourceString("Common_Description"); } }
 //Resources:PipelineAdminResources:Common_IsPublic
 
@@ -299,6 +332,18 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_InvalidTableName
 
 		public static string DataStream_InvalidTableName { get { return GetResourceString("DataStream_InvalidTableName"); } }
+//Resources:PipelineAdminResources:DataStream_RedisPassword
+
+		public static string DataStream_RedisPassword { get { return GetResourceString("DataStream_RedisPassword"); } }
+//Resources:PipelineAdminResources:DataStream_RedisPassword_Help
+
+		public static string DataStream_RedisPassword_Help { get { return GetResourceString("DataStream_RedisPassword_Help"); } }
+//Resources:PipelineAdminResources:DataStream_RedisServers
+
+		public static string DataStream_RedisServers { get { return GetResourceString("DataStream_RedisServers"); } }
+//Resources:PipelineAdminResources:DataStream_RedisServers_Help
+
+		public static string DataStream_RedisServers_Help { get { return GetResourceString("DataStream_RedisServers_Help"); } }
 //Resources:PipelineAdminResources:DataStream_S3_BucketName
 
 		public static string DataStream_S3_BucketName { get { return GetResourceString("DataStream_S3_BucketName"); } }
@@ -329,6 +374,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_StreamType_PostgreSQL
 
 		public static string DataStream_StreamType_PostgreSQL { get { return GetResourceString("DataStream_StreamType_PostgreSQL"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_Redis
+
+		public static string DataStream_StreamType_Redis { get { return GetResourceString("DataStream_StreamType_Redis"); } }
 //Resources:PipelineAdminResources:DataStream_StreamType_Select
 
 		public static string DataStream_StreamType_Select { get { return GetResourceString("DataStream_StreamType_Select"); } }
@@ -1130,6 +1178,17 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 
 		public static class Names
 		{
+			public const string AppCache_CacheType = "AppCache_CacheType";
+			public const string AppCache_CacheType_NuvIoT = "AppCache_CacheType_NuvIoT";
+			public const string AppCache_CacheType_Redis = "AppCache_CacheType_Redis";
+			public const string AppCache_Description = "AppCache_Description";
+			public const string AppCache_Help = "AppCache_Help";
+			public const string AppCache_Password = "AppCache_Password";
+			public const string AppCache_Password_Help = "AppCache_Password_Help";
+			public const string AppCache_SelectCacheType = "AppCache_SelectCacheType";
+			public const string AppCache_Title = "AppCache_Title";
+			public const string AppCache_Uri = "AppCache_Uri";
+			public const string AppCache_Uri_Help = "AppCache_Uri_Help";
 			public const string Common_Description = "Common_Description";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
@@ -1212,6 +1271,10 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_InvalidEHName = "DataStream_InvalidEHName";
 			public const string DataStream_InvalidEHPathName = "DataStream_InvalidEHPathName";
 			public const string DataStream_InvalidTableName = "DataStream_InvalidTableName";
+			public const string DataStream_RedisPassword = "DataStream_RedisPassword";
+			public const string DataStream_RedisPassword_Help = "DataStream_RedisPassword_Help";
+			public const string DataStream_RedisServers = "DataStream_RedisServers";
+			public const string DataStream_RedisServers_Help = "DataStream_RedisServers_Help";
 			public const string DataStream_S3_BucketName = "DataStream_S3_BucketName";
 			public const string DataStream_StreamType = "DataStream_StreamType";
 			public const string DataStream_StreamType_AWS_ElasticSearch = "DataStream_StreamType_AWS_ElasticSearch";
@@ -1222,6 +1285,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_StreamType_AzureEventHub_Managegd = "DataStream_StreamType_AzureEventHub_Managegd";
 			public const string DataStream_StreamType_DataLake = "DataStream_StreamType_DataLake";
 			public const string DataStream_StreamType_PostgreSQL = "DataStream_StreamType_PostgreSQL";
+			public const string DataStream_StreamType_Redis = "DataStream_StreamType_Redis";
 			public const string DataStream_StreamType_Select = "DataStream_StreamType_Select";
 			public const string DataStream_StreamType_SQLServer = "DataStream_StreamType_SQLServer";
 			public const string DataStream_StreamType_TableStorage = "DataStream_StreamType_TableStorage";

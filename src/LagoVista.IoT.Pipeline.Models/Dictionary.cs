@@ -27,8 +27,8 @@ namespace LagoVista.IoT.Pipeline.Models
 
         public override string ModuleType => PipelineModuleType_Dictionary;
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Dictionary_Type, EnumType: typeof(DataStreamTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.Dictionary_Type_Select, IsRequired: true)]
-        public EntityHeader<DictionaryTypes> DictionaryHelp { get; set; }
+        [FormField(LabelResource: PipelineAdminResources.Names.Dictionary_Type, EnumType: typeof(DictionaryTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.Dictionary_Type_Select, IsRequired: true)]
+        public EntityHeader<DictionaryTypes> DictionaryType { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Dictionary_Uri, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string Uri { get; set; }

@@ -200,7 +200,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             var stream = GetValidStream();
             stream.AwsSecretKey = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.", "The request signature we calculated does not match the signature you provided. Check your key and signing method.");
+            AssertInvalidError(validationResult, "Exception of type 'Amazon.Runtime.Internal.HttpErrorResponseException' was thrown.", "The request signature we calculated does not match the signature you provided. Check your key and signing method.");
         }
     }
 }

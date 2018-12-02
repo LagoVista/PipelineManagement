@@ -12,6 +12,7 @@ namespace LagoVista.IoT.Pipeline.Admin
 
             services.AddTransient<IPipelineModuleManager, PipelineModuleManager>();
             services.AddTransient<IDataStreamManager, DataStreamManager>();
+            services.AddTransient<IApplicationCacheManager, ApplicationCacheManager>();
 
         }
     }

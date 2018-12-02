@@ -13,6 +13,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos
             services.AddTransient<IListenerConfigurationRepo, ListenerConfigurationRepo>();
             services.AddTransient<IOutputTranslatorConfigurationRepo, OutputTranslatorConfigurationRepo>();
             services.AddTransient<IDataStreamRepo, DataStreamRepo>();
+            services.AddTransient<IApplicationCacheRepo, ApplicationCacheRepo>();
             services.AddTransient<ISentinelConfigurationRepo, SentinelConfigurationRepo>();
             services.AddTransient<IPlannerConfigurationRepo, PlannerConfigurationRepo>();
             services.AddTransient<ITransmitterConfigurationRepo, TransmitterConfigurationRepo>();

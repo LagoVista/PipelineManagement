@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using LagoVista.Core.Exceptions;
+﻿using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
@@ -12,6 +8,9 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Pipeline.Admin.Managers
 {
@@ -48,7 +47,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 if (!String.IsNullOrEmpty(stream.AzureAccessKey))
                 {
                     var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.AzureAccessKey);
-                    if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
+
                     stream.AzureAccessKeySecureId = addSecretResult.Result;
                     stream.AzureAccessKey = null;
                 }
@@ -63,7 +66,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 if (!String.IsNullOrEmpty(stream.AwsSecretKey))
                 {
                     var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.AwsSecretKey);
-                    if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
+
                     stream.AWSSecretKeySecureId = addSecretResult.Result;
                     stream.AwsSecretKey = null;
                 }
@@ -78,13 +85,31 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 if (!String.IsNullOrEmpty(stream.DbPassword))
                 {
                     var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.DbPassword);
-                    if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
+
                     stream.DBPasswordSecureId = addSecretResult.Result;
                     stream.DbPassword = null;
                 }
                 else
                 {
                     throw new Exception("Validation should have cut null or empty DbPassword, but it did not.");
+                }
+            }
+            else if (stream.StreamType.Value == DataStreamTypes.Redis)
+            {
+                if (!String.IsNullOrEmpty(stream.RedisPassword))
+                {
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.RedisPassword);
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
+
+                    stream.RedisPasswordSecureId = addSecretResult.Result;
+                    stream.RedisPassword = null;
                 }
             }
             else
@@ -116,7 +141,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     }
 
                     var azureSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.AzureAccessKeySecureId, user);
-                    if (!azureSecretKeyResult.Successful) return InvokeResult<DataStream>.FromInvokeResult(azureSecretKeyResult.ToInvokeResult());
+                    if (!azureSecretKeyResult.Successful)
+                    {
+                        return InvokeResult<DataStream>.FromInvokeResult(azureSecretKeyResult.ToInvokeResult());
+                    }
 
                     stream.AzureAccessKey = azureSecretKeyResult.Result;
                 }
@@ -129,7 +157,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     }
 
                     var awsSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.AWSSecretKeySecureId, user);
-                    if (!awsSecretKeyResult.Successful) return InvokeResult<DataStream>.FromInvokeResult(awsSecretKeyResult.ToInvokeResult());
+                    if (!awsSecretKeyResult.Successful)
+                    {
+                        return InvokeResult<DataStream>.FromInvokeResult(awsSecretKeyResult.ToInvokeResult());
+                    }
 
                     stream.AwsSecretKey = awsSecretKeyResult.Result;
                 }
@@ -142,11 +173,26 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     }
 
                     var dbSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
-                    if (!dbSecretKeyResult.Successful) return InvokeResult<DataStream>.FromInvokeResult(dbSecretKeyResult.ToInvokeResult());
+                    if (!dbSecretKeyResult.Successful)
+                    {
+                        return InvokeResult<DataStream>.FromInvokeResult(dbSecretKeyResult.ToInvokeResult());
+                    }
 
                     stream.DbPassword = dbSecretKeyResult.Result;
                 }
+                else if (stream.StreamType.Value == DataStreamTypes.Redis)
+                {
+                    if (!String.IsNullOrEmpty(stream.RedisPasswordSecureId))
+                    {
+                        var getSecretResult = await _secureStorage.GetSecretAsync(org, stream.RedisPasswordSecureId, user);
+                        if (!getSecretResult.Successful)
+                        {
+                            return InvokeResult<DataStream>.FromInvokeResult(getSecretResult.ToInvokeResult());
+                        }
 
+                        stream.RedisPassword = getSecretResult.Result;
+                    }
+                }
 
                 return InvokeResult<DataStream>.Create(stream);
             }
@@ -205,7 +251,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 if (!String.IsNullOrEmpty(stream.AzureAccessKey))
                 {
                     var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.AzureAccessKey);
-                    if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
 
                     if (!string.IsNullOrEmpty(stream.AzureAccessKeySecureId))
                     {
@@ -219,10 +268,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             else if (stream.StreamType.Value == DataStreamTypes.AWSS3 ||
                stream.StreamType.Value == DataStreamTypes.AWSElasticSearch)
             {
-                if(!String.IsNullOrEmpty(stream.AwsSecretKey))
+                if (!String.IsNullOrEmpty(stream.AwsSecretKey))
                 {
                     var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.AwsSecretKey);
-                    if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
 
                     if (!string.IsNullOrEmpty(stream.AWSSecretKeySecureId))
                     {
@@ -233,13 +285,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     stream.AwsSecretKey = null;
                 }
             }
-            else if(stream.StreamType.Value == DataStreamTypes.SQLServer ||
+            else if (stream.StreamType.Value == DataStreamTypes.SQLServer ||
                     stream.StreamType.Value == DataStreamTypes.Postgresql)
             {
                 if (!String.IsNullOrEmpty(stream.DbPassword))
                 {
                     var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.DbPassword);
-                    if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
 
                     if (!string.IsNullOrEmpty(stream.DBPasswordSecureId))
                     {
@@ -250,12 +305,31 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     stream.DbPassword = null;
                 }
             }
+            else if(stream.StreamType.Value == DataStreamTypes.Redis)
+            {
+                if (!String.IsNullOrEmpty(stream.RedisPassword))
+                {
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.RedisPassword);
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
 
-                await _dataStreamRepo.UpdateDataStreamAsync(stream);
+                    if (!string.IsNullOrEmpty(stream.RedisPasswordSecureId))
+                    {
+                        await _secureStorage.RemoveSecretAsync(org, stream.RedisPasswordSecureId);
+                    }
+
+                    stream.RedisPasswordSecureId = addSecretResult.Result;
+                    stream.RedisPassword = null;
+                }
+            }
+
+            await _dataStreamRepo.UpdateDataStreamAsync(stream);
             return InvokeResult.Success;
         }
 
-        public async Task<ListResponse<DataStreamResult>> GetStreamDataAsync(DataStream stream, IDataStreamConnector connector, string deviceId,  EntityHeader org, EntityHeader user, ListRequest request)
+        public async Task<ListResponse<DataStreamResult>> GetStreamDataAsync(DataStream stream, IDataStreamConnector connector, string deviceId, EntityHeader org, EntityHeader user, ListRequest request)
         {
             await AuthorizeAsync(stream, AuthorizeResult.AuthorizeActions.Read, user, org, "ReadDeviceData");
 

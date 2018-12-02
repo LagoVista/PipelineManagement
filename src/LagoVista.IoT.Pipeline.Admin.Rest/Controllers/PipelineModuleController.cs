@@ -5,6 +5,7 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
+using LagoVista.IoT.Web.Common.Attributes;
 using LagoVista.IoT.Web.Common.Controllers;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +18,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
 {
 
     [Authorize]
+    [AppBuilder]
     public class PipelineModuleController : LagoVistaBaseController
     {
 

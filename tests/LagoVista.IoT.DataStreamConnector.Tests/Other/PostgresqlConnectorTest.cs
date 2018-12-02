@@ -32,7 +32,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                 Id = "06A0754DB67945E7BAD5614B097C61F5",
                 Key = "mykey",
                 Name = "My Name",
-                StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureTableStorage),
+                StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.Postgresql),
                 CreationDate = DateTime.Now.ToJSONString(),
                 LastUpdatedDate = DateTime.Now.ToJSONString(),
                 DeviceIdFieldName = "deviceId",

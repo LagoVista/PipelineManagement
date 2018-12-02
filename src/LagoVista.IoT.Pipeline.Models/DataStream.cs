@@ -28,6 +28,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AzureTableStorage_Managed,
         [EnumLabel(DataStream.StreamType_PostgreSQL, PipelineAdminResources.Names.DataStream_StreamType_PostgreSQL, typeof(PipelineAdminResources))]
         Postgresql,
+        [EnumLabel(DataStream.StreamType_Redis, PipelineAdminResources.Names.DataStream_StreamType_Redis, typeof(PipelineAdminResources))]
+        Redis,
         //[EnumLabel(DataStream.StreamType_DataLake, PipelineAdminResources.Names.DataStream_StreamType_DataLake, typeof(PipelineAdminResources))]
         //AzureDataLake,
         [EnumLabel(DataStream.StreamType_SQLServer, PipelineAdminResources.Names.DataStream_StreamType_SQLServer, typeof(PipelineAdminResources))]
@@ -54,6 +56,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string StreamType_AzureTableStorage_Managed = "azuretablestoragemanaged";
         public const string StreamType_SQLServer = "sqlserver";
         public const string StreamType_PostgreSQL = "postgresql";
+        public const string StreamType_Redis = "redis";
 
         //public const string StreamType_DataLake = "azuredatalake";
 
@@ -184,6 +187,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         #endregion
 
+        #region Redis Properties
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisPassword, HelpResource: PipelineAdminResources.Names.DataStream_RedisPassword_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string RedisPassword { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisPassword, HelpResource: PipelineAdminResources.Names.DataStream_RedisPassword_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string RedisPasswordSecureId { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisServers, HelpResource:PipelineAdminResources.Names.DataStream_RedisServers_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]    
+        public string RedisServerUris { get; set; }
+
+        #endregion
+
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<DataStreamField> Fields { get; set; }
@@ -291,7 +306,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 {
                     result.Errors.Add(new ErrorMessage("AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest)."));
                 }
-                else if(string.IsNullOrEmpty(AwsSecretKey) && string.IsNullOrEmpty(AWSSecretKeySecureId))
+                else if (string.IsNullOrEmpty(AwsSecretKey) && string.IsNullOrEmpty(AWSSecretKeySecureId))
                 {
                     result.Errors.Add(new ErrorMessage("AWS Secret Key or SecretKeyId are required for AWS Data Streams, if you are updating and replacing the key you should provide the new AWSSecretKey otherwise you could return the original secret key id."));
                 }
@@ -332,6 +347,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             }
             #endregion
 
+            if (StreamType.Value == DataStreamTypes.Redis)
+            {
+                if ((action == Actions.Create) && String.IsNullOrEmpty(RedisPassword))
+                {
+                    if (String.IsNullOrEmpty(RedisPassword)) result.Errors.Add(new ErrorMessage("Missing Passwrod."));
+                }
+                else if (String.IsNullOrEmpty(RedisPassword) && String.IsNullOrEmpty(RedisPasswordSecureId))
+                {
+                    result.Errors.Add(new ErrorMessage("RedisPassword Password or RedisPasswordSecureId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you should return the original secret key id."));
+                }
+            }
+
             if (StreamType.Value == DataStreamTypes.SQLServer ||
                 StreamType.Value == DataStreamTypes.Postgresql)
             {
@@ -346,7 +373,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 }
                 else if (string.IsNullOrEmpty(DbPassword) && string.IsNullOrEmpty(DBPasswordSecureId))
                 {
-                    result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you could return the original secret key id."));
+                    result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you should return the original secret key id."));
                 }
             }
 
