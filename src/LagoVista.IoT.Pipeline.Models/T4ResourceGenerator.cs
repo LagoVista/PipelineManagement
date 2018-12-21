@@ -56,6 +56,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
         }*/
 		
 		public static string AppCache_CacheType { get { return GetResourceString("AppCache_CacheType"); } }
+//Resources:PipelineAdminResources:AppCache_CacheType_LocalInMemory
+
+		public static string AppCache_CacheType_LocalInMemory { get { return GetResourceString("AppCache_CacheType_LocalInMemory"); } }
 //Resources:PipelineAdminResources:AppCache_CacheType_NuvIoT
 
 		public static string AppCache_CacheType_NuvIoT { get { return GetResourceString("AppCache_CacheType_NuvIoT"); } }
@@ -1179,6 +1182,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 		public static class Names
 		{
 			public const string AppCache_CacheType = "AppCache_CacheType";
+			public const string AppCache_CacheType_LocalInMemory = "AppCache_CacheType_LocalInMemory";
 			public const string AppCache_CacheType_NuvIoT = "AppCache_CacheType_NuvIoT";
 			public const string AppCache_CacheType_Redis = "AppCache_CacheType_Redis";
 			public const string AppCache_Description = "AppCache_Description";

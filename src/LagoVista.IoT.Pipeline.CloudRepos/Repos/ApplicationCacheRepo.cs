@@ -1,6 +1,7 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Repos;
+using LagoVista.IoT.Pipeline.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

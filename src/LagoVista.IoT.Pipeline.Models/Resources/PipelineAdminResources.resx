@@ -1243,4 +1243,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="AppCache_Uri_Help" xml:space="preserve">
     <value>Enter the URI of your cache server.  If you have a cluster configuration, you can enter multiple servers seperated by a comma.  In addition if you are not using the default port (for example 6379 for Redis) you can enter the port number along with the URL seperated by a colon. Example: myhost.net:8080</value>
   </data>
+  <data name="AppCache_CacheType_LocalInMemory" xml:space="preserve">
+    <value>Local - In Memory</value>
+  </data>
 </root>

@@ -8,16 +8,18 @@ using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
 using System.Collections.Generic;
 
-namespace LagoVista.IoT.Pipeline
+namespace LagoVista.IoT.Pipeline.Models
 {
-    public enum CachceTypes
+    public enum CacheTypes
     {
+        [EnumLabel(ApplicationCache.CacheType_LocalInMemory, PipelineAdminResources.Names.AppCache_CacheType_LocalInMemory, typeof(PipelineAdminResources))]
+        LocalInMemory,
+
         [EnumLabel(ApplicationCache.CacheType_Redis, PipelineAdminResources.Names.AppCache_CacheType_Redis, typeof(PipelineAdminResources))]
         Redis,
 
         [EnumLabel(ApplicationCache.CacheType_NuvIot, PipelineAdminResources.Names.AppCache_CacheType_NuvIoT, typeof(PipelineAdminResources))]
         NuvIoT,
-
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help, PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
@@ -26,11 +28,12 @@ namespace LagoVista.IoT.Pipeline
         public override string ModuleType => PipelineModuleConfiguration.PipelineModuleType_ApplicationCache;
 
         public const string CacheType_Redis = "redis";
+        public const string CacheType_LocalInMemory = "localinmemory";
         public const string CacheType_NuvIot = "nuviot";
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.AppCache_CacheType, EnumType: typeof(CachceTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.AppCache_SelectCacheType, IsRequired: true)]
-        public EntityHeader<CachceTypes> CacheType { get; set; }
+        [FormField(LabelResource: PipelineAdminResources.Names.AppCache_CacheType, EnumType: typeof(CacheTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.AppCache_SelectCacheType, IsRequired: true)]
+        public EntityHeader<CacheTypes> CacheType { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.AppCache_Uri, HelpResource: PipelineAdminResources.Names.AppCache_Uri_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
@@ -49,10 +52,9 @@ namespace LagoVista.IoT.Pipeline
             {
                 nameof(Name),
             };
-
         }
 
-        public ApplicationCacheSummary CreateSummary()
+        public new ApplicationCacheSummary CreateSummary()
         {
             return new ApplicationCacheSummary()
             {

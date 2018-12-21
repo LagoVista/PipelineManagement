@@ -2,6 +2,7 @@
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin.Models;
+using LagoVista.IoT.Pipeline.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

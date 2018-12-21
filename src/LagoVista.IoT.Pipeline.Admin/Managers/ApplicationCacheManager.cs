@@ -7,6 +7,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using LagoVista.IoT.Pipeline.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             ValidationCheck(cache, Actions.Create);
 
-            if (cache.CacheType.Value == CachceTypes.Redis && !String.IsNullOrEmpty(cache.Password))
+            if (cache.CacheType.Value == CacheTypes.Redis && !String.IsNullOrEmpty(cache.Password))
             {
                 var addSecretResult = await _secureStorage.AddSecretAsync(org, cache.Password);
                 if (!addSecretResult.Successful)
@@ -58,7 +59,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
                 await AuthorizeAsync(cache, AuthorizeResult.AuthorizeActions.Read, user, org, "LoadFull");
 
-                if (cache.CacheType.Value == CachceTypes.Redis && !String.IsNullOrEmpty(cache.PasswordSecretId))
+                if (cache.CacheType.Value == CacheTypes.Redis && !String.IsNullOrEmpty(cache.PasswordSecretId))
                 {
                     var getResult = await _secureStorage.GetSecretAsync(org, cache.PasswordSecretId, user);
                     if (!getResult.Successful)
@@ -118,7 +119,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             await AuthorizeAsync(cache, AuthorizeResult.AuthorizeActions.Update, user, org);
             ValidationCheck(cache, Actions.Update);
 
-            if (cache.CacheType.Value == CachceTypes.Redis)
+            if (cache.CacheType.Value == CacheTypes.Redis)
             {
                 if (!String.IsNullOrEmpty(cache.Password))
                 {
