@@ -140,7 +140,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(listenerConfiguration.AccessKey))
             {
-                await _secureStorage.RemoveSecretAsync(org, listenerConfiguration.SecureAccessKeyId);
+                if (!String.IsNullOrEmpty(listenerConfiguration.SecurePasswordId))
+                {
+                    await _secureStorage.RemoveSecretAsync(org, listenerConfiguration.SecureAccessKeyId);
+                }
 
                 var addSecretResult = await _secureStorage.AddSecretAsync(org, listenerConfiguration.AccessKey);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
@@ -150,7 +153,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             if (!String.IsNullOrEmpty(listenerConfiguration.Password))
             {
-                await _secureStorage.RemoveSecretAsync(org, listenerConfiguration.SecurePasswordId);
+                if (!String.IsNullOrEmpty(listenerConfiguration.SecurePasswordId))
+                {
+                    await _secureStorage.RemoveSecretAsync(org, listenerConfiguration.SecurePasswordId);
+                }
 
                 var addSecretResult = await _secureStorage.AddSecretAsync(org, listenerConfiguration.Password);
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();

@@ -134,6 +134,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Connection_Type_Custom
 
 		public static string Connection_Type_Custom { get { return GetResourceString("Connection_Type_Custom"); } }
+//Resources:PipelineAdminResources:Connection_Type_Kafka
+
+		public static string Connection_Type_Kafka { get { return GetResourceString("Connection_Type_Kafka"); } }
 //Resources:PipelineAdminResources:Connection_Type_MQTT_Broker
 
 		public static string Connection_Type_MQTT_Broker { get { return GetResourceString("Connection_Type_MQTT_Broker"); } }
@@ -143,6 +146,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Connection_Type_POP3Server
 
 		public static string Connection_Type_POP3Server { get { return GetResourceString("Connection_Type_POP3Server"); } }
+//Resources:PipelineAdminResources:Connection_Type_Redis
+
+		public static string Connection_Type_Redis { get { return GetResourceString("Connection_Type_Redis"); } }
 //Resources:PipelineAdminResources:Connection_Type_Rest
 
 		public static string Connection_Type_Rest { get { return GetResourceString("Connection_Type_Rest"); } }
@@ -620,6 +626,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Listener_EventHub_ConsumerGroup
 
 		public static string Listener_EventHub_ConsumerGroup { get { return GetResourceString("Listener_EventHub_ConsumerGroup"); } }
+//Resources:PipelineAdminResources:Listener_ExchangeName
+
+		public static string Listener_ExchangeName { get { return GetResourceString("Listener_ExchangeName"); } }
 //Resources:PipelineAdminResources:Listener_FailedResponse
 
 		public static string Listener_FailedResponse { get { return GetResourceString("Listener_FailedResponse"); } }
@@ -1208,9 +1217,11 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Connection_Type_AzureIoTHub = "Connection_Type_AzureIoTHub";
 			public const string Connection_Type_AzureServiceBus = "Connection_Type_AzureServiceBus";
 			public const string Connection_Type_Custom = "Connection_Type_Custom";
+			public const string Connection_Type_Kafka = "Connection_Type_Kafka";
 			public const string Connection_Type_MQTT_Broker = "Connection_Type_MQTT_Broker";
 			public const string Connection_Type_MQTT_Client = "Connection_Type_MQTT_Client";
 			public const string Connection_Type_POP3Server = "Connection_Type_POP3Server";
+			public const string Connection_Type_Redis = "Connection_Type_Redis";
 			public const string Connection_Type_Rest = "Connection_Type_Rest";
 			public const string Connection_Type_SharedRest = "Connection_Type_SharedRest";
 			public const string Connection_Type_Soap = "Connection_Type_Soap";
@@ -1370,6 +1381,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Listener_EndMessageSequence_Help = "Listener_EndMessageSequence_Help";
 			public const string Listener_Endpoint = "Listener_Endpoint";
 			public const string Listener_EventHub_ConsumerGroup = "Listener_EventHub_ConsumerGroup";
+			public const string Listener_ExchangeName = "Listener_ExchangeName";
 			public const string Listener_FailedResponse = "Listener_FailedResponse";
 			public const string Listener_Help = "Listener_Help";
 			public const string Listener_HostName = "Listener_HostName";

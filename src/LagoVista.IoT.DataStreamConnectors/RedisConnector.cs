@@ -18,7 +18,7 @@ namespace LagoVista.IoT.DataStreamConnectors
 {
     public class RedisConnector : IDataStreamConnector
     {
-        ConnectionMultiplexer _redis;
+        ConnectionMultiplexer _redis = null;
         DataStream _stream;
         ILogger _logger;
 
@@ -27,16 +27,12 @@ namespace LagoVista.IoT.DataStreamConnectors
             _logger = logger;
         }
 
-
         public RedisConnector(IAdminLogger logger)
         {
             _logger = logger;
         }
 
-        static Newtonsoft.Json.JsonSerializerSettings _camelCaseSettings = new Newtonsoft.Json.JsonSerializerSettings()
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-        };
+        static Newtonsoft.Json.JsonSerializerSettings _camelCaseSettings = new Newtonsoft.Json.JsonSerializerSettings(){ContractResolver = new CamelCasePropertyNamesContractResolver(),};
 
         private ConnectionMultiplexer GetRedisConnection(DataStream stream)
         {
@@ -190,10 +186,22 @@ namespace LagoVista.IoT.DataStreamConnectors
             return InvokeResult.Success;
         }
 
+       
+
         public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
         {
+
+
             try
             {
+                if (_redis != null)
+                {
+                    var db = _redis.GetDatabase();
+                    var reuslt = await db.PingAsync();
+
+                    return InvokeResult.Success;
+                }
+
                 using (var redis = GetRedisConnection(stream))
                 {
                     var db = redis.GetDatabase();

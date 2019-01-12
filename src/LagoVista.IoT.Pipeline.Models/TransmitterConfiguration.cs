@@ -32,6 +32,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             Rest,
             [EnumLabel("mqttclient", PipelineAdminResources.Names.Connection_Type_MQTT_Client, typeof(PipelineAdminResources))]
             MQTTClient,
+            [EnumLabel("rabbitmq", PipelineAdminResources.Names.ConnectionType_RabbitMQ, typeof(PipelineAdminResources))]
+            RabbitMQ,
+            [EnumLabel("redis", PipelineAdminResources.Names.Connection_Type_Redis, typeof(PipelineAdminResources))]
+            Redis,
+            [EnumLabel("kafka", PipelineAdminResources.Names.Connection_Type_Kafka, typeof(PipelineAdminResources))]
+            Kafka,
+            [EnumLabel("amqp", PipelineAdminResources.Names.Connection_Type_AMQP, typeof(PipelineAdminResources))]
+            AMQP,
             [EnumLabel("originallistener", PipelineAdminResources.Names.Transmitter_TransmitterType_OriginalListener, typeof(PipelineAdminResources))]
             OriginalListener,
 
@@ -95,6 +103,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Queue, HelpResource: PipelineAdminResources.Names.Listener_Queue_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Queue { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ExchangeName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string ExchangeName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectToPort, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources))]
         public int? ConnectToPort { get; set; }

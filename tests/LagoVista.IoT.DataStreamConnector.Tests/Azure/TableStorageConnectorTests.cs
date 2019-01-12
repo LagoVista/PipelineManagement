@@ -279,7 +279,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var stream = GetValidStream();
             stream.AzureAccessKey = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly including the signature.");
+            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.");
         }
 
         [TestMethod]
@@ -288,7 +288,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var stream = GetValidStream();
             stream.AzureStorageAccountName = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "No such host is known");
+            AssertInvalidError(validationResult, "The remote name could not be resolved: 'isnottherightone.table.core.windows.net'");
         }       
     }
 }

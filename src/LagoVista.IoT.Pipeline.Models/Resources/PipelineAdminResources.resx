@@ -1246,4 +1246,13 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="AppCache_CacheType_LocalInMemory" xml:space="preserve">
     <value>Local - In Memory</value>
   </data>
+  <data name="Connection_Type_Kafka" xml:space="preserve">
+    <value>Kafka</value>
+  </data>
+  <data name="Connection_Type_Redis" xml:space="preserve">
+    <value>Redis</value>
+  </data>
+  <data name="Listener_ExchangeName" xml:space="preserve">
+    <value>Exchange Name</value>
+  </data>
 </root>

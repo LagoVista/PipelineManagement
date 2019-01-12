@@ -43,8 +43,9 @@ namespace LagoVista.IoT.DataStreamConnectors
                 if(existsResult.IsValid) return InvokeResult.Success;
 
                 if(existsResult.OriginalException != null)
-                {
-                    return InvokeResult.FromError(existsResult.OriginalException.Message);
+                {                    
+                    var failedResult = InvokeResult.FromError(existsResult.OriginalException.Message);
+                    return failedResult;
                 }
                 else
                 {
@@ -119,6 +120,9 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public async Task<LagoVista.Core.Models.UIMetaData.ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
         {
+            request.PageIndex--;
+            request.PageIndex = Math.Max(0, request.PageIndex);
+
             //TODO: Next chunk of code sux, likely much better way but will probably want to build a more robust filtering system at some point.
             ISearchResponse<Dictionary<string, object>> result = null;
             if (String.IsNullOrEmpty(request.StartDate) && String.IsNullOrEmpty(request.EndDate))

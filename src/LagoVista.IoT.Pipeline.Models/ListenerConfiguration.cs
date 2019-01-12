@@ -38,10 +38,19 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         MQTTClient,
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawTCP, PipelineAdminResources.Names.Connection_Type_TCP, typeof(PipelineAdminResources))]
         RawTCP,
+
         [EnumLabel(ListenerConfiguration.ListenerTypes_RabbitMQClient, PipelineAdminResources.Names.ConnectionType_RabbitMQClient, typeof(PipelineAdminResources))]
         RabbitMQClient,
+
         [EnumLabel(ListenerConfiguration.ListenerTypes_REST, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
         Rest,
+
+        [EnumLabel(ListenerConfiguration.ListenerTypes_REDIS, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
+        Redis,
+
+        [EnumLabel(ListenerConfiguration.ListenerTypes_Kafka, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
+        Kafka,
+
 
         [EnumLabel(ListenerConfiguration.ListenerTypes_SharedREST, PipelineAdminResources.Names.Connection_Type_SharedRest, typeof(PipelineAdminResources))]
         SharedRest,
@@ -103,6 +112,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ListenerTypes_RawTCP = "rawtcp";
         public const string ListenerTypes_RawUdp = "raw_udp";
         public const string ListenerTypes_AMQP = "amqp";
+        public const string ListenerTypes_REDIS = "redis";
+        public const string ListenerTypes_Kafka = "kafka";
         public const string ListenerTypes_MQTT_Broker = "mqttbroker";
         public const string ListenerTypes_MQTT_Listener = "mqttlistener";
         public const string ListenerTypes_MQTT_Client = "mqttclient";
@@ -191,6 +202,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_HubName, HelpResource: PipelineAdminResources.Names.Listener_HubName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string HubName { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ExchangeName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string ExchangeName { get; set; }
+
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenOnPort, HelpResource: PipelineAdminResources.Names.Listener_Port_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources))]
         public int? ListenOnPort { get; set; }
