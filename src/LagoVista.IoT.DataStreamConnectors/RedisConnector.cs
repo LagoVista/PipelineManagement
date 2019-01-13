@@ -184,9 +184,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
 
             return InvokeResult.Success;
-        }
-
-       
+        }       
 
         public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
         {
