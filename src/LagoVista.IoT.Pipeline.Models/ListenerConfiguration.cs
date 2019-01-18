@@ -32,8 +32,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Listener, PipelineAdminResources.Names.ConnectionType_MQTT_Listener, typeof(PipelineAdminResources))]
         MQTTListener,
-        /*[EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Broker, PipelineAdminResources.Names.Connection_Type_MQTT_Broker, typeof(PipelineAdminResources))]
-        MQTTBroker,*/
         [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Client, PipelineAdminResources.Names.Connection_Type_MQTT_Client, typeof(PipelineAdminResources))]
         MQTTClient,
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawTCP, PipelineAdminResources.Names.Connection_Type_TCP, typeof(PipelineAdminResources))]
@@ -45,17 +43,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [EnumLabel(ListenerConfiguration.ListenerTypes_REST, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
         Rest,
 
-        [EnumLabel(ListenerConfiguration.ListenerTypes_REDIS, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
+        [EnumLabel(ListenerConfiguration.ListenerTypes_REDIS, PipelineAdminResources.Names.Connection_Type_Redis, typeof(PipelineAdminResources))]
         Redis,
 
-        [EnumLabel(ListenerConfiguration.ListenerTypes_Kafka, PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
+        [EnumLabel(ListenerConfiguration.ListenerTypes_Kafka, PipelineAdminResources.Names.Connection_Type_Kafka, typeof(PipelineAdminResources))]
         Kafka,
-
-
-        [EnumLabel(ListenerConfiguration.ListenerTypes_SharedREST, PipelineAdminResources.Names.Connection_Type_SharedRest, typeof(PipelineAdminResources))]
-        SharedRest,
-        /*[EnumLabel(ListenerConfiguration.ListenerTypes_RabbitMQ, PipelineAdminResources.Names.ConnectionType_RabbitMQ, typeof(PipelineAdminResources))]
-        RabbitMQ,*/
+        
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawUdp, PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
         RawUDP,
         [EnumLabel(ListenerConfiguration.ListenerTypes_WebSocket, PipelineAdminResources.Names.Connection_Type_WebSocket, typeof(PipelineAdminResources))]
