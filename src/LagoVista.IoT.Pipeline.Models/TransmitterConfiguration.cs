@@ -22,35 +22,35 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public enum TransmitterTypes
         {
+            [EnumLabel("amqp", PipelineAdminResources.Names.Connection_Type_AMQP, typeof(PipelineAdminResources))]
+            AMQP,
             [EnumLabel("azureserivcebus", PipelineAdminResources.Names.Connection_Type_AzureServiceBus, typeof(PipelineAdminResources))]
             AzureServiceBus,
             [EnumLabel("azureeventhub", PipelineAdminResources.Names.Connection_Type_AzureEventHub, typeof(PipelineAdminResources))]
             AzureEventHub,
             [EnumLabel("azureiothub", PipelineAdminResources.Names.Connection_Type_AzureIoTHub, typeof(PipelineAdminResources))]
             AzureIoTHub,
-            [EnumLabel("rest", PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
-            Rest,
+            [EnumLabel("kafka", PipelineAdminResources.Names.Connection_Type_Kafka, typeof(PipelineAdminResources))]
+            Kafka,
             [EnumLabel("mqttclient", PipelineAdminResources.Names.Connection_Type_MQTT_Client, typeof(PipelineAdminResources))]
             MQTTClient,
+            [EnumLabel("originallistener", PipelineAdminResources.Names.Transmitter_TransmitterType_OriginalListener, typeof(PipelineAdminResources))]
+            OriginalListener,
             [EnumLabel("rabbitmq", PipelineAdminResources.Names.ConnectionType_RabbitMQ, typeof(PipelineAdminResources))]
             RabbitMQ,
             [EnumLabel("redis", PipelineAdminResources.Names.Connection_Type_Redis, typeof(PipelineAdminResources))]
             Redis,
-            [EnumLabel("kafka", PipelineAdminResources.Names.Connection_Type_Kafka, typeof(PipelineAdminResources))]
-            Kafka,
-            [EnumLabel("amqp", PipelineAdminResources.Names.Connection_Type_AMQP, typeof(PipelineAdminResources))]
-            AMQP,
-            [EnumLabel("originallistener", PipelineAdminResources.Names.Transmitter_TransmitterType_OriginalListener, typeof(PipelineAdminResources))]
-            OriginalListener,
+            [EnumLabel("rest", PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
+            Rest,
+            [EnumLabel("rawtcp", PipelineAdminResources.Names.Connection_Type_TCP, typeof(PipelineAdminResources))]
+            RawTCP,
+            [EnumLabel("rawudp", PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
+            RawUDP,
 
             /*[EnumLabel("mqtt", PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
             MQTT,
             [EnumLabel("soap", PipelineAdminResources.Names.Connection_Type_Soap, typeof(PipelineAdminResources))]
             Soap,
-            [EnumLabel("rawtcp", PipelineAdminResources.Names.Connection_Type_TCP, typeof(PipelineAdminResources))]
-            RawTCP,
-            [EnumLabel("rawudp", PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
-            RawUDP,
             [EnumLabel("amqp", PipelineAdminResources.Names.Connection_Type_AMQP, typeof(PipelineAdminResources))]
             AMQP,
             [EnumLabel("sms", PipelineAdminResources.Names.Transmitter_TransmitterType_SMS, typeof(PipelineAdminResources))]
