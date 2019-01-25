@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.3.31.5" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.31.9" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.31.13" />
     <PackageReference Include="Elasticsearch.Net" Version="6.4.2" />
     <PackageReference Include="Elasticsearch.Net.Aws" Version="6.1.0" />
     <PackageReference Include="LagoVista.Core" Version="2.1.615-beta1617" />
