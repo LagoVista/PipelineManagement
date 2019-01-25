@@ -11,6 +11,8 @@ using LagoVista.Core;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.PlatformSupport;
+using Amazon.Runtime;
+using Amazon.Runtime.CredentialManagement;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -60,13 +62,24 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public Task<InvokeResult> InitAsync(DataStream stream)
         {
-            _stream = stream;
-            _connection = new AwsHttpConnection(stream.AwsRegion, new StaticCredentialsProvider(new AwsCredentials
+            var options = new CredentialProfileOptions
             {
                 AccessKey = stream.AwsAccessKey,
                 SecretKey = stream.AwsSecretKey
-            }));
+            };
 
+            var profile = new Amazon.Runtime.CredentialManagement.CredentialProfile("basic_profile", options);
+            var netSDKFile = new NetSDKCredentialsFile();
+            var region = Amazon.RegionEndpoint.GetBySystemName(stream.AwsRegion);
+
+            var creds = AWSCredentialsFactory.GetAWSCredentials(profile, netSDKFile);
+
+            _connection = new AwsHttpConnection(creds, region);
+
+
+
+            _stream = stream;
+            
             var pool = new SingleNodeConnectionPool(new Uri(stream.ElasticSearchDomainName));
             var config = new ConnectionSettings(pool, _connection);
             _client = new ElasticClient(config);

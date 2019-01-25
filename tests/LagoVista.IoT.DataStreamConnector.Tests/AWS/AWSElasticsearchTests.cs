@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.Core;
 using LagoVista.Core.Models;
+using Amazon.Runtime;
+using Amazon.Runtime.CredentialManagement;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
 {
@@ -58,11 +60,20 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         public void Init()
         {
             var stream = GetValidStream();
-            var connection = new AwsHttpConnection(stream.AwsRegion, new StaticCredentialsProvider(new AwsCredentials
+
+            var options = new CredentialProfileOptions
             {
-                AccessKey = stream.AwsAccessKey,
-                SecretKey = stream.AwsSecretKey
-            }));
+                AccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
+                SecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET")
+            };
+
+            var profile = new Amazon.Runtime.CredentialManagement.CredentialProfile("basic_profile", options);
+            var netSDKFile = new NetSDKCredentialsFile();
+            var region = Amazon.RegionEndpoint.GetBySystemName(stream.AwsRegion);
+
+            var creds = AWSCredentialsFactory.GetAWSCredentials(profile, netSDKFile);
+
+            var connection = new AwsHttpConnection(creds, region);
 
             var pool = new SingleNodeConnectionPool(new Uri(stream.ElasticSearchDomainName));
             var config = new Nest.ConnectionSettings(pool, connection);
@@ -206,11 +217,20 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
         public void TestCleanup()
         {
             var stream = GetValidStream();
-            var connection = new AwsHttpConnection(stream.AwsRegion, new StaticCredentialsProvider(new AwsCredentials
+
+            var options = new CredentialProfileOptions
             {
-                AccessKey = stream.AwsAccessKey,
-                SecretKey = stream.AwsSecretKey
-            }));
+                AccessKey = System.Environment.GetEnvironmentVariable("AWSACCESSKEY"),
+                SecretKey = System.Environment.GetEnvironmentVariable("AWSSECRET")
+            };
+
+            var profile = new Amazon.Runtime.CredentialManagement.CredentialProfile("basic_profile", options);
+            var netSDKFile = new NetSDKCredentialsFile();
+            var region = Amazon.RegionEndpoint.GetBySystemName(stream.AwsRegion);
+
+            var creds = AWSCredentialsFactory.GetAWSCredentials(profile, netSDKFile);
+
+            var connection = new AwsHttpConnection(creds, region);
 
             var pool = new SingleNodeConnectionPool(new Uri(stream.ElasticSearchDomainName));
             var config = new Nest.ConnectionSettings(pool, connection);
