@@ -8,14 +8,14 @@
     <PackageReference Include="AWSSDK.S3" Version="3.3.31.13" />
     <PackageReference Include="Elasticsearch.Net" Version="6.4.2" />
     <PackageReference Include="Elasticsearch.Net.Aws" Version="6.1.0" />
-    <PackageReference Include="LagoVista.Core" Version="2.1.615-beta1617" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.615-beta1617" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.619-beta1503" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.619-beta1503" />
     <PackageReference Include="Microsoft.Azure.EventHubs" Version="2.2.1" />
     <PackageReference Include="Microsoft.Spatial" Version="7.5.3" />
-    <PackageReference Include="NEST" Version="6.4.0" />
+    <PackageReference Include="NEST" Version="6.4.2" />
     <PackageReference Include="Npgsql" Version="4.0.4" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.519" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
   <ItemGroup>
