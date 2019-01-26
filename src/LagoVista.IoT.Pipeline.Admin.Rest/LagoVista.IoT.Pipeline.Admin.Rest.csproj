@@ -13,10 +13,10 @@
     <NoWarn>1701;1702;1705;1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="2.1.615-beta1617" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.615-beta1617" />
-    <PackageReference Include="LagoVista.IoT.Web.Common" Version="2.1.615-beta1617" />
-    <PackageReference Include="LagoVista.UserAdmin" Version="2.1.615-beta1617" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.619-beta0233" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.619-beta0233" />
+    <PackageReference Include="LagoVista.IoT.Web.Common" Version="2.1.619-beta0233" />
+    <PackageReference Include="LagoVista.UserAdmin" Version="2.1.619-beta0233" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
@@ -24,6 +24,5 @@
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.DataStreamConnectors\LagoVista.IoT.DataStreamConnectors.csproj" />
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.Admin\LagoVista.IoT.Pipeline.Admin.csproj" />
-    <ProjectReference Include="..\LagoVista.IoT.Pipeline.CloudRepos\LagoVista.IoT.Pipeline.CloudRepos.csproj" />
   </ItemGroup>
 </Project>
