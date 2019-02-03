@@ -63,6 +63,16 @@ namespace LagoVista.IoT.Pipeline.Models
             };
         }
 
+        [CustomValidator]
+        public void Validate(ValidationResult res, Actions action)
+        {
+            foreach (var value in DefaultValues)
+            {
+                value.Validate(res, action);
+            }
+        }
+
+
         public new ApplicationCacheSummary CreateSummary()
         {
             return new ApplicationCacheSummary()
@@ -98,14 +108,35 @@ namespace LagoVista.IoT.Pipeline.Models
 
         public string LastUpdateDate { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Name { get; set; }
+
         [FormField(LabelResource: PipelineAdminResources.Names.ApplicationCacheValue_Key, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string Key { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.ApplicationCacheValue_Value, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string Value { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.ApplicationCacheValue_Value_Type, EnumType: typeof(CacheTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.ApplicationCacheValue_Value_Type_Select, IsRequired: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.ApplicationCacheValue_Value_Type, EnumType: typeof(CacheValueDataTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.ApplicationCacheValue_Value_Type_Select, IsRequired: true)]
         public EntityHeader<CacheValueDataTypes> ValueType { get; set; }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Description, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string Description { get; set; }
+
+        [CustomValidator]
+        public void Validate(ValidationResult res, Actions action)
+        {
+            Console.WriteLine($"Value provided for {Name} must be a number, it currently is {Value}.");
+
+            if (ValueType.Value == CacheValueDataTypes.Number)
+            {
+                if (!Double.TryParse(Value, out double outValue))
+                {
+                    res.AddUserError($"Value provided for {Name} must be a number, it currently is {Value}.");
+                }
+            }
+        }
     }
 
     public class ApplicationCacheSummary : SummaryData

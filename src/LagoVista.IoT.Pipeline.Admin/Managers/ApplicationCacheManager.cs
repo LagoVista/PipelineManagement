@@ -131,7 +131,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
                     if (!string.IsNullOrEmpty(cache.PasswordSecretId))
                     {
-                        await _secureStorage.RemoveSecretAsync(org, cache.Password);
+                        await _secureStorage.RemoveSecretAsync(org, cache.PasswordSecretId);
                     }
 
                     cache.PasswordSecretId = addSecretResult.Result;
