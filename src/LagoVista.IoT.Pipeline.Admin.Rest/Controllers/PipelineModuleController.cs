@@ -616,7 +616,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// <param name="customPipelineModuleConfiguration"></param>
         /// <returns></returns>
         [HttpPost("/api/pipeline/admin/custommodule")]
-        public Task<InvokeResult> AddCustomPipelineModuleConfigurationAsync([FromBody] CustomPipelineModuleConfiguration customPipelineModuleConfiguration)
+        public Task<InvokeResult> AddCustomPipelineModuleConfigurationAsync([FromBody] CustomModuleConfiguration customPipelineModuleConfiguration)
         {
             return _pipelineModuleManager.AddCustomPipelineModuleConfigurationAsync(customPipelineModuleConfiguration, OrgEntityHeader, UserEntityHeader);
         }
@@ -627,7 +627,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// <param name="customPipelineModuleConfiguration"></param>
         /// <returns></returns>
         [HttpPut("/api/pipeline/admin/custommodule")]
-        public Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync([FromBody] CustomPipelineModuleConfiguration customPipelineModuleConfiguration)
+        public Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync([FromBody] CustomModuleConfiguration customPipelineModuleConfiguration)
         {
             return _pipelineModuleManager.UpdateCustomPipelineModuleConfigurationAsync(customPipelineModuleConfiguration, OrgEntityHeader, UserEntityHeader);
         }
@@ -638,21 +638,20 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/custommodule/{id}")]
-        public async Task<DetailResponse<CustomPipelineModuleConfiguration>> GetCustomPipelineModuleConfigurationAsync(String id)
+        public async Task<DetailResponse<CustomModuleConfiguration>> GetCustomPipelineModuleConfigurationAsync(String id)
         {
             var config = await _pipelineModuleManager.GetCustomPipelineModuleConfigurationAsync(id, OrgEntityHeader, UserEntityHeader);
-            return DetailResponse<CustomPipelineModuleConfiguration>.Create(config);
+            return DetailResponse<CustomModuleConfiguration>.Create(config);
         }
 
         /// <summary>
         /// Custom - Get For Org
         /// </summary>
-        /// <param name="orgid"></param>
         /// <returns></returns>
-        [HttpGet("/api/org/{ordi}/pipeline/admin/custommodules")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetCustomPipelineModuleConfigurationsForOrgAsync(String orgid)
+        [HttpGet("/api/pipeline/admin/custommodules")]
+        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetCustomPipelineModuleConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetCustomPipelineModuleConfiugrationsForOrgAsync(orgid, UserEntityHeader);
+            var configs = await _pipelineModuleManager.GetCustomPipelineModuleConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
             return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
         }
 
@@ -694,9 +693,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/custommodule/factory")]
-        public DetailResponse<CustomPipelineModuleConfiguration> CreateCustomModule()
+        public DetailResponse<CustomModuleConfiguration> CreateCustomModule()
         {
-            var customModuleConfiguration = DetailResponse<CustomPipelineModuleConfiguration>.Create();
+            var customModuleConfiguration = DetailResponse<CustomModuleConfiguration>.Create();
             customModuleConfiguration.Model.Id = Guid.NewGuid().ToId();
             SetOwnedProperties(customModuleConfiguration.Model);
             SetAuditProperties(customModuleConfiguration.Model);

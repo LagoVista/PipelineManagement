@@ -11,7 +11,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         Task<InvokeResult> AddInputTranslatorConfigurationAsync(InputTranslatorConfiguration inputTranslatorConfiguration, EntityHeader org, EntityHeader user);
         Task<InvokeResult> AddListenerConfigurationAsync(ListenerConfiguration listenerConfiguration, EntityHeader org, EntityHeader user);
         Task<InvokeResult> AddOutputTranslatorConfigurationAsync(OutputTranslatorConfiguration outputTranslatorConfiguration, EntityHeader org, EntityHeader user);
-        Task<InvokeResult> AddCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> AddCustomPipelineModuleConfigurationAsync(CustomModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user);
         Task<InvokeResult> AddSentinelConfigurationAsync(SentinelConfiguration sentinelConfiguration, EntityHeader org, EntityHeader user);
         Task<InvokeResult> AddTransmitterConfigurationAsync(TransmitterConfiguration transmitterConfiguration, EntityHeader org, EntityHeader user);
         Task<InvokeResult> AddPlannerConfigurationAsync(PlannerConfiguration plannerConfiguration, EntityHeader org, EntityHeader user);
@@ -31,8 +31,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         Task<OutputTranslatorConfiguration> GetOutputTranslatorConfigurationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult<OutputTranslatorConfiguration>> LoadFullOutputTranslatorConfigurationAsync(string id);
         Task<IEnumerable<PipelineModuleConfigurationSummary>> GetOutputTranslatorConfiugrationsForOrgAsync(string orgId, EntityHeader user);
-        Task<CustomPipelineModuleConfiguration> GetCustomPipelineModuleConfigurationAsync(string id, EntityHeader org, EntityHeader user);
-        Task<InvokeResult<CustomPipelineModuleConfiguration>> LoadFullCustomPipelineModuleConfigurationAsync(string id);
+        Task<CustomModuleConfiguration> GetCustomPipelineModuleConfigurationAsync(string id, EntityHeader org, EntityHeader user);
+        Task<InvokeResult<CustomModuleConfiguration>> LoadFullCustomPipelineModuleConfigurationAsync(string id);
         Task<IEnumerable<PipelineModuleConfigurationSummary>> GetCustomPipelineModuleConfiugrationsForOrgAsync(string orgId, EntityHeader user);
         Task<SentinelConfiguration> GetSentinelConfigurationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult<SentinelConfiguration>> LoadFullSentinelConfigurationAsync(string id);
@@ -50,7 +50,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         Task<InvokeResult> UpdateListenerConfigurationAsync(ListenerConfiguration listenerConfiguration, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateOutputTranslatorConfigurationAsync(OutputTranslatorConfiguration outputTranslatorConfiguration, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdatePlannerConfigurationAsync(PlannerConfiguration plannerConfiguration, EntityHeader org, EntityHeader user);
-        Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync(CustomModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user);
         Task<bool> QueryKeyInUsePlannerConfigurationAsync(string key, EntityHeader org);
         Task<bool> QueryKeyInUseListenerConfigurationAsync(string key, EntityHeader org);
         Task<bool> QueryKeyInUseInputTranslatorConfigurationAsync(string key, EntityHeader org);

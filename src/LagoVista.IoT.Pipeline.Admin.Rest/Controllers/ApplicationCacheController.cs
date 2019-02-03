@@ -123,11 +123,21 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
             response.Model.Id = Guid.NewGuid().ToId();
             SetAuditProperties(response.Model);
             SetOwnedProperties(response.Model);
-
             return response;
         }
 
-     
+        /// <summary>
+        /// Application Cache Value - Create New
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/api/appcache/value/factory")]
+        public DetailResponse<ApplicationCacheValue> CreateApplicationCacheValue()
+        {
+            var value = DetailResponse<ApplicationCacheValue>.Create();
+            value.Model.CreationDate = DateTime.UtcNow.ToJSONString();
+            value.Model.LastUpdateDate = value.Model.CreationDate;
+            return value;
+        }
 
     }
 }

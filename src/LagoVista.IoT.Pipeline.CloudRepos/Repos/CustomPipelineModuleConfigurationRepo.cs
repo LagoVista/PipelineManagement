@@ -9,7 +9,7 @@ using LagoVista.IoT.Logging.Loggers;
 
 namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
-    public class CustomPipelineModuleConfigurationRepo : DocumentDBRepoBase<CustomPipelineModuleConfiguration>, ICustomPipelineConfigurationRepo
+    public class CustomPipelineModuleConfigurationRepo : DocumentDBRepoBase<CustomModuleConfiguration>, ICustomPipelineConfigurationRepo
     {
         private bool _shouldConsolidateCollections;
 
@@ -21,7 +21,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 
         protected override bool ShouldConsolidateCollections { get { return _shouldConsolidateCollections; } }
 
-        public Task AddCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration)
+        public Task AddCustomPipelineModuleConfigurationAsync(CustomModuleConfiguration pipelineModuleConfiguration)
         {
             return CreateDocumentAsync(pipelineModuleConfiguration);
         }
@@ -31,7 +31,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
             return DeleteDocumentAsync(id);
         }
 
-        public Task<CustomPipelineModuleConfiguration> GetCustomPipelineModuleConfigurationAsync(string id)
+        public Task<CustomModuleConfiguration> GetCustomPipelineModuleConfigurationAsync(string id)
         {
             return GetDocumentAsync(id);
         }
@@ -50,7 +50,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
             return items.Any();
         }
 
-        public Task UpdateCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration)
+        public Task UpdateCustomPipelineModuleConfigurationAsync(CustomModuleConfiguration pipelineModuleConfiguration)
         {
             return UpsertDocumentAsync(pipelineModuleConfiguration);
         }

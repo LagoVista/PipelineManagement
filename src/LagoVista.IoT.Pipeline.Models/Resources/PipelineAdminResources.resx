@@ -1255,4 +1255,106 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Listener_ExchangeName" xml:space="preserve">
     <value>Exchange Name</value>
   </data>
+  <data name="CusotmModule_CustomModuleType_DotNetAssembly" xml:space="preserve">
+    <value>DotNet Assembly</value>
+  </data>
+  <data name="CustomModule_AuthenticationHeader" xml:space="preserve">
+    <value>Authentication Header</value>
+  </data>
+  <data name="CustomModule_AuthenticationHeader_Help" xml:space="preserve">
+    <value>Enter the full authorization header that will be added to the HTTP Header Authorization, this should include the authorization type.  This value will not be displayed when you edit your custom module and will be encrypted at rest.</value>
+  </data>
+  <data name="CustomModule_AuthenticationType" xml:space="preserve">
+    <value>Uri Authentication Type</value>
+  </data>
+  <data name="CustomModule_AuthenticationType_Anonymous" xml:space="preserve">
+    <value>Anonymous</value>
+  </data>
+  <data name="CustomModule_AuthenticationType_AuthenticationHeader" xml:space="preserve">
+    <value>Authentication Header</value>
+  </data>
+  <data name="CustomModule_AuthenticationType_BasicAuth" xml:space="preserve">
+    <value>Basic Authentication</value>
+  </data>
+  <data name="CustomModule_AuthenticationType_Select" xml:space="preserve">
+    <value>-select uri authentication type-</value>
+  </data>
+  <data name="CustomModule_ContainerRepository" xml:space="preserve">
+    <value>Container Repository</value>
+  </data>
+  <data name="CustomModule_ContainerTag" xml:space="preserve">
+    <value>Container Tag</value>
+  </data>
+  <data name="CustomModule_CustomModuleType" xml:space="preserve">
+    <value>Custom Module Type</value>
+  </data>
+  <data name="CustomModule_CustomModuleType_Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="CustomModule_CustomModuleType_Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="CustomModule_CustomModuleType_Select" xml:space="preserve">
+    <value>-select custom module type-</value>
+  </data>
+  <data name="CustomModule_CustomModuleType_WebFunction" xml:space="preserve">
+    <value>Web Function</value>
+  </data>
+  <data name="CustomModule_DotNetAssembly" xml:space="preserve">
+    <value>.NET Assembly</value>
+  </data>
+  <data name="CustomModule_DotNetClass" xml:space="preserve">
+    <value>.NET Class</value>
+  </data>
+  <data name="CustomModule_Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="CustomModule_Uri" xml:space="preserve">
+    <value>Uri</value>
+  </data>
+  <data name="CustomModule_Uri_AccountId" xml:space="preserve">
+    <value>Uri Account Id</value>
+  </data>
+  <data name="CustomModule_Uri_AccountPassword" xml:space="preserve">
+    <value>Uri Account Password</value>
+  </data>
+  <data name="CustomModule_Uri_AccountPassword_Help" xml:space="preserve">
+    <value>Enter the password to be used for Basic Auth for your web function call. This will not be displayed when you edit your custom module and will be encrypted at rest.</value>
+  </data>
+  <data name="CustomModule_ContainerRepository_Select" xml:space="preserve">
+    <value>-select container repository-</value>
+  </data>
+  <data name="CustomModule_ContainerTag_Select" xml:space="preserve">
+    <value>-select container tag-</value>
+  </data>
+  <data name="AppCache_InitializationValues" xml:space="preserve">
+    <value>Initialization Values</value>
+  </data>
+  <data name="ApplicationCacheValue_Description" xml:space="preserve">
+    <value>Default values to be used to initialize the application cache with lookup values</value>
+  </data>
+  <data name="ApplicationCacheValue_Help" xml:space="preserve">
+    <value>Default values to be used to initialize the application cache with lookup values</value>
+  </data>
+  <data name="ApplicationCacheValue_Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="ApplicationCacheValue_Title" xml:space="preserve">
+    <value>Cache Value</value>
+  </data>
+  <data name="ApplicationCacheValue_Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="ApplicationCacheValue_Value_Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="ApplicationCacheValue_Value_String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="ApplicationCacheValue_Value_Type" xml:space="preserve">
+    <value>Value Type</value>
+  </data>
+  <data name="ApplicationCacheValue_Value_Type_Select" xml:space="preserve">
+    <value>-select value type-</value>
+  </data>
 </root>

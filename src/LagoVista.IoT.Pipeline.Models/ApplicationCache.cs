@@ -25,6 +25,11 @@ namespace LagoVista.IoT.Pipeline.Models
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help, PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
     public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor
     {
+        public ApplicationCache()
+        {
+            DefaultValues = new List<ApplicationCacheValue>();
+        }
+
         public override string ModuleType => PipelineModuleConfiguration.PipelineModuleType_ApplicationCache;
 
         public const string CacheType_Redis = "redis";
@@ -45,6 +50,10 @@ namespace LagoVista.IoT.Pipeline.Models
 
 
         public string PasswordSecretId { get; set; }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.AppCache_InitializationValues, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
+        public List<ApplicationCacheValue> DefaultValues { get; set; }
 
         public List<string> GetFormFields()
         {
@@ -67,6 +76,36 @@ namespace LagoVista.IoT.Pipeline.Models
                 Key = Key
             };
         }
+    }
+
+    public enum CacheValueDataTypes
+    {
+        [EnumLabel(ApplicationCacheValue.ValueType_String, PipelineAdminResources.Names.ApplicationCacheValue_Value_String, typeof(PipelineAdminResources))]
+        String,
+
+        [EnumLabel(ApplicationCacheValue.ValueType_Number, PipelineAdminResources.Names.ApplicationCacheValue_Value_Number, typeof(PipelineAdminResources))]
+        Number,
+    }
+
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.ApplicationCacheValue_Title, PipelineAdminResources.Names.ApplicationCacheValue_Help, PipelineAdminResources.Names.ApplicationCacheValue_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
+    public class ApplicationCacheValue
+    {
+        public const string ValueType_String = "string";
+
+        public const string ValueType_Number = "number";
+
+        public string CreationDate { get; set; }
+
+        public string LastUpdateDate { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.ApplicationCacheValue_Key, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Key { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.ApplicationCacheValue_Value, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Value { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.ApplicationCacheValue_Value_Type, EnumType: typeof(CacheTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.ApplicationCacheValue_Value_Type_Select, IsRequired: true)]
+        public EntityHeader<CacheValueDataTypes> ValueType { get; set; }
     }
 
     public class ApplicationCacheSummary : SummaryData

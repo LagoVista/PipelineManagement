@@ -123,11 +123,29 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> AddCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> AddCustomPipelineModuleConfigurationAsync(CustomModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(pipelineModuleConfiguration, AuthorizeActions.Create, user, org);
             ValidationCheck(pipelineModuleConfiguration, Actions.Create);
+
+            if (!String.IsNullOrEmpty(pipelineModuleConfiguration.AuthenticationHeader))
+            {
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, pipelineModuleConfiguration.AuthenticationHeader);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                pipelineModuleConfiguration.AuthenticationHeaderSecureId = addSecretResult.Result;
+                pipelineModuleConfiguration.AuthenticationHeader = null;
+            }
+
+            if (!String.IsNullOrEmpty(pipelineModuleConfiguration.AccountPassword))
+            {
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, pipelineModuleConfiguration.AccountPassword);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                pipelineModuleConfiguration.AccountPasswordSecureId = addSecretResult.Result;
+                pipelineModuleConfiguration.AccountPassword = null;
+            }
+
             await _customPipelineConfigurationRepo.AddCustomPipelineModuleConfigurationAsync(pipelineModuleConfiguration);
+
             return InvokeResult.Success;
         }
         #endregion
@@ -229,10 +247,31 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return InvokeResult.Success;
         }
 
-        public async Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user)
+        public async Task<InvokeResult> UpdateCustomPipelineModuleConfigurationAsync(CustomModuleConfiguration pipelineModuleConfiguration, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(pipelineModuleConfiguration, AuthorizeActions.Update, user, org);
             ValidationCheck(pipelineModuleConfiguration, Actions.Update);
+
+            if (!String.IsNullOrEmpty(pipelineModuleConfiguration.AuthenticationHeader))
+            {
+                await _secureStorage.RemoveSecretAsync(org, pipelineModuleConfiguration.AuthenticationHeaderSecureId);
+
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, pipelineModuleConfiguration.AuthenticationHeader);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                pipelineModuleConfiguration.AuthenticationHeaderSecureId = addSecretResult.Result;
+                pipelineModuleConfiguration.AuthenticationHeader = null;
+            }
+
+            if (!String.IsNullOrEmpty(pipelineModuleConfiguration.AccountPassword))
+            {
+                await _secureStorage.RemoveSecretAsync(org, pipelineModuleConfiguration.AccountPasswordSecureId);
+
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, pipelineModuleConfiguration.AccountPassword);
+                if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
+                pipelineModuleConfiguration.AccountPasswordSecureId = addSecretResult.Result;
+                pipelineModuleConfiguration.AccountPassword = null;
+            }
+
             await _customPipelineConfigurationRepo.UpdateCustomPipelineModuleConfigurationAsync(pipelineModuleConfiguration);
             return InvokeResult.Success;
         }
@@ -281,7 +320,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return transmitterConfiguration;
         }
 
-        public async Task<CustomPipelineModuleConfiguration> GetCustomPipelineModuleConfigurationAsync(String id, EntityHeader org, EntityHeader user)
+        public async Task<CustomModuleConfiguration> GetCustomPipelineModuleConfigurationAsync(String id, EntityHeader org, EntityHeader user)
         {
             var pipelineModuleConfiguration = await _customPipelineConfigurationRepo.GetCustomPipelineModuleConfigurationAsync(id);
             await AuthorizeAsync(pipelineModuleConfiguration, AuthorizeActions.Read, user, org);
@@ -362,15 +401,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             }
         }
 
-        public async Task<InvokeResult<CustomPipelineModuleConfiguration>> LoadFullCustomPipelineModuleConfigurationAsync(String id)
+        public async Task<InvokeResult<CustomModuleConfiguration>> LoadFullCustomPipelineModuleConfigurationAsync(String id)
         {
             try
             {
-                return InvokeResult<CustomPipelineModuleConfiguration>.Create(await _customPipelineConfigurationRepo.GetCustomPipelineModuleConfigurationAsync(id));
+                return InvokeResult<CustomModuleConfiguration>.Create(await _customPipelineConfigurationRepo.GetCustomPipelineModuleConfigurationAsync(id));
             }
             catch (RecordNotFoundException)
             {
-                return InvokeResult<CustomPipelineModuleConfiguration>.FromErrors(ErrorCodes.CouldNotLoadCustomModule.ToErrorMessage($"ModuleId={id}"));
+                return InvokeResult<CustomModuleConfiguration>.FromErrors(ErrorCodes.CouldNotLoadCustomModule.ToErrorMessage($"ModuleId={id}"));
             }
 
         }
@@ -413,7 +452,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         }
         public async Task<IEnumerable<PipelineModuleConfigurationSummary>> GetCustomPipelineModuleConfiugrationsForOrgAsync(String orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, orgId, typeof(CustomPipelineModuleConfiguration));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(CustomModuleConfiguration));
             return await _customPipelineConfigurationRepo.GetCustomPipelineModuleConfigurationsForOrgsAsync(orgId);
         }
         #endregion

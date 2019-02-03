@@ -7,10 +7,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Repos
 {
     public interface ICustomPipelineConfigurationRepo
     {
-        Task AddCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModule);
-        Task<CustomPipelineModuleConfiguration> GetCustomPipelineModuleConfigurationAsync(string id);
+        Task AddCustomPipelineModuleConfigurationAsync(CustomModuleConfiguration pipelineModule);
+        Task<CustomModuleConfiguration> GetCustomPipelineModuleConfigurationAsync(string id);
         Task<IEnumerable<PipelineModuleConfigurationSummary>> GetCustomPipelineModuleConfigurationsForOrgsAsync(string orgId);
-        Task UpdateCustomPipelineModuleConfigurationAsync(CustomPipelineModuleConfiguration pipelineModule);
+        Task UpdateCustomPipelineModuleConfigurationAsync(CustomModuleConfiguration pipelineModule);
         Task DeleteCustomPipelineModuleConfigurationAsync(string id);
         Task<bool> QueryKeyInUseAsync(String key, String orgId);
     }

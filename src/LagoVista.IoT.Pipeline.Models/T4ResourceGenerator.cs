@@ -71,6 +71,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:AppCache_Help
 
 		public static string AppCache_Help { get { return GetResourceString("AppCache_Help"); } }
+//Resources:PipelineAdminResources:AppCache_InitializationValues
+
+		public static string AppCache_InitializationValues { get { return GetResourceString("AppCache_InitializationValues"); } }
 //Resources:PipelineAdminResources:AppCache_Password
 
 		public static string AppCache_Password { get { return GetResourceString("AppCache_Password"); } }
@@ -89,6 +92,33 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:AppCache_Uri_Help
 
 		public static string AppCache_Uri_Help { get { return GetResourceString("AppCache_Uri_Help"); } }
+//Resources:PipelineAdminResources:ApplicationCacheValue_Description
+
+		public static string ApplicationCacheValue_Description { get { return GetResourceString("ApplicationCacheValue_Description"); } }
+//Resources:PipelineAdminResources:ApplicationCacheValue_Help
+
+		public static string ApplicationCacheValue_Help { get { return GetResourceString("ApplicationCacheValue_Help"); } }
+//Resources:PipelineAdminResources:ApplicationCacheValue_Key
+
+		public static string ApplicationCacheValue_Key { get { return GetResourceString("ApplicationCacheValue_Key"); } }
+//Resources:PipelineAdminResources:ApplicationCacheValue_Title
+
+		public static string ApplicationCacheValue_Title { get { return GetResourceString("ApplicationCacheValue_Title"); } }
+//Resources:PipelineAdminResources:ApplicationCacheValue_Value
+
+		public static string ApplicationCacheValue_Value { get { return GetResourceString("ApplicationCacheValue_Value"); } }
+//Resources:PipelineAdminResources:ApplicationCacheValue_Value_Number
+
+		public static string ApplicationCacheValue_Value_Number { get { return GetResourceString("ApplicationCacheValue_Value_Number"); } }
+//Resources:PipelineAdminResources:ApplicationCacheValue_Value_String
+
+		public static string ApplicationCacheValue_Value_String { get { return GetResourceString("ApplicationCacheValue_Value_String"); } }
+//Resources:PipelineAdminResources:ApplicationCacheValue_Value_Type
+
+		public static string ApplicationCacheValue_Value_Type { get { return GetResourceString("ApplicationCacheValue_Value_Type"); } }
+//Resources:PipelineAdminResources:ApplicationCacheValue_Value_Type_Select
+
+		public static string ApplicationCacheValue_Value_Type_Select { get { return GetResourceString("ApplicationCacheValue_Value_Type_Select"); } }
 //Resources:PipelineAdminResources:Common_Description
 
 		public static string Common_Description { get { return GetResourceString("Common_Description"); } }
@@ -176,6 +206,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:ConnectionType_RabbitMQClient
 
 		public static string ConnectionType_RabbitMQClient { get { return GetResourceString("ConnectionType_RabbitMQClient"); } }
+//Resources:PipelineAdminResources:CusotmModule_CustomModuleType_DotNetAssembly
+
+		public static string CusotmModule_CustomModuleType_DotNetAssembly { get { return GetResourceString("CusotmModule_CustomModuleType_DotNetAssembly"); } }
 //Resources:PipelineAdminResources:Custom_AccountId
 
 		public static string Custom_AccountId { get { return GetResourceString("Custom_AccountId"); } }
@@ -188,15 +221,84 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Custom_Uri
 
 		public static string Custom_Uri { get { return GetResourceString("Custom_Uri"); } }
+//Resources:PipelineAdminResources:CustomModule_AuthenticationHeader
+
+		public static string CustomModule_AuthenticationHeader { get { return GetResourceString("CustomModule_AuthenticationHeader"); } }
+//Resources:PipelineAdminResources:CustomModule_AuthenticationHeader_Help
+
+		public static string CustomModule_AuthenticationHeader_Help { get { return GetResourceString("CustomModule_AuthenticationHeader_Help"); } }
+//Resources:PipelineAdminResources:CustomModule_AuthenticationType
+
+		public static string CustomModule_AuthenticationType { get { return GetResourceString("CustomModule_AuthenticationType"); } }
+//Resources:PipelineAdminResources:CustomModule_AuthenticationType_Anonymous
+
+		public static string CustomModule_AuthenticationType_Anonymous { get { return GetResourceString("CustomModule_AuthenticationType_Anonymous"); } }
+//Resources:PipelineAdminResources:CustomModule_AuthenticationType_AuthenticationHeader
+
+		public static string CustomModule_AuthenticationType_AuthenticationHeader { get { return GetResourceString("CustomModule_AuthenticationType_AuthenticationHeader"); } }
+//Resources:PipelineAdminResources:CustomModule_AuthenticationType_BasicAuth
+
+		public static string CustomModule_AuthenticationType_BasicAuth { get { return GetResourceString("CustomModule_AuthenticationType_BasicAuth"); } }
+//Resources:PipelineAdminResources:CustomModule_AuthenticationType_Select
+
+		public static string CustomModule_AuthenticationType_Select { get { return GetResourceString("CustomModule_AuthenticationType_Select"); } }
+//Resources:PipelineAdminResources:CustomModule_ContainerRepository
+
+		public static string CustomModule_ContainerRepository { get { return GetResourceString("CustomModule_ContainerRepository"); } }
+//Resources:PipelineAdminResources:CustomModule_ContainerRepository_Select
+
+		public static string CustomModule_ContainerRepository_Select { get { return GetResourceString("CustomModule_ContainerRepository_Select"); } }
+//Resources:PipelineAdminResources:CustomModule_ContainerTag
+
+		public static string CustomModule_ContainerTag { get { return GetResourceString("CustomModule_ContainerTag"); } }
+//Resources:PipelineAdminResources:CustomModule_ContainerTag_Select
+
+		public static string CustomModule_ContainerTag_Select { get { return GetResourceString("CustomModule_ContainerTag_Select"); } }
+//Resources:PipelineAdminResources:CustomModule_CustomModuleType
+
+		public static string CustomModule_CustomModuleType { get { return GetResourceString("CustomModule_CustomModuleType"); } }
+//Resources:PipelineAdminResources:CustomModule_CustomModuleType_Container
+
+		public static string CustomModule_CustomModuleType_Container { get { return GetResourceString("CustomModule_CustomModuleType_Container"); } }
+//Resources:PipelineAdminResources:CustomModule_CustomModuleType_Script
+
+		public static string CustomModule_CustomModuleType_Script { get { return GetResourceString("CustomModule_CustomModuleType_Script"); } }
+//Resources:PipelineAdminResources:CustomModule_CustomModuleType_Select
+
+		public static string CustomModule_CustomModuleType_Select { get { return GetResourceString("CustomModule_CustomModuleType_Select"); } }
+//Resources:PipelineAdminResources:CustomModule_CustomModuleType_WebFunction
+
+		public static string CustomModule_CustomModuleType_WebFunction { get { return GetResourceString("CustomModule_CustomModuleType_WebFunction"); } }
 //Resources:PipelineAdminResources:CustomModule_Description
 
 		public static string CustomModule_Description { get { return GetResourceString("CustomModule_Description"); } }
+//Resources:PipelineAdminResources:CustomModule_DotNetAssembly
+
+		public static string CustomModule_DotNetAssembly { get { return GetResourceString("CustomModule_DotNetAssembly"); } }
+//Resources:PipelineAdminResources:CustomModule_DotNetClass
+
+		public static string CustomModule_DotNetClass { get { return GetResourceString("CustomModule_DotNetClass"); } }
 //Resources:PipelineAdminResources:CustomModule_Help
 
 		public static string CustomModule_Help { get { return GetResourceString("CustomModule_Help"); } }
+//Resources:PipelineAdminResources:CustomModule_Script
+
+		public static string CustomModule_Script { get { return GetResourceString("CustomModule_Script"); } }
 //Resources:PipelineAdminResources:CustomModule_Title
 
 		public static string CustomModule_Title { get { return GetResourceString("CustomModule_Title"); } }
+//Resources:PipelineAdminResources:CustomModule_Uri
+
+		public static string CustomModule_Uri { get { return GetResourceString("CustomModule_Uri"); } }
+//Resources:PipelineAdminResources:CustomModule_Uri_AccountId
+
+		public static string CustomModule_Uri_AccountId { get { return GetResourceString("CustomModule_Uri_AccountId"); } }
+//Resources:PipelineAdminResources:CustomModule_Uri_AccountPassword
+
+		public static string CustomModule_Uri_AccountPassword { get { return GetResourceString("CustomModule_Uri_AccountPassword"); } }
+//Resources:PipelineAdminResources:CustomModule_Uri_AccountPassword_Help
+
+		public static string CustomModule_Uri_AccountPassword_Help { get { return GetResourceString("CustomModule_Uri_AccountPassword_Help"); } }
 //Resources:PipelineAdminResources:DataStream_AutoCreateTable
 
 		public static string DataStream_AutoCreateTable { get { return GetResourceString("DataStream_AutoCreateTable"); } }
@@ -1196,12 +1298,22 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string AppCache_CacheType_Redis = "AppCache_CacheType_Redis";
 			public const string AppCache_Description = "AppCache_Description";
 			public const string AppCache_Help = "AppCache_Help";
+			public const string AppCache_InitializationValues = "AppCache_InitializationValues";
 			public const string AppCache_Password = "AppCache_Password";
 			public const string AppCache_Password_Help = "AppCache_Password_Help";
 			public const string AppCache_SelectCacheType = "AppCache_SelectCacheType";
 			public const string AppCache_Title = "AppCache_Title";
 			public const string AppCache_Uri = "AppCache_Uri";
 			public const string AppCache_Uri_Help = "AppCache_Uri_Help";
+			public const string ApplicationCacheValue_Description = "ApplicationCacheValue_Description";
+			public const string ApplicationCacheValue_Help = "ApplicationCacheValue_Help";
+			public const string ApplicationCacheValue_Key = "ApplicationCacheValue_Key";
+			public const string ApplicationCacheValue_Title = "ApplicationCacheValue_Title";
+			public const string ApplicationCacheValue_Value = "ApplicationCacheValue_Value";
+			public const string ApplicationCacheValue_Value_Number = "ApplicationCacheValue_Value_Number";
+			public const string ApplicationCacheValue_Value_String = "ApplicationCacheValue_Value_String";
+			public const string ApplicationCacheValue_Value_Type = "ApplicationCacheValue_Value_Type";
+			public const string ApplicationCacheValue_Value_Type_Select = "ApplicationCacheValue_Value_Type_Select";
 			public const string Common_Description = "Common_Description";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
@@ -1231,13 +1343,37 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string ConnectionType_MQTT_Listener = "ConnectionType_MQTT_Listener";
 			public const string ConnectionType_RabbitMQ = "ConnectionType_RabbitMQ";
 			public const string ConnectionType_RabbitMQClient = "ConnectionType_RabbitMQClient";
+			public const string CusotmModule_CustomModuleType_DotNetAssembly = "CusotmModule_CustomModuleType_DotNetAssembly";
 			public const string Custom_AccountId = "Custom_AccountId";
 			public const string Custom_AccountPassword = "Custom_AccountPassword";
 			public const string Custom_AccountPassword_Help = "Custom_AccountPassword_Help";
 			public const string Custom_Uri = "Custom_Uri";
+			public const string CustomModule_AuthenticationHeader = "CustomModule_AuthenticationHeader";
+			public const string CustomModule_AuthenticationHeader_Help = "CustomModule_AuthenticationHeader_Help";
+			public const string CustomModule_AuthenticationType = "CustomModule_AuthenticationType";
+			public const string CustomModule_AuthenticationType_Anonymous = "CustomModule_AuthenticationType_Anonymous";
+			public const string CustomModule_AuthenticationType_AuthenticationHeader = "CustomModule_AuthenticationType_AuthenticationHeader";
+			public const string CustomModule_AuthenticationType_BasicAuth = "CustomModule_AuthenticationType_BasicAuth";
+			public const string CustomModule_AuthenticationType_Select = "CustomModule_AuthenticationType_Select";
+			public const string CustomModule_ContainerRepository = "CustomModule_ContainerRepository";
+			public const string CustomModule_ContainerRepository_Select = "CustomModule_ContainerRepository_Select";
+			public const string CustomModule_ContainerTag = "CustomModule_ContainerTag";
+			public const string CustomModule_ContainerTag_Select = "CustomModule_ContainerTag_Select";
+			public const string CustomModule_CustomModuleType = "CustomModule_CustomModuleType";
+			public const string CustomModule_CustomModuleType_Container = "CustomModule_CustomModuleType_Container";
+			public const string CustomModule_CustomModuleType_Script = "CustomModule_CustomModuleType_Script";
+			public const string CustomModule_CustomModuleType_Select = "CustomModule_CustomModuleType_Select";
+			public const string CustomModule_CustomModuleType_WebFunction = "CustomModule_CustomModuleType_WebFunction";
 			public const string CustomModule_Description = "CustomModule_Description";
+			public const string CustomModule_DotNetAssembly = "CustomModule_DotNetAssembly";
+			public const string CustomModule_DotNetClass = "CustomModule_DotNetClass";
 			public const string CustomModule_Help = "CustomModule_Help";
+			public const string CustomModule_Script = "CustomModule_Script";
 			public const string CustomModule_Title = "CustomModule_Title";
+			public const string CustomModule_Uri = "CustomModule_Uri";
+			public const string CustomModule_Uri_AccountId = "CustomModule_Uri_AccountId";
+			public const string CustomModule_Uri_AccountPassword = "CustomModule_Uri_AccountPassword";
+			public const string CustomModule_Uri_AccountPassword_Help = "CustomModule_Uri_AccountPassword_Help";
 			public const string DataStream_AutoCreateTable = "DataStream_AutoCreateTable";
 			public const string DataStream_AutoCreateTable_Help = "DataStream_AutoCreateTable_Help";
 			public const string DataStream_AWSAccessKey = "DataStream_AWSAccessKey";
