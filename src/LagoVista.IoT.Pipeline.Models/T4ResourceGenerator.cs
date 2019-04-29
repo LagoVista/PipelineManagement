@@ -206,6 +206,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:ConnectionType_RabbitMQClient
 
 		public static string ConnectionType_RabbitMQClient { get { return GetResourceString("ConnectionType_RabbitMQClient"); } }
+//Resources:PipelineAdminResources:ConnectionType_SerialPort
+
+		public static string ConnectionType_SerialPort { get { return GetResourceString("ConnectionType_SerialPort"); } }
 //Resources:PipelineAdminResources:CusotmModule_CustomModuleType_DotNetAssembly
 
 		public static string CusotmModule_CustomModuleType_DotNetAssembly { get { return GetResourceString("CusotmModule_CustomModuleType_DotNetAssembly"); } }
@@ -1241,6 +1244,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Sentinel_Title
 
 		public static string Sentinel_Title { get { return GetResourceString("Sentinel_Title"); } }
+//Resources:PipelineAdminResources:SerialPort_BaudRate
+
+		public static string SerialPort_BaudRate { get { return GetResourceString("SerialPort_BaudRate"); } }
+//Resources:PipelineAdminResources:SerialPort_PortName
+
+		public static string SerialPort_PortName { get { return GetResourceString("SerialPort_PortName"); } }
 //Resources:PipelineAdminResources:Translator_Type_Binary
 
 		public static string Translator_Type_Binary { get { return GetResourceString("Translator_Type_Binary"); } }
@@ -1283,6 +1292,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Transmitter_TransmitterType_Outbox
 
 		public static string Transmitter_TransmitterType_Outbox { get { return GetResourceString("Transmitter_TransmitterType_Outbox"); } }
+//Resources:PipelineAdminResources:Transmitter_TransmitterType_SerialPort
+
+		public static string Transmitter_TransmitterType_SerialPort { get { return GetResourceString("Transmitter_TransmitterType_SerialPort"); } }
 //Resources:PipelineAdminResources:Transmitter_TransmitterType_SMS
 
 		public static string Transmitter_TransmitterType_SMS { get { return GetResourceString("Transmitter_TransmitterType_SMS"); } }
@@ -1343,6 +1355,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string ConnectionType_MQTT_Listener = "ConnectionType_MQTT_Listener";
 			public const string ConnectionType_RabbitMQ = "ConnectionType_RabbitMQ";
 			public const string ConnectionType_RabbitMQClient = "ConnectionType_RabbitMQClient";
+			public const string ConnectionType_SerialPort = "ConnectionType_SerialPort";
 			public const string CusotmModule_CustomModuleType_DotNetAssembly = "CusotmModule_CustomModuleType_DotNetAssembly";
 			public const string Custom_AccountId = "Custom_AccountId";
 			public const string Custom_AccountPassword = "Custom_AccountPassword";
@@ -1688,6 +1701,8 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Sentinel_SecurityField_Type_Select = "Sentinel_SecurityField_Type_Select";
 			public const string Sentinel_SecurityField_Type_SharedSignature = "Sentinel_SecurityField_Type_SharedSignature";
 			public const string Sentinel_Title = "Sentinel_Title";
+			public const string SerialPort_BaudRate = "SerialPort_BaudRate";
+			public const string SerialPort_PortName = "SerialPort_PortName";
 			public const string Translator_Type_Binary = "Translator_Type_Binary";
 			public const string Translator_Type_Custom = "Translator_Type_Custom";
 			public const string Translator_Type_Delimited = "Translator_Type_Delimited";
@@ -1702,6 +1717,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Transmitter_TransmitterType = "Transmitter_TransmitterType";
 			public const string Transmitter_TransmitterType_OriginalListener = "Transmitter_TransmitterType_OriginalListener";
 			public const string Transmitter_TransmitterType_Outbox = "Transmitter_TransmitterType_Outbox";
+			public const string Transmitter_TransmitterType_SerialPort = "Transmitter_TransmitterType_SerialPort";
 			public const string Transmitter_TransmitterType_SMS = "Transmitter_TransmitterType_SMS";
 			public const string Transmitter_TransmitterType_SMTP = "Transmitter_TransmitterType_SMTP";
 		}

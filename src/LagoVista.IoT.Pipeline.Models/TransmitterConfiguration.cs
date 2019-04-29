@@ -46,6 +46,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             RawTCP,
             [EnumLabel("rawudp", PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
             RawUDP,
+            [EnumLabel("serialport", PipelineAdminResources.Names.ConnectionType_SerialPort, typeof(PipelineAdminResources))]
+            SerialPort,
 
             /*[EnumLabel("mqtt", PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
             MQTT,
@@ -109,6 +111,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectToPort, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources))]
         public int? ConnectToPort { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SerialPort_BaudRate, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string BaudRate { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SerialPort_PortName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string PortName { get; set; }
 
 
         public override string ModuleType => PipelineModuleType_Transmitter;

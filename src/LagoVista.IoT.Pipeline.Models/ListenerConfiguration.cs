@@ -51,6 +51,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawUdp, PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
         RawUDP,
+
+        [EnumLabel(ListenerConfiguration.ListenerTypes_SerialPort, PipelineAdminResources.Names.ConnectionType_SerialPort, typeof(PipelineAdminResources))]
+        SerialPort,
+
         [EnumLabel(ListenerConfiguration.ListenerTypes_WebSocket, PipelineAdminResources.Names.Connection_Type_WebSocket, typeof(PipelineAdminResources))]
         WebSocket,
         /*
@@ -112,6 +116,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ListenerTypes_MQTT_Client = "mqttclient";
         public const string ListenerTypes_POP3Server = "pop3server";
         public const string ListenerTypes_Custom = "custom";
+        public const string ListenerTypes_SerialPort = "serialport";
         public const string ListenerTypes_WebSocket = "websocket";
 
         public override string ModuleType => PipelineModuleType_Listener;
@@ -242,6 +247,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Subscriptions, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<MQTTSubscription> MqttSubscriptions { get; set; }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SerialPort_BaudRate, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string BaudRate { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SerialPort_PortName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string PortName { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Subscriptions, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<string> AmqpSubscriptions { get; set; }

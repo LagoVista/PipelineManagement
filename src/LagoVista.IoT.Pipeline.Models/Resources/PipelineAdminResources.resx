@@ -1357,4 +1357,16 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="ApplicationCacheValue_Value_Type_Select" xml:space="preserve">
     <value>-select value type-</value>
   </data>
+  <data name="ConnectionType_SerialPort" xml:space="preserve">
+    <value>Serial Port</value>
+  </data>
+  <data name="SerialPort_BaudRate" xml:space="preserve">
+    <value>Baud Rate</value>
+  </data>
+  <data name="SerialPort_PortName" xml:space="preserve">
+    <value>Port Name</value>
+  </data>
+  <data name="Transmitter_TransmitterType_SerialPort" xml:space="preserve">
+    <value>Serial Port</value>
+  </data>
 </root>
