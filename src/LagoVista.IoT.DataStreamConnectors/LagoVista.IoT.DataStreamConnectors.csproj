@@ -4,18 +4,18 @@
     <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.3.31.5" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.31.13" />
-    <PackageReference Include="Elasticsearch.Net" Version="6.4.2" />
+    <PackageReference Include="AWSSDK.Core" Version="3.3.101.12" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.102.2" />
+    <PackageReference Include="Elasticsearch.Net" Version="6.7.0" />
     <PackageReference Include="Elasticsearch.Net.Aws" Version="6.1.0" />
-    <PackageReference Include="LagoVista.Core" Version="2.1.732-beta1138" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.732-beta1138" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.734-beta1138" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.734-beta1138" />
     <PackageReference Include="Microsoft.Azure.EventHubs" Version="2.2.1" />
     <PackageReference Include="Microsoft.Spatial" Version="7.5.3" />
     <PackageReference Include="NEST" Version="6.4.2" />
     <PackageReference Include="Npgsql" Version="4.0.7" />
-    <PackageReference Include="StackExchange.Redis" Version="2.0.519" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.0.601" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
   <ItemGroup>
