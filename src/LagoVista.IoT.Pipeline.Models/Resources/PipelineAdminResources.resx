@@ -1369,4 +1369,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Transmitter_TransmitterType_SerialPort" xml:space="preserve">
     <value>Serial Port</value>
   </data>
+  <data name="Common_IsPublic_Help" xml:space="preserve">
+    <value>If you create this object as a public object it will be available to other users to use and clone within their application.  You will be  the only person allowed to edit it.</value>
+  </data>
 </root>

@@ -125,6 +125,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Common_IsPublic
 
 		public static string Common_IsPublic { get { return GetResourceString("Common_IsPublic"); } }
+//Resources:PipelineAdminResources:Common_IsPublic_Help
+
+		public static string Common_IsPublic_Help { get { return GetResourceString("Common_IsPublic_Help"); } }
 //Resources:PipelineAdminResources:Common_Key
 
 		public static string Common_Key { get { return GetResourceString("Common_Key"); } }
@@ -1328,6 +1331,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string ApplicationCacheValue_Value_Type_Select = "ApplicationCacheValue_Value_Type_Select";
 			public const string Common_Description = "Common_Description";
 			public const string Common_IsPublic = "Common_IsPublic";
+			public const string Common_IsPublic_Help = "Common_IsPublic_Help";
 			public const string Common_Key = "Common_Key";
 			public const string Common_Key_Help = "Common_Key_Help";
 			public const string Common_Key_Validation = "Common_Key_Validation";

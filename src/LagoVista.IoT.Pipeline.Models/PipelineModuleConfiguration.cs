@@ -54,7 +54,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public String EntityType { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_IsPublic,  FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_IsPublic, HelpResource: PipelineAdminResources.Names.Common_IsPublic_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool IsPublic { get; set; }
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
