@@ -19,7 +19,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
     /// Client API Data Stream
     /// </summary>
     [Authorize(AuthenticationSchemes = "APIToken")]
-    [AppBuilder]
     public class AppDataStreamController : LagoVistaBaseController
     {
         IDataStreamManager _dataStreamManager;
