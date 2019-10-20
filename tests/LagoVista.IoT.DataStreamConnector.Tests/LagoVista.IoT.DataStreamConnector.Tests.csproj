@@ -16,7 +16,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="LagoVista.Core" Version="2.1.870-beta0733" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.881-beta0745" />
     <PackageReference Include="Npgsql" Version="4.0.7" />
     <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
