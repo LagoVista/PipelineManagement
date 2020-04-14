@@ -4,12 +4,12 @@
     <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.CloudStorage" Version="2.1.881-beta0745" />
-    <PackageReference Include="LagoVista.Core" Version="2.1.881-beta0745" />
-    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="2.1.881-beta0745" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.881-beta0745" />
+    <PackageReference Include="LagoVista.CloudStorage" Version="2.1.1061-beta1313" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.1061-beta1313" />
+    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="2.1.1061-beta1313" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.1061-beta1313" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.7.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.Admin\LagoVista.IoT.Pipeline.Admin.csproj" />
