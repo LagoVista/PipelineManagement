@@ -9,12 +9,12 @@
     <None Remove="LagoVista\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="2.1.881-beta0745" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.881-beta0745" />
-    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="2.1.881-beta0745" />
-    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="2.1.881-beta0745" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.881-beta0745" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="LagoVista.Core" Version="2.1.1064-beta1512" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="2.1.1064-beta1512" />
+    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="2.1.1064-beta1512" />
+    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="2.1.1064-beta1512" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.1064-beta1512" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="T4ResourceGenerator.cs">
