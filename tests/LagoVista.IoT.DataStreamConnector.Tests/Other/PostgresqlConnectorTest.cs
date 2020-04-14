@@ -141,7 +141,7 @@ CREATE TABLE if not exists public.information (
         {
             var stream = GetValidStream();
 
-            var connString = $"Host={stream.DbURL};Username={stream.DbUserName};Password={stream.DbPassword};";// Database={stream.DbName}";
+            var connString = $"Host={stream.DbURL};Port=5432;Username={stream.DbUserName};Password={stream.DbPassword};";// Database={stream.DbName}";
 
             using (var conn = new NpgsqlConnection(connString))
             {
