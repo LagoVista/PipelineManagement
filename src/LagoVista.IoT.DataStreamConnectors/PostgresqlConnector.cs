@@ -121,7 +121,11 @@ namespace LagoVista.IoT.DataStreamConnectors
 
                         if (item.Data.ContainsKey(field.FieldName))
                         {
-                            value = item.Data[field.FieldName];
+                            value = item.Data[field.FieldName];                         
+                        }
+                        else if(item.Data.ContainsKey(field.Key))
+                        {
+                            value = item.Data[field.Key];
                             if (value == null)
                             {
                                 value = System.DBNull.Value;
