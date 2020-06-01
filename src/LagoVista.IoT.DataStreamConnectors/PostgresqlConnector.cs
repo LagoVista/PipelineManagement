@@ -578,5 +578,144 @@ WHERE table_schema = @dbschema
 
             return response;
         }
+
+        public async Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(string query, Dictionary<string, object> filter, ListRequest request)
+        {
+            var responseItems = new List<DataStreamResult>();
+
+            var sql = new StringBuilder(query);
+
+            sql.AppendLine();
+            sql.AppendLine($"  from  {_stream.DbSchema}.{_stream.DbTableName}");
+            sql.AppendLine($"  where 1 = 1"); /* just used to establish a where clause we can use by appending "and x = y" */
+
+            if (!String.IsNullOrEmpty(request.NextRowKey))
+            {
+                sql.AppendLine($"  and {_stream.TimestampFieldName} < @lastDateStamp");
+            }
+
+            if (!String.IsNullOrEmpty(request.StartDate))
+            {
+                sql.AppendLine($"  and {_stream.TimestampFieldName} >= @startDateStamp");
+            }
+
+            if (!String.IsNullOrEmpty(request.EndDate))
+            {
+                sql.AppendLine($"  and {_stream.TimestampFieldName} <= @endDateStamp");
+            }
+
+            foreach (var filterItem in filter)
+            {
+                sql.AppendLine($"  and {filterItem.Key} = @parm{filterItem.Key}");
+
+            }
+
+            sql.AppendLine($"  order by {_stream.TimestampFieldName} desc");
+            sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * Math.Max(request.PageIndex - 1, 0)} ");
+
+            using (var cn = OpenConnection(_stream.DbName))
+            using (var cmd = new NpgsqlCommand())
+            {
+                cmd.Connection = cn;
+                cmd.CommandText = sql.ToString();
+                Console.WriteLine(cmd.CommandText);
+
+                if (!String.IsNullOrEmpty(request.NextRowKey))
+                {
+                    cmd.Parameters.AddWithValue($"@lastDateStamp", request.NextRowKey.ToDateTime());
+                }
+
+                if (!String.IsNullOrEmpty(request.StartDate))
+                {
+                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
+                }
+
+                if (!String.IsNullOrEmpty(request.EndDate))
+                {
+                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+                }
+
+                foreach (var filterItem in filter)
+                {
+                    cmd.Parameters.AddWithValue($"@parm{filterItem.Key}", filterItem.Value);
+                    _logger.AddCustomEvent(LogLevel.Message, "ProcessStreamAnalyticsAsync", $"{filterItem.Key} - {filterItem.Value}");
+                }
+
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                using (var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    while (rdr.Read())
+                    {
+                        var resultItem = new DataStreamResult();
+                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimestampFieldName]).ToJSONString();
+
+                        resultItem.Add(_stream.TimestampFieldName, resultItem.Timestamp);
+                        resultItem.Add(_stream.DeviceIdFieldName, rdr[_stream.DeviceIdFieldName]);
+
+                        foreach (var fld in _stream.Fields)
+                        {
+                            switch (fld.FieldType.Value)
+                            {
+                                case DeviceAdmin.Models.ParameterTypes.GeoLocation:
+                                    var result = rdr[$"out_{fld.FieldName}"] as String;
+                                    if (!String.IsNullOrEmpty(result))
+                                    {
+                                        var reg = new Regex(@"^POINT\((?'lat'[\d\.\-]{2,14}) (?'lon'[\d\.\-]{2,14})\)$");
+                                        var regMatch = reg.Match(result);
+                                        if (regMatch.Success && regMatch.Groups.Count == 3)
+                                        {
+                                            var strLat = regMatch.Groups[1];
+                                            var strLon = regMatch.Groups[2];
+                                            if (double.TryParse(strLat.Value, out double lat) &&
+                                               double.TryParse(strLat.Value, out double lon))
+                                            {
+                                                resultItem.Add(fld.FieldName, $"{lat:0.0000000},{lon:0.0000000}");
+                                            }
+                                        }
+                                    }
+
+
+                                    if (!resultItem.Keys.Contains(fld.FieldName))
+                                    {
+                                        resultItem.Add(fld.FieldName, null);
+                                    }
+
+                                    break;
+
+                                case DeviceAdmin.Models.ParameterTypes.DateTime:
+                                    {
+                                        var dtValue = rdr[fld.FieldName] as DateTime?;
+                                        if (dtValue.HasValue)
+                                        {
+                                            resultItem.Add(fld.FieldName, dtValue.Value.ToJSONString());
+                                        }
+                                    }
+
+                                    break;
+
+                                default:
+                                    resultItem.Add(fld.FieldName, rdr[fld.FieldName]);
+                                    break;
+                            }
+                        }
+
+                        responseItems.Add(resultItem);
+                    }
+                }
+            }
+
+            var response = new Core.Models.UIMetaData.ListResponse<DataStreamResult>();
+            response.Model = responseItems;
+            response.PageSize = responseItems.Count;
+            response.PageIndex = request.PageIndex;
+            response.HasMoreRecords = responseItems.Count == request.PageSize;
+            if (response.HasMoreRecords)
+            {
+                response.NextRowKey = responseItems.Last().Timestamp;
+            }
+
+            return response;
+        }
     }
 }

@@ -138,12 +138,18 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public Task<InvokeResult> UpdateItem(Dictionary<string, object> item, Dictionary<string, object> recordFilter)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Azure Blob Storage does not supporting updating.");
         }
 
         public Task<ListResponse<DataStreamResult>> GetItemsAsync(Dictionary<string, object> filter, ListRequest request)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Azure Blob Storage does not support filter.");
         }
+
+        public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(string query, Dictionary<string, object> filter, ListRequest request)
+        {
+            throw new NotImplementedException("Azure Blob Storage does does not support stream");
+        }
+
     }
 }

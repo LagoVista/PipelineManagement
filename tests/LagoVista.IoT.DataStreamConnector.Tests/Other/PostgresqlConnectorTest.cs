@@ -330,7 +330,6 @@ CREATE TABLE if not exists public.information (
                 {"int1", 53 },
                 {"dec1", 12.5 },
                 {"str1", 12.5 },
-
             };
 
             await connector.UpdateItem(updatedItems, filteredItems);
@@ -338,7 +337,30 @@ CREATE TABLE if not exists public.information (
             results = await connector.GetItemsAsync(filteredItems, new Core.Models.UIMetaData.ListRequest());
             Assert.AreEqual(1, results.Model.Count());
             Assert.AreEqual(53, results.Model.First()["int1"]);
+        }
 
+        [TestMethod]
+        public async Task DataStream_Postgres_StreamQUery_Test()
+        {
+            var stream = GetValidStream();
+            var connector = new PostgresqlConnector(_logger);
+            AssertSuccessful(await connector.InitAsync(stream));
+
+            var deviceId = "DEV001";
+
+            for (var idx = 0; idx < 20; ++idx)
+            {
+                AssertSuccessful(await AddRecord(connector, stream, deviceId, idx + 300, idx + 200));
+            }
+
+            var filteredItems = new Dictionary<string, object>()
+            {
+                    {"int1", 5 },
+            };
+
+            var query = "select time_bucket('30 minutes', timeStamp) as period, avg(int1)";
+
+            var result = await connector.GetTimeSeriesAnalyticsAsync(query, filteredItems, new Core.Models.UIMetaData.ListRequest());            
         }
     }
 }

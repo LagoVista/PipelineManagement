@@ -127,12 +127,17 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public Task<InvokeResult> UpdateItem(Dictionary<string, object> item, Dictionary<string, object> recordFilter)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("AWS S3 does not supporting updating.");
         }
 
         public Task<ListResponse<DataStreamResult>> GetItemsAsync(Dictionary<string, object> filter, ListRequest request)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("AWS S3 does not support filter.");
+        }
+
+        public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(string query, Dictionary<string, object> filter, ListRequest request)
+        {
+            throw new NotImplementedException("AWS S3 does not support stream");
         }
     }
 }
