@@ -14,5 +14,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string Timestamp { get; set; }
         //public Dictionary<string, object> Fields { get; set; }
 
+        public override string ToString()
+        {
+            var bldr = new StringBuilder();
+            foreach(var key in Keys)
+            {
+                bldr.Append($"{key}={this[key]}; ");
+            }
+
+            return bldr.ToString();
+        }
     }
 }

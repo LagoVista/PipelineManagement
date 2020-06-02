@@ -57,5 +57,9 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             throw new NotImplementedException();
         }
+        public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

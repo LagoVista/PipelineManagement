@@ -247,6 +247,11 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             throw new NotImplementedException("Azure Table Storage does not support stream");
         }
+
+        public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest)
+        {
+            throw new NotImplementedException("Azure Table Storage does not support stream");
+        }
     }
 }
  

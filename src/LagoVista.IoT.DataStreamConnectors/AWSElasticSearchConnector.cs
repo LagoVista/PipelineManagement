@@ -250,5 +250,10 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             throw new NotImplementedException("AWS does not support stream");
         }
+
+        public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest)
+        {
+            throw new NotImplementedException("AWS does not support stream");
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace LagoVista.IoT.Pipeline.Admin
         Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, ListRequest request);
         Task<ListResponse<DataStreamResult>> GetItemsAsync(Dictionary<string, object> filter, ListRequest request);
         Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(string query, Dictionary<string, object> filter, ListRequest request);
+        Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest);
         Task<InvokeResult> UpdateItem(Dictionary<string, object> items, Dictionary<string, object> recordFilter);
         Task<InvokeResult> ValidateConnectionAsync(DataStream stream);
     }

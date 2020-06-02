@@ -2,7 +2,9 @@
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DataStreamConnectors;
+using LagoVista.IoT.DataStreamConnectors.Models;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
@@ -49,6 +51,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                 DbTableName = "information",
                 CreateTableDDL = @"
 CREATE EXTENSION if not exists postgis;
+CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
 CREATE TABLE if not exists public.information (
 	id SERIAL,
     deviceId text not null,
@@ -60,7 +63,8 @@ CREATE TABLE if not exists public.information (
 	str1 text NULL,
 	local1 GEOGRAPHY NULL,
 	pointindex1 integer NULL
-);"
+);
+SELECT create_hypertable('information','timestamp');"
 
 
             };
@@ -173,7 +177,7 @@ CREATE TABLE if not exists public.information (
         [ClassInitialize]
         public static async Task Init(TestContext ctx)
         {
-            await RemoveDatabase();
+             await RemoveDatabase();
         }
 
         [TestInitialize]
@@ -233,9 +237,9 @@ CREATE TABLE if not exists public.information (
             AssertSuccessful(await connector2.InitAsync(stream));
         }
 
-        private async Task<InvokeResult> AddRecord(PostgresqlConnector connector, DataStream stream, String deviceId, int int1, int int2)
+        private async Task<InvokeResult> AddRecord(PostgresqlConnector connector, DataStream stream, String deviceId, int int1, int int2, string dateStamp = "")
         {
-            var record = GetRecord(stream, deviceId, DateTime.Now.ToJSONString(),
+            var record = GetRecord(stream, deviceId, String.IsNullOrEmpty(dateStamp) ? DateTime.Now.ToJSONString() : dateStamp,
                 new System.Collections.Generic.KeyValuePair<string, object>("int1", int1),
                 new System.Collections.Generic.KeyValuePair<string, object>("int2", int2),
                 new System.Collections.Generic.KeyValuePair<string, object>("datetime1", DateTime.Now.ToJSONString()),
@@ -340,7 +344,7 @@ CREATE TABLE if not exists public.information (
         }
 
         [TestMethod]
-        public async Task DataStream_Postgres_StreamQUery_Test()
+        public async Task DataStream_Postgres_StreamQuery_Test()
         {
             var stream = GetValidStream();
             var connector = new PostgresqlConnector(_logger);
@@ -353,14 +357,46 @@ CREATE TABLE if not exists public.information (
                 AssertSuccessful(await AddRecord(connector, stream, deviceId, idx + 300, idx + 200));
             }
 
-            var filteredItems = new Dictionary<string, object>()
+            var filteredItems = new Dictionary<string, object>() { };
+
+
+            var query = "select time_bucket('1.5 minutes', timeStamp) as period, avg(int1)";
+
+            var result = await connector.GetTimeSeriesAnalyticsAsync(query, filteredItems, new Core.Models.UIMetaData.ListRequest() { PageSize = 50 });            
+        }
+
+        [TestMethod]
+        public async Task DataStream_Postgres_Stream_Request_Test()
+        {
+            var stream = GetValidStream();
+            var connector = new PostgresqlConnector(_logger);
+            AssertSuccessful(await connector.InitAsync(stream));
+
+            var deviceId = "DEV001";
+
+            var recordCount = 20;
+
+            for (var idx = 0; idx < 20; ++idx)
             {
-                    {"int1", 5 },
+                var dateStamp = DateTime.Now.AddSeconds((idx - recordCount) * 20);
+                AssertSuccessful(await AddRecord(connector, stream, deviceId, idx + 300, idx + 200, dateStamp.ToJSONString()));
+            }
+
+            var filteredItems = new Dictionary<string, object>() { };
+
+            var request = new TimeSeriesAnalyticsRequest()
+            {
+                Window = Windows.Minutes,
+                WindowSize = 1,
             };
 
-            var query = "select time_bucket('30 minutes', timeStamp) as period, avg(int1)";
+            request.Fields.Add(new TimeSeriesAnalyticsRequestField() { Name = "int1", Operation = Operations.Average });
 
-            var result = await connector.GetTimeSeriesAnalyticsAsync(query, filteredItems, new Core.Models.UIMetaData.ListRequest());            
+            var results = await connector.GetTimeSeriesAnalyticsAsync(request, new Core.Models.UIMetaData.ListRequest() { PageSize = 50 });
+            foreach(var result in results.Model)
+            {
+                Console.WriteLine(result);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
+using LagoVista.IoT.DataStreamConnectors.Models;
 using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Npgsql;
@@ -121,9 +122,9 @@ namespace LagoVista.IoT.DataStreamConnectors
 
                         if (item.Data.ContainsKey(field.FieldName))
                         {
-                            value = item.Data[field.FieldName];                         
+                            value = item.Data[field.FieldName];
                         }
-                        else if(item.Data.ContainsKey(field.Key))
+                        else if (item.Data.ContainsKey(field.Key))
                         {
                             value = item.Data[field.Key];
                             if (value == null)
@@ -170,8 +171,6 @@ namespace LagoVista.IoT.DataStreamConnectors
 
                 cmd.Parameters.AddWithValue($"@{_stream.TimestampFieldName}", item.Timestamp.ToDateTime());
                 cmd.Parameters.AddWithValue($"@{_stream.DeviceIdFieldName}", item.DeviceId);
-
-                Console.WriteLine(cmd.CommandText);
 
                 var insertResult = await cmd.ExecuteNonQueryAsync();
             }
@@ -579,10 +578,126 @@ WHERE table_schema = @dbschema
             return response;
         }
 
+        public async Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest)
+        {
+            var fields = new List<string>();
+            var windowType = "";
+            switch (request.Window)
+            {
+                case Windows.Seconds: windowType = "seconds"; break;
+                case Windows.Minutes: windowType = "minutes"; break;
+                case Windows.Hours: windowType = "hours"; break;
+                case Windows.Days: windowType = "days"; break;
+                case Windows.Months: windowType = "months"; break;
+                case Windows.Years: windowType = "years"; break;
+            }
+
+            var sql = new StringBuilder($"select time_bucket('{request.WindowSize} {windowType}', {_stream.TimestampFieldName}) as period");
+            fields.Add("period");
+            sql.Append($", {_stream.DeviceIdFieldName}");
+            fields.Add(_stream.DeviceIdFieldName);
+
+            foreach (var method in request.Fields)
+            {
+                var operationType = "";
+                switch (method.Operation)
+                {
+                    case Operations.Average: operationType = "avg"; break;
+                    case Operations.Minimum: operationType = "min"; break;
+                    case Operations.Maximum: operationType = "max"; break;
+                    case Operations.Count: operationType = "count"; break;
+                    case Operations.Sum: operationType = "sum"; break;
+                    case Operations.Interpolate: operationType = "interpolate"; break;
+                }
+
+                if (String.IsNullOrEmpty(operationType))
+                {
+                    sql.Append($", {method.Name}");
+                    fields.Add(method.Name);
+                }
+                else
+                {
+                    var fieldName = $"{operationType}_{method.Name}";
+                    sql.Append($", {operationType}({method.Name}) as {fieldName}");
+                    fields.Add(fieldName);
+                }
+            }
+
+            sql.AppendLine();
+
+            sql.AppendLine($"  from  {_stream.DbSchema}.{_stream.DbTableName}");
+            sql.AppendLine($"  where 1 = 1"); /* just used to establish a where clause we can use by appending "and x = y" */
+
+            foreach (var filterItem in request.Filter)
+            {
+                sql.AppendLine($"  and {filterItem.Key} = @parm{filterItem.Key}");
+            }
+
+            sql.AppendLine($"  group by period, {_stream.DeviceIdFieldName}");
+            sql.AppendLine($"  order by period desc");
+            sql.AppendLine($"   LIMIT {listRequest.PageSize} OFFSET {listRequest.PageSize * Math.Max(listRequest.PageIndex - 1, 0)} ");
+
+            var responseItems = new List<DataStreamResult>();
+            using (var cn = OpenConnection(_stream.DbName))
+            using (var cmd = new NpgsqlCommand())
+            {
+                cmd.Connection = cn;
+                cmd.CommandText = sql.ToString();
+                Console.WriteLine(cmd.CommandText);
+
+                if (!String.IsNullOrEmpty(listRequest.NextRowKey))
+                {
+                    cmd.Parameters.AddWithValue($"@lastDateStamp", listRequest.NextRowKey.ToDateTime());
+                }
+
+                if (!String.IsNullOrEmpty(listRequest.StartDate))
+                {
+                    cmd.Parameters.AddWithValue($"@startDateStamp", listRequest.StartDate.ToDateTime());
+                }
+
+                if (!String.IsNullOrEmpty(listRequest.EndDate))
+                {
+                    cmd.Parameters.AddWithValue($"@endDateStamp", listRequest.EndDate.ToDateTime());
+                }
+
+                foreach (var filterItem in request.Filter)
+                {
+                    cmd.Parameters.AddWithValue($"@parm{filterItem.Key}", filterItem.Value);
+                    _logger.AddCustomEvent(LogLevel.Message, "ProcessStreamAnalyticsAsync", $"{filterItem.Key} - {filterItem.Value}");
+                }
+
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                using (var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    while (rdr.Read())
+                    {
+                        var resultItem = new DataStreamResult();
+                        for (var idx = 0; idx < rdr.FieldCount; ++idx)
+                        {
+                            resultItem.Add(fields[idx], rdr[idx]);
+                        }
+
+                        responseItems.Add(resultItem);
+                    }
+                }
+            }
+
+            var response = new Core.Models.UIMetaData.ListResponse<DataStreamResult>();
+            response.Model = responseItems;
+            response.PageSize = responseItems.Count;
+            response.PageIndex = listRequest.PageIndex;
+            response.HasMoreRecords = responseItems.Count == listRequest.PageSize && listRequest.PageSize > 0;
+            if (response.HasMoreRecords)
+            {
+                response.NextRowKey = responseItems.Last().Timestamp;
+            }
+
+            return response;
+        }
+
         public async Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(string query, Dictionary<string, object> filter, ListRequest request)
         {
-            var responseItems = new List<DataStreamResult>();
-
             var sql = new StringBuilder(query);
 
             sql.AppendLine();
@@ -610,9 +725,11 @@ WHERE table_schema = @dbschema
 
             }
 
-            sql.AppendLine($"  order by {_stream.TimestampFieldName} desc");
+            sql.AppendLine($"  group by period");
+            sql.AppendLine($"  order by period desc");
             sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * Math.Max(request.PageIndex - 1, 0)} ");
 
+            var responseItems = new List<DataStreamResult>();
             using (var cn = OpenConnection(_stream.DbName))
             using (var cmd = new NpgsqlCommand())
             {
@@ -648,56 +765,9 @@ WHERE table_schema = @dbschema
                     while (rdr.Read())
                     {
                         var resultItem = new DataStreamResult();
-                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimestampFieldName]).ToJSONString();
-
-                        resultItem.Add(_stream.TimestampFieldName, resultItem.Timestamp);
-                        resultItem.Add(_stream.DeviceIdFieldName, rdr[_stream.DeviceIdFieldName]);
-
-                        foreach (var fld in _stream.Fields)
+                        for (var idx = 0; idx < rdr.FieldCount; ++idx)
                         {
-                            switch (fld.FieldType.Value)
-                            {
-                                case DeviceAdmin.Models.ParameterTypes.GeoLocation:
-                                    var result = rdr[$"out_{fld.FieldName}"] as String;
-                                    if (!String.IsNullOrEmpty(result))
-                                    {
-                                        var reg = new Regex(@"^POINT\((?'lat'[\d\.\-]{2,14}) (?'lon'[\d\.\-]{2,14})\)$");
-                                        var regMatch = reg.Match(result);
-                                        if (regMatch.Success && regMatch.Groups.Count == 3)
-                                        {
-                                            var strLat = regMatch.Groups[1];
-                                            var strLon = regMatch.Groups[2];
-                                            if (double.TryParse(strLat.Value, out double lat) &&
-                                               double.TryParse(strLat.Value, out double lon))
-                                            {
-                                                resultItem.Add(fld.FieldName, $"{lat:0.0000000},{lon:0.0000000}");
-                                            }
-                                        }
-                                    }
-
-
-                                    if (!resultItem.Keys.Contains(fld.FieldName))
-                                    {
-                                        resultItem.Add(fld.FieldName, null);
-                                    }
-
-                                    break;
-
-                                case DeviceAdmin.Models.ParameterTypes.DateTime:
-                                    {
-                                        var dtValue = rdr[fld.FieldName] as DateTime?;
-                                        if (dtValue.HasValue)
-                                        {
-                                            resultItem.Add(fld.FieldName, dtValue.Value.ToJSONString());
-                                        }
-                                    }
-
-                                    break;
-
-                                default:
-                                    resultItem.Add(fld.FieldName, rdr[fld.FieldName]);
-                                    break;
-                            }
+                            resultItem.Add($"col{idx}", rdr[idx]);
                         }
 
                         responseItems.Add(resultItem);
@@ -709,7 +779,7 @@ WHERE table_schema = @dbschema
             response.Model = responseItems;
             response.PageSize = responseItems.Count;
             response.PageIndex = request.PageIndex;
-            response.HasMoreRecords = responseItems.Count == request.PageSize;
+            response.HasMoreRecords = responseItems.Count == request.PageSize && request.PageSize > 0;
             if (response.HasMoreRecords)
             {
                 response.NextRowKey = responseItems.Last().Timestamp;

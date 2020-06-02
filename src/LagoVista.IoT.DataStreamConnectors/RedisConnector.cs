@@ -218,5 +218,10 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             throw new NotImplementedException("REDIS does not support stream analytics");
         }
+
+        public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest)
+        {
+            throw new NotImplementedException("REDIS does not support stream");
+        }
     }
 }

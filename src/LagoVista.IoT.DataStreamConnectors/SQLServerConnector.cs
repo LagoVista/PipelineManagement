@@ -337,6 +337,11 @@ from sysobjects a
         {
             throw new NotImplementedException("SQL Server does not support stream");
         }
+
+        public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest)
+        {
+            throw new NotImplementedException("SQL Server does not support stream");
+        }
     }
 }
 
