@@ -7,6 +7,8 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -382,8 +384,6 @@ SELECT create_hypertable('information','timestamp');"
                 AssertSuccessful(await AddRecord(connector, stream, deviceId, idx + 300, idx + 200, dateStamp.ToJSONString()));
             }
 
-            var filteredItems = new Dictionary<string, object>() { };
-
             var request = new TimeSeriesAnalyticsRequest()
             {
                 Window = Windows.Minutes,
@@ -397,6 +397,24 @@ SELECT create_hypertable('information','timestamp');"
             {
                 Console.WriteLine(result);
             }
+        }
+
+        [TestMethod]
+        public void ParsesRequestObject()
+        {
+            var request = new TimeSeriesAnalyticsRequest()
+            {
+                Window = Windows.Minutes,
+                WindowSize = 1,
+            };
+
+            var serializerSettings = new JsonSerializerSettings();
+            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            request.Fields.Add(new TimeSeriesAnalyticsRequestField() { Name = "int1", Operation = Operations.Average });
+
+            var json = JsonConvert.SerializeObject(request, serializerSettings);
+            Console.WriteLine(json);
         }
     }
 }

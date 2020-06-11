@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
 
 namespace LagoVista.IoT.Pipeline.Admin
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Windows
     {
         Seconds,
@@ -12,6 +15,7 @@ namespace LagoVista.IoT.Pipeline.Admin
         Years
     }
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Operations
     {
         Average,
