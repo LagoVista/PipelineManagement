@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Exceptions;
+﻿using LagoVista.Core;
+using LagoVista.Core.Exceptions;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
@@ -8,6 +9,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using LagoVista.UserAdmin.Interfaces.Managers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,13 +21,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         IDataStreamRepo _dataStreamRepo;
         ISecureStorage _secureStorage;
         IDefaultInternalDataStreamConnectionSettings _defaultConnectionSettings;
+        IOrganizationManager _orgManager;
 
-        public DataStreamManager(IDataStreamRepo dataStreamRepo, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
+        public DataStreamManager(IDataStreamRepo dataStreamRepo, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings, IOrganizationManager orgManager, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
             base(logger, appConfig, depmanager, security)
         {
             _dataStreamRepo = dataStreamRepo;
             _secureStorage = secureStorage;
             _defaultConnectionSettings = defaultConnectionSettings;
+            _orgManager = orgManager;
         }
 
         public async Task<InvokeResult> AddDataStreamAsync(DataStream stream, EntityHeader org, EntityHeader user)
@@ -112,16 +116,47 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     stream.RedisPassword = null;
                 }
             }
+            else if(stream.StreamType.Value == DataStreamTypes.PointArrayStorage)
+            {
+                var orgDetails = await _orgManager.GetOrganizationAsync(org.Id, org, user);
+
+                stream.DeviceIdFieldName = "deviceId";
+                stream.TimestampFieldName = "timeStamp";
+                stream.DbSchema = "public";
+                stream.DbURL = _defaultConnectionSettings.PointArrayConnectionSettings.Uri;
+                stream.CreateTableDDL = GetPointArrayDataStorageSQL_DDL();
+                stream.DatabaseName = $"datastream_{orgDetails.Namespace}";
+                stream.DbTableName = $"point_array_{stream.Key}";
+                stream.DbUserName = orgDetails.Namespace;
+
+                var dbPassword = Guid.NewGuid().ToId();
+
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, dbPassword);
+                if (!addSecretResult.Successful)
+                {
+                    return addSecretResult.ToInvokeResult();
+                }
+
+                stream.DBPasswordSecureId = addSecretResult.Result;
+            }
             else
             {
                 throw new Exception("New data stream Type was added, should likely add something here to store credentials.");
             }
 
-
-
-
             await _dataStreamRepo.AddDataStreamAsync(stream);
             return InvokeResult.Success;
+        }
+
+        private string GetPointArrayDataStorageSQL_DDL()
+        {
+            return @"CREATE TABLE if not exists public.hvacdata(
+                        id SERIAL,
+                        deviceId text not null,
+                        timeStamp timestamp not null,
+                        sensorIndex smallint not null,
+                        value float4 not null
+                    );";
         }
 
         public async Task<InvokeResult<DataStream>> LoadFullDataStreamConfigurationAsync(String id, EntityHeader org, EntityHeader user)
@@ -191,6 +226,19 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                         }
 
                         stream.RedisPassword = getSecretResult.Result;
+                    }
+                }
+                else if (stream.StreamType.Value == DataStreamTypes.Postgresql)
+                {
+                    if (!String.IsNullOrEmpty(stream.DBPasswordSecureId))
+                    {
+                        var getSecretResult = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
+                        if (!getSecretResult.Successful)
+                        {
+                            return InvokeResult<DataStream>.FromInvokeResult(getSecretResult.ToInvokeResult());
+                        }
+
+                        stream.DBPasswordSecureId = getSecretResult.Result;
                     }
                 }
 

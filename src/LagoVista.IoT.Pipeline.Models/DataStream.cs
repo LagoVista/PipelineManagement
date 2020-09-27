@@ -28,6 +28,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AzureTableStorage_Managed,
         [EnumLabel(DataStream.StreamType_PostgreSQL, PipelineAdminResources.Names.DataStream_StreamType_PostgreSQL, typeof(PipelineAdminResources))]
         Postgresql,
+        [EnumLabel(DataStream.StreamType_PointArrayStorage, PipelineAdminResources.Names.DataStream_StreamType_PointArrayStorage, typeof(PipelineAdminResources))]
+        PointArrayStorage,
         [EnumLabel(DataStream.StreamType_Redis, PipelineAdminResources.Names.DataStream_StreamType_Redis, typeof(PipelineAdminResources))]
         Redis,
         //[EnumLabel(DataStream.StreamType_DataLake, PipelineAdminResources.Names.DataStream_StreamType_DataLake, typeof(PipelineAdminResources))]
@@ -56,6 +58,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string StreamType_AzureTableStorage_Managed = "azuretablestoragemanaged";
         public const string StreamType_SQLServer = "sqlserver";
         public const string StreamType_PostgreSQL = "postgresql";
+        public const string StreamType_PointArrayStorage = "pointarray";
         public const string StreamType_Redis = "redis";
 
         //public const string StreamType_DataLake = "azuredatalake";
@@ -237,8 +240,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 AzureTableStorageName = $"DataStream{OwnerOrganization.Id}{Key}";
             }
-
-            //TODO: Need to add localized error messages
+            
             if (StreamType.Value != DataStreamTypes.AzureBlob &&
                 StreamType.Value != DataStreamTypes.AzureTableStorage &&
                 StreamType.Value != DataStreamTypes.AzureEventHub &&
@@ -294,7 +296,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
             if (Fields.Select(fld => fld.Key).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Keys on fields must be unique."));
             if (Fields.Select(fld => fld.FieldName).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Field Names on fields must be unique."));
-
 
             #region AWS Types
             if (StreamType.Value == DataStreamTypes.AWSElasticSearch ||

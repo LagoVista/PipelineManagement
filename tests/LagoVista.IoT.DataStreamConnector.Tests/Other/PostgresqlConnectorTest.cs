@@ -188,6 +188,8 @@ SELECT create_hypertable('information','timestamp');"
             var stream = GetValidStream();
             var connString = $"Host={stream.DbURL};Username={stream.DbUserName};Password={stream.DbPassword};";//Database={stream.DbName}";
 
+            Console.WriteLine("Connect to " + connString);
+
             using (var conn = new NpgsqlConnection(connString))
             using (var cmd = new NpgsqlCommand())
             {

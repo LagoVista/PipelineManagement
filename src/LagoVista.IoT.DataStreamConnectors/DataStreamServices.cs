@@ -25,6 +25,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                 case DataStreamTypes.SQLServer: _streamConnector = new SQLServerConnector(logger); break;
                 case DataStreamTypes.Redis: _streamConnector = new RedisConnector(logger); break;
                 case DataStreamTypes.Postgresql: _streamConnector = new PostgresqlConnector(logger); break;
+                case DataStreamTypes.PointArrayStorage: _streamConnector = new PointArrayPostgresqlConnector(logger); break;
             }
 
             if (_streamConnector == null) return InvokeResult<IDataStreamConnector>.FromError("Unsupported Stream Type");

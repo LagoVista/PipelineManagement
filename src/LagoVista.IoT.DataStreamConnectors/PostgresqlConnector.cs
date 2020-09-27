@@ -43,7 +43,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             return AddItemAsync(item);
         }
 
-        private NpgsqlConnection OpenConnection(String dbName = null)
+        protected NpgsqlConnection OpenConnection(String dbName = null)
         {
             if (_stream == null)
             {
@@ -185,7 +185,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             return GetItemsAsync(filter, request);
         }
 
-        public async Task<InvokeResult> InitAsync(DataStream stream)
+        public virtual async Task<InvokeResult> InitAsync(DataStream stream)
         {
             if (String.IsNullOrEmpty(stream.DbURL))
             {
@@ -786,6 +786,11 @@ WHERE table_schema = @dbschema
             }
 
             return response;
+        }
+
+        protected DataStream GetStream()
+        {
+            return _stream;
         }
     }
 }
