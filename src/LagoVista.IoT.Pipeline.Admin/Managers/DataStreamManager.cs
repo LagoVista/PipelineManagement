@@ -125,13 +125,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 stream.DbSchema = "public";
                 stream.DbURL = _defaultConnectionSettings.PointArrayConnectionSettings.Uri;
                 stream.CreateTableDDL = GetPointArrayDataStorageSQL_DDL();
-                stream.DatabaseName = $"datastream_{orgDetails.Namespace}";
+                stream.DatabaseName = orgDetails.Namespace;
                 stream.DbTableName = $"point_array_{stream.Key}";
                 stream.DbUserName = orgDetails.Namespace;
 
                 var dbPassword = Guid.NewGuid().ToId();
 
-                var addSecretResult = await _secureStorage.AddSecretAsync(org, dbPassword);
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, $"ps_db_uid_{org.Id}", dbPassword);
                 if (!addSecretResult.Successful)
                 {
                     return addSecretResult.ToInvokeResult();
@@ -146,6 +146,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             await _dataStreamRepo.AddDataStreamAsync(stream);
             return InvokeResult.Success;
+        }
+
+        private async InvokeResult CreatePostgresUser()
+        {
+            var connString = $"Host={_defaultConnectionSettings.PointArrayConnectionSettings.Uri};Username={_defaultConnectionSettings.PointArrayConnectionSettings.UserName};Password={_defaultConnectionSettings.PointArrayConnectionSettings.Password};";
+
         }
 
         private string GetPointArrayDataStorageSQL_DDL()

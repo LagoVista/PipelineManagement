@@ -1,5 +1,17 @@
-﻿using LagoVista.IoT.Logging.Loggers;
+﻿using LagoVista.Core;
+using LagoVista.Core.Exceptions;
+using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
+using LagoVista.IoT.DataStreamConnector.Tests.Utils;
+using LagoVista.IoT.DataStreamConnectors;
+using LagoVista.IoT.Logging.Loggers;
+using LagoVista.IoT.Pipeline.Admin.Managers;
+using LagoVista.IoT.Pipeline.Admin.Models;
+using LagoVista.IoT.Pipeline.Admin.Repos;
+using LagoVista.UserAdmin.Interfaces.Managers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -19,7 +31,17 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
 
         const string _orgNamespace = "testing";
 
-        static IInstanceLogger _logger;
+        ISecureStorage _secureStorage = new MockSecureStorage();
+        Mock<IDefaultInternalDataStreamConnectionSettings> _connectionSettings = new Mock<IDefaultInternalDataStreamConnectionSettings>();
+        Mock<IOrganizationManager> _orgManager = new Mock<IOrganizationManager>();
+        Mock<ISecurity> _security = new Mock<ISecurity>();
+        DataStreamManager _dataStreamManager;
+
+        const string OrgId = "726B2E56551D4E2AB23017818723D844";
+        const string UserId = "4F8729CA945A498487927292C1CEDCA0";
+
+        EntityHeader _org;
+        EntityHeader _user;
 
         private static async Task RemoveDatabase()
         {
@@ -85,20 +107,95 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
             _dbUserName = System.Environment.GetEnvironmentVariable("PS_DB_USER_NAME");
             _dbPassword = System.Environment.GetEnvironmentVariable("PS_DB_PASSWORD");
 
+
             await RemoveDatabase();
         }
 
+        const string DS_ID = "6207A83D1BB0485DA2B8A2E21E412E20";
 
         [TestInitialize]
         public void Init()
         {
+            _dataStreamManager = new DataStreamManager(new Mock<IDataStreamRepo>().Object, _connectionSettings.Object, _orgManager.Object, new AdminLogger(new Utils.LogWriter()),
+                _secureStorage, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, _security.Object);
 
+            _security.Setup(sec => sec.AuthorizeAsync(It.IsAny<EntityHeader>(), It.IsAny<EntityHeader>(), It.IsAny<string>(), It.IsAny<object>()));
+
+            _org = EntityHeader.Create(OrgId, "TEST ORG");
+            _user = EntityHeader.Create(UserId, "TEST USER");
+
+            _orgManager.Setup(om => om.GetOrganizationAsync(It.Is<string>(str => str == OrgId), It.IsAny<EntityHeader>(), It.IsAny<EntityHeader>())).ReturnsAsync(new UserAdmin.Models.Orgs.Organization()
+            {
+                Namespace = _orgNamespace
+            });
+
+            var connSettings = new ConnectionSettings()
+            {
+                Uri = _dbUrl,
+                UserName = _dbUserName,
+                Password = _dbPassword,
+            };
+
+            _connectionSettings.SetupGet(cs => cs.PointArrayConnectionSettings).Returns(connSettings);
+        }
+
+        DataStream GetStream()
+        {
+            var timeStamp = DateTime.UtcNow.ToJSONString();
+
+            return new DataStream()
+            {
+                Id = DS_ID,
+                Name = "TestPointArray",
+                OwnerOrganization = _org,
+                StreamType = EntityHeader<DataStreamTypes>.Create(DataStreamTypes.PointArrayStorage),
+                CreationDate = timeStamp,
+                LastUpdatedDate = timeStamp,
+                CreatedBy = _user,
+                LastUpdatedBy = _user,
+                Key = "tpa"
+            };
         }
 
         [TestMethod]
-        public Task InitPointArrayDB()
+        public async Task Should_Set_TS_Server_Parameters_In_Manager()
         {
-            return Task.CompletedTask;
+            try
+            {
+                var ds = GetStream();
+
+                await _dataStreamManager.AddDataStreamAsync(ds, _org, _user);
+
+                Assert.AreEqual($"public", ds.DbSchema);
+                Assert.AreEqual(_dbUrl, ds.DbURL);
+                Assert.AreEqual($"deviceId", ds.DeviceIdFieldName);
+                Assert.AreEqual($"timeStamp", ds.TimestampFieldName);
+                Assert.AreEqual($"{_orgNamespace}", ds.DatabaseName);
+                Assert.AreEqual($"point_array_{ds.Key}", ds.DbTableName);
+                Assert.AreEqual(42, ds.DBPasswordSecureId.Length);
+                Assert.IsNull(ds.DbPassword);
+
+                var pwd = await _secureStorage.GetSecretAsync(_org, ds.DBPasswordSecureId, _user);
+                Assert.AreEqual(32, pwd.Result.Length);
+            }
+            catch (ValidationException val)
+            {
+                foreach(var err in val.Errors)
+                {
+                    Console.WriteLine(err.Message);
+                }
+
+                throw;
+            }
+        }
+
+        [TestMethod]
+        public async Task Should_Create_Database()
+        {
+            var ds = GetStream();
+
+            var paStream = new PointArrayPostgresqlConnector(new AdminLogger(new LogWriter()));
+            await paStream.InitAsync(ds);
         }
     }
 }
