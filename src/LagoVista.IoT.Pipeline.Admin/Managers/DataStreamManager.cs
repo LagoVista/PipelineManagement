@@ -10,6 +10,7 @@ using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Resources;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -148,10 +149,48 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return InvokeResult.Success;
         }
 
-        private async InvokeResult CreatePostgresUser()
+        private async Task<InvokeResult> CreatePostgresUser(DataStream stream, String dbPassword)
         {
             var connString = $"Host={_defaultConnectionSettings.PointArrayConnectionSettings.Uri};Username={_defaultConnectionSettings.PointArrayConnectionSettings.UserName};Password={_defaultConnectionSettings.PointArrayConnectionSettings.Password};";
+            using (var conn = new NpgsqlConnection(connString))
+            {
+                conn.Open();
+                var cmd = new NpgsqlCommand();
+                cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
+                cmd.Parameters.AddWithValue("@userName", stream.DbUserName);
+                var result = await cmd.ExecuteScalarAsync();
+                if (result == null)
+                {
+                    cmd.Parameters.Clear();
+                    
+                    cmd.CommandText = $"CREATE USER {stream.DbUserName} ;";
+                    result = await cmd.ExecuteScalarAsync();
 
+                    cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
+                    cmd.Parameters.AddWithValue("@dbname", stream.DbName);
+                    result = await cmd.ExecuteScalarAsync();
+                }
+
+                cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
+                cmd.Parameters.AddWithValue("@dbname", stream.DbName);
+                result = await cmd.ExecuteScalarAsync();
+                if (result == null)
+                {
+                    cmd.Parameters.Clear();
+
+                    cmd.CommandText = $"CREATE DATABASE {stream.DbName};";
+                    result = await cmd.ExecuteScalarAsync();
+
+                    cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
+                    cmd.Parameters.AddWithValue("@dbname", stream.DbName);
+                    result = await cmd.ExecuteScalarAsync();
+                }
+
+
+                conn.Close();
+                return InvokeResult.Success;
+            }
+          
         }
 
         private string GetPointArrayDataStorageSQL_DDL()
