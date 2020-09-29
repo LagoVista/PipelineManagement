@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Validation;
+﻿using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using System;
@@ -17,8 +18,8 @@ namespace LagoVista.IoT.DataStreamConnectors
                 return validationResult.ToInvokeResult();
             }
 
+            // TODO: Need to restore secure id to passwords prior to testing.
             var result = DataStreamServices.GetConnector(stream.StreamType.Value, logger);
-
             if (!result.Successful) return result.ToInvokeResult();
             
             try

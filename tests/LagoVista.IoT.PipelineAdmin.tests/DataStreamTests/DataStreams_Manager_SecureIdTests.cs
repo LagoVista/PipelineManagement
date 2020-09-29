@@ -12,6 +12,7 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin;
 
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
@@ -20,7 +21,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
     {
         Mock<IDataStreamRepo> _repo = new Moq.Mock<IDataStreamRepo>();
         Mock<ISecureStorage> _secureStorage = new Moq.Mock<ISecureStorage>();
-        Mock<IOrganizationManager> _orgManager = new Moq.Mock<IOrganizationManager>();
+        Mock<IOrgUtils> _orgUtils = new Moq.Mock<IOrgUtils>();
 
         Mock<IDefaultInternalDataStreamConnectionSettings> _mockSettings = new Moq.Mock<IDefaultInternalDataStreamConnectionSettings>();
 
@@ -39,7 +40,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         [TestInitialize]
         public void TestInit()
         {
-            _dataStreamManager = new DataStreamManager(_repo.Object, _mockSettings.Object, _orgManager.Object, new Logging.Loggers.AdminLogger(new Utils.LogWriter()), _secureStorage.Object, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, new Mock<ISecurity>().Object);
+            _dataStreamManager = new DataStreamManager(_repo.Object, _mockSettings.Object, _orgUtils.Object, new Logging.Loggers.AdminLogger(new Utils.LogWriter()), _secureStorage.Object, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, new Mock<ISecurity>().Object);
 
             _mockSettings.Setup(ms => ms.DefaultInternalDataStreamConnectionSettingsTableStorage).Returns(new ConnectionSettings() { AccessKey = DEFAULT_TS_ACCESS_KEY, AccountId = DEFAULT_TS_ACCOUNT_ID });
 
@@ -48,8 +49,6 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 
             _secureStorage.Setup<Task<Core.Validation.InvokeResult<string>>>(obj => obj.AddSecretAsync(_org, It.IsAny<string>())).ReturnsAsync(InvokeResult<string>.Create(GENERATD_SECURE_ID_VALUE));
             _secureStorage.Setup<Task<Core.Validation.InvokeResult>>(obj => obj.RemoveSecretAsync(_org, It.IsAny<string>())).ReturnsAsync(InvokeResult.Success);
-
-            
         }
 
 

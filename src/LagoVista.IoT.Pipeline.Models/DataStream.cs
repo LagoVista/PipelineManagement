@@ -87,12 +87,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         #region Data Formatting Properties
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9_]{2,64}$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_TimeStamp_InvalidFormat,
             HelpResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string TimestampFieldName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9]{2,64}$",
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9_]{2,64}$",
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_DeviceId_InvalidFormat,
             HelpResource: PipelineAdminResources.Names.DataStream_DeviceIdFieldName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string DeviceIdFieldName { get; set; }
@@ -259,7 +259,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             }
 
             if (StreamType.Value != DataStreamTypes.SQLServer &&
-                StreamType.Value != DataStreamTypes.Postgresql)
+                StreamType.Value != DataStreamTypes.Postgresql &&
+                StreamType.Value != DataStreamTypes.PointArrayStorage)
             {
                 DbName = null;
                 DbPassword = null;
@@ -361,28 +362,25 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             }
 
             if (StreamType.Value == DataStreamTypes.SQLServer ||
-                StreamType.Value == DataStreamTypes.Postgresql)
+                StreamType.Value == DataStreamTypes.Postgresql ||
+                StreamType.Value == DataStreamTypes.PointArrayStorage)
             {
                 if (string.IsNullOrEmpty(DbURL)) result.Errors.Add(new ErrorMessage("URL of database server is required for a database data stream."));
                 if (string.IsNullOrEmpty(DbUserName)) result.Errors.Add(new ErrorMessage("Database User Name is required for a database data stream."));
                 if (string.IsNullOrEmpty(DbName)) result.Errors.Add(new ErrorMessage("Database Name is required for a database data stream."));
                 if (string.IsNullOrEmpty(DbTableName)) result.Errors.Add(new ErrorMessage("Database Table Name is required for a database data stream."));
-
-                if ((action == Actions.Create) && string.IsNullOrEmpty(DbPassword))
-                {
-                    result.Errors.Add(new ErrorMessage("Database Password is required for a database data streams"));
-                }
-                else if (string.IsNullOrEmpty(DbPassword) && string.IsNullOrEmpty(DBPasswordSecureId))
+                
+                if (string.IsNullOrEmpty(DbPassword) && string.IsNullOrEmpty(DBPasswordSecureId))
                 {
                     result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you should return the original secret key id."));
                 }
             }
 
-            if (StreamType.Value == DataStreamTypes.Postgresql)
+            if (StreamType.Value == DataStreamTypes.Postgresql ||
+                StreamType.Value == DataStreamTypes.PointArrayStorage)
             {
                 if (string.IsNullOrEmpty(DbSchema)) result.Errors.Add(new ErrorMessage("Database Schema is required for a Postgres database."));
             }
-
 
             #region Azure Type
             if (StreamType.Value == DataStreamTypes.AzureTableStorage)
@@ -418,7 +416,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 }
             }
             #endregion
-
         }
     }
 

@@ -346,6 +346,11 @@ WHERE table_schema = @dbschema
         public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
         {
             var result = await this.InitAsync(stream);
+            if(!result.Successful)
+            {
+                return result;
+            }
+
             // If we don't automatically validate within the stream do so manually here.
             if (!stream.DbValidateSchema)
             {

@@ -9,7 +9,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Resources;
-using LagoVista.UserAdmin.Interfaces.Managers;
+using LagoVista.UserAdmin;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -22,15 +22,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         IDataStreamRepo _dataStreamRepo;
         ISecureStorage _secureStorage;
         IDefaultInternalDataStreamConnectionSettings _defaultConnectionSettings;
-        IOrganizationManager _orgManager;
+        IOrgUtils _orgUtils;
 
-        public DataStreamManager(IDataStreamRepo dataStreamRepo, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings, IOrganizationManager orgManager, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
+        public DataStreamManager(IDataStreamRepo dataStreamRepo, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings, IOrgUtils orgUtils, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
             base(logger, appConfig, depmanager, security)
         {
             _dataStreamRepo = dataStreamRepo;
             _secureStorage = secureStorage;
             _defaultConnectionSettings = defaultConnectionSettings;
-            _orgManager = orgManager;
+            _orgUtils = orgUtils;
         }
 
         public async Task<InvokeResult> AddDataStreamAsync(DataStream stream, EntityHeader org, EntityHeader user)
@@ -41,8 +41,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 stream.AzureStorageAccountName = _defaultConnectionSettings.DefaultInternalDataStreamConnectionSettingsTableStorage.AccountId;
                 stream.AzureAccessKey = _defaultConnectionSettings.DefaultInternalDataStreamConnectionSettingsTableStorage.AccessKey;
             }
-
-            ValidationCheck(stream, Actions.Create);
 
             if (stream.StreamType.Value == DataStreamTypes.AzureBlob ||
                 stream.StreamType.Value == DataStreamTypes.AzureEventHub ||
@@ -119,7 +117,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             }
             else if (stream.StreamType.Value == DataStreamTypes.PointArrayStorage)
             {
-                var orgDetails = await _orgManager.GetOrganizationAsync(org.Id, org, user);
+
+                var orgNamespace = (await _orgUtils.GetOrgNamespaceAsync(org.Id)).Result;
 
                 stream.DeviceIdFieldName = "device_id";
                 stream.TimestampFieldName = "time_stamp";
@@ -129,34 +128,49 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
                 stream.CreateTableDDL = GetPointArrayDataStorageSQL_DDL(stream.DbTableName);
 
-                stream.DatabaseName = orgDetails.Namespace;
-                stream.DbName = orgDetails.Namespace;
-                stream.DbUserName = orgDetails.Namespace;
+                stream.DatabaseName = orgNamespace;
+                stream.DbName = orgNamespace;
+                stream.DbUserName = orgNamespace;
+
                 // we will create it here as part of our setup.
                 stream.AutoCreateSQLTable = false;
 
-                var dbPassword = Guid.NewGuid().ToId();
+                stream.DBPasswordSecureId = $"ps_db_uid_{org.Id}";
 
-                var addSecretResult = await _secureStorage.AddSecretAsync(org, $"ps_db_uid_{org.Id}", dbPassword);
-                if (!addSecretResult.Successful)
+                 var existingPassword = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
+                if (existingPassword.Successful)
                 {
-                    return addSecretResult.ToInvokeResult();
+                    stream.DbPassword = existingPassword.Result;
+                }
+                else
+                {
+                    stream.DbPassword = Guid.NewGuid().ToId();
+
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.DBPasswordSecureId, stream.DbPassword);
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
                 }
 
-                stream.DBPasswordSecureId = addSecretResult.Result;
+                this.ValidationCheck(stream, Actions.Create);
 
-                await CreatePostgresUser(stream, dbPassword);
+                await CreatePostgresStorage(stream, stream.DbPassword);
+
+                stream.DbPassword = null;
             }
             else
             {
                 throw new Exception("New data stream Type was added, should likely add something here to store credentials.");
             }
 
+            this.ValidationCheck(stream, Actions.Create);
+
             await _dataStreamRepo.AddDataStreamAsync(stream);
             return InvokeResult.Success;
         }
 
-        private async Task<InvokeResult> CreatePostgresUser(DataStream stream, String dbPassword)
+        private async Task<InvokeResult> CreatePostgresStorage(DataStream stream, String dbPassword)
         {
             var connString = $"Host={_defaultConnectionSettings.PointArrayConnectionSettings.Uri};Username={_defaultConnectionSettings.PointArrayConnectionSettings.UserName};Password={_defaultConnectionSettings.PointArrayConnectionSettings.Password};";
             using (var conn = new NpgsqlConnection(connString))
@@ -164,6 +178,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             {
                 conn.Open();
 
+                // Create the user.
                 cmd.Connection = conn;
                 cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
                 cmd.Parameters.AddWithValue("@userName", stream.DbUserName);
@@ -184,6 +199,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     }
                 }
 
+                // Create teh database.
                 cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
                 cmd.Parameters.AddWithValue("@dbname", stream.DatabaseName);
                 result = await cmd.ExecuteScalarAsync();
@@ -206,17 +222,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 conn.Close();
             }
 
-            //connString = $"Host={_defaultConnectionSettings.PointArrayConnectionSettings.Uri};Username={_defaultConnectionSettings.PointArrayConnectionSettings.UserName};Password={_defaultConnectionSettings.PointArrayConnectionSettings.Password};Database={stream.DbName}";
+            // now login to postgres with the user for this org.
             connString = $"Host={stream.DbURL};Username={stream.DbUserName};Password={dbPassword};Database={stream.DbName}";
             using (var conn = new NpgsqlConnection(connString))
             using (var cmd = new NpgsqlCommand())
             {
+                // Create storage.
                 conn.Open();
                 cmd.Connection = conn;
                 cmd.Parameters.Clear();
                 cmd.CommandText = stream.CreateTableDDL;
                 cmd.ExecuteNonQuery();
-
                 conn.Close();
                 return InvokeResult.Success;
             }
@@ -274,7 +290,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     stream.AwsSecretKey = awsSecretKeyResult.Result;
                 }
                 else if (stream.StreamType.Value == DataStreamTypes.SQLServer ||
-                         stream.StreamType.Value == DataStreamTypes.Postgresql)
+                         stream.StreamType.Value == DataStreamTypes.Postgresql ||
+                         stream.StreamType.Value == DataStreamTypes.PointArrayStorage)
                 {
                     if (String.IsNullOrEmpty(stream.DBPasswordSecureId))
                     {
@@ -302,20 +319,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                         stream.RedisPassword = getSecretResult.Result;
                     }
                 }
-                else if (stream.StreamType.Value == DataStreamTypes.Postgresql)
-                {
-                    if (!String.IsNullOrEmpty(stream.DBPasswordSecureId))
-                    {
-                        var getSecretResult = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
-                        if (!getSecretResult.Successful)
-                        {
-                            return InvokeResult<DataStream>.FromInvokeResult(getSecretResult.ToInvokeResult());
-                        }
-
-                        stream.DBPasswordSecureId = getSecretResult.Result;
-                    }
-                }
-
+              
                 return InvokeResult<DataStream>.Create(stream);
             }
             catch (RecordNotFoundException)

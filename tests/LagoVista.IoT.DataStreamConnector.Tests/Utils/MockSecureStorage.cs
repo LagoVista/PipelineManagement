@@ -28,7 +28,10 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Utils
 
         public Task<InvokeResult<string>> GetSecretAsync(EntityHeader org, string id, EntityHeader user)
         {
-            return Task.FromResult(InvokeResult<string>.Create(_storage[id]));
+            if (_storage.ContainsKey(id))
+                return Task.FromResult(InvokeResult<string>.Create(_storage[id]));
+            else
+                return Task.FromResult(InvokeResult<string>.FromError("Could not find key."));
         }
 
         public Task<InvokeResult> RemoveSecretAsync(EntityHeader org, string id)

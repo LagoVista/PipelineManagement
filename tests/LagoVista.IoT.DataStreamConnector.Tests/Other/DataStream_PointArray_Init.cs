@@ -9,6 +9,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
+using LagoVista.UserAdmin;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -34,7 +35,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
 
         ISecureStorage _secureStorage = new MockSecureStorage();
         Mock<IDefaultInternalDataStreamConnectionSettings> _connectionSettings = new Mock<IDefaultInternalDataStreamConnectionSettings>();
-        Mock<IOrganizationManager> _orgManager = new Mock<IOrganizationManager>();
+        Mock<IOrgUtils> _orgUtils = new Mock<IOrgUtils>();
         Mock<ISecurity> _security = new Mock<ISecurity>();
         DataStreamManager _dataStreamManager;
 
@@ -113,7 +114,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
         [TestInitialize]
         public void Init()
         {
-            _dataStreamManager = new DataStreamManager(new Mock<IDataStreamRepo>().Object, _connectionSettings.Object, _orgManager.Object, new AdminLogger(new Utils.LogWriter()),
+            _dataStreamManager = new DataStreamManager(new Mock<IDataStreamRepo>().Object, _connectionSettings.Object, _orgUtils.Object, new AdminLogger(new Utils.LogWriter()),
                 _secureStorage, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, _security.Object);
 
             _security.Setup(sec => sec.AuthorizeAsync(It.IsAny<EntityHeader>(), It.IsAny<EntityHeader>(), It.IsAny<string>(), It.IsAny<object>()));
@@ -121,10 +122,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
             _org = EntityHeader.Create(OrgId, "TEST ORG");
             _user = EntityHeader.Create(UserId, "TEST USER");
 
-            _orgManager.Setup(om => om.GetOrganizationAsync(It.Is<string>(str => str == OrgId), It.IsAny<EntityHeader>(), It.IsAny<EntityHeader>())).ReturnsAsync(new UserAdmin.Models.Orgs.Organization()
-            {
-                Namespace = _orgNamespace
-            });
+            _orgUtils.Setup(om => om.GetOrgNamespaceAsync(It.Is<string>(str => str == OrgId))).ReturnsAsync(InvokeResult<string>.Create(_orgNamespace));
 
             var connSettings = new ConnectionSettings()
             {
@@ -163,14 +161,15 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
 
             Assert.AreEqual($"public", ds.DbSchema);
             Assert.AreEqual(_dbUrl, ds.DbURL);
-            Assert.AreEqual($"deviceId", ds.DeviceIdFieldName);
-            Assert.AreEqual($"timeStamp", ds.TimestampFieldName);
+            Assert.AreEqual($"device_id", ds.DeviceIdFieldName);
+            Assert.AreEqual($"time_stamp", ds.TimestampFieldName);
             Assert.AreEqual($"{_orgNamespace}", ds.DatabaseName);
             Assert.AreEqual($"point_array_{ds.Key}", ds.DbTableName);
             Assert.AreEqual(42, ds.DBPasswordSecureId.Length);
             Assert.IsNull(ds.DbPassword);
 
             var pwd = await _secureStorage.GetSecretAsync(_org, ds.DBPasswordSecureId, _user);
+            Assert.IsTrue(pwd.Successful);
             Assert.AreEqual(32, pwd.Result.Length);
         }
 
@@ -186,7 +185,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
 
             var connector = new PointArrayPostgresqlConnector(new AdminLogger(new LogWriter()));
             var initResult = await connector.InitAsync(ds);
-            if(!initResult.Successful)
+            if (!initResult.Successful)
             {
                 Console.WriteLine(initResult.Errors[0].Details);
                 throw new InvalidOperationException(initResult.Errors[0].Details);
@@ -200,7 +199,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
             var rnd = new Random();
 
             var points = new List<double>();
-            for(int idx = 0; idx < pointCount; ++idx)
+            for (int idx = 0; idx < pointCount; ++idx)
             {
                 var point = (rnd.NextDouble() * (max - min)) + min;
                 points.Add(point);
