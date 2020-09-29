@@ -69,8 +69,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
             var record = new Pipeline.Admin.Models.DataStreamRecord()
             {
                 DeviceId = deviceId,
-                StreamId = stream.Id
-                
+                StreamId = stream.Id                
             };
 
             if (!String.IsNullOrEmpty(timeStamp))

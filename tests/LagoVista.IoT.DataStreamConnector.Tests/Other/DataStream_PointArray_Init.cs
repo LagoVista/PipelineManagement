@@ -12,6 +12,7 @@ using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.UserAdmin.Interfaces.Managers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -70,28 +71,24 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                         cmd.Parameters.AddWithValue("@dbname", _orgNamespace);
                         result = await cmd.ExecuteScalarAsync();
                         Assert.IsNull(result);
-                    }
-                    catch (ReflectionTypeLoadException ex)
-                    {
-                        foreach (var item in ex.LoaderExceptions)
-                        {
 
-                        }
-                    }
-                    catch (TypeInitializationException tie)
-                    {
-                        if (tie.InnerException is ReflectionTypeLoadException rte)
+                        cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
+                        cmd.Parameters.AddWithValue("@userName", _orgNamespace);
+                        result = await cmd.ExecuteScalarAsync();
+                        if (result != null)
                         {
-                            Console.WriteLine(rte);
+                            cmd.Parameters.Clear();
+                            cmd.CommandText = $"DROP USER {_orgNamespace}";
+                            result = await cmd.ExecuteScalarAsync();
                         }
-                        Console.WriteLine(tie.Message);
-                        throw;
+
+                        cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
+                        cmd.Parameters.AddWithValue("@userName", _orgNamespace);
+                        result = await cmd.ExecuteScalarAsync();
+                        Assert.IsNull(result);
                     }
                     catch (Exception ex)
                     {
-                        var typeLoadException = ex as ReflectionTypeLoadException;
-                        var loaderExceptions = typeLoadException.LoaderExceptions;
-
                         Console.WriteLine(ex.Message);
                         throw;
                     }
@@ -160,42 +157,64 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
         [TestMethod]
         public async Task Should_Set_TS_Server_Parameters_In_Manager()
         {
-            try
-            {
-                var ds = GetStream();
+            var ds = GetStream();
 
-                await _dataStreamManager.AddDataStreamAsync(ds, _org, _user);
+            await _dataStreamManager.AddDataStreamAsync(ds, _org, _user);
 
-                Assert.AreEqual($"public", ds.DbSchema);
-                Assert.AreEqual(_dbUrl, ds.DbURL);
-                Assert.AreEqual($"deviceId", ds.DeviceIdFieldName);
-                Assert.AreEqual($"timeStamp", ds.TimestampFieldName);
-                Assert.AreEqual($"{_orgNamespace}", ds.DatabaseName);
-                Assert.AreEqual($"point_array_{ds.Key}", ds.DbTableName);
-                Assert.AreEqual(42, ds.DBPasswordSecureId.Length);
-                Assert.IsNull(ds.DbPassword);
+            Assert.AreEqual($"public", ds.DbSchema);
+            Assert.AreEqual(_dbUrl, ds.DbURL);
+            Assert.AreEqual($"deviceId", ds.DeviceIdFieldName);
+            Assert.AreEqual($"timeStamp", ds.TimestampFieldName);
+            Assert.AreEqual($"{_orgNamespace}", ds.DatabaseName);
+            Assert.AreEqual($"point_array_{ds.Key}", ds.DbTableName);
+            Assert.AreEqual(42, ds.DBPasswordSecureId.Length);
+            Assert.IsNull(ds.DbPassword);
 
-                var pwd = await _secureStorage.GetSecretAsync(_org, ds.DBPasswordSecureId, _user);
-                Assert.AreEqual(32, pwd.Result.Length);
-            }
-            catch (ValidationException val)
-            {
-                foreach(var err in val.Errors)
-                {
-                    Console.WriteLine(err.Message);
-                }
-
-                throw;
-            }
+            var pwd = await _secureStorage.GetSecretAsync(_org, ds.DBPasswordSecureId, _user);
+            Assert.AreEqual(32, pwd.Result.Length);
         }
 
+        const string DEVICE_ID = "A84A61C990414502BB2D9EF59B503EAD";
+
         [TestMethod]
-        public async Task Should_Create_Database()
+        public async Task Should_Insert_Point_Array()
         {
             var ds = GetStream();
 
-            var paStream = new PointArrayPostgresqlConnector(new AdminLogger(new LogWriter()));
-            await paStream.InitAsync(ds);
+            await _dataStreamManager.AddDataStreamAsync(ds, _org, _user);
+            ds.DbPassword = (await _secureStorage.GetSecretAsync(_org, ds.DBPasswordSecureId, _user)).Result;
+
+            var connector = new PointArrayPostgresqlConnector(new AdminLogger(new LogWriter()));
+            var initResult = await connector.InitAsync(ds);
+            if(!initResult.Successful)
+            {
+                Console.WriteLine(initResult.Errors[0].Details);
+                throw new InvalidOperationException(initResult.Errors[0].Details);
+            }
+
+            var pointCount = 305;
+            var pointInterval = 1.0;
+            var min = 9.0;
+            var max = 12.0;
+
+            var rnd = new Random();
+
+            var points = new List<double>();
+            for(int idx = 0; idx < pointCount; ++idx)
+            {
+                var point = (rnd.NextDouble() * (max - min)) + min;
+                points.Add(point);
+            }
+
+            var record = new DataStreamRecord();
+            record.Data.Add("startTimeStamp", DateTime.UtcNow.AddSeconds(-(pointCount * pointInterval)));
+            record.Data.Add("pointCount", pointCount);
+            record.Data.Add("interval", pointInterval);
+            record.Data.Add("sensorIndex", 1);
+            record.Data.Add("pointArray", JsonConvert.SerializeObject(points));
+            record.DeviceId = DEVICE_ID;
+
+            await connector.AddItemAsync(record);
         }
     }
 }

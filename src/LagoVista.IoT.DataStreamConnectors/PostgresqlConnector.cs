@@ -84,7 +84,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
         }
 
-        public async Task<InvokeResult> AddItemAsync(DataStreamRecord item)
+        public async virtual Task<InvokeResult> AddItemAsync(DataStreamRecord item)
         {
             var fields = String.Empty;
             var values = String.Empty;

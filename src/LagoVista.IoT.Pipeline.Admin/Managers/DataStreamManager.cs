@@ -117,18 +117,23 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     stream.RedisPassword = null;
                 }
             }
-            else if(stream.StreamType.Value == DataStreamTypes.PointArrayStorage)
+            else if (stream.StreamType.Value == DataStreamTypes.PointArrayStorage)
             {
                 var orgDetails = await _orgManager.GetOrganizationAsync(org.Id, org, user);
 
-                stream.DeviceIdFieldName = "deviceId";
-                stream.TimestampFieldName = "timeStamp";
+                stream.DeviceIdFieldName = "device_id";
+                stream.TimestampFieldName = "time_stamp";
                 stream.DbSchema = "public";
                 stream.DbURL = _defaultConnectionSettings.PointArrayConnectionSettings.Uri;
-                stream.CreateTableDDL = GetPointArrayDataStorageSQL_DDL();
-                stream.DatabaseName = orgDetails.Namespace;
                 stream.DbTableName = $"point_array_{stream.Key}";
+
+                stream.CreateTableDDL = GetPointArrayDataStorageSQL_DDL(stream.DbTableName);
+
+                stream.DatabaseName = orgDetails.Namespace;
+                stream.DbName = orgDetails.Namespace;
                 stream.DbUserName = orgDetails.Namespace;
+                // we will create it here as part of our setup.
+                stream.AutoCreateSQLTable = false;
 
                 var dbPassword = Guid.NewGuid().ToId();
 
@@ -139,6 +144,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 }
 
                 stream.DBPasswordSecureId = addSecretResult.Result;
+
+                await CreatePostgresUser(stream, dbPassword);
             }
             else
             {
@@ -153,53 +160,75 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         {
             var connString = $"Host={_defaultConnectionSettings.PointArrayConnectionSettings.Uri};Username={_defaultConnectionSettings.PointArrayConnectionSettings.UserName};Password={_defaultConnectionSettings.PointArrayConnectionSettings.Password};";
             using (var conn = new NpgsqlConnection(connString))
+            using (var cmd = new NpgsqlCommand())
             {
                 conn.Open();
-                var cmd = new NpgsqlCommand();
+
+                cmd.Connection = conn;
                 cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
                 cmd.Parameters.AddWithValue("@userName", stream.DbUserName);
                 var result = await cmd.ExecuteScalarAsync();
                 if (result == null)
                 {
                     cmd.Parameters.Clear();
-                    
-                    cmd.CommandText = $"CREATE USER {stream.DbUserName} ;";
+
+                    cmd.CommandText = $"CREATE USER {stream.DbUserName} with LOGIN PASSWORD '{dbPassword}';";
                     result = await cmd.ExecuteScalarAsync();
 
-                    cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
-                    cmd.Parameters.AddWithValue("@dbname", stream.DbName);
+                    cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
+                    cmd.Parameters.AddWithValue("@userName", stream.DbUserName);
                     result = await cmd.ExecuteScalarAsync();
+                    if (result == null)
+                    {
+                        return InvokeResult.FromError("Could not create local user.");
+                    }
                 }
 
                 cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
-                cmd.Parameters.AddWithValue("@dbname", stream.DbName);
+                cmd.Parameters.AddWithValue("@dbname", stream.DatabaseName);
                 result = await cmd.ExecuteScalarAsync();
                 if (result == null)
                 {
                     cmd.Parameters.Clear();
 
-                    cmd.CommandText = $"CREATE DATABASE {stream.DbName};";
+                    cmd.CommandText = $"CREATE DATABASE {stream.DatabaseName};";
                     result = await cmd.ExecuteScalarAsync();
 
                     cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
-                    cmd.Parameters.AddWithValue("@dbname", stream.DbName);
+                    cmd.Parameters.AddWithValue("@dbname", stream.DatabaseName);
                     result = await cmd.ExecuteScalarAsync();
+                    if (result == null)
+                    {
+                        return InvokeResult.FromError("Could not create local database.");
+                    }
                 }
 
+                conn.Close();
+            }
+
+            //connString = $"Host={_defaultConnectionSettings.PointArrayConnectionSettings.Uri};Username={_defaultConnectionSettings.PointArrayConnectionSettings.UserName};Password={_defaultConnectionSettings.PointArrayConnectionSettings.Password};Database={stream.DbName}";
+            connString = $"Host={stream.DbURL};Username={stream.DbUserName};Password={dbPassword};Database={stream.DbName}";
+            using (var conn = new NpgsqlConnection(connString))
+            using (var cmd = new NpgsqlCommand())
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                cmd.Parameters.Clear();
+                cmd.CommandText = stream.CreateTableDDL;
+                cmd.ExecuteNonQuery();
 
                 conn.Close();
                 return InvokeResult.Success;
             }
-          
         }
 
-        private string GetPointArrayDataStorageSQL_DDL()
+        private string GetPointArrayDataStorageSQL_DDL(String tableName)
         {
-            return @"CREATE TABLE if not exists public.hvacdata(
+            return $@"CREATE TABLE if not exists {tableName}(
                         id SERIAL,
-                        deviceId text not null,
-                        timeStamp timestamp not null,
-                        sensorIndex smallint not null,
+                        device_id text not null,
+                        time_stamp timestamp not null,
+                        sensor_index smallint not null,
                         value float4 not null
                     );";
         }
@@ -398,7 +427,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     stream.DbPassword = null;
                 }
             }
-            else if(stream.StreamType.Value == DataStreamTypes.Redis)
+            else if (stream.StreamType.Value == DataStreamTypes.Redis)
             {
                 if (!String.IsNullOrEmpty(stream.RedisPassword))
                 {
