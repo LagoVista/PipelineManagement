@@ -137,7 +137,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
                 stream.DBPasswordSecureId = $"ps_db_uid_{org.Id}";
 
-                 var existingPassword = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
+                var existingPassword = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
                 if (existingPassword.Successful)
                 {
                     stream.DbPassword = existingPassword.Result;
@@ -152,6 +152,58 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                         return addSecretResult.ToInvokeResult();
                     }
                 }
+
+                stream.Fields.Clear();
+
+                stream.Fields.Add(new DataStreamField()
+                {
+                    Name = "Start Time Stamp",
+                    Key = "starttimestamp",
+                    FieldName = "start_time_stamp",
+                    Description = "Time in seconds from UTC epoch (1/1/1970).",
+                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
+                    IsRequired = true,
+                });
+
+                stream.Fields.Add(new DataStreamField()
+                {
+                    Name = "Sensor Index",
+                    Key = "sensorindex",
+                    FieldName = "sensor_index",
+                    Description = "Sensor Index on Board for this point array.",
+                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
+                    IsRequired = true,
+                });
+
+                stream.Fields.Add(new DataStreamField()
+                {
+                    Name = "Point Count",
+                    Key = "pointcount",
+                    FieldName = "point_count",
+                    Description = "Number of points that make up this point array.",
+                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
+                    IsRequired = true
+                });
+                
+                stream.Fields.Add(new DataStreamField()
+                {
+                    Name = "Interval",
+                    Key = "interval",
+                    FieldName = "interval",
+                    Description = "Interval between sample collection points.",
+                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Decimal),
+                    IsRequired = true,
+                });
+
+                stream.Fields.Add(new DataStreamField()
+                {
+                    Name = "Point Array",
+                    Key = "pointarray",
+                    FieldName = "point_array",
+                    Description = "Collection of points that make up the data collected from the device.",
+                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.DecimalArray),
+                    IsRequired = true,
+                });
 
                 this.ValidationCheck(stream, Actions.Create);
 
@@ -319,7 +371,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                         stream.RedisPassword = getSecretResult.Result;
                     }
                 }
-              
+
                 return InvokeResult<DataStream>.Create(stream);
             }
             catch (RecordNotFoundException)

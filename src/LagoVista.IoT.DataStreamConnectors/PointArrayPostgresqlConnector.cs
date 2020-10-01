@@ -13,11 +13,16 @@ namespace LagoVista.IoT.DataStreamConnectors
 {
     public class PointArrayPostgresqlConnector : PostgresqlConnector
     {
+        public PointArrayPostgresqlConnector(IInstanceLogger instanceLogger) : base(instanceLogger)
+        {
+
+        }
+
         public PointArrayPostgresqlConnector(IAdminLogger instanceLogger) : base(instanceLogger)
         {
 
         }
-      
+
         public async new Task<InvokeResult> AddItemAsync(DataStreamRecord item)
         {
             var stream = GetStream();
