@@ -175,6 +175,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
 
         const string DEVICE_ID = "A84A61C990414502BB2D9EF59B503EAD";
 
+        private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
         [TestMethod]
         public async Task Should_Insert_Point_Array()
         {
@@ -205,12 +207,14 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                 points.Add(point);
             }
 
+            var secondsFromEpoch = (DateTime.UtcNow.AddSeconds(-(pointCount * pointInterval)) - epoch).TotalSeconds;
+
             var record = new DataStreamRecord();
-            record.Data.Add("startTimeStamp", DateTime.UtcNow.AddSeconds(-(pointCount * pointInterval)));
-            record.Data.Add("pointCount", pointCount);
+            record.Data.Add("starttimestamp", Convert.ToInt64(secondsFromEpoch));
+            record.Data.Add("pointcount", pointCount);
             record.Data.Add("interval", pointInterval);
-            record.Data.Add("sensorIndex", 1);
-            record.Data.Add("pointArray", JsonConvert.SerializeObject(points));
+            record.Data.Add("sensorindex", 1);
+            record.Data.Add("pointarray", JsonConvert.SerializeObject(points));
             record.DeviceId = DEVICE_ID;
 
             await connector.AddItemAsync(record);

@@ -159,7 +159,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 {
                     Name = "Start Time Stamp",
                     Key = "starttimestamp",
-                    FieldName = "start_time_stamp",
+                    FieldName = "starttimestamp",
                     Description = "Time in seconds from UTC epoch (1/1/1970).",
                     FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
                     IsRequired = true,
@@ -169,7 +169,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 {
                     Name = "Sensor Index",
                     Key = "sensorindex",
-                    FieldName = "sensor_index",
+                    FieldName = "sensorindex",
                     Description = "Sensor Index on Board for this point array.",
                     FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
                     IsRequired = true,
@@ -179,7 +179,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 {
                     Name = "Point Count",
                     Key = "pointcount",
-                    FieldName = "point_count",
+                    FieldName = "pointcount",
                     Description = "Number of points that make up this point array.",
                     FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
                     IsRequired = true
@@ -199,7 +199,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 {
                     Name = "Point Array",
                     Key = "pointarray",
-                    FieldName = "point_array",
+                    FieldName = "pointarray",
                     Description = "Collection of points that make up the data collected from the device.",
                     FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.DecimalArray),
                     IsRequired = true,

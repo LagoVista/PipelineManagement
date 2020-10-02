@@ -23,29 +23,33 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         }
 
-        public async new Task<InvokeResult> AddItemAsync(DataStreamRecord item)
+        private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        public override async Task<InvokeResult> AddItemAsync(DataStreamRecord item)
         {
             var stream = GetStream();
 
-            if (!item.Data.ContainsKey("pointCount")) return InvokeResult.FromError("Point Array Record must contain a field called pointCount and is the number of points.");
-            if (!item.Data.ContainsKey("sensorIndex")) return InvokeResult.FromError("Point Array Record must contain a field called sensorIndex and is the index of the sensor.");
+            if (!item.Data.ContainsKey("pointcount")) return InvokeResult.FromError("Point Array Record must contain a field called pointcount and is the number of points.");
+            if (!item.Data.ContainsKey("sensorindex")) return InvokeResult.FromError("Point Array Record must contain a field called sensorindex and is the index of the sensor.");
             if (!item.Data.ContainsKey("interval")) return InvokeResult.FromError("Point Array Record must contain a field called interval and is the index of the sensor.");
-            if (!item.Data.ContainsKey("pointArray")) return InvokeResult.FromError("Point Array Record must contain a field called pointArray and is the points from the array.");
-            if (!item.Data.ContainsKey("startTimeStamp")) return InvokeResult.FromError("Point Array Record must contain a field called startTimeStamp and is the time stamp for the first point.");
+            if (!item.Data.ContainsKey("pointarray")) return InvokeResult.FromError("Point Array Record must contain a field called pointarray and is the points from the array.");
+            if (!item.Data.ContainsKey("starttimestamp")) return InvokeResult.FromError("Point Array Record must contain a field called starttimestamp and is the time stamp for the first point.");
 
             try
             {
-                var startTimeStamp = item.Data["startTimeStamp"].ToString().ToDateTime();
-                var pointCount = Convert.ToInt32(item.Data["pointCount"]);
-                var sensorIndex = Convert.ToInt32(item.Data["sensorIndex"]);
+                var startTimeStamp = epoch.AddSeconds(Convert.ToUInt64(item.Data["starttimestamp"]));
+                var pointCount = Convert.ToInt32(item.Data["pointcount"]);
+                var sensorIndex = Convert.ToInt32(item.Data["sensorindex"]);
                 var interval = Convert.ToSingle(item.Data["interval"]);
-                var pointListJson = item.Data["pointArray"].ToString();
+                var pointListJson = item.Data["pointarray"].ToString();
                 var points = JsonConvert.DeserializeObject<List<float>>(pointListJson);
 
                 if (pointCount < 1) return InvokeResult.FromError("Point count must be at least one record.");
                 if (sensorIndex < 0) return InvokeResult.FromError("Sensor Index must be a postive number.");
                 if (interval < 0) return InvokeResult.FromError("Interval must be a postiive number.");
                 if (points.Count != pointCount) return InvokeResult.FromError("Points and point count mismatch.");
+
+                var insertCount = 0;
 
                 using (var cn = OpenConnection(stream.DbName))
                 using (var cmd = new NpgsqlCommand())
@@ -74,10 +78,17 @@ namespace LagoVista.IoT.DataStreamConnectors
                             var valueLine = $"(@device_id, '{timeStamp.ToUniversalTime()}', @sensor_index, {points[idx]}),";
                             bldr.AppendLine(valueLine);
                             timeStamp = timeStamp.AddSeconds(interval);
+                            insertCount++;
                         }
 
                         cmd.CommandText = bldr.ToString().Substring(0, bldr.Length - 3) + ";";
+                        Console.WriteLine(cmd.CommandText);
                         await cmd.ExecuteNonQueryAsync();
+                    }
+
+                    if(insertCount != pointCount)
+                    {
+                        return InvokeResult.FromError("Point count does not match number of values in the array.");
                     }
 
                     cn.Close();
