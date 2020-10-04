@@ -75,14 +75,12 @@ namespace LagoVista.IoT.DataStreamConnectors
 
                         for (int idx = startIndex; idx < lastPoint; ++idx)
                         {
-                            var valueLine = $"(@device_id, '{timeStamp.ToUniversalTime()}', @sensor_index, {points[idx]}),";
-                            bldr.AppendLine(valueLine);
+                            var valueLine = $"(@device_id, '{timeStamp.ToUniversalTime()}', @sensor_index, {points[idx]})";
+                            bldr.AppendLine(valueLine + ((idx == lastPoint - 1) ? ";" : "," ));
                             timeStamp = timeStamp.AddSeconds(interval);
                             insertCount++;
                         }
-
-                        cmd.CommandText = bldr.ToString().Substring(0, bldr.Length - 3) + ";";
-                        Console.WriteLine(cmd.CommandText);
+                        cmd.CommandText = bldr.ToString();
                         await cmd.ExecuteNonQueryAsync();
                     }
 
