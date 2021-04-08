@@ -680,6 +680,24 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:InputTranslator_Help
 
 		public static string InputTranslator_Help { get { return GetResourceString("InputTranslator_Help"); } }
+//Resources:PipelineAdminResources:InputTranslator_Model
+
+		public static string InputTranslator_Model { get { return GetResourceString("InputTranslator_Model"); } }
+//Resources:PipelineAdminResources:InputTranslator_Model_Select
+
+		public static string InputTranslator_Model_Select { get { return GetResourceString("InputTranslator_Model_Select"); } }
+//Resources:PipelineAdminResources:InputTranslator_ModelRevision
+
+		public static string InputTranslator_ModelRevision { get { return GetResourceString("InputTranslator_ModelRevision"); } }
+//Resources:PipelineAdminResources:InputTranslator_ModelRevision_Select
+
+		public static string InputTranslator_ModelRevision_Select { get { return GetResourceString("InputTranslator_ModelRevision_Select"); } }
+//Resources:PipelineAdminResources:InputTranslator_SevenSegmentParser
+
+		public static string InputTranslator_SevenSegmentParser { get { return GetResourceString("InputTranslator_SevenSegmentParser"); } }
+//Resources:PipelineAdminResources:InputTranslator_SevenSegmentParser_Select
+
+		public static string InputTranslator_SevenSegmentParser_Select { get { return GetResourceString("InputTranslator_SevenSegmentParser_Select"); } }
 //Resources:PipelineAdminResources:InputTranslator_Title
 
 		public static string InputTranslator_Title { get { return GetResourceString("InputTranslator_Title"); } }
@@ -1277,6 +1295,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Translator_Type_XML
 
 		public static string Translator_Type_XML { get { return GetResourceString("Translator_Type_XML"); } }
+//Resources:PipelineAdminResources:TranslatorType_AIModel
+
+		public static string TranslatorType_AIModel { get { return GetResourceString("TranslatorType_AIModel"); } }
+//Resources:PipelineAdminResources:TranslatorType_SevenSegmentParser
+
+		public static string TranslatorType_SevenSegmentParser { get { return GetResourceString("TranslatorType_SevenSegmentParser"); } }
 //Resources:PipelineAdminResources:Transmitter_Description
 
 		public static string Transmitter_Description { get { return GetResourceString("Transmitter_Description"); } }
@@ -1519,6 +1543,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string InputTranslator_DelimterSequence = "InputTranslator_DelimterSequence";
 			public const string InputTranslator_Description = "InputTranslator_Description";
 			public const string InputTranslator_Help = "InputTranslator_Help";
+			public const string InputTranslator_Model = "InputTranslator_Model";
+			public const string InputTranslator_Model_Select = "InputTranslator_Model_Select";
+			public const string InputTranslator_ModelRevision = "InputTranslator_ModelRevision";
+			public const string InputTranslator_ModelRevision_Select = "InputTranslator_ModelRevision_Select";
+			public const string InputTranslator_SevenSegmentParser = "InputTranslator_SevenSegmentParser";
+			public const string InputTranslator_SevenSegmentParser_Select = "InputTranslator_SevenSegmentParser_Select";
 			public const string InputTranslator_Title = "InputTranslator_Title";
 			public const string InputTranslator_TranslatorType = "InputTranslator_TranslatorType";
 			public const string InputTranslator_TranslatorType_Select = "InputTranslator_TranslatorType_Select";
@@ -1718,6 +1748,8 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Translator_Type_Message = "Translator_Type_Message";
 			public const string Translator_Type_String = "Translator_Type_String";
 			public const string Translator_Type_XML = "Translator_Type_XML";
+			public const string TranslatorType_AIModel = "TranslatorType_AIModel";
+			public const string TranslatorType_SevenSegmentParser = "TranslatorType_SevenSegmentParser";
 			public const string Transmitter_Description = "Transmitter_Description";
 			public const string Transmitter_Headers = "Transmitter_Headers";
 			public const string Transmitter_Help = "Transmitter_Help";

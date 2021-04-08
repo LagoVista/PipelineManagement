@@ -13,6 +13,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         {
             [EnumLabel("message", PipelineAdminResources.Names.Translator_Type_Message, typeof(PipelineAdminResources))]
             MessageBased,
+
+            [EnumLabel("nuvaimodel", PipelineAdminResources.Names.TranslatorType_AIModel, typeof(PipelineAdminResources))]
+            NuvAIModel,
+
+            [EnumLabel("sevensegementparser", PipelineAdminResources.Names.TranslatorType_SevenSegmentParser, typeof(PipelineAdminResources))]
+            SevenSegmentParser,
+
             /*[EnumLabel("binary", PipelineAdminResources.Names.Translator_Type_Binary, typeof(PipelineAdminResources))]
             Binary,
             [EnumLabel("string", PipelineAdminResources.Names.Translator_Type_String, typeof(PipelineAdminResources))]
@@ -40,6 +47,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, HelpResource: PipelineAdminResources.Names.InputTranslator_DelimiterSquence_Help, FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public String Script { get; set; }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_Model, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_Model_Select, IsRequired: true, IsUserEditable: true)]
+        public EntityHeader Model { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_ModelRevision, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_ModelRevision_Select, IsRequired: true, IsUserEditable: true)]
+        public EntityHeader ModelRevision { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_SevenSegmentParser, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_SevenSegmentParser_Select, IsRequired: true, IsUserEditable: true)]
+        public EntityHeader SevenSegementParser { get; set; }
 
 
         public override string ModuleType => PipelineModuleType_InputTranslator;

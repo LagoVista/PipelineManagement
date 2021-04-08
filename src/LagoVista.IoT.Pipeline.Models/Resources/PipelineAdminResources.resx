@@ -1375,4 +1375,28 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStream_StreamType_PointArrayStorage" xml:space="preserve">
     <value>Point Array Storage</value>
   </data>
+  <data name="InputTranslator_Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="InputTranslator_ModelRevision" xml:space="preserve">
+    <value>Model Revision</value>
+  </data>
+  <data name="InputTranslator_ModelRevision_Select" xml:space="preserve">
+    <value>-select nuvai model revision-</value>
+  </data>
+  <data name="InputTranslator_Model_Select" xml:space="preserve">
+    <value>-select nuvai model-</value>
+  </data>
+  <data name="InputTranslator_SevenSegmentParser" xml:space="preserve">
+    <value>Seven Segement Display Parser</value>
+  </data>
+  <data name="TranslatorType_AIModel" xml:space="preserve">
+    <value>NuvAI Model</value>
+  </data>
+  <data name="TranslatorType_SevenSegmentParser" xml:space="preserve">
+    <value>Seven Segment Display Parser</value>
+  </data>
+  <data name="InputTranslator_SevenSegmentParser_Select" xml:space="preserve">
+    <value>-select seven segment parser-</value>
+  </data>
 </root>
