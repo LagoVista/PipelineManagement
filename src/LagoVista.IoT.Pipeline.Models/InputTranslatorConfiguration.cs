@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Attributes;
+﻿using LagoVista.AI.Models;
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.IoT.Pipeline.Admin.Resources;
 using LagoVista.IoT.Pipeline.Models.Resources;
@@ -50,10 +51,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_Model, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_Model_Select, IsRequired: true, IsUserEditable: true)]
-        public EntityHeader Model { get; set; }
+        public EntityHeader<Model> Model { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_ModelRevision, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_ModelRevision_Select, IsRequired: true, IsUserEditable: true)]
-        public EntityHeader ModelRevision { get; set; }
+        public EntityHeader<ModelRevision> ModelRevision { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_SevenSegmentParser, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_SevenSegmentParser_Select, IsRequired: true, IsUserEditable: true)]
         public EntityHeader SevenSegementParser { get; set; }
