@@ -1399,4 +1399,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="InputTranslator_SevenSegmentParser_Select" xml:space="preserve">
     <value>-select seven segment parser-</value>
   </data>
+  <data name="Connection_Type_FTP" xml:space="preserve">
+    <value>FTP</value>
+  </data>
 </root>

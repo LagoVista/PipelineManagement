@@ -57,6 +57,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [EnumLabel(ListenerConfiguration.ListenerTypes_WebSocket, PipelineAdminResources.Names.Connection_Type_WebSocket, typeof(PipelineAdminResources))]
         WebSocket,
+
+        [EnumLabel(ListenerConfiguration.ListenerTypes_FTP, PipelineAdminResources.Names.Connection_Type_FTP, typeof(PipelineAdminResources))]
+        FTP,
         /*
             Soap,
         
@@ -118,6 +121,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ListenerTypes_Custom = "custom";
         public const string ListenerTypes_SerialPort = "serialport";
         public const string ListenerTypes_WebSocket = "websocket";
+        public const string ListenerTypes_FTP = "ftp";
 
         public override string ModuleType => PipelineModuleType_Listener;
 

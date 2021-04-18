@@ -11,6 +11,8 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Exceptions;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using LagoVista.AI;
+using System.Linq;
 
 namespace LagoVista.IoT.Pipeline.Admin.Managers
 {
@@ -24,10 +26,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         ITransmitterConfigurationRepo _transmitterConfigurationRepo;
         ICustomPipelineConfigurationRepo _customPipelineConfigurationRepo;
         ISecureStorage _secureStorage;
+        IModelRepo _modelRepo;
 
 
         public PipelineModuleManager(IListenerConfigurationRepo listenerConfigurationRep, ISecureStorage secureStorage, IInputTranslatorConfigurationRepo inputConfigurationRepo, ISentinelConfigurationRepo sentinalConfigurationRepo, IPlannerConfigurationRepo plannerConfigurationRepo,
-               IOutputTranslatorConfigurationRepo outputConfigurationRepo, ITransmitterConfigurationRepo translatorConfigurationRepo, ICustomPipelineConfigurationRepo pipelineConfigrationRepo, IAdminLogger logger, IAppConfig appConfig,
+               IModelRepo modelRepo, IOutputTranslatorConfigurationRepo outputConfigurationRepo, ITransmitterConfigurationRepo translatorConfigurationRepo, ICustomPipelineConfigurationRepo pipelineConfigrationRepo, IAdminLogger logger, IAppConfig appConfig,
                IDependencyManager depManager, ISecurity security) : base(logger, appConfig, depManager, security)
         {
             _listenerConfigurationRepo = listenerConfigurationRep;
@@ -38,6 +41,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             _customPipelineConfigurationRepo = pipelineConfigrationRepo;
             _plannerConfigurationRepo = plannerConfigurationRepo;
             _secureStorage = secureStorage;
+            _modelRepo = modelRepo;
         }
 
         #region Add Methods
@@ -345,7 +349,52 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         {
             try
             {
-                return InvokeResult<InputTranslatorConfiguration>.Create(await _inputTranslatorConfigurationRepo.GetInputTranslatorConfigurationAsync(id));
+
+                var inputTranslator = await _inputTranslatorConfigurationRepo.GetInputTranslatorConfigurationAsync(id);
+
+                switch(inputTranslator.InputTranslatorType.Value)
+                {
+                    case InputTranslatorConfiguration.InputTranslatorTypes.NuvAIModel:
+                        if(EntityHeader.IsNullOrEmpty(inputTranslator.Model))
+                        {
+                            throw new InvalidDataException("Input Translator set to be NuvAI, but does not have a model object assigned.");
+                        }
+
+                        inputTranslator.Model.Value = await _modelRepo.GetModelAsync(inputTranslator.Model.Id);
+
+                        if(inputTranslator.Model.Value == null)
+                        {
+                            throw new RecordNotFoundException("Model", inputTranslator.Model.Id);
+                        }
+
+                        if (EntityHeader.IsNullOrEmpty(inputTranslator.ModelRevision) &&
+                            EntityHeader.IsNullOrEmpty(inputTranslator.Model.Value.PreferredRevision))
+                        {
+                            throw new InvalidDataException("Input Translator does not have a model revision, model does not have a preferred revision.");
+                        }
+
+                        if (EntityHeader.IsNullOrEmpty(inputTranslator.ModelRevision))
+                        {
+                            inputTranslator.ModelRevision.Value = inputTranslator.Model.Value.Revisions.Where(rev => rev.Id == inputTranslator.Model.Value.PreferredRevision.Id).FirstOrDefault();
+                            if (inputTranslator.ModelRevision.Value == null)
+                            {
+                                throw new InvalidDataException("Could not find preferred model revision.");
+                            }
+                        }
+                        else
+                        {
+                            inputTranslator.ModelRevision.Value = inputTranslator.Model.Value.Revisions.Where(rev => rev.Id == inputTranslator.ModelRevision.Id).FirstOrDefault();
+                            if (inputTranslator.ModelRevision.Value == null)
+                            {
+                                throw new InvalidDataException("Could not find specified model revision.");
+                            }
+                        }
+
+                            break;
+                }
+                    
+                    
+                return InvokeResult<InputTranslatorConfiguration>.Create(inputTranslator);
             }
             catch (RecordNotFoundException)
             {
