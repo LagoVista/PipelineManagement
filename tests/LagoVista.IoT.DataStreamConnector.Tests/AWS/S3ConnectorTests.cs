@@ -72,7 +72,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             {
                 if((await client.ListBucketsAsync()).Buckets.Where(bkt => bkt.BucketName == BUCKET_NAME).Any())
                 {
-                    RemoveBucket();
+                    await RemoveBucket();
                 }
             }
         }
@@ -177,7 +177,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
                     var items = await s3Client.ListObjectsAsync(BUCKET_NAME);
                     foreach (var item in items.S3Objects)
                     {
-                        s3Client.DeleteObjectAsync(BUCKET_NAME, item.Key);
+                        await s3Client.DeleteObjectAsync(BUCKET_NAME, item.Key);
                     }
 
                     await s3Client.DeleteBucketAsync(BUCKET_NAME);

@@ -78,9 +78,9 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             var pool = new SingleNodeConnectionPool(new Uri(stream.ElasticSearchDomainName));
             var config = new Nest.ConnectionSettings(pool, connection);
             var client = new ElasticClient(config);
-            if (client.IndexExists(stream.ElasticSearchIndexName).Exists)
+            if (client.Indices.Exists(stream.ElasticSearchIndexName).Exists)
             {
-                var res = client.DeleteIndex(stream.ElasticSearchIndexName);
+                var res = client.Indices.Delete(stream.ElasticSearchIndexName);
                 Console.WriteLine(res.DebugInformation);
             }
         }
@@ -235,9 +235,9 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             var pool = new SingleNodeConnectionPool(new Uri(stream.ElasticSearchDomainName));
             var config = new Nest.ConnectionSettings(pool, connection);
             var client = new ElasticClient(config);
-            if (client.IndexExists(stream.ElasticSearchIndexName).Exists)
+            if (client.Indices.Exists(stream.ElasticSearchIndexName).Exists)
             {
-                var res = client.DeleteIndex(stream.ElasticSearchIndexName);
+                var res = client.Indices.Delete(stream.ElasticSearchIndexName);
                 Console.WriteLine(res.DebugInformation);
             }
         }

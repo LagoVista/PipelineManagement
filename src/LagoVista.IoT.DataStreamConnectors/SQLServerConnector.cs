@@ -299,7 +299,7 @@ from sysobjects a
                             {
                                 resultItem.Add(fld.FieldName, rdr[fld.FieldName]);
                             }
-                            catch(Exception ex)
+                            catch(Exception)
                             {
                                 Debugger.Break();
                             }
