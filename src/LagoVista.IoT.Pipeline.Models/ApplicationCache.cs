@@ -126,12 +126,10 @@ namespace LagoVista.IoT.Pipeline.Models
 
         [CustomValidator]
         public void Validate(ValidationResult res, Actions action)
-        {
-            Console.WriteLine($"Value provided for {Name} must be a number, it currently is {Value}.");
-
+        {            
             if (ValueType.Value == CacheValueDataTypes.Number)
             {
-                if (!Double.TryParse(Value, out double outValue))
+                if (!Double.TryParse(Value, out _))
                 {
                     res.AddUserError($"Value provided for {Name} must be a number, it currently is {Value}.");
                 }

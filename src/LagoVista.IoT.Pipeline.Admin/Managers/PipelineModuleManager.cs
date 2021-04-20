@@ -18,15 +18,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 {
     public class PipelineModuleManager : ManagerBase, IPipelineModuleManager
     {
-        IListenerConfigurationRepo _listenerConfigurationRepo;
-        IPlannerConfigurationRepo _plannerConfigurationRepo;
-        IInputTranslatorConfigurationRepo _inputTranslatorConfigurationRepo;
-        ISentinelConfigurationRepo _sentinalConfigurationRepo;
-        IOutputTranslatorConfigurationRepo _outputTranslatorConfigurationRepo;
-        ITransmitterConfigurationRepo _transmitterConfigurationRepo;
-        ICustomPipelineConfigurationRepo _customPipelineConfigurationRepo;
-        ISecureStorage _secureStorage;
-        IModelRepo _modelRepo;
+        readonly IListenerConfigurationRepo _listenerConfigurationRepo;
+        readonly IPlannerConfigurationRepo _plannerConfigurationRepo;
+        readonly IInputTranslatorConfigurationRepo _inputTranslatorConfigurationRepo;
+        readonly ISentinelConfigurationRepo _sentinalConfigurationRepo;
+        readonly IOutputTranslatorConfigurationRepo _outputTranslatorConfigurationRepo;
+        readonly ITransmitterConfigurationRepo _transmitterConfigurationRepo;
+        readonly ICustomPipelineConfigurationRepo _customPipelineConfigurationRepo;
+        readonly ISecureStorage _secureStorage;
+        readonly IModelRepo _modelRepo;
 
 
         public PipelineModuleManager(IListenerConfigurationRepo listenerConfigurationRep, ISecureStorage secureStorage, IInputTranslatorConfigurationRepo inputConfigurationRepo, ISentinelConfigurationRepo sentinalConfigurationRepo, IPlannerConfigurationRepo plannerConfigurationRepo,
