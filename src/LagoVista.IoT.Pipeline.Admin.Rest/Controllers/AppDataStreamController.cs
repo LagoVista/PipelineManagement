@@ -1,6 +1,9 @@
-﻿using LagoVista.Core.Models.UIMetaData;
+﻿using LagoVista.Core.Exceptions;
+using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Validation;
 using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Web.Common.Attributes;
 using LagoVista.IoT.Web.Common.Controllers;
@@ -10,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,6 +61,60 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
             var connectorResult = DataStreamServices.GetConnector(dataStream.Result.StreamType.Value, _adminlogger);
 
             return await _dataStreamManager.GetStreamDataAsync(dataStream.Result, connectorResult.Result, deviceid, OrgEntityHeader, UserEntityHeader, GetListRequestFromHeader());
+        }
+
+        /// <summary>
+        /// Client API Data Stream -
+        /// </summary>
+        [HttpPost("/clientapi/datastream/{datastreamid}/data/timeseriesquery")]
+        public async Task<ListResponse<DataStreamResult>> GetDataAsync(string datastreamid, [FromBody] TimeSeriesAnalyticsRequest request)
+        {
+            var dataStream = await _dataStreamManager.LoadFullDataStreamConfigurationAsync(datastreamid, OrgEntityHeader, UserEntityHeader);
+            var connectorResult = DataStreamServices.GetConnector(dataStream.Result.StreamType.Value, _adminlogger);
+            var connector = connectorResult.Result;
+            if(request.ListRequest == null)
+            {
+                request.ListRequest = new ListRequest()
+                {
+                    PageSize = 50,
+                    PageIndex = 1
+                };
+            }
+
+            return await connector.GetTimeSeriesAnalyticsAsync(request, request.ListRequest);
+        }
+
+        /// <summary>
+        /// Client API Data Stream -
+        /// </summary>
+        [HttpPost("/clientapi/datastream/{datastreamid}/data/sqlquery")]
+        public async Task<InvokeResult<List<DataStreamResult>>> SqlQuery(string datastreamid, [FromBody] SQLRequest request)
+        {
+            if(request == null)
+            {
+                return InvokeResult<List<DataStreamResult>>.FromError($"Empty SQL Request");
+            }
+
+            if (String.IsNullOrEmpty(request.Query))
+            {
+                return InvokeResult<List<DataStreamResult>>.FromError($"Empty Query SQL Request");
+            }
+
+            var dataStream = await _dataStreamManager.LoadFullDataStreamConfigurationAsync(datastreamid, OrgEntityHeader, UserEntityHeader);
+            if(dataStream == null)
+            {
+                throw new RecordNotFoundException("DataStream", datastreamid);
+            }
+
+            var connectorResult = DataStreamServices.GetConnector(dataStream.Result.StreamType.Value, _adminlogger);
+            if(connectorResult == null)
+            {
+                return InvokeResult<List<DataStreamResult>>.FromError($"Could not get data stream connector for: {dataStream.Result.StreamType.Value}");
+            }
+
+            var connector = connectorResult.Result;
+            await connector.InitAsync(dataStream.Result);
+            return await connector.ExecSQLAsync(request.Query, request.Parameters);
         }
     }
 }

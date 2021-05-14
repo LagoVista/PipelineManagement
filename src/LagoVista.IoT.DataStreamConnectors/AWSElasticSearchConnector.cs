@@ -13,6 +13,7 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.PlatformSupport;
 using Amazon.Runtime;
 using Amazon.Runtime.CredentialManagement;
+using LagoVista.IoT.Pipeline.Admin.Managers;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -251,6 +252,11 @@ namespace LagoVista.IoT.DataStreamConnectors
         public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest)
         {
             throw new NotImplementedException("AWS does not support stream");
+        }
+
+        public Task<InvokeResult<List<DataStreamResult>>> ExecSQLAsync(string query, List<SQLParameter> filter)
+        {
+            throw new NotImplementedException();
         }
     }
 }

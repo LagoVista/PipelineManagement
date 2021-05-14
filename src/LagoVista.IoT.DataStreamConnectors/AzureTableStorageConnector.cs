@@ -13,13 +13,14 @@ using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.IoT.Pipeline.Admin.Managers;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
     public class AzureTableStorageConnector : IDataStreamConnector
     {
         DataStream _stream;
-        ILogger _logger;
+        readonly ILogger _logger;
         CloudTableClient _tableClient;
         CloudTable _cloudTable;
 
@@ -176,8 +177,8 @@ namespace LagoVista.IoT.DataStreamConnectors
 
                     var listResponse = new ListResponse<DataStreamResult>
                     {
-                        NextRowKey = results.ContinuationToken == null ? null : results.ContinuationToken.NextRowKey,
-                        NextPartitionKey = results.ContinuationToken == null ? null : results.ContinuationToken.NextPartitionKey,
+                        NextRowKey = results.ContinuationToken?.NextRowKey,
+                        NextPartitionKey = results.ContinuationToken?.NextPartitionKey,
                         PageSize = results.Count(),
                         HasMoreRecords = results.ContinuationToken != null,
                     };
@@ -251,6 +252,11 @@ namespace LagoVista.IoT.DataStreamConnectors
         public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest)
         {
             throw new NotImplementedException("Azure Table Storage does not support stream");
+        }
+
+        public Task<InvokeResult<List<DataStreamResult>>> ExecSQLAsync(string query, List<SQLParameter> filter)
+        {
+            throw new NotImplementedException();
         }
     }
 }

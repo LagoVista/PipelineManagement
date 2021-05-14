@@ -5,6 +5,7 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin;
+using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.Azure.EventHubs;
 using Newtonsoft.Json;
@@ -133,6 +134,11 @@ namespace LagoVista.IoT.DataStreamConnectors
         public Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(TimeSeriesAnalyticsRequest request, ListRequest listRequest)
         {
             throw new NotImplementedException("Azure Event Hubs does not support stream");
+        }
+
+        public Task<InvokeResult<List<DataStreamResult>>> ExecSQLAsync(string query, List<SQLParameter> filter)
+        {
+            throw new NotImplementedException();
         }
     }
 }

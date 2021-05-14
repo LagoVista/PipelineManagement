@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LagoVista.Core.Models.UIMetaData;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 
@@ -42,5 +43,7 @@ namespace LagoVista.IoT.Pipeline.Admin
         public List<TimeSeriesAnalyticsRequestField> Fields { get; set; } = new List<TimeSeriesAnalyticsRequestField>();
 
         public Dictionary<string, object> Filter { get; set; } = new Dictionary<string, object>();
+    
+        public ListRequest ListRequest { get; set; } 
     }
 }

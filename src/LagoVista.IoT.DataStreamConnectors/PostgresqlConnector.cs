@@ -5,6 +5,7 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DataStreamConnectors.Models;
 using LagoVista.IoT.Pipeline.Admin;
+using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Npgsql;
 using System;
@@ -346,7 +347,7 @@ WHERE table_schema = @dbschema
         public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
         {
             var result = await this.InitAsync(stream);
-            if(!result.Successful)
+            if (!result.Successful)
             {
                 return result;
             }
@@ -668,7 +669,6 @@ WHERE table_schema = @dbschema
                 foreach (var filterItem in request.Filter)
                 {
                     cmd.Parameters.AddWithValue($"@parm{filterItem.Key}", filterItem.Value);
-                    _logger.AddCustomEvent(LogLevel.Message, "ProcessStreamAnalyticsAsync", $"{filterItem.Key} - {filterItem.Value}");
                 }
 
                 cmd.CommandType = System.Data.CommandType.Text;
@@ -699,6 +699,46 @@ WHERE table_schema = @dbschema
             }
 
             return response;
+        }
+
+        public async Task<InvokeResult<List<DataStreamResult>>> ExecSQLAsync(string query, List<SQLParameter> filter)
+        {
+            try
+            {
+                var responseItems = new List<DataStreamResult>();
+                using (var cn = OpenConnection(_stream.DbName))
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = cn;
+                    cmd.CommandText = query.ToString();
+
+                    foreach (var filterItem in filter)
+                    {
+                        cmd.Parameters.AddWithValue(filterItem.Name, filterItem.Value);
+                    }
+
+                    using (var rdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (rdr.Read())
+                        {
+                            var resultItem = new DataStreamResult();
+                            for (var idx = 0; idx < rdr.FieldCount; ++idx)
+                            {
+                                resultItem.Add(rdr.GetColumnSchema()[idx].ColumnName, rdr[idx]);
+                            }
+
+                            responseItems.Add(resultItem);
+                        }
+                    }
+
+                    return InvokeResult<List<DataStreamResult>>.Create(responseItems);
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.AddException("PostgresqlConnector_ExecSQLAsync", ex, query.ToKVP("query"));
+                return InvokeResult<List<DataStreamResult>>.FromException("PostgresqlConnector_ExecSQLAsync", ex);
+            }
         }
 
         public async Task<ListResponse<DataStreamResult>> GetTimeSeriesAnalyticsAsync(string query, Dictionary<string, object> filter, ListRequest request)

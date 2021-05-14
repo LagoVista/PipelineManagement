@@ -5,6 +5,7 @@ using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.DataStreamConnectors.Models;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin;
+using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -366,7 +367,32 @@ SELECT create_hypertable('information','timestamp');"
 
             var query = "select time_bucket('1.5 minutes', timeStamp) as period, avg(int1)";
 
-            var result = await connector.GetTimeSeriesAnalyticsAsync(query, filteredItems, new Core.Models.UIMetaData.ListRequest() { PageSize = 50 });            
+            var result = await connector.GetTimeSeriesAnalyticsAsync(query, filteredItems, new Core.Models.UIMetaData.ListRequest() { PageSize = 50 });
+            Assert.IsTrue(result.Successful);
+        }
+
+
+        [TestMethod]
+        public async Task DataStream_Postgres_ExecSQL_Test()
+        {
+            var stream = GetValidStream();
+            var connector = new PostgresqlConnector(_logger);
+            AssertSuccessful(await connector.InitAsync(stream));
+
+            var deviceId = "DEV001";
+
+            for (var idx = 0; idx < 20; ++idx)
+            {
+                AssertSuccessful(await AddRecord(connector, stream, deviceId, idx + 300, idx + 200));
+            }
+
+            var filteredItems = new List<SQLParameter>() { new SQLParameter() { Name = "@start", Value = "2021-04-12" } };
+
+            
+            var query = "select timeStamp, int1 from information where timeStamp > TO_TIMESTAMP(@start, 'yyyy-mm-dd')";
+
+            var result = await connector.ExecSQLAsync(query, filteredItems);
+            Assert.IsTrue(result.Successful);
         }
 
         [TestMethod]
