@@ -6,6 +6,8 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.DataStreamConnector.Tests.Utils;
 using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.IoT.Pipeline;
+using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
@@ -114,7 +116,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
         [TestInitialize]
         public void Init()
         {
-            _dataStreamManager = new DataStreamManager(new Mock<IDataStreamRepo>().Object, _connectionSettings.Object, _orgUtils.Object, new AdminLogger(new Utils.LogWriter()),
+            _dataStreamManager = new DataStreamManager(new Mock<IDataStreamRepo>().Object, new Mock<ISharedConnectionManager>().Object, _connectionSettings.Object, _orgUtils.Object, new AdminLogger(new Utils.LogWriter()),
                 _secureStorage, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, _security.Object);
 
             _security.Setup(sec => sec.AuthorizeAsync(It.IsAny<EntityHeader>(), It.IsAny<EntityHeader>(), It.IsAny<string>(), It.IsAny<object>()));

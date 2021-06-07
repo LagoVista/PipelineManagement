@@ -308,6 +308,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:CustomModule_Uri_AccountPassword_Help
 
 		public static string CustomModule_Uri_AccountPassword_Help { get { return GetResourceString("CustomModule_Uri_AccountPassword_Help"); } }
+//Resources:PipelineAdminResources:DataaStream_SummaryLevel
+
+		public static string DataaStream_SummaryLevel { get { return GetResourceString("DataaStream_SummaryLevel"); } }
 //Resources:PipelineAdminResources:DataStream_AutoCreateTable
 
 		public static string DataStream_AutoCreateTable { get { return GetResourceString("DataStream_AutoCreateTable"); } }
@@ -467,6 +470,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_S3_BucketName
 
 		public static string DataStream_S3_BucketName { get { return GetResourceString("DataStream_S3_BucketName"); } }
+//Resources:PipelineAdminResources:DataStream_SharedConnection
+
+		public static string DataStream_SharedConnection { get { return GetResourceString("DataStream_SharedConnection"); } }
+//Resources:PipelineAdminResources:DataStream_SharedConnection_Select
+
+		public static string DataStream_SharedConnection_Select { get { return GetResourceString("DataStream_SharedConnection_Select"); } }
 //Resources:PipelineAdminResources:DataStream_StreamType
 
 		public static string DataStream_StreamType { get { return GetResourceString("DataStream_StreamType"); } }
@@ -512,6 +521,15 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_StreamType_TableStorage_Managed
 
 		public static string DataStream_StreamType_TableStorage_Managed { get { return GetResourceString("DataStream_StreamType_TableStorage_Managed"); } }
+//Resources:PipelineAdminResources:DataStream_SummaryData
+
+		public static string DataStream_SummaryData { get { return GetResourceString("DataStream_SummaryData"); } }
+//Resources:PipelineAdminResources:DataStream_SummaryData_Help
+
+		public static string DataStream_SummaryData_Help { get { return GetResourceString("DataStream_SummaryData_Help"); } }
+//Resources:PipelineAdminResources:DataStream_SummaryLevel_Help
+
+		public static string DataStream_SummaryLevel_Help { get { return GetResourceString("DataStream_SummaryLevel_Help"); } }
 //Resources:PipelineAdminResources:DataStream_TableName
 
 		public static string DataStream_TableName { get { return GetResourceString("DataStream_TableName"); } }
@@ -1277,6 +1295,33 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:SerialPort_PortName
 
 		public static string SerialPort_PortName { get { return GetResourceString("SerialPort_PortName"); } }
+//Resources:PipelineAdminResources:SharedConnection_AWS
+
+		public static string SharedConnection_AWS { get { return GetResourceString("SharedConnection_AWS"); } }
+//Resources:PipelineAdminResources:SharedConnection_Azure
+
+		public static string SharedConnection_Azure { get { return GetResourceString("SharedConnection_Azure"); } }
+//Resources:PipelineAdminResources:SharedConnection_ConnectionType
+
+		public static string SharedConnection_ConnectionType { get { return GetResourceString("SharedConnection_ConnectionType"); } }
+//Resources:PipelineAdminResources:SharedConnection_ConnectionType_Select
+
+		public static string SharedConnection_ConnectionType_Select { get { return GetResourceString("SharedConnection_ConnectionType_Select"); } }
+//Resources:PipelineAdminResources:SharedConnection_Database
+
+		public static string SharedConnection_Database { get { return GetResourceString("SharedConnection_Database"); } }
+//Resources:PipelineAdminResources:SharedConnection_Description
+
+		public static string SharedConnection_Description { get { return GetResourceString("SharedConnection_Description"); } }
+//Resources:PipelineAdminResources:SharedConnection_Help
+
+		public static string SharedConnection_Help { get { return GetResourceString("SharedConnection_Help"); } }
+//Resources:PipelineAdminResources:SharedConnection_Redis
+
+		public static string SharedConnection_Redis { get { return GetResourceString("SharedConnection_Redis"); } }
+//Resources:PipelineAdminResources:SharedConnection_Title
+
+		public static string SharedConnection_Title { get { return GetResourceString("SharedConnection_Title"); } }
 //Resources:PipelineAdminResources:Translator_Type_Binary
 
 		public static string Translator_Type_Binary { get { return GetResourceString("Translator_Type_Binary"); } }
@@ -1422,6 +1467,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string CustomModule_Uri_AccountId = "CustomModule_Uri_AccountId";
 			public const string CustomModule_Uri_AccountPassword = "CustomModule_Uri_AccountPassword";
 			public const string CustomModule_Uri_AccountPassword_Help = "CustomModule_Uri_AccountPassword_Help";
+			public const string DataaStream_SummaryLevel = "DataaStream_SummaryLevel";
 			public const string DataStream_AutoCreateTable = "DataStream_AutoCreateTable";
 			public const string DataStream_AutoCreateTable_Help = "DataStream_AutoCreateTable_Help";
 			public const string DataStream_AWSAccessKey = "DataStream_AWSAccessKey";
@@ -1475,6 +1521,8 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_RedisServers = "DataStream_RedisServers";
 			public const string DataStream_RedisServers_Help = "DataStream_RedisServers_Help";
 			public const string DataStream_S3_BucketName = "DataStream_S3_BucketName";
+			public const string DataStream_SharedConnection = "DataStream_SharedConnection";
+			public const string DataStream_SharedConnection_Select = "DataStream_SharedConnection_Select";
 			public const string DataStream_StreamType = "DataStream_StreamType";
 			public const string DataStream_StreamType_AWS_ElasticSearch = "DataStream_StreamType_AWS_ElasticSearch";
 			public const string DataStream_StreamType_AWS_S3 = "DataStream_StreamType_AWS_S3";
@@ -1490,6 +1538,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_StreamType_SQLServer = "DataStream_StreamType_SQLServer";
 			public const string DataStream_StreamType_TableStorage = "DataStream_StreamType_TableStorage";
 			public const string DataStream_StreamType_TableStorage_Managed = "DataStream_StreamType_TableStorage_Managed";
+			public const string DataStream_SummaryData = "DataStream_SummaryData";
+			public const string DataStream_SummaryData_Help = "DataStream_SummaryData_Help";
+			public const string DataStream_SummaryLevel_Help = "DataStream_SummaryLevel_Help";
 			public const string DataStream_TableName = "DataStream_TableName";
 			public const string DataStream_TableStorage_InvalidName = "DataStream_TableStorage_InvalidName";
 			public const string DataStream_TableStorageName = "DataStream_TableStorageName";
@@ -1745,6 +1796,15 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Sentinel_Title = "Sentinel_Title";
 			public const string SerialPort_BaudRate = "SerialPort_BaudRate";
 			public const string SerialPort_PortName = "SerialPort_PortName";
+			public const string SharedConnection_AWS = "SharedConnection_AWS";
+			public const string SharedConnection_Azure = "SharedConnection_Azure";
+			public const string SharedConnection_ConnectionType = "SharedConnection_ConnectionType";
+			public const string SharedConnection_ConnectionType_Select = "SharedConnection_ConnectionType_Select";
+			public const string SharedConnection_Database = "SharedConnection_Database";
+			public const string SharedConnection_Description = "SharedConnection_Description";
+			public const string SharedConnection_Help = "SharedConnection_Help";
+			public const string SharedConnection_Redis = "SharedConnection_Redis";
+			public const string SharedConnection_Title = "SharedConnection_Title";
 			public const string Translator_Type_Binary = "Translator_Type_Binary";
 			public const string Translator_Type_Custom = "Translator_Type_Custom";
 			public const string Translator_Type_Delimited = "Translator_Type_Delimited";

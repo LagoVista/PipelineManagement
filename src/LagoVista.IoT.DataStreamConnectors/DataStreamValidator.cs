@@ -11,14 +11,6 @@ namespace LagoVista.IoT.DataStreamConnectors
     {
         public static async Task<InvokeResult> ValidateDataStreamAsync(DataStream stream, IAdminLogger logger)
         {
-            /* Update will make sure we have either the access key or secure id which is what we want here, it's fine since this isn't applying the update */
-            var validationResult = Validator.Validate(stream);
-            if(!validationResult.Successful)
-            {
-                return validationResult.ToInvokeResult();
-            }
-
-            // TODO: Need to restore secure id to passwords prior to testing.
             var result = DataStreamServices.GetConnector(stream.StreamType.Value, logger);
             if (!result.Successful) return result.ToInvokeResult();
             

@@ -37,10 +37,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public String Script { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_Model, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_Model_Select, IsRequired: true, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_Model, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_Model_Select, IsRequired: false, IsUserEditable: true)]
         public EntityHeader<Model> Model { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_ModelRevision, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_ModelRevision_Select, IsRequired: true, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_ModelRevision, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_ModelRevision_Select, IsRequired: false, IsUserEditable: true)]
         public EntityHeader<ModelRevision> ModelRevision { get; set; }
 
 

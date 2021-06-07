@@ -18,15 +18,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
     {
         IApplicationCacheRepo _applicationCacheRepo;
         ISecureStorage _secureStorage;
-        IDefaultInternalDataStreamConnectionSettings _defaultConnectionSettings;
 
-        public ApplicationCacheManager(IApplicationCacheRepo applicationCacheRepo, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings,
-            IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
-            base(logger, appConfig, depmanager, security)
+        public ApplicationCacheManager(IApplicationCacheRepo applicationCacheRepo, IAdminLogger logger, ISecureStorage secureStorage, 
+            IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) : base(logger, appConfig, depmanager, security)
         {
             _applicationCacheRepo = applicationCacheRepo;
             _secureStorage = secureStorage;
-            _defaultConnectionSettings = defaultConnectionSettings;
         }
 
         public async Task<InvokeResult> AddApplicationCacheAsync(ApplicationCache cache, EntityHeader org, EntityHeader user)
@@ -80,16 +77,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
         public async Task<DependentObjectCheckResult> CheckApplicationCacheInUseAsync(string ApplicationCacheId, EntityHeader org, EntityHeader user)
         {
-            var ApplicationCache = await _applicationCacheRepo.GetApplicationCacheAsync(ApplicationCacheId);
-            await AuthorizeAsync(ApplicationCache, AuthorizeResult.AuthorizeActions.Read, user, org);
-            return await CheckForDepenenciesAsync(ApplicationCache);
+            var cache = await _applicationCacheRepo.GetApplicationCacheAsync(ApplicationCacheId);
+            await AuthorizeAsync(cache, AuthorizeResult.AuthorizeActions.Read, user, org);
+            return await CheckForDepenenciesAsync(cache);
         }
 
         public async Task<InvokeResult> DeleteDatStreamAsync(string ApplicationCacheId, EntityHeader org, EntityHeader user)
         {
-            var ApplicationCache = await _applicationCacheRepo.GetApplicationCacheAsync(ApplicationCacheId);
-            await AuthorizeAsync(ApplicationCache, AuthorizeResult.AuthorizeActions.Delete, user, org);
-            await CheckForDepenenciesAsync(ApplicationCache);
+            var cache = await _applicationCacheRepo.GetApplicationCacheAsync(ApplicationCacheId);
+            await AuthorizeAsync(cache, AuthorizeResult.AuthorizeActions.Delete, user, org);
+            await CheckForDepenenciesAsync(cache);
 
             await _applicationCacheRepo.DeleteApplicationCacheAsync(ApplicationCacheId);
 
@@ -98,14 +95,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
         public async Task<ApplicationCache> GetApplicationCacheAsync(string ApplicationCacheId, EntityHeader org, EntityHeader user)
         {
-            var ApplicationCache = await _applicationCacheRepo.GetApplicationCacheAsync(ApplicationCacheId);
-            await AuthorizeAsync(ApplicationCache, AuthorizeResult.AuthorizeActions.Read, user, org);
-            return ApplicationCache;
+            var cahce = await _applicationCacheRepo.GetApplicationCacheAsync(ApplicationCacheId);
+            await AuthorizeAsync(cahce, AuthorizeResult.AuthorizeActions.Read, user, org);
+            return cahce;
         }
 
         public async Task<IEnumerable<ApplicationCacheSummary>> GetApplicationCachesForOrgAsync(string orgId, EntityHeader user)
         {
-            await AuthorizeOrgAccessAsync(user, orgId, typeof(ApplicationCacheSummary));
+            await AuthorizeOrgAccessAsync(user, orgId, typeof(ApplicationCache));
             return await _applicationCacheRepo.GetApplicationCachesForOrgAsync(orgId);
         }
 

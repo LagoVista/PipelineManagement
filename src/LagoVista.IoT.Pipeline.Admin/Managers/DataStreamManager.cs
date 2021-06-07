@@ -19,18 +19,117 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 {
     public class DataStreamManager : ManagerBase, IDataStreamManager
     {
-        IDataStreamRepo _dataStreamRepo;
-        ISecureStorage _secureStorage;
-        IDefaultInternalDataStreamConnectionSettings _defaultConnectionSettings;
-        IOrgUtils _orgUtils;
-
-        public DataStreamManager(IDataStreamRepo dataStreamRepo, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings, IOrgUtils orgUtils, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
+        private readonly IDataStreamRepo _dataStreamRepo;
+        private readonly ISecureStorage _secureStorage;
+        private readonly IDefaultInternalDataStreamConnectionSettings _defaultConnectionSettings;
+        private readonly IOrgUtils _orgUtils;
+        private readonly ISharedConnectionManager _sharedDataStreamConnectionManager;
+        public DataStreamManager(IDataStreamRepo dataStreamRepo, ISharedConnectionManager sharedDataStreamConnectionManager, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings, IOrgUtils orgUtils, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
             base(logger, appConfig, depmanager, security)
         {
-            _dataStreamRepo = dataStreamRepo;
-            _secureStorage = secureStorage;
-            _defaultConnectionSettings = defaultConnectionSettings;
-            _orgUtils = orgUtils;
+            _dataStreamRepo = dataStreamRepo ?? throw new ArgumentNullException(nameof(IDataStreamRepo));
+            _secureStorage = secureStorage ?? throw new ArgumentNullException(nameof(ISecureStorage));
+            _defaultConnectionSettings = defaultConnectionSettings ?? throw new ArgumentNullException(nameof(IDefaultInternalDataStreamConnectionSettings));
+            _sharedDataStreamConnectionManager = sharedDataStreamConnectionManager ?? throw new ArgumentNullException(nameof(SharedConnectionManager));
+            _orgUtils = orgUtils ?? throw new ArgumentNullException(nameof(IOrgUtils));
+        }
+
+        private async Task<InvokeResult> CreatePointArrayStorageAsync(DataStream stream, EntityHeader org, EntityHeader user)
+        {
+            var orgNamespace = (await _orgUtils.GetOrgNamespaceAsync(org.Id)).Result;
+
+            stream.DeviceIdFieldName = "device_id";
+            stream.TimestampFieldName = "time_stamp";
+            stream.DbSchema = "public";
+            stream.DbURL = _defaultConnectionSettings.PointArrayConnectionSettings.Uri;
+            stream.DbTableName = $"point_array_{stream.Key}";
+
+            stream.CreateTableDDL = GetPointArrayDataStorageSQL_DDL(stream.DbTableName);
+
+            stream.DatabaseName = orgNamespace;
+            stream.DbName = orgNamespace;
+            stream.DbUserName = orgNamespace;
+
+            stream.AutoCreateSQLTable = false;
+
+            // we will create it here as part of our setup.
+            stream.DBPasswordSecureId = $"ps_db_uid_{org.Id}";
+
+            var existingPassword = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
+            if (existingPassword.Successful)
+            {
+                stream.DbPassword = existingPassword.Result;
+            }
+            else
+            {
+                stream.DbPassword = Guid.NewGuid().ToId();
+
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.DBPasswordSecureId, stream.DbPassword);
+                if (!addSecretResult.Successful)
+                {
+                    return addSecretResult.ToInvokeResult();
+                }
+            }
+
+            stream.Fields.Clear();
+
+            stream.Fields.Add(new DataStreamField()
+            {
+                Name = "Start Time Stamp",
+                Key = "starttimestamp",
+                FieldName = "starttimestamp",
+                Description = "Time in seconds from UTC epoch (1/1/1970).",
+                FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
+                IsRequired = true,
+            });
+
+            stream.Fields.Add(new DataStreamField()
+            {
+                Name = "Sensor Index",
+                Key = "sensorindex",
+                FieldName = "sensorindex",
+                Description = "Sensor Index on Board for this point array.",
+                FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
+                IsRequired = true,
+            });
+
+            stream.Fields.Add(new DataStreamField()
+            {
+                Name = "Point Count",
+                Key = "pointcount",
+                FieldName = "pointcount",
+                Description = "Number of points that make up this point array.",
+                FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
+                IsRequired = true
+            });
+
+            stream.Fields.Add(new DataStreamField()
+            {
+                Name = "Interval",
+                Key = "interval",
+                FieldName = "interval",
+                Description = "Interval between sample collection points.",
+                FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Decimal),
+                IsRequired = true,
+            });
+
+            stream.Fields.Add(new DataStreamField()
+            {
+                Name = "Point Array",
+                Key = "pointarray",
+                FieldName = "pointarray",
+                Description = "Collection of points that make up the data collected from the device.",
+                FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.DecimalArray),
+                IsRequired = true,
+            });
+
+            this.ValidationCheck(stream, Actions.Create);
+
+            await CreatePostgresStorage(stream, stream.DbPassword);
+
+            stream.DbPassword = null;
+
+            return InvokeResult.Success;
         }
 
         public async Task<InvokeResult> AddDataStreamAsync(DataStream stream, EntityHeader org, EntityHeader user)
@@ -60,7 +159,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 }
                 else
                 {
-                    throw new Exception("Validation should have cut null or empty AzureAccessKey, but it did not.");
+                    throw new Exception("Validation should have not null or empty AzureAccessKey, but it did not.");
                 }
             }
             else if (stream.StreamType.Value == DataStreamTypes.AWSS3 ||
@@ -79,7 +178,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 }
                 else
                 {
-                    throw new Exception("Validation should have cut null or empty AWSSecretKey, but it did not.");
+                    throw new Exception("Validation should have not null or empty AWSSecretKey, but it did not.");
                 }
             }
             else if (stream.StreamType.Value == DataStreamTypes.SQLServer ||
@@ -98,7 +197,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 }
                 else
                 {
-                    throw new Exception("Validation should have cut null or empty DbPassword, but it did not.");
+                    throw new Exception("Validation should have not null or empty DbPassword, but it did not.");
                 }
             }
             else if (stream.StreamType.Value == DataStreamTypes.Redis)
@@ -117,99 +216,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             }
             else if (stream.StreamType.Value == DataStreamTypes.PointArrayStorage)
             {
-
-                var orgNamespace = (await _orgUtils.GetOrgNamespaceAsync(org.Id)).Result;
-
-                stream.DeviceIdFieldName = "device_id";
-                stream.TimestampFieldName = "time_stamp";
-                stream.DbSchema = "public";
-                stream.DbURL = _defaultConnectionSettings.PointArrayConnectionSettings.Uri;
-                stream.DbTableName = $"point_array_{stream.Key}";
-
-                stream.CreateTableDDL = GetPointArrayDataStorageSQL_DDL(stream.DbTableName);
-
-                stream.DatabaseName = orgNamespace;
-                stream.DbName = orgNamespace;
-                stream.DbUserName = orgNamespace;
-
-                // we will create it here as part of our setup.
-                stream.AutoCreateSQLTable = false;
-
-                stream.DBPasswordSecureId = $"ps_db_uid_{org.Id}";
-
-                var existingPassword = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
-                if (existingPassword.Successful)
-                {
-                    stream.DbPassword = existingPassword.Result;
-                }
-                else
-                {
-                    stream.DbPassword = Guid.NewGuid().ToId();
-
-                    var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.DBPasswordSecureId, stream.DbPassword);
-                    if (!addSecretResult.Successful)
-                    {
-                        return addSecretResult.ToInvokeResult();
-                    }
-                }
-
-                stream.Fields.Clear();
-
-                stream.Fields.Add(new DataStreamField()
-                {
-                    Name = "Start Time Stamp",
-                    Key = "starttimestamp",
-                    FieldName = "starttimestamp",
-                    Description = "Time in seconds from UTC epoch (1/1/1970).",
-                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
-                    IsRequired = true,
-                });
-
-                stream.Fields.Add(new DataStreamField()
-                {
-                    Name = "Sensor Index",
-                    Key = "sensorindex",
-                    FieldName = "sensorindex",
-                    Description = "Sensor Index on Board for this point array.",
-                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
-                    IsRequired = true,
-                });
-
-                stream.Fields.Add(new DataStreamField()
-                {
-                    Name = "Point Count",
-                    Key = "pointcount",
-                    FieldName = "pointcount",
-                    Description = "Number of points that make up this point array.",
-                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
-                    IsRequired = true
-                });
-                
-                stream.Fields.Add(new DataStreamField()
-                {
-                    Name = "Interval",
-                    Key = "interval",
-                    FieldName = "interval",
-                    Description = "Interval between sample collection points.",
-                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Decimal),
-                    IsRequired = true,
-                });
-
-                stream.Fields.Add(new DataStreamField()
-                {
-                    Name = "Point Array",
-                    Key = "pointarray",
-                    FieldName = "pointarray",
-                    Description = "Collection of points that make up the data collected from the device.",
-                    FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.DecimalArray),
-                    IsRequired = true,
-                });
-
-                this.ValidationCheck(stream, Actions.Create);
-
-                await CreatePostgresStorage(stream, stream.DbPassword);
-
-                stream.DbPassword = null;
+                await CreatePointArrayStorageAsync(stream, org, user);
             }
             else
             {
@@ -301,78 +308,155 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     );";
         }
 
+        private async Task<InvokeResult<DataStream>> PopulateCredentialsAsync(DataStream stream, EntityHeader org, EntityHeader user)
+        {
+            if (stream.StreamType.Value == DataStreamTypes.AzureBlob ||
+                stream.StreamType.Value == DataStreamTypes.AzureEventHub ||
+                stream.StreamType.Value == DataStreamTypes.AzureTableStorage ||
+                stream.StreamType.Value == DataStreamTypes.AzureTableStorage_Managed)
+            {
+                if (String.IsNullOrEmpty(stream.AzureAccessKeySecureId))
+                {
+                    return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
+                }
+
+                var azureSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.AzureAccessKeySecureId, user);
+                if (!azureSecretKeyResult.Successful)
+                {
+                    return InvokeResult<DataStream>.FromInvokeResult(azureSecretKeyResult.ToInvokeResult());
+                }
+
+                stream.AzureAccessKey = azureSecretKeyResult.Result;
+            }
+            else if (stream.StreamType.Value == DataStreamTypes.AWSS3 ||
+                stream.StreamType.Value == DataStreamTypes.AWSElasticSearch)
+            {
+                if (String.IsNullOrEmpty(stream.AWSSecretKeySecureId))
+                {
+                    return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
+                }
+
+                var awsSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.AWSSecretKeySecureId, user);
+                if (!awsSecretKeyResult.Successful)
+                {
+                    return InvokeResult<DataStream>.FromInvokeResult(awsSecretKeyResult.ToInvokeResult());
+                }
+
+                stream.AwsSecretKey = awsSecretKeyResult.Result;
+            }
+            else if (stream.StreamType.Value == DataStreamTypes.SQLServer ||
+                     stream.StreamType.Value == DataStreamTypes.Postgresql ||
+                     stream.StreamType.Value == DataStreamTypes.PointArrayStorage)
+            {
+                if (String.IsNullOrEmpty(stream.DBPasswordSecureId))
+                {
+                    return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
+                }
+
+                var dbSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
+                if (!dbSecretKeyResult.Successful)
+                {
+                    return InvokeResult<DataStream>.FromInvokeResult(dbSecretKeyResult.ToInvokeResult());
+                }
+
+                stream.DbPassword = dbSecretKeyResult.Result;
+            }
+            else if (stream.StreamType.Value == DataStreamTypes.Redis)
+            {
+                if (!String.IsNullOrEmpty(stream.RedisPasswordSecureId))
+                {
+                    var getSecretResult = await _secureStorage.GetSecretAsync(org, stream.RedisPasswordSecureId, user);
+                    if (!getSecretResult.Successful)
+                    {
+                        return InvokeResult<DataStream>.FromInvokeResult(getSecretResult.ToInvokeResult());
+                    }
+
+                    stream.RedisPassword = getSecretResult.Result;
+                }
+            }
+
+            return InvokeResult<DataStream>.Create(stream);
+        }
+
+        public async Task<InvokeResult<DataStream>> PopulateSharedConnectionAsync(DataStream stream, EntityHeader org, EntityHeader user)
+        {
+            var sharedConnection = await _sharedDataStreamConnectionManager.LoadFullSharedConnectionAsync(stream.SharedConnection.Id, org, user);
+
+            switch (stream.StreamType.Value)
+            {
+                case DataStreamTypes.AWSElasticSearch:
+                case DataStreamTypes.AWSS3:
+                    if(sharedConnection.Result.ConnectionType.Value != Pipeline.Models.SharedConnectionTypes.AWS)
+                    {
+                        return InvokeResult<DataStream>.FromError($"Mismatch in stream types, shared connection type {sharedConnection.Result.ConnectionType} - {stream.StreamType.Value}");
+                    }
+
+                    stream.AwsAccessKey = sharedConnection.Result.AwsAccessKey;
+                    stream.AwsRegion = sharedConnection.Result.AwsRegion;
+                    stream.AwsSecretKey = sharedConnection.Result.AwsSecretKey;
+                    stream.AWSSecretKeySecureId = sharedConnection.Result.AWSSecretKeySecureId;
+                    break;
+
+                case DataStreamTypes.AzureBlob:
+                case DataStreamTypes.AzureEventHub:
+                case DataStreamTypes.AzureTableStorage:
+                case DataStreamTypes.AzureTableStorage_Managed:
+                    if (sharedConnection.Result.ConnectionType.Value != Pipeline.Models.SharedConnectionTypes.Azure)
+                    {
+                        return InvokeResult<DataStream>.FromError($"Mismatch in stream types, shared connection type {sharedConnection.Result.ConnectionType} - {stream.StreamType.Value}");
+                    }
+                    
+                    stream.AzureAccessKey = sharedConnection.Result.AzureAccessKey;
+                    stream.AzureAccessKeySecureId = sharedConnection.Result.AzureAccessKeySecureId;
+                    stream.AzureStorageAccountName = sharedConnection.Result.AzureStorageAccountName;
+                    break;
+
+                case DataStreamTypes.Postgresql:
+                case DataStreamTypes.PointArrayStorage:
+                case DataStreamTypes.SQLServer:
+                    if (sharedConnection.Result.ConnectionType.Value != Pipeline.Models.SharedConnectionTypes.Database)
+                    {
+                        return InvokeResult<DataStream>.FromError($"Mismatch in stream types, shared connection type {sharedConnection.Result.ConnectionType} - {stream.StreamType.Value}");
+                    }
+                   
+                    stream.DbName = sharedConnection.Result.DbName;
+                    stream.DbUserName = sharedConnection.Result.DbUserName;
+                    stream.DbPassword = sharedConnection.Result.DbPassword;
+                    stream.DBPasswordSecureId = sharedConnection.Result.DBPasswordSecureId;
+                    stream.DbURL = sharedConnection.Result.DbURL;
+                    stream.DbSchema = sharedConnection.Result.DbSchema;
+
+                    break;
+            
+                case DataStreamTypes.Redis:
+                    if (sharedConnection.Result.ConnectionType.Value != Pipeline.Models.SharedConnectionTypes.Redis)
+                    {
+                        return InvokeResult<DataStream>.FromError($"Mismatch in stream types, shared connection type {sharedConnection.Result.ConnectionType} - {stream.StreamType.Value}");
+                    }
+                  
+                    stream.RedisPassword = sharedConnection.Result.RedisPassword;
+                    stream.RedisServerUris = sharedConnection.Result.RedisServerUris;
+                    stream.RedisPasswordSecureId = sharedConnection.Result.RedisPasswordSecureId;
+                    break;
+            }
+
+            return InvokeResult<DataStream>.Create(stream);
+        }
+
         public async Task<InvokeResult<DataStream>> LoadFullDataStreamConfigurationAsync(String id, EntityHeader org, EntityHeader user)
         {
             try
             {
                 var stream = await _dataStreamRepo.GetDataStreamAsync(id);
-
-                if (stream.StreamType.Value == DataStreamTypes.AzureBlob ||
-                    stream.StreamType.Value == DataStreamTypes.AzureEventHub ||
-                    stream.StreamType.Value == DataStreamTypes.AzureTableStorage ||
-                    stream.StreamType.Value == DataStreamTypes.AzureTableStorage_Managed)
+                await AuthorizeAsync(stream, AuthorizeResult.AuthorizeActions.Read, user, org, "LoadWithSecrets");
+                if (!EntityHeader.IsNullOrEmpty(stream.SharedConnection))
                 {
-                    if (String.IsNullOrEmpty(stream.AzureAccessKeySecureId))
-                    {
-                        return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
-                    }
-
-                    var azureSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.AzureAccessKeySecureId, user);
-                    if (!azureSecretKeyResult.Successful)
-                    {
-                        return InvokeResult<DataStream>.FromInvokeResult(azureSecretKeyResult.ToInvokeResult());
-                    }
-
-                    stream.AzureAccessKey = azureSecretKeyResult.Result;
+                    return await PopulateSharedConnectionAsync(stream, org, user);
                 }
-                else if (stream.StreamType.Value == DataStreamTypes.AWSS3 ||
-                    stream.StreamType.Value == DataStreamTypes.AWSElasticSearch)
+                else
                 {
-                    if (String.IsNullOrEmpty(stream.AWSSecretKeySecureId))
-                    {
-                        return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
-                    }
-
-                    var awsSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.AWSSecretKeySecureId, user);
-                    if (!awsSecretKeyResult.Successful)
-                    {
-                        return InvokeResult<DataStream>.FromInvokeResult(awsSecretKeyResult.ToInvokeResult());
-                    }
-
-                    stream.AwsSecretKey = awsSecretKeyResult.Result;
+                    return await PopulateCredentialsAsync(stream, org, user);
                 }
-                else if (stream.StreamType.Value == DataStreamTypes.SQLServer ||
-                         stream.StreamType.Value == DataStreamTypes.Postgresql ||
-                         stream.StreamType.Value == DataStreamTypes.PointArrayStorage)
-                {
-                    if (String.IsNullOrEmpty(stream.DBPasswordSecureId))
-                    {
-                        return InvokeResult<DataStream>.FromError("Attempt to load an azure type data stream, but secret key id is not present.");
-                    }
-
-                    var dbSecretKeyResult = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
-                    if (!dbSecretKeyResult.Successful)
-                    {
-                        return InvokeResult<DataStream>.FromInvokeResult(dbSecretKeyResult.ToInvokeResult());
-                    }
-
-                    stream.DbPassword = dbSecretKeyResult.Result;
-                }
-                else if (stream.StreamType.Value == DataStreamTypes.Redis)
-                {
-                    if (!String.IsNullOrEmpty(stream.RedisPasswordSecureId))
-                    {
-                        var getSecretResult = await _secureStorage.GetSecretAsync(org, stream.RedisPasswordSecureId, user);
-                        if (!getSecretResult.Successful)
-                        {
-                            return InvokeResult<DataStream>.FromInvokeResult(getSecretResult.ToInvokeResult());
-                        }
-
-                        stream.RedisPassword = getSecretResult.Result;
-                    }
-                }
-
-                return InvokeResult<DataStream>.Create(stream);
             }
             catch (RecordNotFoundException)
             {
@@ -513,6 +597,44 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             await connector.InitAsync(stream);
             return await connector.GetItemsAsync(deviceId, request);
+        }
+
+        public async Task<InvokeResult<string>> GetDataStreamSecretAsync(string id, EntityHeader org, EntityHeader user)
+        {
+            var dataStream = await _dataStreamRepo.GetDataStreamAsync(id);
+
+            //Auth should take care of this, but this is very, very important.
+            if(dataStream.OwnerOrganization.Id != org.Id)
+            {
+                throw new NotAuthorizedException("Invalid get secret call."); 
+            }
+
+            await AuthorizeAsync(dataStream, AuthorizeResult.AuthorizeActions.Read, user, org, "GetDataStreamSecret" );
+
+            switch (dataStream.StreamType.Value)
+            {
+                case DataStreamTypes.AWSElasticSearch:
+                case DataStreamTypes.AWSS3:
+                    return await _secureStorage.GetSecretAsync(org, dataStream.AWSSecretKeySecureId, user);
+
+                case DataStreamTypes.AzureBlob:
+                case DataStreamTypes.AzureEventHub:
+                case DataStreamTypes.AzureTableStorage:
+                    return await _secureStorage.GetSecretAsync(org, dataStream.AzureAccessKeySecureId, user);
+                
+                case DataStreamTypes.Redis:
+                    return await _secureStorage.GetSecretAsync(org, dataStream.RedisPasswordSecureId, user);
+
+                case DataStreamTypes.Postgresql:
+                case DataStreamTypes.SQLServer:
+                    return await _secureStorage.GetSecretAsync(org, dataStream.DBPasswordSecureId, user);
+                
+                case DataStreamTypes.AzureTableStorage_Managed:
+                case DataStreamTypes.PointArrayStorage:
+                    return InvokeResult<string>.FromError("No secret available.");
+            }
+           
+            throw new InvalidOperationException($"Secret of type {dataStream.StreamType.Value} not supported.");
         }
     }
 }

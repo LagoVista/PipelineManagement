@@ -451,30 +451,6 @@ WHERE table_schema = @dbschema
             sql.AppendLine($"  from  {_stream.DbSchema}.{_stream.DbTableName}");
             sql.AppendLine($"  where 1 = 1"); /* just used to establish a where clause we can use by appending "and x = y" */
 
-            if (!String.IsNullOrEmpty(request.NextRowKey))
-            {
-                sql.AppendLine($"  and {_stream.TimestampFieldName} < @lastDateStamp");
-            }
-
-            if (!String.IsNullOrEmpty(request.StartDate))
-            {
-                sql.AppendLine($"  and {_stream.TimestampFieldName} >= @startDateStamp");
-            }
-
-            if (!String.IsNullOrEmpty(request.EndDate))
-            {
-                sql.AppendLine($"  and {_stream.TimestampFieldName} <= @endDateStamp");
-            }
-
-            foreach (var filterItem in filter)
-            {
-                sql.AppendLine($"  and {filterItem.Key} = @parm{filterItem.Key}");
-
-            }
-
-            sql.AppendLine($"  order by {_stream.TimestampFieldName} desc");
-            sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * Math.Max(request.PageIndex - 1, 0)} ");
-
             _logger.AddCustomEvent(LogLevel.Message, "GetItemsAsync", sql.ToString());
 
             var responseItems = new List<DataStreamResult>();
@@ -482,31 +458,44 @@ WHERE table_schema = @dbschema
             using (var cn = OpenConnection(_stream.DbName))
             using (var cmd = new NpgsqlCommand())
             {
-                cmd.Connection = cn;
-                cmd.CommandText = sql.ToString();
                 Console.WriteLine(cmd.CommandText);
 
                 if (!String.IsNullOrEmpty(request.NextRowKey))
                 {
+                    sql.AppendLine($"  and {_stream.TimestampFieldName} < @lastDateStamp");
                     cmd.Parameters.AddWithValue($"@lastDateStamp", request.NextRowKey.ToDateTime());
                 }
 
                 if (!String.IsNullOrEmpty(request.StartDate))
                 {
+                    sql.AppendLine($"  and {_stream.TimestampFieldName} >= @startDateStamp");
                     cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
                 }
 
                 if (!String.IsNullOrEmpty(request.EndDate))
                 {
+                    sql.AppendLine($"  and {_stream.TimestampFieldName} <= @endDateStamp");
                     cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+                }
+
+                if (!String.IsNullOrEmpty(request.GroupBy))
+                {
+                    sql.AppendLine($"  and period = @groupBy");
+                    cmd.Parameters.AddWithValue($"@groupBy", request.GroupBy);
                 }
 
                 foreach (var filterItem in filter)
                 {
+                    sql.AppendLine($"  and {filterItem.Key} = @parm{filterItem.Key}");
                     cmd.Parameters.AddWithValue($"@parm{filterItem.Key}", filterItem.Value);
                     _logger.AddCustomEvent(LogLevel.Message, "GetItemsAsync", $"{filterItem.Key} - {filterItem.Value}");
                 }
 
+                sql.AppendLine($"  order by {_stream.TimestampFieldName} desc");
+                sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * Math.Max(request.PageIndex - 1, 0)} ");
+
+                cmd.Connection = cn;
+                cmd.CommandText = sql.ToString();
                 cmd.CommandType = System.Data.CommandType.Text;
 
                 using (var rdr = await cmd.ExecuteReaderAsync())
@@ -514,7 +503,9 @@ WHERE table_schema = @dbschema
                     while (rdr.Read())
                     {
                         var resultItem = new DataStreamResult();
-                        resultItem.Timestamp = Convert.ToDateTime(rdr[_stream.TimestampFieldName]).ToJSONString();
+                        var timeStamp = Convert.ToDateTime(rdr[_stream.TimestampFieldName]);
+                        timeStamp = DateTime.SpecifyKind(timeStamp, DateTimeKind.Utc);
+                        resultItem.Timestamp = timeStamp.ToJSONString();
 
                         resultItem.Add(_stream.TimestampFieldName, resultItem.Timestamp);
                         resultItem.Add(_stream.DeviceIdFieldName, rdr[_stream.DeviceIdFieldName]);

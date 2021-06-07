@@ -138,6 +138,5 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
             value.Model.LastUpdateDate = value.Model.CreationDate;
             return value;
         }
-
     }
 }

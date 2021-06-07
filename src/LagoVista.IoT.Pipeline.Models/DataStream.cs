@@ -78,6 +78,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string AWSSecretKeySecureId { get; set; }
         public string AzureAccessKeySecureId { get; set; }
         public string DBPasswordSecureId { get; set; }
+        public string RedisPasswordSecureId { get; set; }
 
         public override string ModuleType => PipelineModuleType_DataStream;
 
@@ -100,6 +101,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DateStorageFormat, EnumType: (typeof(DateStorageFormats)), HelpResource: PipelineAdminResources.Names.DataStream_DateStorageFormat,
             FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.DataStreamField_DataType_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public EntityHeader<DateStorageFormats> DateStorageFormat { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataaStream_SummaryLevel, HelpResource: PipelineAdminResources.Names.DataStream_SummaryLevel_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
+        public bool SummaryLevelData { get; set; }
+
         #endregion
 
         #region Amazon Properties
@@ -128,7 +133,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSRegion, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AwsRegion { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSSecretKey, HelpResource: PipelineAdminResources.Names.DataStream_AWSSecretKey_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSSecretKey, HelpResource: PipelineAdminResources.Names.DataStream_AWSSecretKey_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AwsSecretKey { get; set; }
         #endregion
 
@@ -136,7 +141,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureStorageName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureStorageAccountName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccessKey, HelpResource: PipelineAdminResources.Names.DataStream_AzureAccessKeyHelp, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccessKey, HelpResource: PipelineAdminResources.Names.DataStream_AzureAccessKeyHelp, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureAccessKey { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TableStorageName, ValidationRegEx: @"^[a-zA-Z0-9]{3,63}$",
@@ -160,7 +165,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbUserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbUserName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbPassword, HelpResource: PipelineAdminResources.Names.DataStream_DbPassword_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbPassword, HelpResource: PipelineAdminResources.Names.DataStream_DbPassword_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbPassword { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbSchema, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
@@ -180,12 +185,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             RegExValidationMessageResource: PipelineAdminResources.Names.DataStream_InvalidTableName, ResourceType: typeof(PipelineAdminResources))]
         public string DbTableName { get; set; }
 
-        /* Currently not implemented */
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AutoCreateTable, HelpResource: PipelineAdminResources.Names.DataStream_AutoCreateTable_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool AutoCreateSQLTable { get; set; }
 
-    
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_CreateTableDDL, HelpResource: PipelineAdminResources.Names.DataStream_CreateTableDDL_Help,  FieldType: FieldTypes.MultiLineText, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_CreateTableDDL, HelpResource: PipelineAdminResources.Names.DataStream_CreateTableDDL_Help, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string CreateTableDDL { get; set; }
 
         #endregion
@@ -194,17 +198,21 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisPassword, HelpResource: PipelineAdminResources.Names.DataStream_RedisPassword_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string RedisPassword { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisPassword, HelpResource: PipelineAdminResources.Names.DataStream_RedisPassword_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public string RedisPasswordSecureId { get; set; }
-
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisServers, HelpResource:PipelineAdminResources.Names.DataStream_RedisServers_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]    
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisServers, HelpResource: PipelineAdminResources.Names.DataStream_RedisServers_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string RedisServerUris { get; set; }
 
         #endregion
 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_SummaryData, HelpResource: PipelineAdminResources.Names.DataStream_SummaryData_Help,  FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public bool IsSummaryLevelData { get; set; }
+
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<DataStreamField> Fields { get; set; }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_SharedConnection, FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.DataStream_SharedConnection_Select)]
+        public EntityHeader<SharedConnection> SharedConnection { get; set; }
 
 
         public new DataStreamSummary CreateSummary()
@@ -236,56 +244,84 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [PreValidation]
         public void PreValidate(Actions action)
         {
-            if (StreamType.Value == DataStreamTypes.AzureTableStorage_Managed && action == Actions.Create)
+            if (!EntityHeader.IsNullOrEmpty(StreamType))
             {
-                AzureTableStorageName = $"DataStream{OwnerOrganization.Id}{Key}";
-            }
-            
-            if (StreamType.Value != DataStreamTypes.AzureBlob &&
-                StreamType.Value != DataStreamTypes.AzureTableStorage &&
-                StreamType.Value != DataStreamTypes.AzureEventHub &&
-                StreamType.Value != DataStreamTypes.AzureTableStorage_Managed)
-            {
-                AzureAccessKey = null;
-                AzureAccessKeySecureId = null;
-            }
+                if (!EntityHeader.IsNullOrEmpty(SharedConnection))
+                {
+                    AzureAccessKey = null;
+                    AzureAccessKeySecureId = null;
+                    AzureStorageAccountName = null;
+                    DbName = null;
+                    DbPassword = null;
+                    DBPasswordSecureId = null;
+                    DbURL = null;
+                    DbUserName = null;
+                    AwsRegion = null;
+                    AwsSecretKey = null;
+                    AwsAccessKey = null;
+                    AWSSecretKeySecureId = null;
+                }
 
-            if (StreamType.Value != DataStreamTypes.AWSS3 && StreamType.Value != DataStreamTypes.AWSElasticSearch)
-            {
-                AwsRegion = null;
-                AwsSecretKey = null;
-                AwsAccessKey = null;
-                AWSSecretKeySecureId = null;
-            }
+                if (StreamType.Value == DataStreamTypes.AzureTableStorage_Managed && action == Actions.Create)
+                {
+                    AzureTableStorageName = $"DataStream{OwnerOrganization.Id}{Key}";
+                }
 
-            if (StreamType.Value != DataStreamTypes.SQLServer &&
-                StreamType.Value != DataStreamTypes.Postgresql &&
-                StreamType.Value != DataStreamTypes.PointArrayStorage)
-            {
-                DbName = null;
-                DbPassword = null;
-                DBPasswordSecureId = null;
-                DbTableName = null;
-                DbURL = null;
-                DbUserName = null;
-                DbValidateSchema = false;
-            }
+                if (StreamType.Value != DataStreamTypes.AzureBlob &&
+                    StreamType.Value != DataStreamTypes.AzureTableStorage &&
+                    StreamType.Value != DataStreamTypes.AzureEventHub &&
+                    StreamType.Value != DataStreamTypes.AzureTableStorage_Managed)
+                {
+                    AzureStorageAccountName = null;
+                    AzureAccessKey = null;
+                    AzureAccessKeySecureId = null;
+                }
 
-            if (StreamType.Value != DataStreamTypes.AzureEventHub)
-            {
-                AzureEventHubEntityPath = null;
-                AzureEventHubName = null;
-            }
+                if (StreamType.Value != DataStreamTypes.AWSS3 && StreamType.Value != DataStreamTypes.AWSElasticSearch)
+                {
+                    AwsRegion = null;
+                    AwsSecretKey = null;
+                    AwsAccessKey = null;
+                    AWSSecretKeySecureId = null;
+                }
 
-            if (StreamType.Value != DataStreamTypes.AzureTableStorage &&
-                StreamType.Value != DataStreamTypes.AzureTableStorage_Managed)
-            {
-                AzureTableStorageName = null;
-            }
+                if (StreamType.Value != DataStreamTypes.SQLServer &&
+                    StreamType.Value != DataStreamTypes.Postgresql &&
+                    StreamType.Value != DataStreamTypes.PointArrayStorage)
+                {
+                    DbName = null;
+                    DbPassword = null;
+                    DBPasswordSecureId = null;
+                    DbSchema = null;
+                    DbTableName = null;
+                    DbURL = null;
+                    DbUserName = null;
+                    DbValidateSchema = false;
+                }
 
-            if (StreamType.Value != DataStreamTypes.AzureBlob)
-            {
-                AzureBlobStorageContainerName = null;
+                if(StreamType.Value != DataStreamTypes.Redis)
+                {
+                    RedisPassword = null;
+                    RedisPasswordSecureId = null;
+                    RedisServerUris = null;
+                }
+
+                if (StreamType.Value != DataStreamTypes.AzureEventHub)
+                {
+                    AzureEventHubEntityPath = null;
+                    AzureEventHubName = null;
+                }
+
+                if (StreamType.Value != DataStreamTypes.AzureTableStorage &&
+                    StreamType.Value != DataStreamTypes.AzureTableStorage_Managed)
+                {
+                    AzureTableStorageName = null;
+                }
+
+                if (StreamType.Value != DataStreamTypes.AzureBlob)
+                {
+                    AzureBlobStorageContainerName = null;
+                }
             }
         }
 
@@ -298,19 +334,43 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             if (Fields.Select(fld => fld.Key).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Keys on fields must be unique."));
             if (Fields.Select(fld => fld.FieldName).Distinct().Count() != Fields.Count) result.Errors.Add(new ErrorMessage("Field Names on fields must be unique."));
 
+            if(IsSummaryLevelData && !Fields.Select(fld=>fld.FieldName.ToLower() == "period" && fld.FieldType.Value == DeviceAdmin.Models.ParameterTypes.String).Any())
+            {
+                result.Errors.Add(new ErrorMessage("If the data stream is summary level data, it must contain a string field with the name period."));
+            }
+
             #region AWS Types
             if (StreamType.Value == DataStreamTypes.AWSElasticSearch ||
                 StreamType.Value == DataStreamTypes.AWSS3)
             {
-                if (string.IsNullOrEmpty(AwsAccessKey)) result.Errors.Add(new ErrorMessage("AWS Acceess Key is required for AWS Data Streams."));
+                if (EntityHeader.IsNullOrEmpty(SharedConnection))
+                {
+                    if (string.IsNullOrEmpty(AwsAccessKey)) result.Errors.Add(new ErrorMessage("AWS Acceess Key is required for AWS Data Streams."));
 
-                if ((action == Actions.Create) && string.IsNullOrEmpty(AwsSecretKey))
-                {
-                    result.Errors.Add(new ErrorMessage("AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest)."));
-                }
-                else if (string.IsNullOrEmpty(AwsSecretKey) && string.IsNullOrEmpty(AWSSecretKeySecureId))
-                {
-                    result.Errors.Add(new ErrorMessage("AWS Secret Key or SecretKeyId are required for AWS Data Streams, if you are updating and replacing the key you should provide the new AWSSecretKey otherwise you could return the original secret key id."));
+                    if ((action == Actions.Create) && string.IsNullOrEmpty(AwsSecretKey))
+                    {
+                        result.Errors.Add(new ErrorMessage("AWS Secret Key is required for AWS Data Streams (it will be encrypted at rest)."));
+                    }
+                    else if (string.IsNullOrEmpty(AwsSecretKey) && string.IsNullOrEmpty(AWSSecretKeySecureId))
+                    {
+                        result.Errors.Add(new ErrorMessage("AWS Secret Key or SecretKeyId are required for AWS Data Streams, if you are updating and replacing the key you should provide the new AWSSecretKey otherwise you could return the original secret key id."));
+                    }
+
+                    if (string.IsNullOrEmpty(AwsRegion))
+                    {
+                        result.Errors.Add(new ErrorMessage("AWS Region is a required field for AWS Data Streams."));
+                    }
+                    else
+                    {
+                        if (StreamType.Value == DataStreamTypes.AWSS3)
+                        {
+                            if (!AWSUtils.AWSS3Regions.Contains(AwsRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AwsRegion}] could not be found."));
+                        }
+                        else if (StreamType.Value == DataStreamTypes.AWSElasticSearch)
+                        {
+                            if (!AWSUtils.AWSESRegions.Contains(AwsRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AwsRegion}] could not be found."));
+                        }
+                    }
                 }
 
                 if (StreamType.Value == DataStreamTypes.AWSS3 && string.IsNullOrEmpty(S3BucketName)) result.Errors.Add(new ErrorMessage("Please Provide an S3 Bucket Name."));
@@ -327,33 +387,20 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     }
                     if (string.IsNullOrEmpty(ElasticSearchIndexName)) result.Errors.Add(new ErrorMessage("Elastic Search Index Name is required."));
                     if (string.IsNullOrEmpty(ElasticSearchTypeName)) result.Errors.Add(new ErrorMessage("Elastic Search Type Name is required."));
-
-
-                }
-
-                if (string.IsNullOrEmpty(AwsRegion))
-                {
-                    result.Errors.Add(new ErrorMessage("AWS Region is a required field for AWS Data Streams."));
-                }
-                else
-                {
-                    if (StreamType.Value == DataStreamTypes.AWSS3)
-                    {
-                        if (!AWSUtils.AWSS3Regions.Contains(AwsRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AwsRegion}] could not be found."));
-                    }
-                    else if (StreamType.Value == DataStreamTypes.AWSElasticSearch)
-                    {
-                        if (!AWSUtils.AWSESRegions.Contains(AwsRegion)) result.Errors.Add(new ErrorMessage($"Invalid AWS Region, Region [{AwsRegion}] could not be found."));
-                    }
                 }
             }
             #endregion
 
-            if (StreamType.Value == DataStreamTypes.Redis)
+            if (StreamType.Value == DataStreamTypes.Redis && EntityHeader.IsNullOrEmpty(SharedConnection))
             {
+                if(String.IsNullOrEmpty(RedisServerUris))
+                {
+                    result.Errors.Add(new ErrorMessage("REDIS Urls are required for a redis type of connection."));
+                }
+
                 if ((action == Actions.Create) && String.IsNullOrEmpty(RedisPassword))
                 {
-                    if (String.IsNullOrEmpty(RedisPassword)) result.Errors.Add(new ErrorMessage("Missing Passwrod."));
+                    if (String.IsNullOrEmpty(RedisPassword)) result.Errors.Add(new ErrorMessage("Missing Passwrod for REDIS connection."));
                 }
                 else if (String.IsNullOrEmpty(RedisPassword) && String.IsNullOrEmpty(RedisPasswordSecureId))
                 {
@@ -365,19 +412,23 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 StreamType.Value == DataStreamTypes.Postgresql ||
                 StreamType.Value == DataStreamTypes.PointArrayStorage)
             {
-                if (string.IsNullOrEmpty(DbURL)) result.Errors.Add(new ErrorMessage("URL of database server is required for a database data stream."));
-                if (string.IsNullOrEmpty(DbUserName)) result.Errors.Add(new ErrorMessage("Database User Name is required for a database data stream."));
-                if (string.IsNullOrEmpty(DbName)) result.Errors.Add(new ErrorMessage("Database Name is required for a database data stream."));
-                if (string.IsNullOrEmpty(DbTableName)) result.Errors.Add(new ErrorMessage("Database Table Name is required for a database data stream."));
-                
-                if (string.IsNullOrEmpty(DbPassword) && string.IsNullOrEmpty(DBPasswordSecureId))
+                if (EntityHeader.IsNullOrEmpty(SharedConnection))
                 {
-                    result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you should return the original secret key id."));
+                    if (string.IsNullOrEmpty(DbURL)) result.Errors.Add(new ErrorMessage("URL of database server is required for a database data stream."));
+                    if (string.IsNullOrEmpty(DbUserName)) result.Errors.Add(new ErrorMessage("Database User Name is required for a database data stream."));
+                    if (string.IsNullOrEmpty(DbName)) result.Errors.Add(new ErrorMessage("Database Name is required for a database data stream."));
+
+                    if (string.IsNullOrEmpty(DbPassword) && string.IsNullOrEmpty(DBPasswordSecureId))
+                    {
+                        result.Errors.Add(new ErrorMessage("Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you should return the original secret key id."));
+                    }
                 }
+
+                if (string.IsNullOrEmpty(DbTableName)) result.Errors.Add(new ErrorMessage("Database Table Name is required for a database data stream."));
             }
 
-            if (StreamType.Value == DataStreamTypes.Postgresql ||
-                StreamType.Value == DataStreamTypes.PointArrayStorage)
+            if ((StreamType.Value == DataStreamTypes.Postgresql ||
+                StreamType.Value == DataStreamTypes.PointArrayStorage) && EntityHeader.IsNullOrEmpty(SharedConnection))
             {
                 if (string.IsNullOrEmpty(DbSchema)) result.Errors.Add(new ErrorMessage("Database Schema is required for a Postgres database."));
             }
@@ -399,12 +450,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 if (string.IsNullOrEmpty(AzureEventHubEntityPath)) result.Errors.Add(new ErrorMessage("Entity path on event hub is a required field."));
             }
 
-            if (StreamType.Value == DataStreamTypes.AzureBlob || StreamType.Value == DataStreamTypes.AzureTableStorage)
+            if ((StreamType.Value == DataStreamTypes.AzureBlob || StreamType.Value == DataStreamTypes.AzureTableStorage) && EntityHeader.IsNullOrEmpty(SharedConnection))
             {
                 if (string.IsNullOrEmpty(AzureStorageAccountName)) result.Errors.Add(new ErrorMessage("Name of Azure Storage Account is Required."));
             }
 
-            if (StreamType.Value == DataStreamTypes.AzureEventHub || StreamType.Value == DataStreamTypes.AzureBlob || StreamType.Value == DataStreamTypes.AzureTableStorage)
+            if ((StreamType.Value == DataStreamTypes.AzureEventHub || StreamType.Value == DataStreamTypes.AzureBlob || StreamType.Value == DataStreamTypes.AzureTableStorage) && 
+                EntityHeader.IsNullOrEmpty(SharedConnection))
             {
                 if ((action == Actions.Create) && string.IsNullOrEmpty(AzureAccessKey))
                 {

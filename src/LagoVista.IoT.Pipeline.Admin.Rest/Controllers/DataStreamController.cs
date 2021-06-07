@@ -134,22 +134,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         }
 
         /// <summary>
-        /// Data Stream - Get Data for Device
-        /// </summary>
-        /// <param name="datastreamid"></param>
-        /// <param name="deviceid"></param>
-        /// <returns></returns>
-        [HttpGet("/api/datastream/{datastreamid}/data/{deviceid}")]
-        public async Task<ListResponse<DataStreamResult>> GetDataAsync(string datastreamid, string deviceid)
-        {
-            var dataStream = await _dataStreamManager.LoadFullDataStreamConfigurationAsync(datastreamid, OrgEntityHeader, UserEntityHeader);
-            
-            var connectorResult = DataStreamServices.GetConnector(dataStream.Result.StreamType.Value, _adminlogger);
-
-            return await _dataStreamManager.GetStreamDataAsync(dataStream.Result, connectorResult.Result, deviceid, OrgEntityHeader, UserEntityHeader, GetListRequestFromHeader());
-        }
-
-        /// <summary>
         /// Data Stream - Create New
         /// </summary>
         /// <returns></returns>
@@ -175,6 +159,50 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
             var field = DetailResponse<DataStreamField>.Create();
             field.Model.Id = Guid.NewGuid().ToId();
             return field;
-        }        
+        }
+
+        /// <summary>
+        /// Data Stream Retreive Secret
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("/api/datastream/{id}/secret")]
+        public Task<InvokeResult<string>> GetSecrets(String id)
+        {
+            return _dataStreamManager.GetDataStreamSecretAsync(id, OrgEntityHeader, UserEntityHeader);
+        }
+    }
+
+    /// <summary>
+    /// Device Stream Controller
+    /// </summary>
+    [Authorize]
+    public class DataStreamDataController : LagoVistaBaseController
+    {
+        IDataStreamManager _dataStreamManager;
+        IAdminLogger _adminlogger;
+
+        public DataStreamDataController(IDataStreamManager dataStreamManager, UserManager<AppUser> userManager, IAdminLogger logger) : base(userManager, logger)
+        {
+            _dataStreamManager = dataStreamManager;
+            _adminlogger = logger;
+        }
+
+        /// <summary>
+        /// Data Stream - Get Data for Device
+        /// </summary>
+        /// <param name="datastreamid"></param>
+        /// <param name="deviceid"></param>
+        /// <returns></returns>
+        [HttpGet("/api/datastream/{datastreamid}/data/{deviceid}")]
+        public async Task<ListResponse<DataStreamResult>> GetDataAsync(string datastreamid, string deviceid)
+        {
+            var dataStream = await _dataStreamManager.LoadFullDataStreamConfigurationAsync(datastreamid, OrgEntityHeader, UserEntityHeader);
+
+            var connectorResult = DataStreamServices.GetConnector(dataStream.Result.StreamType.Value, _adminlogger);
+
+            return await _dataStreamManager.GetStreamDataAsync(dataStream.Result, connectorResult.Result, deviceid, OrgEntityHeader, UserEntityHeader, GetListRequestFromHeader());
+        }
+
     }
 }
