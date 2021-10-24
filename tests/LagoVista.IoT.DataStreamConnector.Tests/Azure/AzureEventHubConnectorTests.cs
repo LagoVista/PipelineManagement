@@ -38,6 +38,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREEHACCESSKEY"),
             };
 
+            Assert.IsNotNull(_stream.AzureAccessKey);
+
             return _stream;
         }
 

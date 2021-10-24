@@ -193,14 +193,14 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             var result = Validator.Validate(stream, Actions.Create);
             AssertInvalidError(result.ToInvokeResult(), "Database Name is required for a database data stream.");
         }
-
+       
         [TestMethod]
         public void DataStreams_SQLServer_PasswordMissingOnInsert_InValid()
         {
             var stream = GetDataStream(DeviceAdmin.Models.ParameterTypes.String);
             stream.DbPassword = null;
             var result = Validator.Validate(stream, Actions.Create);
-            AssertInvalidError(result.ToInvokeResult(), "Database Password is required for a database data streams");
+            AssertInvalidError(result.ToInvokeResult(), "Database Password or SecretKeyId are required for a Database Data Streams, if you are updating and replacing the key you should provide the new Database Password otherwise you should return the original secret key id.");
         }       
 
         [TestMethod]

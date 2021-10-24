@@ -11,6 +11,7 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin;
+using System.Diagnostics;
 
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
@@ -244,7 +245,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         [TestMethod]
         public async Task DataStream_Manager_AzureBlob_Insert_Valid()
         {
-            await AzureInsertAsync(_org, DataStreamTypes.AzureBlob);
+              await AzureInsertAsync(_org, DataStreamTypes.AzureBlob);
         }
 
         [TestMethod]

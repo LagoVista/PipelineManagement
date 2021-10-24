@@ -30,8 +30,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 Key = "mykey",
                 Name = "My Name",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureBlob),
-                AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID"),
-                AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
+                AzureStorageAccountName = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCOUNTID"),
+                AzureAccessKey = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCESSKEY"),
                 CreationDate = DateTime.Now.ToJSONString(),
                 LastUpdatedDate = DateTime.Now.ToJSONString(),
                 CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
@@ -39,6 +39,9 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
                 AzureBlobStorageContainerName = "unittest" + Guid.NewGuid().ToId().ToLower()
             };
+
+            Assert.IsNotNull(_stream.AzureStorageAccountName);
+            Assert.IsNotNull(_stream.AzureAccessKey);
 
             return _stream;
         }
@@ -72,8 +75,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         public async Task TestCleanup()
         {
             var stream = GetValidStream();
-            stream.AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID");
-            stream.AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY");
+            stream.AzureStorageAccountName = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCOUNTID");
+            stream.AzureAccessKey = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCESSKEY");
             var container = GetBlobContainer(stream);
             if (await container.ExistsAsync())
             {
@@ -147,7 +150,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var stream = GetValidStream();
             stream.AzureAccessKey = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.");
+            AssertInvalidError(validationResult, "Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly including the signature.");
         }
 
          /* Test passes, but takes 50 seconds to run, not really critical */
@@ -157,7 +160,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var stream = GetValidStream();
             stream.AzureStorageAccountName = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "The remote name could not be resolved: 'isnottherightone.blob.core.windows.net'");
+            AssertInvalidError(validationResult, "No such host is known. (isnottherightone.blob.core.windows.net:443)");
         }
     }
 }

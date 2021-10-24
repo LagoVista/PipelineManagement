@@ -141,6 +141,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 stream.AzureAccessKey = _defaultConnectionSettings.DefaultInternalDataStreamConnectionSettingsTableStorage.AccessKey;
             }
 
+            this.ValidationCheck(stream, Actions.Create);
+
             if (stream.StreamType.Value == DataStreamTypes.AzureBlob ||
                 stream.StreamType.Value == DataStreamTypes.AzureEventHub ||
                 stream.StreamType.Value == DataStreamTypes.AzureTableStorage ||
@@ -223,7 +225,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 throw new Exception("New data stream Type was added, should likely add something here to store credentials.");
             }
 
-            this.ValidationCheck(stream, Actions.Create);
 
             await _dataStreamRepo.AddDataStreamAsync(stream);
             return InvokeResult.Success;

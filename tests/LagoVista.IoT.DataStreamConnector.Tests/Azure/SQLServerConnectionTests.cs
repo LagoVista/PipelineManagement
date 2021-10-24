@@ -68,6 +68,12 @@ CCREATE TABLE [dbo].[unittest](
                 TimestampFieldName = "timeStamp",
             };
 
+
+            Assert.IsNotNull(_stream.DbURL);
+            Assert.IsNotNull(_stream.DbUserName);
+            Assert.IsNotNull(_stream.DbPassword);
+            Assert.IsNotNull(_stream.DbName);
+
             _stream.Fields.Add(new DataStreamField()
             {
                 FieldName = "value1",
@@ -154,6 +160,12 @@ CCREATE TABLE [dbo].[unittest](
         public void TestCleanup()
         {
             var stream = GetValidStream();
+       
+            if (stream.DbTableName == "does not exist")
+            {
+                return;
+            }
+
             stream.DbPassword = System.Environment.GetEnvironmentVariable("SQLSERVERPWD");
 
             using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
@@ -171,7 +183,7 @@ CCREATE TABLE [dbo].[unittest](
             stream.DbName = "does not exist";
 
             var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            
+
             AssertInvalidError((await connector.InitAsync(stream)), @"Could not access SQL Server: Cannot open database ""does not exist"" requested by the login. The login failed.
 Login failed for user 'nuviotadmin'.");
         }
@@ -184,14 +196,20 @@ Login failed for user 'nuviotadmin'.");
             stream.DbTableName = "does not exist";
 
             var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            AssertInvalidError((await connector.InitAsync(stream)), "Table [does not exist] name not found on SQL Server database [UnitTestDB] on server [nuviot-dev.database.windows.net.");
+            AssertInvalidError((await connector.InitAsync(stream)), $"Table [does not exist] name not found on SQL Server database [{stream.DbName}] on server [nuviot-dev.database.windows.net.");
             stream.DbTableName = oldName;
         }
 
         private async Task<Pipeline.Admin.IDataStreamConnector> GetConnector(DataStream stream)
         {
             var connector = new DataStreamConnectors.SQLServerConnector(new Logging.Loggers.InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            Assert.IsTrue((await connector.InitAsync(stream)).Successful, "Invalid table schema");
+            var validation = (await connector.InitAsync(stream));
+            foreach (var err in validation.Errors)
+            {
+                Console.WriteLine(err.Message);
+            }
+            
+            Assert.IsTrue(validation.Successful, "Invalid table schema");
             return connector;
         }
 

@@ -46,6 +46,9 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
                 ElasticSearchDomainName = "https://search-nuviot-test-fsibnpqsw3mt7cjapjdqzbt3sq.us-east-1.es.amazonaws.com/"
             };
 
+            Assert.IsNotNull(stream.AwsAccessKey);
+            Assert.IsNotNull(stream.AwsSecretKey);
+
             return stream;
         }
 
@@ -189,7 +192,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             var stream = GetValidStream();
             stream.AwsSecretKey = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.. Call: Status code 403 from: HEAD /dontcare");
+            AssertInvalidError(validationResult, "Request failed to execute. Call: Status code 403 from: HEAD /dontcare");
         }
 
         [TestMethod]
@@ -198,7 +201,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             var stream = GetValidStream();
             stream.ElasticSearchDomainName = "https://search-nuviot-test-aaaaabbbbbbccccc.us-east-1.es.amazonaws.com/";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "The remote name could not be resolved: 'search-nuviot-test-aaaaabbbbbbccccc.us-east-1.es.amazonaws.com'. Call: Status code unknown from: HEAD /dontcare");
+            AssertInvalidError(validationResult, "No such host is known. (search-nuviot-test-aaaaabbbbbbccccc.us-east-1.es.amazonaws.com:443)");
         }
 
         [TestMethod]

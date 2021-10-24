@@ -45,8 +45,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 LastUpdatedDate = DateTime.Now.ToJSONString(),
                 CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
-                AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID"),
-                AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
+                AzureStorageAccountName = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCOUNTID"),
+                AzureAccessKey = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCESSKEY"),
                 AzureTableStorageName = "unittesttable" + Guid.NewGuid().ToId(),
             };
 
@@ -95,8 +95,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         public async Task Cleanup()
         {
             var stream = GetValidStream();
-            stream.AzureStorageAccountName = System.Environment.GetEnvironmentVariable("AZUREACCOUNTID");
-            stream.AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY");
+            stream.AzureStorageAccountName = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCOUNTID");
+            stream.AzureAccessKey = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCESSKEY");
 
             var cloudTable = GetCloudTable(stream);
             if (await cloudTable.ExistsAsync())
@@ -279,7 +279,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var stream = GetValidStream();
             stream.AzureAccessKey = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "The remote server returned an error: (403) Forbidden.");
+            AssertInvalidError(validationResult, "Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly including the signature.");
         }
 
         [TestMethod]
@@ -288,7 +288,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var stream = GetValidStream();
             stream.AzureStorageAccountName = "isnottherightone";
             var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "The remote name could not be resolved: 'isnottherightone.table.core.windows.net'");
+            AssertInvalidError(validationResult, "No such host is known. (isnottherightone.table.core.windows.net:443)");
         }       
     }
 }
