@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Pipeline.Admin.Managers;
+using Azure.Data.Tables;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -18,8 +19,7 @@ namespace LagoVista.IoT.DataStreamConnectors
     {
         DataStream _stream;
         readonly ILogger _logger;
-        CloudTableClient _tableClient;
-        CloudTable _cloudTable;
+        TableClient _cloudTable;
 
         public AzureTableStorageConnector(IInstanceLogger logger)
         {
@@ -71,25 +71,23 @@ namespace LagoVista.IoT.DataStreamConnectors
 
         public async Task<InvokeResult> InitAsync(DataStream stream)
         {
-            var credentials = new StorageCredentials(stream.AzureStorageAccountName, stream.AzureAccessKey);
-            var account = new CloudStorageAccount(credentials, true);
+            var accountName = stream.AzureStorageAccountName;
+            var accountKey = stream.AzureAccessKey;
+            var tableName = stream.AzureTableStorageName;
 
-            _stream = stream;
-            _tableClient = account.CreateCloudTableClient();
+            if (String.IsNullOrEmpty(accountName)) throw new ArgumentNullException(nameof(accountName));
+            if (String.IsNullOrEmpty(accountKey)) throw new ArgumentNullException(nameof(accountKey));
+            if (String.IsNullOrEmpty(tableName)) throw new ArgumentNullException(nameof(tableName));
 
-            _cloudTable = _tableClient.GetTableReference(stream.AzureTableStorageName);
-
+            var connectionString = $"DefaultEndpointsProtocol=https;AccountName={accountName};AccountKey={accountKey}";
+            _cloudTable = new TableClient(connectionString, tableName);
+            
             try
             {
-                var opContext = new OperationContext();
-                var options = new TableRequestOptions()
-                {
-                    ServerTimeout = TimeSpan.FromSeconds(15)
-                };
                 await _cloudTable.CreateIfNotExistsAsync();
                 return InvokeResult.Success;
             }
-            catch (StorageException ex)
+            catch (Exception ex)
             {
                 _logger.AddException("AzureTableStorageConnector_InitAsync", ex);
                 return InvokeResult.FromException("AzureTableStorageConnector_InitAsync", ex);
@@ -110,6 +108,8 @@ namespace LagoVista.IoT.DataStreamConnectors
         public Task<InvokeResult> AddItemAsync(DataStreamRecord item)
         {
             var tsItem = Models.DataStreamTSEntity.FromDeviceStreamRecord(_stream, item);
+
+            _cloudTable.AddEntityAsync(tsItem.TSEntity);
             return ExecWithRetry(TableOperation.Insert(tsItem));
         }
 

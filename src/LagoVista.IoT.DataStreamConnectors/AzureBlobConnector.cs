@@ -1,4 +1,6 @@
-﻿using LagoVista.Core;
+﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using LagoVista.Core;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
@@ -9,6 +11,8 @@ using LagoVista.IoT.Pipeline.Admin.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.DataStreamConnectors
@@ -17,15 +21,12 @@ namespace LagoVista.IoT.DataStreamConnectors
     {
         DataStream _stream;
         ILogger _logger;
-        CloudBlobClient _cloudBlobClient;
-        CloudBlobContainer _container;
+        BlobContainerClient _containerClient;
 
-        private CloudBlobClient CreateBlobClient(DataStream stream)
+        private BlobServiceClient CreateBlobContainerClient(DataStream stream)
         {
-            var baseuri = $"https://{stream.AzureStorageAccountName}.blob.core.windows.net";
-
-            var uri = new Uri(baseuri);
-            return new CloudBlobClient(uri, new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(stream.AzureStorageAccountName, stream.AzureAccessKey));
+            var connectionString = $"DefaultEndpointsProtocol=https;AccountName={stream.AzureStorageAccountName};AccountKey={stream.AzureAccessKey}";
+            return  new BlobServiceClient(connectionString);
         }
 
         public AzureBlobConnector(IInstanceLogger instanceLogger)
@@ -43,37 +44,37 @@ namespace LagoVista.IoT.DataStreamConnectors
             return InitAsync(stream);
         }
 
-        public async Task<InvokeResult> InitAsync(DataStream stream)
+        public Task<InvokeResult> InitAsync(DataStream stream)
         {
             _stream = stream;
 
-            _cloudBlobClient = CreateBlobClient(_stream);
-            _container = _cloudBlobClient.GetContainerReference(_stream.AzureBlobStorageContainerName);
+            var cloudBlobClient = CreateBlobContainerClient(_stream);
+            
             try
             {
-                Microsoft.WindowsAzure.Storage.NameValidator.ValidateContainerName(_stream.AzureBlobStorageContainerName);
-
-                var options = new BlobRequestOptions()
+                string patternContainer = @"^[a-z0-9-]{3,63}$";
+                if (!Regex.IsMatch(_stream.AzureBlobStorageContainerName, patternContainer))
                 {
-                    MaximumExecutionTime = TimeSpan.FromSeconds(15)
-                };
+                    _logger.AddCustomEvent(LogLevel.Error, "AzureBlobConnector_InitAsync", $"Invalid Container Name [{patternContainer}], please refer to Azure naming specs");
+                    var result = InvokeResult.FromError("AzureBlobConnector_InitAsync", $"Invalid Container Name [{patternContainer}], please refer to Azure naming specs");
+                }
 
-                var opContext = new OperationContext();
-                await _container.CreateIfNotExistsAsync(options, opContext);
 
-                return InvokeResult.Success;
+                _containerClient = cloudBlobClient.GetBlobContainerClient(_stream.AzureBlobStorageContainerName);
+
+                return Task.FromResult(InvokeResult.Success);
             }
             catch (ArgumentException ex)
             {
                 _logger.AddException("AzureBlobConnector_InitAsync", ex);
                 var result = InvokeResult.FromException("AzureBlobConnector_InitAsync", ex);
-                return result;
+                return Task.FromResult(result);
             }
-            catch (StorageException ex)
+            catch (Exception ex)
             {
                 _logger.AddException("AzureBlobConnector_InitAsync", ex);
                 var result = InvokeResult.FromException("AzureBlobConnector_InitAsync", ex);
-                return result;
+                return Task.FromResult(result);
             }
         }
 
@@ -99,9 +100,11 @@ namespace LagoVista.IoT.DataStreamConnectors
             item.Data.Add("dataStreamId", _stream.Id);
 
             var fileName = $"{recordId}.json";
-            var blob = _container.GetBlockBlobReference(fileName);
-            blob.Properties.ContentType = "application/json";
             var json = JsonConvert.SerializeObject(item.Data);
+            var blobClient = _containerClient.GetBlobClient(fileName);
+
+            var header = new BlobHttpHeaders { ContentType = "application/json" };
+
 
             var numberRetries = 5;
             var retryCount = 0;
@@ -110,7 +113,10 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 try
                 {
-                    await blob.UploadTextAsync(json);
+                    var blobResponse = await blobClient.UploadAsync(json, new BlobUploadOptions { HttpHeaders = header });
+                    var statusCode = blobResponse.GetRawResponse().Status;
+                    if (statusCode < 200 || statusCode > 299)
+                        throw new InvalidOperationException($"Invalid response Code {statusCode}");
                 }
                 catch (Exception ex)
                 {

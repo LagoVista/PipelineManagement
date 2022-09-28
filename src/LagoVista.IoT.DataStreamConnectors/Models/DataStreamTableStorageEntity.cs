@@ -1,51 +1,53 @@
 ﻿using LagoVista.IoT.Pipeline.Admin.Models;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using LagoVista.Core;
+using Azure.Data.Tables;
+using Azure;
 
 namespace LagoVista.IoT.DataStreamConnectors.Models
 {
 
-    public class DataStreamTSEntity : TableEntity
+    public class DataStreamTSEntity
     {
-        public Dictionary<string, object> Data { get; set; }
+        TableEntity _entity;
 
-        public override IDictionary<string, EntityProperty> WriteEntity(OperationContext operationContext)
+        public DataStreamTSEntity()
         {
-            var results = base.WriteEntity(operationContext);
-            foreach (var item in Data)
-            {
-                if (item.Value != null)
-                {
-                    if (item.Value.GetType() == typeof(Double) ||
-                       item.Value.GetType() == typeof(Single) ||
-                        item.Value.GetType() == typeof(Decimal))
-                    {
-                        results.Add(item.Key, new EntityProperty(Convert.ToDouble(item.Value)));
-                    }
-                    else if (item.Value.GetType() == typeof(Byte) ||
-                        item.Value.GetType() == typeof(short) ||
-                        item.Value.GetType() == typeof(int) ||
-                        item.Value.GetType() == typeof(long))
-                    {
-                        results.Add(item.Key, new EntityProperty(Convert.ToInt32(item.Value)));
-                    }
-                    else
-                    {
-                        results.Add(item.Key, new EntityProperty(item.Value.ToString()));
-                    }
-                }
-            }
+            _entity = new TableEntity();
+        }
 
-            return results;
+        public Dictionary<string, object> Data { get; set; }
+        public string PartitionKey { get; set; }
+        public string RowKey { get; set; }
+        public DateTimeOffset? Timestamp { get; set; }
+        public ETag ETag { get; set; }
+
+
+        public TableEntity TSEntity
+        {
+            get
+            {
+                var tableEntity = new TableEntity()
+                {
+                    RowKey = RowKey,
+                    PartitionKey = PartitionKey,
+
+                };
+
+                foreach(var prop in Data)
+                {
+                    tableEntity.Add(prop.Key, prop.Value);
+                }
+
+                return tableEntity;
+            }
         }
 
         public static DataStreamTSEntity FromDeviceStreamRecord(DataStream stream, DataStreamRecord record)
         {
-            if(String.IsNullOrEmpty(record.Timestamp))
+            if (String.IsNullOrEmpty(record.Timestamp))
             {
                 record.Timestamp = DateTime.UtcNow.ToJSONString();
             }
