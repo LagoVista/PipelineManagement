@@ -1,10 +1,10 @@
-﻿using LagoVista.Core;
+﻿using Azure.Storage.Blobs;
+using LagoVista.Core;
 using LagoVista.Core.Models;
 using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -46,29 +46,33 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             return _stream;
         }
 
-        private CloudBlobContainer GetBlobContainer(DataStream straem)
+        private async Task<BlobContainerClient> GetBlobContainer(DataStream straem)
         {
             var stream = GetValidStream();
 
             var baseuri = $"https://{stream.AzureStorageAccountName}.blob.core.windows.net";
+            var connectionString = $"DefaultEndpointsProtocol=https;AccountName={stream.AzureStorageAccountName};AccountKey={stream.AzureAccessKey}";
+            var blobClient = new BlobServiceClient(connectionString);
+            try
+            {
+                var blobContainerClient = blobClient.GetBlobContainerClient(stream.AzureBlobStorageContainerName);
+                await blobContainerClient.CreateIfNotExistsAsync();
+                return blobContainerClient;
+            }
+            catch (Exception)
+            {
+                var container = await blobClient.CreateBlobContainerAsync(stream.AzureBlobStorageContainerName);
 
-            var uri = new Uri(baseuri);
-            var client = new CloudBlobClient(uri, new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(stream.AzureStorageAccountName, stream.AzureAccessKey));
-
-            return client.GetContainerReference(_stream.AzureBlobStorageContainerName);
+                return container.Value;
+            }
         }
 
         [TestInitialize]
         public async Task TestInit()
         {
             var stream = GetValidStream();
-            var container = GetBlobContainer(stream);
-            if (await container.ExistsAsync())
-            {
-                await container.DeleteAsync();
-            }
-
-            Assert.IsFalse(await container.ExistsAsync());
+            var container = await GetBlobContainer(stream);
+            Assert.IsTrue(await container.ExistsAsync());
         }
 
         [TestCleanup]
@@ -77,7 +81,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             var stream = GetValidStream();
             stream.AzureStorageAccountName = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCOUNTID");
             stream.AzureAccessKey = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCESSKEY");
-            var container = GetBlobContainer(stream);
+            var container = await GetBlobContainer(stream);
+
             if (await container.ExistsAsync())
             {
                 await container.DeleteAsync();
@@ -93,7 +98,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
             var connector = new AzureBlobConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             Assert.IsTrue((await connector.InitAsync(stream)).Successful);
-        }        
+        }
 
         [TestMethod]
         public async Task DataStream_Azure_Blob_Insert()
@@ -105,22 +110,21 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                  new KeyValuePair<string, object>("pointTwo", 58.6),
                  new KeyValuePair<string, object>("pointThree", "testing"));
 
-            var container = GetBlobContainer(stream);
+            var container = await GetBlobContainer(stream);
             var fileName = $"{record.Data["id"]}.json";
-            var blob = container.GetBlobReference(fileName);
 
-            using (var ms = new MemoryStream())               
+            var blobClient = container.GetBlobClient(fileName);
+
+            using (var ms = new MemoryStream())
             {
-                await blob.DownloadToStreamAsync(ms);
-                using (var rdr = new StreamReader(ms))
-                {
-                    ms.Seek(0, SeekOrigin.Begin);
-                    var json = rdr.ReadToEnd();
-                    var contents = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-                    Assert.AreEqual(contents["pointOne"], 37.5);
-                    Assert.AreEqual(contents["pointTwo"], 58.6);
-                    Assert.AreEqual(contents["pointThree"], "testing");
-                }
+                var result = await blobClient.DownloadContentAsync();
+                var buffer = result.Value.Content;
+                var json = System.Text.ASCIIEncoding.ASCII.GetString(buffer);
+
+                var contents = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+                Assert.AreEqual(contents["pointOne"], 37.5);
+                Assert.AreEqual(contents["pointTwo"], 58.6);
+                Assert.AreEqual(contents["pointThree"], "testing");
             }
         }
 
@@ -153,7 +157,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             AssertInvalidError(validationResult, "Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly including the signature.");
         }
 
-         /* Test passes, but takes 50 seconds to run, not really critical */
+        /* Test passes, but takes 50 seconds to run, not really critical */
         [TestMethod]
         public async Task DataStream_Azure_Blob_ValidateConnection_InvalidAccountId_Invalid()
         {

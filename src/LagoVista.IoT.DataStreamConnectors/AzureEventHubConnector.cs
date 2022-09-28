@@ -1,4 +1,6 @@
-﻿using LagoVista.Core;
+﻿using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
+using LagoVista.Core;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
@@ -7,7 +9,6 @@ using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
-using Microsoft.Azure.EventHubs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace LagoVista.IoT.DataStreamConnectors
         ILogger _logger;
 
         const string EhConnectionString = "Endpoint=sb://{0}.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={1}";
-        EventHubClient _eventHubClient;
+        EventHubProducerClient _eventHubClient;
 
         public AzureEventHubConnector(IInstanceLogger instanceLogger)
         {
@@ -39,12 +40,8 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             _stream = stream;
 
-            var bldr = new EventHubsConnectionStringBuilder(string.Format(EhConnectionString, stream.AzureEventHubName, stream.AzureAccessKey))
-            {
-                EntityPath = stream.AzureEventHubEntityPath
-            };
-
-            _eventHubClient = EventHubClient.CreateFromConnectionString(bldr.ToString());
+            var connectionString = string.Format(EhConnectionString, stream.AzureEventHubName, stream.AzureAccessKey);
+            _eventHubClient = new EventHubProducerClient(connectionString, stream.AzureEventHubEntityPath);
 
             return Task<InvokeResult>.FromResult(InvokeResult.Success);
         }
@@ -91,7 +88,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 try
                 {
-                    await _eventHubClient.SendAsync(eventData);
+                    await _eventHubClient.SendAsync(new List<EventData>() { eventData });
                 }
                 catch (Exception ex)
                 {

@@ -44,7 +44,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             return InitAsync(stream);
         }
 
-        public Task<InvokeResult> InitAsync(DataStream stream)
+        public async Task<InvokeResult> InitAsync(DataStream stream)
         {
             _stream = stream;
 
@@ -61,20 +61,21 @@ namespace LagoVista.IoT.DataStreamConnectors
 
 
                 _containerClient = cloudBlobClient.GetBlobContainerClient(_stream.AzureBlobStorageContainerName);
+                await _containerClient.CreateIfNotExistsAsync();
 
-                return Task.FromResult(InvokeResult.Success);
+                return InvokeResult.Success;
             }
             catch (ArgumentException ex)
             {
                 _logger.AddException("AzureBlobConnector_InitAsync", ex);
                 var result = InvokeResult.FromException("AzureBlobConnector_InitAsync", ex);
-                return Task.FromResult(result);
+                return result;
             }
             catch (Exception ex)
             {
                 _logger.AddException("AzureBlobConnector_InitAsync", ex);
                 var result = InvokeResult.FromException("AzureBlobConnector_InitAsync", ex);
-                return Task.FromResult(result);
+                return result;
             }
         }
 
@@ -113,7 +114,8 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 try
                 {
-                    var blobResponse = await blobClient.UploadAsync(json, new BlobUploadOptions { HttpHeaders = header });
+                    var buffer = System.Text.ASCIIEncoding.ASCII.GetBytes(json);
+                    var blobResponse = await blobClient.UploadAsync(new BinaryData(buffer), new BlobUploadOptions { HttpHeaders = header });
                     var statusCode = blobResponse.GetRawResponse().Status;
                     if (statusCode < 200 || statusCode > 299)
                         throw new InvalidOperationException($"Invalid response Code {statusCode}");

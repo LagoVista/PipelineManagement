@@ -10,6 +10,7 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Models;
+using Microsoft.Data.SqlClient;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 {
@@ -135,7 +136,7 @@ CCREATE TABLE [dbo].[unittest](
             stream.DbURL = System.Environment.GetEnvironmentVariable("SQLSERVERURL");
             stream.DbPassword = System.Environment.GetEnvironmentVariable("SQLSERVERPWD");
 
-            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            var builder = new SqlConnectionStringBuilder();
             builder.Add("Data Source", stream.DbURL);
             builder.Add("Initial Catalog", stream.DbName);
             builder.Add("User Id", stream.DbUserName);
@@ -148,8 +149,8 @@ CCREATE TABLE [dbo].[unittest](
         {
             var stream = GetValidStream();
 
-            using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
-            using (var cmd = new System.Data.SqlClient.SqlCommand($"delete from {stream.DbTableName}", cn))
+            using (var cn = new SqlConnection(GetConnectionString(stream)))
+            using (var cmd = new SqlCommand($"delete from {stream.DbTableName}", cn))
             {
                 cn.Open();
                 cmd.ExecuteNonQuery();
@@ -168,8 +169,8 @@ CCREATE TABLE [dbo].[unittest](
 
             stream.DbPassword = System.Environment.GetEnvironmentVariable("SQLSERVERPWD");
 
-            using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
-            using (var cmd = new System.Data.SqlClient.SqlCommand($"delete from {stream.DbTableName}", cn))
+            using (var cn = new SqlConnection(GetConnectionString(stream)))
+            using (var cmd = new SqlCommand($"delete from {stream.DbTableName}", cn))
             {
                 cn.Open();
                 cmd.ExecuteNonQuery();
@@ -238,8 +239,8 @@ Login failed for user 'nuviotadmin'.");
                 new KeyValuePair<string, object>("value3", 88.6),
                 new KeyValuePair<string, object>("location", "-28.700123,100.443322"));
 
-            using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
-            using (var cmd = new System.Data.SqlClient.SqlCommand($"select * from {stream.DbTableName} where customid = @customid", cn))
+            using (var cn = new SqlConnection(GetConnectionString(stream)))
+            using (var cmd = new SqlCommand($"select * from {stream.DbTableName} where customid = @customid", cn))
             {
                 cmd.Parameters.AddWithValue("@customid", customId);
                 cn.Open();
@@ -271,8 +272,8 @@ Login failed for user 'nuviotadmin'.");
                     new KeyValuePair<string, object>("location", "-28.700123,100.443322"));
             }
 
-            using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
-            using (var cmd = new System.Data.SqlClient.SqlCommand($"select count(*) from {stream.DbTableName}", cn))
+            using (var cn = new SqlConnection(GetConnectionString(stream)))
+            using (var cmd = new SqlCommand($"select count(*) from {stream.DbTableName}", cn))
             {
                 cn.Open();
                 var rdr = await cmd.ExecuteReaderAsync();
@@ -285,8 +286,8 @@ Login failed for user 'nuviotadmin'.");
         {
             var records = base.GetRecordsToInsert(stream, deviceId, rangeType);
             var insertCommand = "insert into [unittest] (value1,value2,value3,customid,location,deviceId,timeStamp,pointindex) values (@value1,@value2,@value3,@customid,@location,@deviceId,@timeStamp,@pointindex)";
-            using (var cn = new System.Data.SqlClient.SqlConnection(GetConnectionString(stream)))
-            using (var cmd = new System.Data.SqlClient.SqlCommand(insertCommand, cn))
+            using (var cn = new SqlConnection(GetConnectionString(stream)))
+            using (var cmd = new SqlCommand(insertCommand, cn))
             {
                 cmd.Parameters.AddWithValue("value1", 100);
                 cmd.Parameters.AddWithValue("value2", 100);

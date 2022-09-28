@@ -30,12 +30,12 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 Name = "My Name",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureEventHub),
                 AzureEventHubEntityPath = "unittesteh",
-                AzureEventHubName = "nuviot-dev",
+                AzureEventHubName = System.Environment.GetEnvironmentVariable("TEST_EH_ACCESS_KEY"),
                 CreationDate = DateTime.Now.ToJSONString(),
                 LastUpdatedDate = DateTime.Now.ToJSONString(),
                 CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
-                AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREEHACCESSKEY"),
+                AzureAccessKey = System.Environment.GetEnvironmentVariable("TEST_EH_ACCESS_KEY"),
             };
 
             Assert.IsNotNull(_stream.AzureAccessKey);

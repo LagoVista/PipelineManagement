@@ -25,7 +25,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
     [TestClass]
     public class AWSElasticsearchTests : DataStreamConnectorTestBase
     {
-        private DataStream GetValidStream()
+        private Pipeline.Admin.Models.DataStream GetValidStream()
         {
             var stream = new Pipeline.Admin.Models.DataStream()
             {
@@ -52,7 +52,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             return stream;
         }
 
-        private async Task<IDataStreamConnector> GetConnector(DataStream stream)
+        private async Task<IDataStreamConnector> GetConnector(Pipeline.Admin.Models.DataStream stream)
         {
             var connector = new AWSElasticSearchConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
             Assert.IsTrue((await connector.InitAsync(stream)).Successful);
@@ -129,7 +129,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.AWS
             }
         }
 
-        private async Task BulkInsert(IDataStreamConnector connector, DataStream stream, string deviceType, QueryRangeType rangeType)
+        private async Task BulkInsert(IDataStreamConnector connector, Pipeline.Admin.Models.DataStream stream, string deviceType, QueryRangeType rangeType)
         {
             var records = GetRecordsToInsert(stream, "dev123", rangeType);
             foreach (var record in records)

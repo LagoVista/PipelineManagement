@@ -12,6 +12,7 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Pipeline.Admin.Managers;
 using Azure.Data.Tables;
+using System.Linq.Expressions;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -31,7 +32,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             _logger = logger;
         }
 
-        protected async Task<InvokeResult> ExecWithRetry(TableOperation operation, int numberRetries = 5)
+        protected async Task<InvokeResult> ExecWithRetry(Func<Task<Azure.Response>> method, int numberRetries = 5)
         {
             var retryCount = 0;
             var completed = false;
@@ -39,11 +40,11 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 try
                 {
-                    var execResult = await _cloudTable.ExecuteAsync(operation);
-                    completed = (execResult.HttpStatusCode == 200 || execResult.HttpStatusCode == 204);
+                    var execResult = await method();
+                    completed = (execResult.Status == 200 || execResult.Status == 204);
                     if (!completed)
                     {
-                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureTableStorageConnector_ExecWithRetry", "HTTP Error Adding PEM", execResult.HttpStatusCode.ToString().ToKVP("httpStatusCode"), retryCount.ToString().ToKVP("retryCount"));
+                        _logger.AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel.Warning, "AzureTableStorageConnector_ExecWithRetry", "HTTP Error Adding PEM", execResult.Status.ToString().ToKVP("httpStatusCode"), retryCount.ToString().ToKVP("retryCount"));
                     }
                 }
                 catch (Exception ex)
@@ -105,17 +106,16 @@ namespace LagoVista.IoT.DataStreamConnectors
             return AddItemAsync(item);
         }
 
-        public Task<InvokeResult> AddItemAsync(DataStreamRecord item)
+        public async Task<InvokeResult> AddItemAsync(DataStreamRecord item)
         {
             var tsItem = Models.DataStreamTSEntity.FromDeviceStreamRecord(_stream, item);
 
-            _cloudTable.AddEntityAsync(tsItem.TSEntity);
-            return ExecWithRetry(TableOperation.Insert(tsItem));
+            return await ExecWithRetry(() => _cloudTable.AddEntityAsync(tsItem.TSEntity));
         }
 
         public async Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
-        {
-            var filter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.PartitionKey), QueryComparisons.Equal, deviceId);
+        {            
+            Expression<Func<TableEntity, bool>> query = tbl => tbl.PartitionKey == deviceId;
 
             var dateFilter = String.Empty;
 
@@ -125,29 +125,34 @@ namespace LagoVista.IoT.DataStreamConnectors
                 var startRowKey = request.StartDate.ToDateTime().ToInverseTicksRowKey();
                 var endRowKey = request.EndDate.ToDateTime().ToInverseTicksRowKey();
 
-                dateFilter = TableQuery.CombineFilters(
-                    TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.LessThanOrEqual, startRowKey.ToString()),
-                    TableOperators.And,
-                    TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.GreaterThanOrEqual, endRowKey.ToString())
-                    );
+                Expression<Func<TableEntity, bool>> query2 = tbl => String.Compare(tbl.RowKey,startRowKey.ToString()) < 0;
+                Expression<Func<TableEntity, bool>> query3 = tbl => String.Compare(tbl.RowKey, endRowKey.ToString()) > 0;
+
+                var finalQuery = Expression<TableEntity>.Add(Expression<TableEntity>.Add(query,query2),query3);
+                query = Expression.Lambda<Func<TableEntity, bool>>( finalQuery);
+
             }
             else if (String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.EndDate))
-            {
+            {                
                 var endRowKey = request.EndDate.ToDateTime().ToInverseTicksRowKey();
-                dateFilter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.GreaterThanOrEqual, endRowKey.ToString());
+                Expression<Func<TableEntity, bool>> query3 = tbl => String.Compare(tbl.RowKey, endRowKey.ToString()) > 0;
+                var finalQuery = Expression<TableEntity>.Add(query, query3);
+                query = Expression.Lambda<Func<TableEntity, bool>>(finalQuery);
             }
             else if (String.IsNullOrEmpty(request.EndDate) && !String.IsNullOrEmpty(request.StartDate))
             {
                 var startRowKey = request.StartDate.ToDateTime().ToInverseTicksRowKey();
-                dateFilter = TableQuery.GenerateFilterCondition(nameof(Models.DataStreamTSEntity.RowKey), QueryComparisons.LessThanOrEqual, startRowKey.ToString());
+                Expression<Func<TableEntity, bool>> query2 = tbl => String.Compare(tbl.RowKey, startRowKey.ToString()) < 0;
+                var finalQuery = Expression<TableEntity>.Add(query, query2);
+                query = Expression.Lambda<Func<TableEntity, bool>>(finalQuery);
             }
 
-            if (!String.IsNullOrEmpty(dateFilter))
-            {
-                filter = TableQuery.CombineFilters(filter, TableOperators.And, dateFilter);
-            }
+            //if (!String.IsNullOrEmpty(dateFilter))
+            //{
+            //    filter = TableQuery.CombineFilters(filter, TableOperators.And, dateFilter);
+            //}
 
-            var query = new TableQuery<DynamicTableEntity>().Where(filter).Take(request.PageSize);
+            //var query = new TableQuery<DynamicTableEntity>().Where(filter).Take(request.PageSize);
 
             var numberRetries = 5;
             var retryCount = 0;
@@ -156,58 +161,58 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 try
                 {
-                    TableQuerySegment<DynamicTableEntity> results;
-                    if (!String.IsNullOrEmpty(request.NextPartitionKey) && !String.IsNullOrEmpty(request.NextRowKey))
-                    {
-                        var token = new TableContinuationToken()
-                        {
-                            NextPartitionKey = request.NextPartitionKey,
-                            NextRowKey = request.NextRowKey
-                        };
+                    //TableQuerySegment<DynamicTableEntity> results;
+                    //if (!String.IsNullOrEmpty(request.NextPartitionKey) && !String.IsNullOrEmpty(request.NextRowKey))
+                    //{
+                    //    var token = new TableContinuationToken()
+                    //    {
+                    //        NextPartitionKey = request.NextPartitionKey,
+                    //        NextRowKey = request.NextRowKey
+                    //    };
 
-                        results = await _cloudTable.ExecuteQuerySegmentedAsync<DynamicTableEntity>(query, token);
-                    }
-                    else
-                    {
-                        results = await _cloudTable.ExecuteQuerySegmentedAsync<DynamicTableEntity>(query, new TableContinuationToken());
-                    }
+                     var    results = _cloudTable.QueryAsync<TableEntity>(query);
+                    //}
+                    //else
+                    //{
+                       //var  results = await _cloudTable.ExecuteQuerySegmentedAsync<DynamicTableEntity>(query, new TableContinuationToken());
+                    //}
 
-                    var listResponse = new ListResponse<DataStreamResult>
-                    {
-                        NextRowKey = results.ContinuationToken?.NextRowKey,
-                        NextPartitionKey = results.ContinuationToken?.NextPartitionKey,
-                        PageSize = results.Count(),
-                        HasMoreRecords = results.ContinuationToken != null,
-                    };
+                    //var listResponse = new ListResponse<DataStreamResult>
+                    //{
+                    //    NextRowKey = results.ContinuationToken?.NextRowKey,
+                    //    NextPartitionKey = results.ContinuationToken?.NextPartitionKey,
+                    //    PageSize = results.Count(),
+                    //    HasMoreRecords = results.ContinuationToken != null,
+                    //};
 
-                    var resultSet = new List<DataStreamResult>();
+                    //var resultSet = new List<DataStreamResult>();
 
-                    foreach (var item in results)
-                    {
-                        var result = new DataStreamResult();
-                        foreach (var property in item.Properties)
-                        {
-                            result.Add(property.Key, property.Value.PropertyAsObject);
-                        }
+                    //foreach (var item in results)
+                    //{
+                    //    var result = new DataStreamResult();
+                    //    foreach (var property in item.Properties)
+                    //    {
+                    //        result.Add(property.Key, property.Value.PropertyAsObject);
+                    //    }
 
-                        switch (_stream.DateStorageFormat.Value)
-                        {
-                            case DateStorageFormats.Epoch:
-                                long epoch = Convert.ToInt64(item.Properties[_stream.TimestampFieldName]);
-                                result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(epoch).DateTime.ToJSONString();
-                                break;
-                            case DateStorageFormats.ISO8601:
-                                result.Timestamp = item.Properties[_stream.TimestampFieldName].StringValue.ToDateTime().ToJSONString();
-                                break;
-                        }
+                    //    switch (_stream.DateStorageFormat.Value)
+                    //    {
+                    //        case DateStorageFormats.Epoch:
+                    //            long epoch = Convert.ToInt64(item.Properties[_stream.TimestampFieldName]);
+                    //            result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(epoch).DateTime.ToJSONString();
+                    //            break;
+                    //        case DateStorageFormats.ISO8601:
+                    //            result.Timestamp = item.Properties[_stream.TimestampFieldName].StringValue.ToDateTime().ToJSONString();
+                    //            break;
+                    //    }
 
-                        resultSet.Add(result);
-                    }
+                    //    resultSet.Add(result);
+                    //}
 
 
-                    listResponse.Model = resultSet;
+//                    listResponse.Model = resultSet;
 
-                    return listResponse;
+                    return new ListResponse<DataStreamResult>();
                 }
                 catch (Exception ex)
                 {
