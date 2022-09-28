@@ -5,10 +5,10 @@ using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -36,7 +36,7 @@ namespace LagoVista.IoT.DataStreamConnectors
         {
             var result = new InvokeResult();
 
-            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            var builder = new SqlConnectionStringBuilder();
             builder.Add("Data Source", stream.DbURL);
             builder.Add("Initial Catalog", stream.DbName);
             builder.Add("User Id", stream.DbUserName);
@@ -60,8 +60,8 @@ from sysobjects a
 
             var fields = new List<SQLFieldMetaData>();
 
-            using (var cn = new System.Data.SqlClient.SqlConnection(_connectionString))
-            using (var cmd = new System.Data.SqlClient.SqlCommand(sql, cn))
+            using (var cn = new SqlConnection(_connectionString))
+            using (var cmd = new SqlCommand(sql, cn))
             {
                 cmd.Parameters.AddWithValue("@tableName", stream.DbTableName);
                 try
@@ -105,7 +105,7 @@ from sysobjects a
         {
             _stream = stream;
 
-            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            var builder = new SqlConnectionStringBuilder();
             builder.Add("Data Source", stream.DbURL);
             builder.Add("Initial Catalog", stream.DbName);
             builder.Add("User Id", stream.DbUserName);
@@ -163,8 +163,8 @@ from sysobjects a
 
             var sql = $"insert into [{_stream.DbTableName}] ({fields}) values ({values})";
 
-            using (var cn = new System.Data.SqlClient.SqlConnection(_connectionString))
-            using (var cmd = new System.Data.SqlClient.SqlCommand(sql, cn))
+            using (var cn = new SqlConnection(_connectionString))
+            using (var cmd = new SqlCommand(sql, cn))
             {
                 cmd.CommandType = System.Data.CommandType.Text;
 
@@ -262,8 +262,8 @@ from sysobjects a
 
             var responseItems = new List<DataStreamResult>();
 
-            using (var cn = new System.Data.SqlClient.SqlConnection(_connectionString))
-            using (var cmd = new System.Data.SqlClient.SqlCommand(sql.ToString(), cn))
+            using (var cn = new SqlConnection(_connectionString))
+            using (var cmd = new SqlCommand(sql.ToString(), cn))
             {
                 cmd.Parameters.AddWithValue("@deviceId", deviceId);
                 cmd.Parameters.AddWithValue("@PageSize", request.PageSize);

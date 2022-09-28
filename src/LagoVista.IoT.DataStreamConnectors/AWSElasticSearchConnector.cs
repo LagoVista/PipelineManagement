@@ -19,7 +19,7 @@ namespace LagoVista.IoT.DataStreamConnectors
 {
     public class AWSElasticSearchConnector : IDataStreamConnector
     {
-        DataStream _stream;
+        Pipeline.Admin.Models.DataStream _stream;
         AwsHttpConnection _connection;
         ILogger _logger;
 
@@ -35,7 +35,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             _logger = instanceLogger;
         }
 
-        public async Task<InvokeResult> ValidateConnectionAsync(DataStream stream)
+        public async Task<InvokeResult> ValidateConnectionAsync(Pipeline.Admin.Models.DataStream stream)
         {
             var result = await InitAsync(stream);
             if (!result.Successful) return result;
@@ -61,7 +61,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
         }
 
-        public Task<InvokeResult> InitAsync(DataStream stream)
+        public Task<InvokeResult> InitAsync(Pipeline.Admin.Models.DataStream stream)
         {
             var options = new CredentialProfileOptions
             {

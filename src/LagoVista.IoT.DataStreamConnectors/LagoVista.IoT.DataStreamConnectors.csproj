@@ -1,21 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="3.7.0.14" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.0.15" />
-    <PackageReference Include="Elasticsearch.Net" Version="7.12.0" />
-    <PackageReference Include="Elasticsearch.Net.Aws" Version="7.0.6" />
-    <PackageReference Include="LagoVista.Core" Version="2.1.1478-beta0515" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="2.1.1478-beta0515" />
-    <PackageReference Include="Microsoft.Azure.EventHubs" Version="4.3.1" />
-    <PackageReference Include="Microsoft.Spatial" Version="7.8.3" />
-    <PackageReference Include="NEST" Version="7.12.0" />
-    <PackageReference Include="Npgsql" Version="5.0.4" />
-    <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+    <PackageReference Include="AWSSDK.Core" Version="3.7.13.12" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.9.61" />
+    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.7.2" />
+    <PackageReference Include="Elasticsearch.Net" Version="7.17.4" />
+    <PackageReference Include="Elasticsearch.Net.Aws" Version="7.2.2" />
+    <PackageReference Include="LagoVista.Core" Version="3.0.1960.0726" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.1960.0726" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Spatial" Version="7.12.3" />
+    <PackageReference Include="NEST" Version="7.17.4" />
+    <PackageReference Include="Npgsql" Version="6.0.7" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.66" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.Admin\LagoVista.IoT.Pipeline.Admin.csproj" />
