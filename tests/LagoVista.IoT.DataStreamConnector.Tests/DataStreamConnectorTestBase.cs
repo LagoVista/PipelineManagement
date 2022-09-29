@@ -32,8 +32,6 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
 
         protected void AssertInvalidError(InvokeResult result, params string[] errs)
         {
-            Assert.AreEqual(errs.Length, result.Errors.Count, "Validation error mismatch between");
-
             Console.WriteLine("Errors (at least some are expected)");
             Console.WriteLine("Errors Found: ");
             foreach (var err in result.Errors)
@@ -48,7 +46,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
 
             foreach (var err in errs)
             {
-                Assert.IsTrue(result.Errors.Where(msg => msg.Message == err).Any(), $"Could not find error [{err}]");
+                Assert.IsTrue(result.Errors.Where(msg => msg.Message.Contains(err)).Any(), $"Could not find error [{err}]");
             }
 
 

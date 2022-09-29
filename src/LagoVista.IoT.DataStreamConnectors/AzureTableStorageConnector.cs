@@ -13,6 +13,8 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Pipeline.Admin.Managers;
 using Azure.Data.Tables;
 using System.Linq.Expressions;
+using LagoVista.IoT.DataStreamConnectors.Models;
+using Azure;
 
 namespace LagoVista.IoT.DataStreamConnectors
 {
@@ -82,7 +84,9 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             var connectionString = $"DefaultEndpointsProtocol=https;AccountName={accountName};AccountKey={accountKey}";
             _cloudTable = new TableClient(connectionString, tableName);
-            
+
+            _stream = stream;
+
             try
             {
                 await _cloudTable.CreateIfNotExistsAsync();
@@ -114,8 +118,8 @@ namespace LagoVista.IoT.DataStreamConnectors
         }
 
         public async Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, LagoVista.Core.Models.UIMetaData.ListRequest request)
-        {            
-            Expression<Func<TableEntity, bool>> query = tbl => tbl.PartitionKey == deviceId;
+        {
+            AsyncPageable<TableEntity> pageable = null;
 
             var dateFilter = String.Empty;
 
@@ -125,34 +129,26 @@ namespace LagoVista.IoT.DataStreamConnectors
                 var startRowKey = request.StartDate.ToDateTime().ToInverseTicksRowKey();
                 var endRowKey = request.EndDate.ToDateTime().ToInverseTicksRowKey();
 
-                Expression<Func<TableEntity, bool>> query2 = tbl => String.Compare(tbl.RowKey,startRowKey.ToString()) < 0;
-                Expression<Func<TableEntity, bool>> query3 = tbl => String.Compare(tbl.RowKey, endRowKey.ToString()) > 0;
-
-                var finalQuery = Expression<TableEntity>.Add(Expression<TableEntity>.Add(query,query2),query3);
-                query = Expression.Lambda<Func<TableEntity, bool>>( finalQuery);
-
+                pageable = _cloudTable.QueryAsync<TableEntity>(tbl =>
+                   String.Compare(tbl.RowKey, startRowKey.ToString()) < 0 &&
+                   String.Compare(tbl.RowKey, endRowKey.ToString()) > 0 &&
+                      tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
             }
             else if (String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.EndDate))
-            {                
+            {
                 var endRowKey = request.EndDate.ToDateTime().ToInverseTicksRowKey();
-                Expression<Func<TableEntity, bool>> query3 = tbl => String.Compare(tbl.RowKey, endRowKey.ToString()) > 0;
-                var finalQuery = Expression<TableEntity>.Add(query, query3);
-                query = Expression.Lambda<Func<TableEntity, bool>>(finalQuery);
+                pageable = _cloudTable.QueryAsync<TableEntity>(tbl => String.Compare(tbl.RowKey, endRowKey.ToString()) > 0 &&
+                     tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
+
             }
             else if (String.IsNullOrEmpty(request.EndDate) && !String.IsNullOrEmpty(request.StartDate))
             {
                 var startRowKey = request.StartDate.ToDateTime().ToInverseTicksRowKey();
-                Expression<Func<TableEntity, bool>> query2 = tbl => String.Compare(tbl.RowKey, startRowKey.ToString()) < 0;
-                var finalQuery = Expression<TableEntity>.Add(query, query2);
-                query = Expression.Lambda<Func<TableEntity, bool>>(finalQuery);
+                pageable = _cloudTable.QueryAsync<TableEntity>(tbl => String.Compare(tbl.RowKey, startRowKey.ToString()) < 0 &&
+                     tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
             }
-
-            //if (!String.IsNullOrEmpty(dateFilter))
-            //{
-            //    filter = TableQuery.CombineFilters(filter, TableOperators.And, dateFilter);
-            //}
-
-            //var query = new TableQuery<DynamicTableEntity>().Where(filter).Take(request.PageSize);
+            else
+                pageable = _cloudTable.QueryAsync<TableEntity>(tbl => tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
 
             var numberRetries = 5;
             var retryCount = 0;
@@ -161,58 +157,52 @@ namespace LagoVista.IoT.DataStreamConnectors
             {
                 try
                 {
-                    //TableQuerySegment<DynamicTableEntity> results;
-                    //if (!String.IsNullOrEmpty(request.NextPartitionKey) && !String.IsNullOrEmpty(request.NextRowKey))
-                    //{
-                    //    var token = new TableContinuationToken()
-                    //    {
-                    //        NextPartitionKey = request.NextPartitionKey,
-                    //        NextRowKey = request.NextRowKey
-                    //    };
+                    var records = new List<DataStreamResult>();
+                    var response = new ListResponse<DataStreamResult>();
 
-                     var    results = _cloudTable.QueryAsync<TableEntity>(query);
-                    //}
-                    //else
-                    //{
-                       //var  results = await _cloudTable.ExecuteQuerySegmentedAsync<DynamicTableEntity>(query, new TableContinuationToken());
-                    //}
+                    if (String.IsNullOrEmpty(request.NextRowKey))
+                    {
+                        var pages = pageable.AsPages().GetAsyncEnumerator();
 
-                    //var listResponse = new ListResponse<DataStreamResult>
-                    //{
-                    //    NextRowKey = results.ContinuationToken?.NextRowKey,
-                    //    NextPartitionKey = results.ContinuationToken?.NextPartitionKey,
-                    //    PageSize = results.Count(),
-                    //    HasMoreRecords = results.ContinuationToken != null,
-                    //};
+                        if (await pages.MoveNextAsync())
+                        {
+                            var pageOne = pages.Current.Values;
 
-                    //var resultSet = new List<DataStreamResult>();
+                            foreach (var value in pageOne)
+                            {
+                                records.Add((new DataStreamTSEntity(value)).ToDataStreamResult(_stream));
+                            }
 
-                    //foreach (var item in results)
-                    //{
-                    //    var result = new DataStreamResult();
-                    //    foreach (var property in item.Properties)
-                    //    {
-                    //        result.Add(property.Key, property.Value.PropertyAsObject);
-                    //    }
+                            if (pages.Current.ContinuationToken != null)
+                            {
+                                response.NextRowKey = pages.Current.ContinuationToken;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        await using (var enumerator = pageable.AsPages(request.NextRowKey).GetAsyncEnumerator())
+                        {
+                            await enumerator.MoveNextAsync();
+                            var currentResult = enumerator.Current;
 
-                    //    switch (_stream.DateStorageFormat.Value)
-                    //    {
-                    //        case DateStorageFormats.Epoch:
-                    //            long epoch = Convert.ToInt64(item.Properties[_stream.TimestampFieldName]);
-                    //            result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(epoch).DateTime.ToJSONString();
-                    //            break;
-                    //        case DateStorageFormats.ISO8601:
-                    //            result.Timestamp = item.Properties[_stream.TimestampFieldName].StringValue.ToDateTime().ToJSONString();
-                    //            break;
-                    //    }
+                            foreach (var value in currentResult.Values)
+                            {
+                                records.Add((new DataStreamTSEntity(value)).ToDataStreamResult(_stream));
+                            }
 
-                    //    resultSet.Add(result);
-                    //}
+                            if (currentResult.ContinuationToken != null)
+                            {
+                                response.NextRowKey = currentResult.ContinuationToken;
+                            }
+                        }
+                    }
 
+                    response.HasMoreRecords = !String.IsNullOrEmpty(response.NextRowKey);
+                    response.Model = records;
+                    response.PageSize = records.Count;
+                    return response;
 
-//                    listResponse.Model = resultSet;
-
-                    return new ListResponse<DataStreamResult>();
                 }
                 catch (Exception ex)
                 {
@@ -262,4 +252,3 @@ namespace LagoVista.IoT.DataStreamConnectors
         }
     }
 }
- 

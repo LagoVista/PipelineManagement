@@ -35,14 +35,12 @@ namespace LagoVista.IoT.DataStreamConnectors
             _logger = adminLogger;
         }
 
-
         public Task<InvokeResult> InitAsync(DataStream stream)
         {
             _stream = stream;
 
             var connectionString = string.Format(EhConnectionString, stream.AzureEventHubName, stream.AzureAccessKey);
             _eventHubClient = new EventHubProducerClient(connectionString, stream.AzureEventHubEntityPath);
-
             return Task<InvokeResult>.FromResult(InvokeResult.Success);
         }
 

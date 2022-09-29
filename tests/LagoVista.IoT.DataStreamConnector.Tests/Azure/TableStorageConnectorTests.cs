@@ -12,6 +12,7 @@ using LagoVista.Core;
 using System.Threading.Tasks;
 using LagoVista.Core.Models;
 using Azure.Data.Tables;
+using System.Linq.Expressions;
 
 namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 {
@@ -126,6 +127,50 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
             }
         }
 
+        private async Task<List<DataStreamResult>> GetRecords(DataStream stream, Expression<Func<TableEntity, bool>> filter)
+        {
+            var records = new List<DataStreamResult>();
+            var cloudTable = await GetCloudTable(stream);
+
+            var query = cloudTable.QueryAsync<TableEntity>(filter);
+            var pages = query.AsPages().GetAsyncEnumerator();
+
+            if (await pages.MoveNextAsync())
+            {
+                var pageOne = pages.Current.Values;
+
+                foreach (var value in pageOne)
+                {
+                    var result = new DataStreamResult();
+                    foreach (var property in value)
+                    {
+                        result.Add(property.Key, value[property.Key]);
+                    }
+
+                    switch (stream.DateStorageFormat.Value)
+                    {
+                        case DateStorageFormats.Epoch:
+                            long epoch = Convert.ToInt64(value[stream.TimestampFieldName]);
+                            result.Timestamp = DateTimeOffset.FromUnixTimeSeconds(epoch).DateTime.ToJSONString();
+                            break;
+                        case DateStorageFormats.ISO8601:
+                            result.Timestamp = value[stream.TimestampFieldName].ToString().ToDateTime().ToJSONString();
+                            break;
+                    }
+
+                    records.Add(result);
+
+                }
+
+                if (pages.Current.ContinuationToken != null)
+                {
+
+                }
+            }
+
+            return records;
+        }
+
             [TestMethod]
         public async Task DataStream_Azure_TableStorage_CreateRecord()
         {
@@ -140,27 +185,21 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 new KeyValuePair<string, object>("uniqueId", uniqueId),
                 new KeyValuePair<string, object>("pointThree", "testing"));
 
-            var cloudTable = GetCloudTable(stream);
-/*            var recIdQuery = TableQuery.GenerateFilterCondition("uniqueId", QueryComparisons.Equal, uniqueId);
-
-            var query = new TableQuery().Where(recIdQuery);
-
-            var queryResult = (await cloudTable.ExecuteQuerySegmentedAsync(query, new TableContinuationToken()));
+            var records = await GetRecords(stream, tbl => tbl.PartitionKey == record.DeviceId);
+            Assert.AreEqual(1, records.Count);
 
 
-            Assert.AreEqual(uniqueId, queryResult.First().Properties["uniqueId"].PropertyAsObject);
-            Assert.AreEqual("abc123", queryResult.First().Properties[stream.DeviceIdFieldName].PropertyAsObject);*/
+            Assert.AreEqual(uniqueId, records.First()["uniqueId"]);
+            Assert.AreEqual("abc123", records.First()[stream.DeviceIdFieldName]);
         }
-        /*
-
+       
         [TestMethod]
         public async Task DataStream_Azure_TableStorage_Validate_PaginatedItems()
         {
             var deviceId = "dev123";
 
             var stream = GetValidStream();
-            var cloudTable = GetCloudTable(stream);
-            var batchOper = new TableBatchOperation();
+            var cloudTable = await GetCloudTable(stream);
 
             var connector = await GetConnector(stream);
 
@@ -174,23 +213,16 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                     new KeyValuePair<string, object>("uniqueId", Guid.NewGuid().ToId()),
                     new KeyValuePair<string, object>("pointThree", "testing"));
 
-                batchOper.Add(TableOperation.Insert(DataStreamTSEntity.FromDeviceStreamRecord(stream, record)));
+                await connector.AddItemAsync(record);
             }
-
-            var results = await cloudTable.ExecuteBatchAsync(batchOper);
-            Assert.AreEqual(100, results.Count, "Batch result size should match insert size");
-            foreach (var result in results)
-            {
-                Assert.AreEqual(204, result.HttpStatusCode);
-            }
-
+ 
             var getResult = await connector.GetItemsAsync(deviceId, new Core.Models.UIMetaData.ListRequest() { PageSize = 15 });
 
             Assert.IsTrue(getResult.Successful);
             WriteResult(getResult);
 
             Assert.AreEqual("99", getResult.Model.ToArray()[0].Where(fld => fld.Key == "pointIndex").First().Value.ToString());
-            Assert.IsTrue(getResult.HasMoreRecords, "Should Have Records");
+            Assert.IsTrue(getResult.HasMoreRecords, "Should Have More Records then First PageRecords");
             WriteResult(getResult);
 
             for (var idx = 0; idx < 5; ++idx)
@@ -216,87 +248,76 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
 
         private async Task BulkInsert(IDataStreamConnector connector, DataStream stream, string deviceType, QueryRangeType rangeType)
         {
-            var batchOper = new TableBatchOperation();
-            var cloudTable = GetCloudTable(stream);
             var records = GetRecordsToInsert(stream, "dev123", rangeType);
+
             foreach (var record in records)
             {
-                var tsRecord = DataStreamTSEntity.FromDeviceStreamRecord(stream, record);
-                batchOper.Add(TableOperation.Insert(tsRecord));
-                Console.WriteLine(tsRecord.RowKey);
+                await connector.AddItemAsync(record);
             }
-
-            var results = await cloudTable.ExecuteBatchAsync(batchOper);
-            Assert.AreEqual(records.Count, results.Count, "Batch result size should match insert size");
-            foreach (var result in results)
-            {
-                Assert.AreEqual(204, result.HttpStatusCode);
-            }
-            // Give it just a little time to insert the rest of the records
-            await Task.Delay(1000);
         }
 
 
-        [TestMethod]
-        public async Task DataStream_Azure_TableStorage_DateFiltereBefore()
-        {
-            var stream = GetValidStream();
-            var connector = await GetConnector(stream);
-            var deviceId = "dev123";
 
-            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForBeforeQuery);
+       [TestMethod]
+       public async Task DataStream_Azure_TableStorage_DateFiltereBefore()
+       {
+           var stream = GetValidStream();
+           var connector = await GetConnector(stream);
+           var deviceId = "dev123";
 
-            await ValidateDataFilterBefore(deviceId, stream, connector);
-        }
+           await BulkInsert(connector, stream, deviceId, QueryRangeType.ForBeforeQuery);
 
-        [TestMethod]
-        public async Task DataStream_Azure_TableStorage_DateFilteredInRange()
-        {
-            var stream = GetValidStream();
-            var connector = await GetConnector(stream);
-            var deviceId = "dev123";
+           await ValidateDataFilterBefore(deviceId, stream, connector);
+       }
 
-            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForInRangeQuery);
+       [TestMethod]
+       public async Task DataStream_Azure_TableStorage_DateFilteredInRange()
+       {
+           var stream = GetValidStream();
+           var connector = await GetConnector(stream);
+           var deviceId = "dev123";
 
-            await ValidateDataFilterInRange("dev123", stream, connector);
-        }
+           await BulkInsert(connector, stream, deviceId, QueryRangeType.ForInRangeQuery);
 
-        [TestMethod]
-        public async Task DataStream_Azure_TableStorage_DateFilteredAfter()
-        {
-            var stream = GetValidStream();
-            var connector = await GetConnector(stream);
-            var deviceId = "dev123";
+           await ValidateDataFilterInRange("dev123", stream, connector);
+       }
 
-            await BulkInsert(connector, stream, deviceId, QueryRangeType.ForAfterQuery);
+       [TestMethod]
+       public async Task DataStream_Azure_TableStorage_DateFilteredAfter()
+       {
+           var stream = GetValidStream();
+           var connector = await GetConnector(stream);
+           var deviceId = "dev123";
 
-            await ValidateDataFilterAfter("dev123", stream, connector);
-        }
+           await BulkInsert(connector, stream, deviceId, QueryRangeType.ForAfterQuery);
 
-        [TestMethod]
-        public async Task DataStream_Azure_TableStorage_ValidateConnection_Valid()
-        {
-            var stream = GetValidStream();
-            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertSuccessful(validationResult);
-        }
+           await ValidateDataFilterAfter("dev123", stream, connector);
+       }
 
-        [TestMethod]
-        public async Task DataStream_Azure_TableStorage_ValidateConnection_BadCredentials_Invalid()
-        {
-            var stream = GetValidStream();
-            stream.AzureAccessKey = "isnottherightone";
-            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly including the signature.");
-        }
+       [TestMethod]
+       public async Task DataStream_Azure_TableStorage_ValidateConnection_Valid()
+       {
+           var stream = GetValidStream();
+           var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+           AssertSuccessful(validationResult);
+       }
 
-        [TestMethod]
-        public async Task DataStream_Azure_TableStorage_ValidateConnection_InvalidAccountId_Invalid()
-        {
-            var stream = GetValidStream();
-            stream.AzureStorageAccountName = "isnottherightone";
-            var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
-            AssertInvalidError(validationResult, "No such host is known. (isnottherightone.table.core.windows.net:443)");
-        }*/
+       [TestMethod]
+       public async Task DataStream_Azure_TableStorage_ValidateConnection_BadCredentials_Invalid()
+       {
+           var stream = GetValidStream();
+           stream.AzureAccessKey = "isnottherightone";
+           var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+           AssertInvalidError(validationResult, "Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly including the signature.");
+       }
+
+       [TestMethod]
+       public async Task DataStream_Azure_TableStorage_ValidateConnection_InvalidAccountId_Invalid()
+       {
+           var stream = GetValidStream();
+           stream.AzureStorageAccountName = "isnottherightone";
+           var validationResult = await DataStreamValidator.ValidateDataStreamAsync(stream, new AdminLogger(new Utils.LogWriter()));
+           AssertInvalidError(validationResult, "No such host is known. (isnottherightone.table.core.windows.net:443)");
+       }
     }
 }

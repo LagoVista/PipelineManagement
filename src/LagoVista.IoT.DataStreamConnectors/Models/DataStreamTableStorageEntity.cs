@@ -18,6 +18,11 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
             _entity = new TableEntity();
         }
 
+        public DataStreamTSEntity(TableEntity entity)
+        {
+            TSEntity = entity;
+        }
+
         public Dictionary<string, object> Data { get; set; }
         public string PartitionKey { get; set; }
         public string RowKey { get; set; }
@@ -42,6 +47,19 @@ namespace LagoVista.IoT.DataStreamConnectors.Models
                 }
 
                 return tableEntity;
+            }
+            set
+            {
+                RowKey = value.RowKey;
+                PartitionKey = value.PartitionKey;
+                Data = new Dictionary<string, object>();
+                ETag = value.ETag;
+                Timestamp = value.Timestamp;
+
+                foreach(var key in value.Keys)
+                {
+                    Data.Add(key, value[key]);
+                }
             }
         }
 
