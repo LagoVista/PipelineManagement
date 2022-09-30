@@ -30,7 +30,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 Name = "My Name",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureEventHub),
                 AzureEventHubEntityPath = "unittesteh",
-                AzureEventHubName = System.Environment.GetEnvironmentVariable("TEST_EH_ACCESS_KEY"),
+                AzureEventHubName = System.Environment.GetEnvironmentVariable("TEST_EH_ACCOUNT_ID"),
                 CreationDate = DateTime.Now.ToJSONString(),
                 LastUpdatedDate = DateTime.Now.ToJSONString(),
                 CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),

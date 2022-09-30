@@ -22,7 +22,7 @@ namespace LagoVista.IoT.DataStreamConnectors
         DataStream _stream;
         ILogger _logger;
 
-        const string EhConnectionString = "Endpoint=sb://{0}.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={1}";
+        const string EhConnectionString = "Endpoint=sb://{0}.servicebus.windows.net/;SharedAccessKeyName={1};SharedAccessKey={2}";
         EventHubProducerClient _eventHubClient;
 
         public AzureEventHubConnector(IInstanceLogger instanceLogger)

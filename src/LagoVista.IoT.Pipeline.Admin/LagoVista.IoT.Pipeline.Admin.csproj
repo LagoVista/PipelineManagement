@@ -3,14 +3,14 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="3.0.1961.0455" />
-    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.1961.0455" />
-    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="3.0.1961.0455" />
-    <PackageReference Include="LagoVista.UserAdmin" Version="3.0.1961.0455" />
-    <PackageReference Include="LagoVista.AI" Version="3.0.1961.0455" />
-    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="3.0.1961.0455" />
+    <PackageReference Include="LagoVista.Core" Version="3.0.1962.0830" />
+    <PackageReference Include="LagoVista.Core.Authentication" Version="3.0.1962.0830" />
+    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="3.0.1962.0830" />
+    <PackageReference Include="LagoVista.UserAdmin" Version="3.0.1962.0830" />
+    <PackageReference Include="LagoVista.AI" Version="3.0.1962.0830" />
+    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="3.0.1962.0830" />
     <PackageReference Include="Npgsql" Version="6.0.7" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.1961.0455" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.1962.0830" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>

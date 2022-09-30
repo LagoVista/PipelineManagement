@@ -20,7 +20,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AzureBlob,
         //[EnumLabel(DataStream.StreamType_AzureBlob_Managed, PipelineAdminResources.Names.DataStream_StreamType_AzureBlob_Managed, typeof(PipelineAdminResources))]
         //AzureBlob_Managed,
-        [EnumLabel(DataStream.StreamType_AzureEventHub, PipelineAdminResources.Names.DataStream_StreamType_AzureEventHub, typeof(PipelineAdminResources))]
+        [EnumLabel(DataStream.StreamType_AzureEventHub,  PipelineAdminResources.Names.DataStream_StreamType_AzureEventHub, typeof(PipelineAdminResources))]
         AzureEventHub,
         [EnumLabel(DataStream.StreamType_AzureTableStorage, PipelineAdminResources.Names.DataStream_StreamType_TableStorage, typeof(PipelineAdminResources))]
         AzureTableStorage,

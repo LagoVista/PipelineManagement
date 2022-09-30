@@ -92,7 +92,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests
         protected async Task<DataStreamRecord> AddObject(IDataStreamConnector connector, DataStream stream, string deviceId, string timeStamp, params KeyValuePair<string, object>[] items)
         {
             var record = GetRecord(stream, deviceId, timeStamp, items);
-            var addResult = await connector.AddItemAsync(record);
+                var addResult = await connector.AddItemAsync(record);
 
             if (!addResult.Successful)
             {
