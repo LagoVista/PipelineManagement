@@ -7,11 +7,7 @@
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="3.0.1962.0830" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.1962.0830" />
-    <PackageReference Include="LagoVista.IoT.Web.Common" Version="3.0.1962.0830" />
-    <PackageReference Include="LagoVista.UserAdmin" Version="3.0.1962.0830" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="LagoVista.IoT.Web.Common" Version="3.0.1963.1145" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.DataStreamConnectors\LagoVista.IoT.DataStreamConnectors.csproj" />
