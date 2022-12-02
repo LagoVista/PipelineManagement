@@ -122,6 +122,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             AsyncPageable<TableEntity> pageable = null;
 
             var dateFilter = String.Empty;
+            request.PageSize = Math.Min(1000, request.PageSize);
 
             /* FYI - less than and greater than are reversed because the data is inserted wiht row keys in descending order */
             if (!String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.EndDate))
@@ -133,6 +134,8 @@ namespace LagoVista.IoT.DataStreamConnectors
                    String.Compare(tbl.RowKey, startRowKey.ToString()) < 0 &&
                    String.Compare(tbl.RowKey, endRowKey.ToString()) > 0 &&
                       tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
+
+                Console.WriteLine($"[AzureTableStorageConnector__GetItemsAsync] - {deviceId} {request.PageSize} - {request.StartDate} - {request.EndDate} {startRowKey} - {endRowKey}");
             }
             else if (String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.EndDate))
             {
@@ -140,15 +143,21 @@ namespace LagoVista.IoT.DataStreamConnectors
                 pageable = _cloudTable.QueryAsync<TableEntity>(tbl => String.Compare(tbl.RowKey, endRowKey.ToString()) > 0 &&
                      tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
 
+                Console.WriteLine($"[AzureTableStorageConnector__GetItemsAsync] - {deviceId} {request.PageSize} - {request.EndDate} - {endRowKey}");
             }
             else if (String.IsNullOrEmpty(request.EndDate) && !String.IsNullOrEmpty(request.StartDate))
             {
                 var startRowKey = request.StartDate.ToDateTime().ToInverseTicksRowKey();
                 pageable = _cloudTable.QueryAsync<TableEntity>(tbl => String.Compare(tbl.RowKey, startRowKey.ToString()) < 0 &&
                      tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
+
+                Console.WriteLine($"[AzureTableStorageConnector__GetItemsAsync] - {deviceId} {request.PageSize} {request.StartDate} - {startRowKey}");
             }
             else
+            {
+                Console.WriteLine($"[AzureTableStorageConnector__GetItemsAsync] - {deviceId} {request.PageSize}");
                 pageable = _cloudTable.QueryAsync<TableEntity>(tbl => tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
+            }             
 
             var numberRetries = 5;
             var retryCount = 0;
