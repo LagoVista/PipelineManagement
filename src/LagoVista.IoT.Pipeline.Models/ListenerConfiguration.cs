@@ -32,6 +32,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Listener, PipelineAdminResources.Names.ConnectionType_MQTT_Listener, typeof(PipelineAdminResources))]
         MQTTListener,
+
         [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_Client, PipelineAdminResources.Names.Connection_Type_MQTT_Client, typeof(PipelineAdminResources))]
         MQTTClient,
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawTCP, PipelineAdminResources.Names.Connection_Type_TCP, typeof(PipelineAdminResources))]
@@ -115,6 +116,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ListenerTypes_REDIS = "redis";
         public const string ListenerTypes_Kafka = "kafka";
         public const string ListenerTypes_MQTT_Broker = "mqttbroker";
+        public const string ListenerTypes_MQTT_Shared = "sharedmqttlistener";
         public const string ListenerTypes_MQTT_Listener = "mqttlistener";
         public const string ListenerTypes_MQTT_Client = "mqttclient";
         public const string ListenerTypes_POP3Server = "pop3server";

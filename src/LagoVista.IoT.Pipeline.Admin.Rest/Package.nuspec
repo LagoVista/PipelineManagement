@@ -2,23 +2,23 @@
 <package>
   <metadata>
     <id>LagoVista.IoT.Pipeline.Admin.Rest</id>
-    <version>3.0.2049.0908</version>
+    <version>3.0.2055.1054</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Provides a set of REST Services for working with Pipeline Module Configurations for the LagoVista Devices, IoT and Home Automation Frameworks</description>
-    <copyright>Copyright Software Logistics - 2022</copyright>
+    <copyright>Copyright Software Logistics - 2023</copyright>
     <tags>HomeAutomation IoT Cloud LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 12/26/2022 2:08:26 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 1/1/2023 3:54:34 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net6.0">
-        <dependency id="LagoVista.IoT.Web.Common" version="3.0.2049.0908" />
-        <dependency id="LagoVista.IoT.DataStreamConnectors" version="3.0.2049.0908" />
-        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.2049.0908" />
+        <dependency id="LagoVista.IoT.Web.Common" version="3.0.2055.1054" />
+        <dependency id="LagoVista.IoT.DataStreamConnectors" version="3.0.2055.1054" />
+        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.2055.1054" />
       </group>
     </dependencies>
   </metadata>
