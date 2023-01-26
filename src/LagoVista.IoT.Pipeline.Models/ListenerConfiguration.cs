@@ -6,6 +6,7 @@ using LagoVista.IoT.DeviceMessaging.Admin.Models;
 using LagoVista.IoT.DeviceMessaging.Admin.Resources;
 using LagoVista.IoT.DeviceMessaging.Models.Resources;
 using LagoVista.IoT.Pipeline.Admin.Resources;
+using LagoVista.IoT.Pipeline.Models;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [EnumLabel(ListenerConfiguration.ListenerTypes_Kafka, PipelineAdminResources.Names.Connection_Type_Kafka, typeof(PipelineAdminResources))]
         Kafka,
-        
+
         [EnumLabel(ListenerConfiguration.ListenerTypes_RawUdp, PipelineAdminResources.Names.Connection_Type_UDP, typeof(PipelineAdminResources))]
         RawUDP,
 
@@ -87,7 +88,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [EnumLabel(ListenerConfiguration.RESTServerType_HTTP, PipelineAdminResources.Names.Listener_RESTServerType_HTTP, typeof(PipelineAdminResources))]
         HTTP,
         [EnumLabel(ListenerConfiguration.RESTServerType_HTTPS, PipelineAdminResources.Names.Listener_RESTServerType_HTTPS, typeof(PipelineAdminResources))]
-        HTTPS,     
+        HTTPS,
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
@@ -227,7 +228,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string Origin { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_DefaultResponse, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources))]
-        public string DefaultResponse {get; set; }
+        public string DefaultResponse { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_FailedResponse, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources))]
         public string FailedResponse { get; set; }
@@ -328,14 +329,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     }
                     if (!ConnectToPort.HasValue) result.AddUserError("Please provide a port that your MQTT Client will connect, usually 1883 or 8883 (SSL).");
                     MqttSubscriptions.RemoveAll(sub => string.IsNullOrEmpty(sub.Topic));
-                    if (!MqttSubscriptions.Any()) result.AddUserError("Please ensure you provide at least one subscription (including wildcards + and #) that will be monitored for incoming messages.");                    
+                    if (!MqttSubscriptions.Any()) result.AddUserError("Please ensure you provide at least one subscription (including wildcards + and #) that will be monitored for incoming messages.");
 
                     break;
                 case ListenerTypes.WebSocket:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for an Azure Service Bus Listener, this is the host name of your Event Hub without the sb:// protocol.");
                     if (HostName != null && HostName.ToLower().StartsWith("wss://")) HostName = HostName.Substring(5);
                     if (HostName != null && HostName.ToLower().StartsWith("ws://")) HostName = HostName.Substring(4);
-                    if (!string.IsNullOrEmpty(Path) && !Path.StartsWith("/")) Path = "/" + Path; 
+                    if (!string.IsNullOrEmpty(Path) && !Path.StartsWith("/")) Path = "/" + Path;
 
                     if (!Anonymous)
                     {
@@ -362,13 +363,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     }
                     if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your MQTT listenr will listen for incoming messages, usually 1883.");
                     break;
-                    /*
-                case ListenerTypes.MQTTBroker:
-                    break; 
-                case ListenerTypes.RabbitMQ:
-                    break;
-                case ListenerTypes.RabbitMQClient:
-                    break;*/
+                /*
+            case ListenerTypes.MQTTBroker:
+                break; 
+            case ListenerTypes.RabbitMQ:
+                break;
+            case ListenerTypes.RabbitMQClient:
+                break;*/
                 case ListenerTypes.RawTCP:
                     if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your TCP listenr will listen for incoming messages.");
                     break;
@@ -392,8 +393,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
                     break;
             }
-            
+
         }
+
+        public List<ClientAccount> ClientAccounts { get; set; } = new List<ClientAccount>();
 
         /// <summary>
         /// Populated at run time so any modules that need to create temporary storage for event hub checkpoint containers
