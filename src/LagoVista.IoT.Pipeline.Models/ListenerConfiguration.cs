@@ -396,8 +396,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         }
 
-        public List<ClientAccount> ClientAccounts { get; set; } = new List<ClientAccount>();
-
         /// <summary>
         /// Populated at run time so any modules that need to create temporary storage for event hub checkpoint containers
         /// </summary>
