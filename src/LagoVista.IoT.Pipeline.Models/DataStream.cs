@@ -35,7 +35,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         //[EnumLabel(DataStream.StreamType_DataLake, PipelineAdminResources.Names.DataStream_StreamType_DataLake, typeof(PipelineAdminResources))]
         //AzureDataLake,
         [EnumLabel(DataStream.StreamType_SQLServer, PipelineAdminResources.Names.DataStream_StreamType_SQLServer, typeof(PipelineAdminResources))]
-        SQLServer
+        SQLServer,
+        [EnumLabel(DataStream.StreamType_GeoSpatial, PipelineAdminResources.Names.DataStream_StreamType_GeoSpatial, typeof(PipelineAdminResources))]
+        GeoSpatial
+
     }
 
     public enum DateStorageFormats
@@ -60,6 +63,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string StreamType_PostgreSQL = "postgresql";
         public const string StreamType_PointArrayStorage = "pointarray";
         public const string StreamType_Redis = "redis";
+        public const string StreamType_GeoSpatial = "geospatial";
 
         //public const string StreamType_DataLake = "azuredatalake";
 
@@ -409,8 +413,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             }
 
             if (StreamType.Value == DataStreamTypes.SQLServer ||
-                StreamType.Value == DataStreamTypes.Postgresql ||
-                StreamType.Value == DataStreamTypes.PointArrayStorage)
+                StreamType.Value == DataStreamTypes.Postgresql)
             {
                 if (EntityHeader.IsNullOrEmpty(SharedConnection))
                 {
@@ -427,8 +430,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 if (string.IsNullOrEmpty(DbTableName)) result.Errors.Add(new ErrorMessage("Database Table Name is required for a database data stream."));
             }
 
-            if ((StreamType.Value == DataStreamTypes.Postgresql ||
-                StreamType.Value == DataStreamTypes.PointArrayStorage) && EntityHeader.IsNullOrEmpty(SharedConnection))
+            if (StreamType.Value == DataStreamTypes.Postgresql)
             {
                 if (string.IsNullOrEmpty(DbSchema)) result.Errors.Add(new ErrorMessage("Database Schema is required for a Postgres database."));
             }

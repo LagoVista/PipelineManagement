@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿/*3/18/2023 5:56:33 AM*/
+using System.Globalization;
 using System.Reflection;
 
 //Resources:PipelineAdminResources:AppCache_CacheType
@@ -500,6 +501,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStream_StreamType_DataLake
 
 		public static string DataStream_StreamType_DataLake { get { return GetResourceString("DataStream_StreamType_DataLake"); } }
+//Resources:PipelineAdminResources:DataStream_StreamType_GeoSpatial
+
+		public static string DataStream_StreamType_GeoSpatial { get { return GetResourceString("DataStream_StreamType_GeoSpatial"); } }
 //Resources:PipelineAdminResources:DataStream_StreamType_PointArrayStorage
 
 		public static string DataStream_StreamType_PointArrayStorage { get { return GetResourceString("DataStream_StreamType_PointArrayStorage"); } }
@@ -1531,6 +1535,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStream_StreamType_AzureEventHub = "DataStream_StreamType_AzureEventHub";
 			public const string DataStream_StreamType_AzureEventHub_Managegd = "DataStream_StreamType_AzureEventHub_Managegd";
 			public const string DataStream_StreamType_DataLake = "DataStream_StreamType_DataLake";
+			public const string DataStream_StreamType_GeoSpatial = "DataStream_StreamType_GeoSpatial";
 			public const string DataStream_StreamType_PointArrayStorage = "DataStream_StreamType_PointArrayStorage";
 			public const string DataStream_StreamType_PostgreSQL = "DataStream_StreamType_PostgreSQL";
 			public const string DataStream_StreamType_Redis = "DataStream_StreamType_Redis";
@@ -1827,3 +1832,4 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 		}
 	}
 }
+

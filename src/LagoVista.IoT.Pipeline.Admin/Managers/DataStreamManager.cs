@@ -132,6 +132,97 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return InvokeResult.Success;
         }
 
+
+        public async Task<InvokeResult> CreateGeoSpatialStorageAsync(DataStream stream, EntityHeader org, EntityHeader user)
+        {
+            var orgNamespace = (await _orgUtils.GetOrgNamespaceAsync(org.Id)).Result;
+
+            stream.DeviceIdFieldName = "device_id";
+            stream.TimestampFieldName = "time_stamp";
+            stream.DbSchema = "public";
+            stream.DbURL = _defaultConnectionSettings.GeoSpatialConnectionSettings.Uri;
+            stream.DbTableName = $"geospatial_{stream.Key}";
+
+            stream.CreateTableDDL = GetGeoSpatialStorageSQL_DDL(stream.DbTableName);
+
+            // we will create it here as part of our setup.
+            stream.DBPasswordSecureId = $"ps_db_uid_{org.Id}";
+
+            stream.DatabaseName = orgNamespace;
+            stream.DbName = orgNamespace;
+            stream.DbUserName = orgNamespace;
+
+            stream.AutoCreateSQLTable = false;
+
+            var existingPassword = await _secureStorage.GetSecretAsync(org, stream.DBPasswordSecureId, user);
+            if (existingPassword.Successful)
+            {
+                stream.DbPassword = existingPassword.Result;
+            }
+            else
+            {
+                stream.DbPassword = Guid.NewGuid().ToId();
+
+                var addSecretResult = await _secureStorage.AddSecretAsync(org, stream.DBPasswordSecureId, stream.DbPassword);
+                if (!addSecretResult.Successful)
+                {
+                    return addSecretResult.ToInvokeResult();
+                }
+            }
+
+            stream.Fields.Clear();
+
+            stream.Fields.Add(new DataStreamField()
+            {
+                Name = "Start Time Stamp",
+                Key = "starttimestamp",
+                FieldName = "starttimestamp",
+                Description = "Time in seconds from UTC epoch (1/1/1970).",
+                FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
+                IsRequired = true,
+            });
+
+            stream.Fields.Add(new DataStreamField()
+            {
+                Name = "Point Count",
+                Key = "pointcount",
+                FieldName = "pointcount",
+                Description = "Number of points that make up this point array.",
+                FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Integer),
+                IsRequired = true
+            });
+
+            stream.Fields.Add(new DataStreamField()
+            {
+                Name = "Interval",
+                Key = "interval",
+                FieldName = "interval",
+                Description = "Interval between sample collection points.",
+                FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.Decimal),
+                IsRequired = true,
+            });
+
+            stream.Fields.Add(new DataStreamField()
+            {
+                Name = "Point Array",
+                Key = "pointarray",
+                FieldName = "pointarray",
+                Description = "Collection of points that make up the data collected from the device.",
+                FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.DecimalArray),
+                IsRequired = true,
+            });
+
+
+            this.ValidationCheck(stream, Actions.Create);
+
+            await CreatePostgresStorage(stream, stream.DbPassword);
+
+            stream.DbPassword = null;
+
+            return InvokeResult.Success;
+
+        }
+
         public async Task<InvokeResult> AddDataStreamAsync(DataStream stream, EntityHeader org, EntityHeader user)
         {
             await AuthorizeAsync(stream, AuthorizeResult.AuthorizeActions.Create, user, org);
@@ -220,6 +311,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             {
                 await CreatePointArrayStorageAsync(stream, org, user);
             }
+            else if(stream.StreamType.Value == DataStreamTypes.GeoSpatial)
+            {
+                await CreateGeoSpatialStorageAsync(stream, org, user);
+            }
             else
             {
                 throw new Exception("New data stream Type was added, should likely add something here to store credentials.");
@@ -237,7 +332,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             using (var cmd = new NpgsqlCommand())
             {
                 conn.Open();
-
+                Console.WriteLine($"[DataStreamManager__CreatePostgresStorage] - Check User {stream.DbUserName}");
                 // Create the user.
                 cmd.Connection = conn;
                 cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
@@ -245,6 +340,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 var result = await cmd.ExecuteScalarAsync();
                 if (result == null)
                 {
+                    Console.WriteLine($"[DataStreamManager__CreatePostgresStorage] - Does Not Exist - creating {stream.DbUserName}");
                     cmd.Parameters.Clear();
 
                     cmd.CommandText = $"CREATE USER {stream.DbUserName} with LOGIN PASSWORD '{dbPassword}';";
@@ -257,7 +353,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     {
                         return InvokeResult.FromError("Could not create local user.");
                     }
+                    Console.WriteLine($"[DataStreamManager__CreatePostgresStorage] - Does Not Exist - created {stream.DbUserName}");
                 }
+                else
+                    Console.WriteLine($"[DataStreamManager__CreatePostgresStorage] - Exists {stream.DbUserName}");
 
                 // Create teh database.
                 cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
@@ -309,6 +408,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     );";
         }
 
+        private string GetGeoSpatialStorageSQL_DDL(String tableName)
+        {
+            return $@"CREATE TABLE if not exists {tableName}(
+                        id SERIAL,
+                        device_id text not null,
+                        time_stamp timestamp not null,
+                        value geometry not null
+                    );";
+        }
+
+
         private async Task<InvokeResult<DataStream>> PopulateCredentialsAsync(DataStream stream, EntityHeader org, EntityHeader user)
         {
             if (stream.StreamType.Value == DataStreamTypes.AzureBlob ||
@@ -347,6 +457,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             }
             else if (stream.StreamType.Value == DataStreamTypes.SQLServer ||
                      stream.StreamType.Value == DataStreamTypes.Postgresql ||
+                     stream.StreamType.Value == DataStreamTypes.GeoSpatial ||
                      stream.StreamType.Value == DataStreamTypes.PointArrayStorage)
             {
                 if (String.IsNullOrEmpty(stream.DBPasswordSecureId))
@@ -414,6 +525,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
                 case DataStreamTypes.Postgresql:
                 case DataStreamTypes.PointArrayStorage:
+                case DataStreamTypes.GeoSpatial:
                 case DataStreamTypes.SQLServer:
                     if (sharedConnection.Result.ConnectionType.Value != Pipeline.Models.SharedConnectionTypes.Database)
                     {

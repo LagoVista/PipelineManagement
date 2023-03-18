@@ -1447,4 +1447,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStream_SummaryData_Help" xml:space="preserve">
     <value>This data stream contains data this is already summarized over periods of time.  It must contain a field named "period" that will be populated with "hour", "day", "week" or "month".</value>
   </data>
+  <data name="DataStream_StreamType_GeoSpatial" xml:space="preserve">
+    <value>Geo Spatial</value>
+  </data>
 </root>
