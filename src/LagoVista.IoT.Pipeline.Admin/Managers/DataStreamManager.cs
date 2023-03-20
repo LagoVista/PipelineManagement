@@ -125,7 +125,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             this.ValidationCheck(stream, Actions.Create);
 
-            await CreatePostgresStorage(stream, stream.DbPassword);
+            await CreatePostgresStorage(stream, stream.DbPassword, true);
 
             stream.DbPassword = null;
 
@@ -136,6 +136,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         public async Task<InvokeResult> CreateGeoSpatialStorageAsync(DataStream stream, EntityHeader org, EntityHeader user)
         {
             var orgNamespace = (await _orgUtils.GetOrgNamespaceAsync(org.Id)).Result;
+            if (String.IsNullOrEmpty(orgNamespace))
+                throw new ArgumentNullException(nameof(orgNamespace));
 
             stream.DeviceIdFieldName = "device_id";
             stream.TimestampFieldName = "time_stamp";
@@ -204,9 +206,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             stream.Fields.Add(new DataStreamField()
             {
-                Name = "Point Array",
-                Key = "pointarray",
-                FieldName = "pointarray",
+                Name = "Geo Point Array",
+                Key = "geopointarray",
+                FieldName = "geopointarray",
                 Description = "Collection of points that make up the data collected from the device.",
                 FieldType = EntityHeader<DeviceAdmin.Models.ParameterTypes>.Create(DeviceAdmin.Models.ParameterTypes.DecimalArray),
                 IsRequired = true,
@@ -215,7 +217,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             this.ValidationCheck(stream, Actions.Create);
 
-            await CreatePostgresStorage(stream, stream.DbPassword);
+            await CreatePostgresStorage(stream, stream.DbPassword, false);
 
             stream.DbPassword = null;
 
@@ -325,9 +327,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return InvokeResult.Success;
         }
 
-        private async Task<InvokeResult> CreatePostgresStorage(DataStream stream, String dbPassword)
+        private async Task<InvokeResult> CreatePostgresStorage(DataStream stream, String dbPassword, bool foforPointStorage)
         {
-            var connString = $"Host={_defaultConnectionSettings.PointArrayConnectionSettings.Uri};Username={_defaultConnectionSettings.PointArrayConnectionSettings.UserName};Password={_defaultConnectionSettings.PointArrayConnectionSettings.Password};";
+            var connString = foforPointStorage ? 
+                             $"Host={_defaultConnectionSettings.PointArrayConnectionSettings.Uri};Username={_defaultConnectionSettings.PointArrayConnectionSettings.UserName};Password={_defaultConnectionSettings.PointArrayConnectionSettings.Password};" :
+                             $"Host={_defaultConnectionSettings.GeoSpatialConnectionSettings.Uri};Username={_defaultConnectionSettings.GeoSpatialConnectionSettings.UserName};Password={_defaultConnectionSettings.GeoSpatialConnectionSettings.Password};";
+            
             using (var conn = new NpgsqlConnection(connString))
             using (var cmd = new NpgsqlCommand())
             {
@@ -343,7 +348,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     Console.WriteLine($"[DataStreamManager__CreatePostgresStorage] - Does Not Exist - creating {stream.DbUserName}");
                     cmd.Parameters.Clear();
 
-                    cmd.CommandText = $"CREATE USER {stream.DbUserName} with LOGIN PASSWORD '{dbPassword}';";
+                    cmd.CommandText = $"CREATE USER {stream.DbUserName} with SUPERUSER LOGIN PASSWORD '{dbPassword}';";
                     result = await cmd.ExecuteScalarAsync();
 
                     cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
@@ -410,7 +415,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
         private string GetGeoSpatialStorageSQL_DDL(String tableName)
         {
-            return $@"CREATE TABLE if not exists {tableName}(
+            return $@" create extension if not exists postgis;
+                       CREATE TABLE if not exists {tableName}(
                         id SERIAL,
                         device_id text not null,
                         time_stamp timestamp not null,

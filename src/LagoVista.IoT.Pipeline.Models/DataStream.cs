@@ -291,6 +291,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
                 if (StreamType.Value != DataStreamTypes.SQLServer &&
                     StreamType.Value != DataStreamTypes.Postgresql &&
+                    StreamType.Value != DataStreamTypes.GeoSpatial &&
                     StreamType.Value != DataStreamTypes.PointArrayStorage)
                 {
                     DbName = null;
