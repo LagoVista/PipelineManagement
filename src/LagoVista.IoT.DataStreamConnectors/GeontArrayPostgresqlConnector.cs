@@ -31,7 +31,7 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             if (!item.Data.ContainsKey("pointcount")) return InvokeResult.FromError("Point Array Record must contain a field called pointcount and is the number of points.");
             if (!item.Data.ContainsKey("interval")) return InvokeResult.FromError("Point Array Record must contain a field called interval and is the index of the sensor.");
-            if (!item.Data.ContainsKey("pointarray")) return InvokeResult.FromError("Point Array Record must contain a field called pointarray and is the points from the array.");
+            if (!item.Data.ContainsKey("geopointarray")) return InvokeResult.FromError("Point Array Record must contain a field called geopointarray and is the points from the array.");
             if (!item.Data.ContainsKey("starttimestamp")) return InvokeResult.FromError("Point Array Record must contain a field called starttimestamp and is the time stamp for the first point.");
 
             try
@@ -89,13 +89,20 @@ namespace LagoVista.IoT.DataStreamConnectors
                                 InvokeResult.FromError($"Lon value in array is incorrect => {parts[1]} is not a valid single number.");
                             }
 
-                            var valueLine = $"(@device_id, '{timeStamp.ToUniversalTime()}', POINT({lat} {lon}) )";
+                            var valueLine = $"(@device_id, '{timeStamp.ToUniversalTime()}', ST_GeomFromText('POINT({lat} {lon})', 4326))";
                             bldr.AppendLine(valueLine + ((idx == lastPoint - 1) ? ";" : "," ));
                             timeStamp = timeStamp.AddSeconds(interval);
                             insertCount++;
                         }
-                        cmd.CommandText = bldr.ToString();
-                        await cmd.ExecuteNonQueryAsync();
+                        try
+                        {
+                            cmd.CommandText = bldr.ToString();
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                        catch(Exception ex)
+                        {
+                            throw new Exception($"Error executing SQL statement: {bldr}");
+                        }
                     }
 
                     if(insertCount != pointCount)

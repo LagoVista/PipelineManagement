@@ -451,8 +451,6 @@ WHERE table_schema = @dbschema
             sql.AppendLine($"  from  {_stream.DbSchema}.{_stream.DbTableName}");
             sql.AppendLine($"  where 1 = 1"); /* just used to establish a where clause we can use by appending "and x = y" */
 
-            _logger.AddCustomEvent(LogLevel.Message, "GetItemsAsync", sql.ToString());
-
             var responseItems = new List<DataStreamResult>();
 
             using (var cn = OpenConnection(_stream.DbName))
@@ -478,6 +476,7 @@ WHERE table_schema = @dbschema
                     cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
                 }
 
+
                 if (!String.IsNullOrEmpty(request.GroupBy))
                 {
                     sql.AppendLine($"  and period = @groupBy");
@@ -493,6 +492,14 @@ WHERE table_schema = @dbschema
 
                 sql.AppendLine($"  order by {_stream.TimestampFieldName} desc");
                 sql.AppendLine($"   LIMIT {request.PageSize} OFFSET {request.PageSize * Math.Max(request.PageIndex - 1, 0)} ");
+
+                var query = new StringBuilder(sql.ToString());
+                foreach (NpgsqlParameter prm in cmd.Parameters)
+                {
+                    query.AppendLine($" - {prm.ParameterName} = {prm.Value}");
+                }
+
+                _logger.AddCustomEvent(LogLevel.Message, "[PostgresqlConnector__GetItemsAsync]", sql.ToString());
 
                 cmd.Connection = cn;
                 cmd.CommandText = sql.ToString();
