@@ -1450,4 +1450,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="DataStream_StreamType_GeoSpatial" xml:space="preserve">
     <value>Geo Spatial</value>
   </data>
+  <data name="Connection_MQTT_SharedBroker" xml:space="preserve">
+    <value>Shared MQTT Broker</value>
+  </data>
 </root>

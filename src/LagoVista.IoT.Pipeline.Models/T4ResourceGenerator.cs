@@ -1,4 +1,4 @@
-﻿/*3/18/2023 5:56:33 AM*/
+﻿/*4/28/2023 2:53:55 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -150,6 +150,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Common_UniqueId
 
 		public static string Common_UniqueId { get { return GetResourceString("Common_UniqueId"); } }
+//Resources:PipelineAdminResources:Connection_MQTT_SharedBroker
+
+		public static string Connection_MQTT_SharedBroker { get { return GetResourceString("Connection_MQTT_SharedBroker"); } }
 //Resources:PipelineAdminResources:Connection_Select_Type
 
 		public static string Connection_Select_Type { get { return GetResourceString("Connection_Select_Type"); } }
@@ -1418,6 +1421,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Common_Notes = "Common_Notes";
 			public const string Common_Script = "Common_Script";
 			public const string Common_UniqueId = "Common_UniqueId";
+			public const string Connection_MQTT_SharedBroker = "Connection_MQTT_SharedBroker";
 			public const string Connection_Select_Type = "Connection_Select_Type";
 			public const string Connection_Type_AMQP = "Connection_Type_AMQP";
 			public const string Connection_Type_AzureEventHub = "Connection_Type_AzureEventHub";
