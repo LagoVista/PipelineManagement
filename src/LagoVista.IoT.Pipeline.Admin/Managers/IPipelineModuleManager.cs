@@ -65,5 +65,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         Task<DependentObjectCheckResult> CheckInUseTransmitter(string id, EntityHeader org, EntityHeader user);
         Task<DependentObjectCheckResult> CheckInUsePlanner(string id, EntityHeader org, EntityHeader user);
         Task<DependentObjectCheckResult> CheckInUseCustom(string id, EntityHeader org, EntityHeader user);
+        bool IsForInitialization { get; set; }
     }
 }
