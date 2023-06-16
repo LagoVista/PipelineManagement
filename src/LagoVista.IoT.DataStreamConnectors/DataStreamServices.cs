@@ -30,6 +30,8 @@ namespace LagoVista.IoT.DataStreamConnectors
 
             if (_streamConnector == null) return InvokeResult<IDataStreamConnector>.FromError("Unsupported Stream Type");
 
+            Console.WriteLine($"Created Data stream Connecter {_streamConnector.GetType().Name} for {type} ");
+
             return  InvokeResult<IDataStreamConnector>.Create(_streamConnector);
         }
     }

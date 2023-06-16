@@ -33,6 +33,11 @@ namespace LagoVista.IoT.DataStreamConnectors
             _logger = logger;
         }
 
+        protected ILogger GetLogger()
+        {
+            return _logger;
+        }
+
         public Task<InvokeResult> AddItemAsync(DataStreamRecord item, EntityHeader org, EntityHeader user)
         {
             item.Data.Add("orgId", org.Id);
@@ -179,7 +184,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             return InvokeResult.Success;
         }
 
-        public Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, ListRequest request)
+        public virtual Task<ListResponse<DataStreamResult>> GetItemsAsync(string deviceId, ListRequest request)
         {
             var filter = new Dictionary<string, object>();
             filter.Add(_stream.DeviceIdFieldName, deviceId);
@@ -423,7 +428,7 @@ WHERE table_schema = @dbschema
             return InvokeResult.Success;
         }
 
-        public async Task<ListResponse<DataStreamResult>> GetItemsAsync(Dictionary<string, object> filter, ListRequest request)
+        public virtual async Task<ListResponse<DataStreamResult>> GetItemsAsync(Dictionary<string, object> filter, ListRequest request)
         {
             var sql = new StringBuilder("select ");
             if (request.PageSize == 0)
