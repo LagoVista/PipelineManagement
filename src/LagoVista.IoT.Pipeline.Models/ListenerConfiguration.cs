@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Networking.Models;
 using LagoVista.Core.Validation;
@@ -95,8 +96,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         HTTPS,
     }
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
-    public class ListenerConfiguration : PipelineModuleConfiguration
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, PipelineAdminResources.Names.InputTranslator_Description,
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
+    public class ListenerConfiguration : PipelineModuleConfiguration, IFormDescriptor
     {
 
         public const string MessageLengthSize_One = "one";
@@ -398,6 +400,62 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     break;
             }
 
+        }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(ListenerType),
+                nameof(ContentType),
+                nameof(ListenOnPort),
+
+                nameof(MessageReceiveTimeoutMS),
+
+                nameof(StartMessageSequence),
+                nameof(EndMessageSequence),
+
+                nameof(KeepAliveToSendReply),
+                nameof(KeepAliveToSendReplyTimeoutMS),
+
+                nameof(MaxMessageSize),
+
+                nameof(MessageLengthInMessage),
+                nameof(MessageLengthLocation),
+                nameof(MessageLengthSize),
+                nameof(MessageLengthByteCountEndiness),
+                nameof(SecureConnection),
+                nameof(HostName),
+                nameof(ResourceName),
+                nameof(Endpoint),
+                nameof(ConnectToPort),
+                nameof(RestServerType),
+
+                nameof(PortName),
+                nameof(BaudRate),
+
+                nameof(Queue),
+                nameof(ExchangeName),
+                nameof(HubName),
+
+                nameof(Anonymous),
+                nameof(UserName),
+                nameof(Password),
+                nameof(AccessKeyName),
+                nameof(AccessKey),
+
+                nameof(Path),
+                nameof(SupportedProtocol),
+                nameof(Origin),
+
+                nameof(ConsumerGroup),
+                nameof(Topic),
+
+                nameof(DelimitedWithSOHEOT),
+                nameof(Description)
+            };
         }
 
         /// <summary>

@@ -211,7 +211,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public bool IsSummaryLevelData { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
         public List<DataStreamField> Fields { get; set; }
 
 
@@ -239,9 +239,47 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         {
             return new List<string>()
             {
-                nameof(DataStream.Name),
-                nameof(DataStream.Key),
-                nameof(DataStream.Description),
+                nameof(Name),
+                nameof(Key),
+                nameof(StreamType),
+                nameof(SharedConnection),
+                nameof(IsSummaryLevelData),
+                nameof(TimestampFieldName),
+                nameof(DeviceIdFieldName),
+                nameof(DateStorageFormat),
+
+                nameof(AwsAccessKey),
+                nameof(AwsSecretKey),
+
+                nameof(AzureStorageAccountName),
+                nameof(AzureAccessKey),
+
+                nameof(AzureBlobStorageContainerName),
+
+                nameof(AzureEventHubName),
+                nameof(AzureEventHubEntityPath),
+
+                nameof(AzureTableStorageName),
+
+                nameof(DbURL),
+                nameof(DbName),
+                nameof(DbUserName),
+                nameof(DbPassword),
+                nameof(DbSchema),
+                nameof(DbValidateSchema),
+                nameof(DbTableName),
+                nameof(AutoCreateSQLTable),
+                nameof(CreateTableDDL),
+
+                nameof(RedisServerUris),
+                nameof(RedisPassword),
+
+                nameof(ElasticSearchDomainName),
+                nameof(ElasticSearchIndexName),
+                nameof(ElasticSearchTypeName),
+
+                nameof(S3BucketName),
+                nameof(Description)
             };
         }
 

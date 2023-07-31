@@ -22,6 +22,7 @@ namespace LagoVista.IoT.Pipeline.Models
         NuvIoT,
     }
 
+
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help, PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
     public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor
     {
@@ -60,6 +61,11 @@ namespace LagoVista.IoT.Pipeline.Models
             return new List<string>()
             {
                 nameof(Name),
+                nameof(Key),
+                nameof(CacheType),
+                nameof(Uri),
+                nameof(Password),
+                nameof(Description),
             };
         }
 

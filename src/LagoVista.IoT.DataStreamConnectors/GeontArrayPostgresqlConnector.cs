@@ -99,7 +99,7 @@ namespace LagoVista.IoT.DataStreamConnectors
                             cmd.CommandText = bldr.ToString();
                             await cmd.ExecuteNonQueryAsync();
                         }
-                        catch(Exception ex)
+                        catch(Exception)
                         {
                             throw new Exception($"Error executing SQL statement: {bldr}");
                         }

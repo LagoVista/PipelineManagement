@@ -1,13 +1,15 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceAdmin.Models;
 using LagoVista.IoT.Pipeline.Models.Resources;
+using System.Collections.Generic;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.DataStreamField_Title, PipelineAdminResources.Names.DataStreamField_Help, PipelineAdminResources.Names.DataStreamField_Help, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
-    public class DataStreamField : IValidateable
+    public class DataStreamField : IValidateable, IFormDescriptor
     {
         [Newtonsoft.Json.JsonProperty("id")]
         public string Id { get; set; }
@@ -55,6 +57,26 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_MaxValue, HelpResource: PipelineAdminResources.Names.DataStreamField_MaxValue_Help, FieldType: FieldTypes.Decimal, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public double? MaxValue { get; set; }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(FieldName),
+                nameof(FieldType),
+                nameof(StateSet),
+                nameof(UnitSet),
+                nameof(IsRequired),
+                nameof(IsDatabaseGenerated),
+                nameof(NumberDecimalPoint),
+                nameof(MinValue),
+                nameof(MaxValue),
+                nameof(Description),
+                nameof(Notes),
+            };
+        }
 
         [CustomValidator]
         public void Validate(ValidationResult result)

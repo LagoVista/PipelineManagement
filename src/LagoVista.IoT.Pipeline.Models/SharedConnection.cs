@@ -7,6 +7,7 @@ using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
+using System.Collections.Generic;
 
 namespace LagoVista.IoT.Pipeline.Models
 {
@@ -25,7 +26,7 @@ namespace LagoVista.IoT.Pipeline.Models
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnection_Title, PipelineAdminResources.Names.SharedConnection_Help, PipelineAdminResources.Names.SharedConnection_Description,
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
-    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity
+    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity, IFormDescriptor
     {
         public const string SHARED_CONNECTION_TYPE_AWS = "aws";
         public const string SHARED_CONNECTION_TYPE_AZURE = "azure";
@@ -234,6 +235,29 @@ namespace LagoVista.IoT.Pipeline.Models
             }
 
             return base.ToString();
+        }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(ConnectionType),
+                nameof(Key),
+                nameof(Description),
+                nameof(RedisPassword),
+                nameof(RedisServerUris),
+                nameof(AzureStorageAccountName),
+                nameof(AzureAccessKey),
+                nameof(AwsAccessKey),
+                nameof(AwsRegion),
+                nameof(AwsSecretKey),
+                nameof(DbURL),
+                nameof(DbName),
+                nameof(DbSchema),
+                nameof(DbUserName),
+                nameof(DbPassword),
+            };
         }
     }
 

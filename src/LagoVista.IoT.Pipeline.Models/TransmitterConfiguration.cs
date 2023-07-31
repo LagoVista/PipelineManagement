@@ -13,7 +13,7 @@ using LagoVista.IoT.Pipeline.Models.Resources;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Transmitter_Title, PipelineAdminResources.Names.Transmitter_Help, PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
-    public class TransmitterConfiguration : PipelineModuleConfiguration
+    public class TransmitterConfiguration : PipelineModuleConfiguration, IFormDescriptor
     {
         public TransmitterConfiguration()
         {
@@ -97,7 +97,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public string SecureAccessKeyId { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Transmitter_Headers, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Transmitter_Headers, FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public List<Header> Headers { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_HubName, HelpResource: PipelineAdminResources.Names.Listener_HubName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
@@ -210,6 +210,30 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
                     break;
             }
+        }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(TransmitterType),
+                nameof(HostName),
+                nameof(SecureConnection),
+                nameof(ExchangeName),
+                nameof(Queue),
+                nameof(HubName),
+                nameof(AccessKeyName),
+                nameof(AccessKey),
+                nameof(Anonymous),
+                nameof(PortName),
+                nameof(BaudRate),
+                nameof(UserName),
+                nameof(Password),
+                nameof(Description),
+                nameof(Headers)
+            };
         }
     }
 }

@@ -27,7 +27,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Sentinel_SecurityField_Title, PipelineAdminResources.Names.Sentinel_SecurityField_Help, PipelineAdminResources.Names.Sentinel_SecurityField_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
-    public class SecurityField : IKeyedEntity, INamedEntity, IValidateable
+    public class SecurityField : IKeyedEntity, INamedEntity, IValidateable, IFormDescriptor
     {
         public const string FieldType_AccessKey = "accesskey";
         public const string FieldType_BasicAccess = "basicaccess";
@@ -52,6 +52,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Sentinel_SecurityField_Type, HelpResource: PipelineAdminResources.Names.Sentinel_SecurityField_Type_Help, FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.Sentinel_SecurityField_Type_Select, EnumType: typeof(SecurityFieldType), IsRequired:true, ResourceType: typeof(PipelineAdminResources))]
         public EntityHeader<SecurityFieldType> FieldType { get; set; }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(Locator),
+                nameof(Script),
+                nameof(FieldType),
+            };
+        }
 
         [CustomValidator]
         public void Validate(ValidationResult result)

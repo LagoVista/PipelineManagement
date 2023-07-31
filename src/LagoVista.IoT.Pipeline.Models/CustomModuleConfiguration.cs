@@ -1,8 +1,10 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
+using System.Collections.Generic;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
@@ -35,8 +37,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.CustomModule_Title, PipelineAdminResources.Names.CustomModule_Help, PipelineAdminResources.Names.CustomModule_Description,EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
-    public class CustomModuleConfiguration : PipelineModuleConfiguration
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.CustomModule_Title, PipelineAdminResources.Names.CustomModule_Help, 
+        PipelineAdminResources.Names.CustomModule_Description,EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
+    public class CustomModuleConfiguration : PipelineModuleConfiguration, IFormDescriptor
     {
         public const string CustomModuleType_Script = "script";
         public const string CustomModuleType_Container = "container";
@@ -52,8 +55,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.CustomModule_CustomModuleType, EnumType:(typeof(CustomModuleTypes)), FieldType: FieldTypes.Picker, WaterMark:PipelineAdminResources.Names.CustomModule_CustomModuleType_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public EntityHeader<CustomModuleTypes> CustomModuleType { get; set; }
-
-
 
         [FormField(LabelResource: PipelineAdminResources.Names.CustomModule_AuthenticationType, EnumType:(typeof(UriAuthenticationTypes)), FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.CustomModule_AuthenticationType_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public EntityHeader<UriAuthenticationTypes> AuthenticationType { get; set; }
@@ -91,6 +92,27 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.CustomModule_ContainerTag, FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.CustomModule_ContainerTag_Select, IsRequired: false)]
         public EntityHeader ContainerTag { get; set; }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(CustomModuleType),
+                nameof(Uri),
+                nameof(Script),
+                nameof(AuthenticationType),
+                nameof(AccountId),
+                nameof(AccountPassword),
+                nameof(AuthenticationHeader),
+                nameof(ContainerRepository),
+                nameof(ContainerTag),
+                nameof(DotNetAssembly),
+                nameof(DotNetClass),
+                nameof(Description)
+            };
+        }
 
         [CustomValidator]
         public void Validate(ValidationResult result, Actions action)

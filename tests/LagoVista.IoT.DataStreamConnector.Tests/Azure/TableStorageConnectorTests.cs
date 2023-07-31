@@ -75,7 +75,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 await _cloudTable.CreateIfNotExistsAsync();
                 return _cloudTable;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
