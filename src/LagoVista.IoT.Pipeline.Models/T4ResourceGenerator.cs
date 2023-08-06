@@ -1,4 +1,4 @@
-﻿/*4/28/2023 2:53:55 PM*/
+﻿/*8/5/2023 1:19:57 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -174,6 +174,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Connection_Type_FTP
 
 		public static string Connection_Type_FTP { get { return GetResourceString("Connection_Type_FTP"); } }
+//Resources:PipelineAdminResources:Connection_Type_HostedMQTT
+
+		public static string Connection_Type_HostedMQTT { get { return GetResourceString("Connection_Type_HostedMQTT"); } }
 //Resources:PipelineAdminResources:Connection_Type_Kafka
 
 		public static string Connection_Type_Kafka { get { return GetResourceString("Connection_Type_Kafka"); } }
@@ -1429,6 +1432,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Connection_Type_AzureServiceBus = "Connection_Type_AzureServiceBus";
 			public const string Connection_Type_Custom = "Connection_Type_Custom";
 			public const string Connection_Type_FTP = "Connection_Type_FTP";
+			public const string Connection_Type_HostedMQTT = "Connection_Type_HostedMQTT";
 			public const string Connection_Type_Kafka = "Connection_Type_Kafka";
 			public const string Connection_Type_MQTT_Broker = "Connection_Type_MQTT_Broker";
 			public const string Connection_Type_MQTT_Client = "Connection_Type_MQTT_Client";

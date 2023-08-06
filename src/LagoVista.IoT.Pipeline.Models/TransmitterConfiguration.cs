@@ -48,6 +48,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             RawUDP,
             [EnumLabel("serialport", PipelineAdminResources.Names.ConnectionType_SerialPort, typeof(PipelineAdminResources))]
             SerialPort,
+            [EnumLabel("hostedmqtt", PipelineAdminResources.Names.Connection_Type_HostedMQTT, typeof(PipelineAdminResources))]
+            HostedMQTT,
 
             /*[EnumLabel("mqtt", PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
             MQTT,
