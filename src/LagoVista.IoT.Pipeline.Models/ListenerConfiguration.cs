@@ -529,9 +529,26 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Client,
-                          VisibleFields = { }
+                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection), nameof(UserName), nameof(Password), nameof(HostName), nameof(ConnectToPort) }
                      },
-
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_MQTT_Listener,
+                          VisibleFields = { nameof(Anonymous), nameof(UserName), nameof(Password), nameof(ListenOnPort) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_RabbitMQ,
+                          VisibleFields = { nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(ListenOnPort), nameof(Queue), nameof(ExchangeName) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_MQTT_Broker,
+                          VisibleFields = { nameof(Endpoint), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(Queue), nameof(ExchangeName) }
+                     },
                  }
 
             };
