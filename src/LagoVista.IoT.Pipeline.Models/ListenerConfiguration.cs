@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Networking.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
@@ -98,7 +99,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, PipelineAdminResources.Names.InputTranslator_Description,
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
-    public class ListenerConfiguration : PipelineModuleConfiguration, IFormDescriptor
+    public class ListenerConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields
     {
 
         public const string MessageLengthSize_One = "one";
@@ -455,6 +456,84 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
                 nameof(DelimitedWithSOHEOT),
                 nameof(Description)
+            };
+        }
+
+        public FormConditionals GetConditionalFields()
+        {
+            return new FormConditionals()
+            {
+                ConditionalFields = { nameof(MessageReceiveTimeoutMS), nameof(KeepAliveToSendReply), nameof(KeepAliveToSendReplyTimeoutMS), nameof(ListenOnPort), nameof(StartMessageSequence), nameof(EndMessageSequence),
+                                      nameof(MaxMessageSize), nameof(MessageLengthInMessage), nameof(MessageLengthLocation), nameof(MessageLengthSize),nameof(MessageLengthByteCountEndiness),
+                                      nameof(Anonymous), nameof(UserName), nameof(AccessKey), nameof(Queue), nameof(ExchangeName), nameof(HubName), nameof(AccessKey), nameof(AccessKeyName), nameof(Password),
+                                      nameof(ConsumerGroup), nameof(ResourceName), nameof(SecureConnection), nameof(RestServerType), nameof(HostName), nameof(Endpoint), nameof(ConnectToPort), nameof(Path),
+                                      nameof(Origin), nameof(SupportedProtocol), nameof(BaudRate), nameof(PortName) 
+                },
+                 Conditionals = new List<FormConditional>()
+                 {
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_AMQP,
+                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password)}
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_Kafka,
+                          VisibleFields = {nameof(HostName), nameof(ConsumerGroup)}
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_SerialPort,
+                          VisibleFields = {nameof(PortName), nameof(BaudRate)}
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_REDIS,
+                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_AzureEventHub,
+                          VisibleFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(ConsumerGroup), nameof(HostName), nameof(HubName) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_WebSocket,
+                          VisibleFields = {nameof(Anonymous), nameof(UserName), nameof(Password), nameof(HostName), nameof(SupportedProtocol), nameof(Path), nameof(Origin) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_AzureIoTHub,
+                          VisibleFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(ResourceName), nameof(ConsumerGroup), nameof(HostName) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_AzureServiceBus,
+                          VisibleFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(Queue),  nameof(HostName) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_MQTT_SharedBroker,
+                          VisibleFields = { }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_MQTT_Client,
+                          VisibleFields = { }
+                     },
+
+                 }
+
             };
         }
 
