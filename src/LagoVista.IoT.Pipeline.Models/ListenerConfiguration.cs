@@ -549,6 +549,30 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                           Value = ListenerTypes_MQTT_Broker,
                           VisibleFields = { nameof(Endpoint), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(Queue), nameof(ExchangeName) }
                      },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_RawTCP,
+                          VisibleFields = { nameof(ListenOnPort) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_RawUdp,
+                          VisibleFields = { nameof(ListenOnPort) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_FTP,
+                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_REST,
+                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort), nameof(KeepAliveToSendReply), nameof(KeepAliveToSendReplyTimeoutMS), nameof(RestServerType) }
+                     },
                  }
 
             };
