@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Models;
 using LagoVista.IoT.Pipeline.Models.Resources;
@@ -50,7 +51,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.DataStream_Title, PipelineAdminResources.Names.DataStream_Help, PipelineAdminResources.Names.DataStream_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
-    public class DataStream : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor
+    public class DataStream : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, IFormConditionalFields
     {
         public const string StreamType_AWS_S3 = "awss3";
         public const string StreamType_AWS_ElasticSearch = "awselasticsearch";
@@ -232,6 +233,29 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 StreamTypeKey = StreamType.Id,
                 DeviceIdFieldName = DeviceIdFieldName,
                 TimestampFieldName = TimestampFieldName
+            };
+        }
+
+        public FormConditionals GetConditionalFields()
+        {
+            return new FormConditionals()
+            {
+                ConditionalFields = { nameof(ElasticSearchDomainName), nameof(ElasticSearchIndexName), nameof(ElasticSearchTypeName),
+                    nameof(AwsAccessKey), nameof(AwsSecretKey), nameof(RedisPassword), nameof(RedisServerUris), nameof(DbName),
+                    nameof(DbPassword), nameof(DbUserName), nameof(DbTableName), nameof(DbURL), nameof(DbSchema), nameof(CreateTableDDL),
+                    nameof(DbValidateSchema), nameof(S3BucketName), nameof(AzureAccessKey), nameof(AzureStorageAccountName), nameof(DateStorageFormat),
+                    nameof(AzureBlobStorageContainerName), nameof(AzureEventHubEntityPath), nameof(AzureEventHubName), nameof(AzureTableStorageName),
+                    nameof(AutoCreateSQLTable), nameof(DeviceIdFieldName), nameof(TimestampFieldName) },
+                Conditionals = new List<FormConditional>()
+                {
+                    new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_AWS_ElasticSearch,
+                        VisibleFields =  {nameof(ElasticSearchDomainName), nameof(ElasticSearchIndexName), nameof(ElasticSearchTypeName), nameof(AwsAccessKey), nameof(AwsSecretKey)}
+                    }
+                }
+                
             };
         }
 
