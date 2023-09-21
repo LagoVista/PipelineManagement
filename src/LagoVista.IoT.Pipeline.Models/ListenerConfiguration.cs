@@ -5,17 +5,14 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Networking.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
-using LagoVista.IoT.DeviceMessaging.Admin.Resources;
 using LagoVista.IoT.DeviceMessaging.Models.Resources;
-using LagoVista.IoT.Pipeline.Admin.Resources;
-using LagoVista.IoT.Pipeline.Models;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
-    public enum RESTListenerTypes
+	public enum RESTListenerTypes
     {
         PipelineModule,
         InputCommandListener,
@@ -97,7 +94,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         HTTPS,
     }
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, PipelineAdminResources.Names.InputTranslator_Description,
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Listener_Title, PipelineAdminResources.Names.Listener_Help, PipelineAdminResources.Names.Listener_Description,
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
     public class ListenerConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields
     {
@@ -467,7 +464,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                                       nameof(MaxMessageSize), nameof(MessageLengthInMessage), nameof(MessageLengthLocation), nameof(MessageLengthSize),nameof(MessageLengthByteCountEndiness),
                                       nameof(Anonymous), nameof(UserName), nameof(AccessKey), nameof(Queue), nameof(ExchangeName), nameof(HubName), nameof(AccessKey), nameof(AccessKeyName), nameof(Password),
                                       nameof(ConsumerGroup), nameof(ResourceName), nameof(SecureConnection), nameof(RestServerType), nameof(HostName), nameof(Endpoint), nameof(ConnectToPort), nameof(Path),
-                                      nameof(Origin), nameof(SupportedProtocol), nameof(BaudRate), nameof(PortName), nameof(Topic), nameof(DelimitedWithSOHEOT), nameof(AmqpSubscriptions), nameof(MqttSubscriptions),
+                                      nameof(Origin), nameof(SupportedProtocol), nameof(BaudRate), nameof(PortName), nameof(Topic), nameof(AmqpSubscriptions), nameof(MqttSubscriptions), nameof(DelimitedWithSOHEOT) /* Per Kevin, this is related to content type */,
 				},
                  Conditionals = new List<FormConditional>()
                  {
@@ -475,7 +472,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_AMQP,
-                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(AmqpSubscriptions)}
+                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(Topic), nameof(AmqpSubscriptions)}
                      },
                      new FormConditional()
                      {
