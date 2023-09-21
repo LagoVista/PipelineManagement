@@ -467,21 +467,21 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                                       nameof(MaxMessageSize), nameof(MessageLengthInMessage), nameof(MessageLengthLocation), nameof(MessageLengthSize),nameof(MessageLengthByteCountEndiness),
                                       nameof(Anonymous), nameof(UserName), nameof(AccessKey), nameof(Queue), nameof(ExchangeName), nameof(HubName), nameof(AccessKey), nameof(AccessKeyName), nameof(Password),
                                       nameof(ConsumerGroup), nameof(ResourceName), nameof(SecureConnection), nameof(RestServerType), nameof(HostName), nameof(Endpoint), nameof(ConnectToPort), nameof(Path),
-                                      nameof(Origin), nameof(SupportedProtocol), nameof(BaudRate), nameof(PortName) 
-                },
+                                      nameof(Origin), nameof(SupportedProtocol), nameof(BaudRate), nameof(PortName), nameof(Topic), nameof(DelimitedWithSOHEOT), nameof(AmqpSubscriptions), nameof(MqttSubscriptions),
+				},
                  Conditionals = new List<FormConditional>()
                  {
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_AMQP,
-                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password)}
+                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(AmqpSubscriptions)}
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_Kafka,
-                          VisibleFields = {nameof(HostName), nameof(ConsumerGroup)}
+                          VisibleFields = {nameof(HostName), nameof(ConsumerGroup), nameof(MqttSubscriptions) }
                      },
                      new FormConditional()
                      {
@@ -493,7 +493,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_REDIS,
-                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password) }
+                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(MqttSubscriptions) }
                      },
                      new FormConditional()
                      {
@@ -523,13 +523,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_SharedBroker,
-                          VisibleFields = { }
+                          VisibleFields = {nameof(MqttSubscriptions) }
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Client,
-                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection), nameof(UserName), nameof(Password), nameof(HostName), nameof(ConnectToPort) }
+                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection), nameof(UserName), nameof(Password), nameof(HostName), nameof(ConnectToPort), nameof(MqttSubscriptions) }
                      },
                      new FormConditional()
                      {
@@ -541,7 +541,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_RabbitMQ,
-                          VisibleFields = { nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(ListenOnPort), nameof(Queue), nameof(ExchangeName) }
+                          VisibleFields = { nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(ListenOnPort), nameof(Queue), nameof(ExchangeName), nameof(MqttSubscriptions) }
                      },
                      new FormConditional()
                      {
@@ -571,7 +571,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_REST,
-                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort), nameof(KeepAliveToSendReply), nameof(KeepAliveToSendReplyTimeoutMS), nameof(RestServerType) }
+                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort), nameof(KeepAliveToSendReply), nameof(KeepAliveToSendReplyTimeoutMS), nameof(RestServerType), nameof(UserName), nameof(Password) }
                      },
                  }
 
