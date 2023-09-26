@@ -50,7 +50,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         ISO8601
     }
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.DataStream_Title, PipelineAdminResources.Names.DataStream_Help, PipelineAdminResources.Names.DataStream_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.DataStream_Title, PipelineAdminResources.Names.DataStream_Help, 
+        PipelineAdminResources.Names.DataStream_Description, 
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        GetUrl: "/api/datastream/{id}", SaveUrl: "/api/datastream", GetListUrl: "/api/datastreams", FactoryUrl: "/api/datastream/factory", DeleteUrl: "/api/datastream/{id}")]
     public class DataStream : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, IFormConditionalFields
     {
         public const string StreamType_AWS_S3 = "awss3";
