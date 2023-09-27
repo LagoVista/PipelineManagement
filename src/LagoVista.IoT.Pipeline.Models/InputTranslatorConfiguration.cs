@@ -1,15 +1,16 @@
 ﻿using LagoVista.AI.Models;
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
-using LagoVista.IoT.Pipeline.Admin.Resources;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
+using System.Collections.Generic;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
-    public class InputTranslatorConfiguration : PipelineModuleConfiguration
-    {        
+	[EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
+    public class InputTranslatorConfiguration : PipelineModuleConfiguration, IFormDescriptor
+	{        
         public enum InputTranslatorTypes
         {
             [EnumLabel("message", PipelineAdminResources.Names.Translator_Type_Message, typeof(PipelineAdminResources))]
@@ -45,5 +46,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         public override string ModuleType => PipelineModuleType_InputTranslator;
-    }
+
+		public List<string> GetFormFields()
+		{
+
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(InputTranslatorType),
+                nameof(Model),
+				nameof(Description),
+			};
+		}
+	}
 }
