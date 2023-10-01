@@ -448,6 +448,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(SupportedProtocol),
                 nameof(Origin),
 
+                nameof(AmqpSubscriptions),
+                nameof(MqttSubscriptions),
                 nameof(ConsumerGroup),
                 nameof(Topic),
 
@@ -569,6 +571,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_REST,
                           VisibleFields = { nameof(Anonymous), nameof(ListenOnPort), nameof(KeepAliveToSendReply), nameof(KeepAliveToSendReplyTimeoutMS), nameof(RestServerType), nameof(UserName), nameof(Password) }
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(Anonymous),
+                          Value = "false",
+                          VisibleFields = { nameof(UserName), nameof(Password) }
                      },
                  }
 
