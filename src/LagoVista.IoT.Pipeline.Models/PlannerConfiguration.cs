@@ -8,9 +8,10 @@ using System.Collections.Generic;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
-
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Planner_Title, PipelineAdminResources.Names.Planner_Help, 
-        PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
+        PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
+        FactoryUrl: "/api/pipeline/admin/listener/factory")]
     public class PlannerConfiguration : PipelineModuleConfiguration, IFormDescriptor
     {
         public PlannerConfiguration()
@@ -58,5 +59,25 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 result.Concat(fld.Validate());
             }
         }
+
+        public new PlannerConfigurationSummary CreateSummary()
+        {
+            return new PlannerConfigurationSummary()
+            {
+                Id = Id,
+                Name = Name,
+                Key = Key,
+                IsPublic = IsPublic,
+                Description = Description
+            };
+        }
+    }
+
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Planner_Title, PipelineAdminResources.Names.Planner_Help,
+        PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
+        FactoryUrl: "/api/pipeline/admin/listener/factory")]
+    public class PlannerConfigurationSummary : SummaryData
+    {
     }
 }

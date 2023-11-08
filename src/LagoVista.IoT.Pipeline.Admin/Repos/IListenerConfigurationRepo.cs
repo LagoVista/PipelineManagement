@@ -1,7 +1,6 @@
-﻿using LagoVista.IoT.Pipeline.Admin.Models;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Pipeline.Admin.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Pipeline.Admin.Repos
@@ -10,7 +9,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Repos
     {
         Task AddListenerConfigurationAsync(ListenerConfiguration listener);
         Task<ListenerConfiguration> GetListenerConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetListenerConfigurationsForOrgsAsync(string orgId);
+        Task<ListResponse<ListenerConfigurationSummary>> GetListenerConfigurationsForOrgsAsync(string orgId, ListRequest listRequest);
         Task UpdateListenerConfigurationAsync(ListenerConfiguration listener);
         Task DeleteListenerConfigurationAsync(string id);
         Task<bool> QueryKeyInUseAsync(String key, String orgId);

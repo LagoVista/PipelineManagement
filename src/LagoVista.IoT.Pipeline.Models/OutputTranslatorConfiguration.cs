@@ -7,7 +7,10 @@ using System;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslator_Title, PipelineAdminResources.Names.OutputTranslator_Help, PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslator_Title, PipelineAdminResources.Names.OutputTranslator_Help, 
+        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
+        DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
     public class OutputTranslatorConfiguration : PipelineModuleConfiguration
     {
         public enum OutputTranslatorTypes
@@ -38,7 +41,29 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_TranslatorType, EnumType: (typeof(OutputTranslatorTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_TranslatorType_Select, IsRequired: true, IsUserEditable: true)]
         public EntityHeader<OutputTranslatorTypes> OutputTranslatorType { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, HelpResource: PipelineAdminResources.Names.InputTranslator_DelimiterSquence_Help, FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Script,  FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources))]
         public String Script { get; set; }
+
+
+        public OutputTranslatorConfigurationSummary CreateSummary()
+        {
+            return new OutputTranslatorConfigurationSummary()
+            {
+                Id = Id,
+                Name = Name,
+                Key = Key,
+                IsPublic = IsPublic,
+                Description = Description
+            };
+        }
+    }
+
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslator_Title, PipelineAdminResources.Names.OutputTranslator_Help,
+        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
+        DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
+    public class OutputTranslatorConfigurationSummary : SummaryData
+    {
+
     }
 }

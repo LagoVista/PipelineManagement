@@ -14,7 +14,7 @@ namespace LagoVista.IoT.Pipeline.Admin
         Task<InvokeResult> AddDataStreamAsync(DataStream stream,  EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateDataStreamAsync(DataStream stream, EntityHeader org, EntityHeader user);
         Task<InvokeResult<DataStream>> LoadFullDataStreamConfigurationAsync(String id, EntityHeader org, EntityHeader user);
-        Task<IEnumerable<DataStreamSummary>> GetDataStreamsForOrgAsync(string orgId, EntityHeader user);
+        Task<ListResponse<DataStreamSummary>> GetDataStreamsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest);
         Task<DataStream> GetDataStreamAsync(string dataStreamId, EntityHeader org, EntityHeader user);
         Task<InvokeResult<string>> GetDataStreamSecretAsync(String id, EntityHeader org, EntityHeader user);
         Task<DependentObjectCheckResult> CheckDataStreamInUseAsync(string dataStreamId, EntityHeader org, EntityHeader user);

@@ -2,6 +2,7 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Models;
@@ -100,10 +101,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return cahce;
         }
 
-        public async Task<IEnumerable<ApplicationCacheSummary>> GetApplicationCachesForOrgAsync(string orgId, EntityHeader user)
+        public async Task<ListResponse<ApplicationCacheSummary>> GetApplicationCachesForOrgAsync(string orgId, EntityHeader user, ListRequest request)
         {
             await AuthorizeOrgAccessAsync(user, orgId, typeof(ApplicationCache));
-            return await _applicationCacheRepo.GetApplicationCachesForOrgAsync(orgId);
+            return await _applicationCacheRepo.GetApplicationCachesForOrgAsync(orgId, request);
         }
 
         public Task<bool> QueryKeyInUseAsync(string key, EntityHeader org)

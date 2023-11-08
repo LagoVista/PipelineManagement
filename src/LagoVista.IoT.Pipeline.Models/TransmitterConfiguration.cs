@@ -12,7 +12,10 @@ using LagoVista.IoT.Pipeline.Models.Resources;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Transmitter_Title, PipelineAdminResources.Names.Transmitter_Help, PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Transmitter_Title, PipelineAdminResources.Names.Transmitter_Help,
+        PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/transmitters", SaveUrl: "/api/pipeline/admin/transmitter", GetUrl: "/api/pipeline/admin/transmitter/{id}", FactoryUrl: "/api/pipeline/admin/transmitter/factory",
+        DeleteUrl: "/api/pipeline/admin/transmitter/{id}")]
     public class TransmitterConfiguration : PipelineModuleConfiguration, IFormDescriptor
     {
         public TransmitterConfiguration()
@@ -83,7 +86,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, HelpResource: PipelineAdminResources.Names.Listener_UserName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string UserName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Password, HelpResource: PipelineAdminResources.Names.Listener_Password_Help, FieldType: FieldTypes.Password, SecureIdFieldName:nameof(SecurePasswordId), ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Password, HelpResource: PipelineAdminResources.Names.Listener_Password_Help, FieldType: FieldTypes.Password, SecureIdFieldName: nameof(SecurePasswordId), ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Password { get; set; }
 
         public string SecurePasswordId { get; set; }
@@ -94,7 +97,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKeyName, HelpResource: PipelineAdminResources.Names.Listener_AccessKeyName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string AccessKeyName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKey, HelpResource: PipelineAdminResources.Names.Listener_AccessKey_Help, FieldType: FieldTypes.Password, SecureIdFieldName:nameof(SecureAccessKeyId), ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_AccessKey, HelpResource: PipelineAdminResources.Names.Listener_AccessKey_Help, FieldType: FieldTypes.Password, SecureIdFieldName: nameof(SecureAccessKeyId), ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string AccessKey { get; set; }
 
         public string SecureAccessKeyId { get; set; }
@@ -214,6 +217,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             }
         }
 
+        public TransmitterConfigurationSummary CreateSummary()
+        {
+            return new TransmitterConfigurationSummary()
+            {
+                Id = Id,
+                Name = Name,
+                Key = Key,
+                IsPublic = IsPublic,
+                Description = Description
+            };
+        }
+
         public List<string> GetFormFields()
         {
             return new List<string>()
@@ -238,4 +253,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             };
         }
     }
+
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Transmitter_Title, PipelineAdminResources.Names.Transmitter_Help,
+        PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/transmitters", SaveUrl: "/api/pipeline/admin/transmitter", GetUrl: "/api/pipeline/admin/transmitter/{id}", FactoryUrl: "/api/pipeline/admin/transmitter/factory",
+        DeleteUrl: "/api/pipeline/admin/transmitter/{id}")]
+    public class TransmitterConfigurationSummary : SummaryData
+    {
+
+    }
+
 }

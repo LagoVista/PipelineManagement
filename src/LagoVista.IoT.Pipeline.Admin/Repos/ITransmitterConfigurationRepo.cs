@@ -1,7 +1,6 @@
-﻿using LagoVista.IoT.Pipeline.Admin.Models;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Pipeline.Admin.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Pipeline.Admin.Repos
@@ -10,7 +9,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Repos
     {
         Task AddTransmitterConfigurationAsync(TransmitterConfiguration deployment);
         Task<TransmitterConfiguration> GetTransmitterConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetTransmitterConfigurationsForOrgsAsync(string orgId);
+        Task<ListResponse<TransmitterConfigurationSummary>> GetTransmitterConfigurationsForOrgsAsync(string orgId, ListRequest listRequest);
         Task UpdateTransmitterConfigurationAsync(TransmitterConfiguration transmitter);
         Task DeleteTransmitterConfigurationAsync(string id);
         Task<bool> QueryKeyInUseAsync(String key, String orgId);

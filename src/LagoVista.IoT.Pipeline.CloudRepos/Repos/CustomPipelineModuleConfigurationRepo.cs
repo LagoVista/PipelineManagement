@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
-    public class CustomPipelineModuleConfigurationRepo : DocumentDBRepoBase<CustomModuleConfiguration>, ICustomPipelineConfigurationRepo
+    public class CustomPipelineModuleConfigurationRepo : DocumentDBRepoBase<CustomModuleConfiguration>, 
+        ICustomPipelineConfigurationRepo
     {
         private bool _shouldConsolidateCollections;
 
@@ -36,12 +38,10 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
             return GetDocumentAsync(id);
         }
 
-        public async Task<IEnumerable<PipelineModuleConfigurationSummary>> GetCustomPipelineModuleConfigurationsForOrgsAsync(string orgId)
+        public async Task<ListResponse<CustomModuleConfigurationSummary>> GetCustomPipelineModuleConfigurationsForOrgsAsync(string orgId, ListRequest listRequest)
         {
-            var items = await base.QueryAsync(qry => qry.IsPublic == true || qry.OwnerOrganization.Id == orgId);
-
-            return from item in items
-                   select item.CreateSummary();
+            var items = await base.QueryAsync(qry => qry.IsPublic == true || qry.OwnerOrganization.Id == orgId, qry => qry.Name, listRequest);
+            return ListResponse<CustomModuleConfigurationSummary>.Create(items.Model.Select(itm => itm.CreateSummary()), items);
         }
 
         public async Task<bool> QueryKeyInUseAsync(string key, string orgId)

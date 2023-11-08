@@ -69,10 +69,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/listeners")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetListenerConfigurationsForOrgAsync()
+        public Task<ListResponse<ListenerConfigurationSummary>> GetListenerConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetListenerConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
+            return _pipelineModuleManager.GetListenerConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>
@@ -163,10 +162,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/inputtranslators")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetInputTranslatorConfigurationsForOrgAsync()
+        public Task<ListResponse<InputTranslatorConfigurationSummary>> GetInputTranslatorConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetInputTranslatorConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
+            return _pipelineModuleManager.GetInputTranslatorConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>
@@ -258,10 +256,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/sentinels")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetSentinelConfigurationsForOrgAsync()
+        public Task<ListResponse<SentinelConfigurationSummary>> GetSentinelConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetSentinelConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
+            return _pipelineModuleManager.GetSentinelConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>
@@ -365,10 +362,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/outputtranslators")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetOutputTranslatorConfigurationsForOrgAsync()
+        public Task<ListResponse<OutputTranslatorConfigurationSummary>> GetOutputTranslatorConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetOutputTranslatorConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
+            return _pipelineModuleManager.GetOutputTranslatorConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>
@@ -460,10 +456,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/transmitters")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetTransmitterConfigurationsForOrgAsync()
+        public Task<ListResponse<TransmitterConfigurationSummary>> GetTransmitterConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetTransmitterConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
+            return _pipelineModuleManager.GetTransmitterConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>
@@ -555,10 +550,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/planners")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetPlannerConfigurationsForOrgAsync()
+        public Task<ListResponse<PlannerConfigurationSummary>> GetPlannerConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetPlannerConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
+            return _pipelineModuleManager.GetPlannerConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>
@@ -649,10 +643,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/pipeline/admin/custommodules")]
-        public async Task<ListResponse<PipelineModuleConfigurationSummary>> GetCustomPipelineModuleConfigurationsForOrgAsync()
+        public Task<ListResponse<CustomModuleConfigurationSummary>> GetCustomPipelineModuleConfigurationsForOrgAsync()
         {
-            var configs = await _pipelineModuleManager.GetCustomPipelineModuleConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            return ListResponse<PipelineModuleConfigurationSummary>.Create(configs);
+            return _pipelineModuleManager.GetCustomPipelineModuleConfiugrationsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>

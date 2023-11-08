@@ -1,11 +1,9 @@
 ﻿using LagoVista.CloudStorage.DocumentDB;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
@@ -38,12 +36,10 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
             return GetDocumentAsync(id);
         }
 
-        public async Task<IEnumerable<SharedConnectionSummary>> GetSharedConnectionsForOrgAsync(string orgId)
+        public async Task<ListResponse<SharedConnectionSummary>> GetSharedConnectionsForOrgAsync(string orgId, ListRequest listRequest)
         {
-            var items = await base.QueryAsync(qry => qry.OwnerOrganization.Id == orgId);
-
-            return from item in items
-                   select item.CreateSummary();
+            var items = await base.QueryAsync(qry => qry.IsPublic == true || qry.OwnerOrganization.Id == orgId, qry => qry.Name, listRequest);
+            return ListResponse<SharedConnectionSummary>.Create(items.Model.Select(itm => itm.CreateSummary()), items);
         }
 
         public async Task<bool> QueryKeyInUseAsync(string key, string orgId)

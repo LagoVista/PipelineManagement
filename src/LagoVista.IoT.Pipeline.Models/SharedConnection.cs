@@ -23,9 +23,10 @@ namespace LagoVista.IoT.Pipeline.Models
         Redis,
     }
 
-
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnection_Title, PipelineAdminResources.Names.SharedConnection_Help, PipelineAdminResources.Names.SharedConnection_Description,
-        EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
+        EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory", 
+        DeleteUrl: "/api/sharedconnection/{id}")]
     public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity, IFormDescriptor
     {
         public const string SHARED_CONNECTION_TYPE_AWS = "aws";
@@ -58,7 +59,8 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureStorageName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureStorageAccountName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccessKey, HelpResource: PipelineAdminResources.Names.DataStream_AzureAccessKeyHelp, FieldType: FieldTypes.Password, SecureIdFieldName: nameof(AzureAccessKeySecureId), ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccessKey, SecureIdFieldName:nameof(AzureAccessKeySecureId),
+            HelpResource: PipelineAdminResources.Names.DataStream_AzureAccessKeyHelp, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureAccessKey { get; set; }
 
 
@@ -68,7 +70,8 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSRegion, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AwsRegion { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSSecretKey, HelpResource: PipelineAdminResources.Names.DataStream_AWSSecretKey_Help, FieldType: FieldTypes.Password, SecureIdFieldName:nameof(AWSSecretKeySecureId), ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSSecretKey, SecureIdFieldName:nameof(AWSSecretKeySecureId), 
+            HelpResource: PipelineAdminResources.Names.DataStream_AWSSecretKey_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AwsSecretKey { get; set; }
 
 
@@ -79,7 +82,8 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbUserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbUserName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbPassword, HelpResource: PipelineAdminResources.Names.DataStream_DbPassword_Help, FieldType: FieldTypes.Password, SecureIdFieldName:nameof(DBPasswordSecureId), ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbPassword, SecureIdFieldName:nameof(DBPasswordSecureId), 
+            HelpResource: PipelineAdminResources.Names.DataStream_DbPassword_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbPassword { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbSchema, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
@@ -88,7 +92,8 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisPassword, HelpResource: PipelineAdminResources.Names.DataStream_RedisPassword_Help, FieldType: FieldTypes.Password, SecureIdFieldName:nameof(RedisPasswordSecureId), ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisPassword, SecureIdFieldName:nameof(RedisPasswordSecureId), 
+            HelpResource: PipelineAdminResources.Names.DataStream_RedisPassword_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string RedisPassword { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisServers, HelpResource: PipelineAdminResources.Names.DataStream_RedisServers_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
@@ -261,6 +266,11 @@ namespace LagoVista.IoT.Pipeline.Models
         }
     }
 
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnection_Title, PipelineAdminResources.Names.SharedConnection_Help, 
+        PipelineAdminResources.Names.SharedConnection_Description,
+        EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
+        DeleteUrl: "/api/sharedconnection/{id}")]
     public class SharedConnectionSummary : SummaryData
     {
         public string ConnectionType { get; set; }

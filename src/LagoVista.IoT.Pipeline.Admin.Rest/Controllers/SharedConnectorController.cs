@@ -62,12 +62,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/sharedconnections")]
-        public async Task<ListResponse<SharedConnectionSummary>> GetSharedConnectionsForOrgAsync()
+        public Task<ListResponse<SharedConnectionSummary>> GetSharedConnectionsForOrgAsync()
         {
-            var hostSummaries = await _connectionManager.GetSharedConnectionsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            var response = ListResponse<SharedConnectionSummary>.Create(hostSummaries);
-
-            return response;
+            return _connectionManager.GetSharedConnectionsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>

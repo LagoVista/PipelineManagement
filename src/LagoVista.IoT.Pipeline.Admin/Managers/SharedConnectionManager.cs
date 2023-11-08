@@ -2,13 +2,12 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Managers;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
-using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Models;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Pipeline.Admin.Managers
@@ -146,10 +145,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return cahce;
         }
 
-        public async Task<IEnumerable<SharedConnectionSummary>> GetSharedConnectionsForOrgAsync(string orgId, EntityHeader user)
+        public async Task<ListResponse<SharedConnectionSummary>> GetSharedConnectionsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest)
         {
             await AuthorizeOrgAccessAsync(user, orgId, typeof(SharedConnection));
-            return await _sharedConnectionRepo.GetSharedConnectionsForOrgAsync(orgId);
+            return await _sharedConnectionRepo.GetSharedConnectionsForOrgAsync(orgId,listRequest);
         }
 
         public Task<bool> QueryKeyInUseAsync(string key, EntityHeader org)

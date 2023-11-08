@@ -5,7 +5,6 @@ using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
-using LagoVista.IoT.Web.Common.Attributes;
 using LagoVista.IoT.Web.Common.Controllers;
 using LagoVista.UserAdmin.Models.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -14,8 +13,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
@@ -40,12 +37,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/clientapi/datastreams")]
-        public async Task<ListResponse<DataStreamSummary>> GetDataStreamsForOrgAsync()
+        public Task<ListResponse<DataStreamSummary>> GetDataStreamsForOrgAsync()
         {
-            var hostSummaries = await _dataStreamManager.GetDataStreamsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            var response = ListResponse<DataStreamSummary>.Create(hostSummaries);
-
-            return response;
+            return _dataStreamManager.GetDataStreamsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿/*8/5/2023 1:19:57 PM*/
+﻿/*11/7/2023 8:29:58 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1347,6 +1347,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Translator_Type_Message
 
 		public static string Translator_Type_Message { get { return GetResourceString("Translator_Type_Message"); } }
+//Resources:PipelineAdminResources:Translator_Type_Script
+
+		public static string Translator_Type_Script { get { return GetResourceString("Translator_Type_Script"); } }
 //Resources:PipelineAdminResources:Translator_Type_String
 
 		public static string Translator_Type_String { get { return GetResourceString("Translator_Type_String"); } }
@@ -1823,6 +1826,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Translator_Type_Delimited = "Translator_Type_Delimited";
 			public const string Translator_Type_JSON = "Translator_Type_JSON";
 			public const string Translator_Type_Message = "Translator_Type_Message";
+			public const string Translator_Type_Script = "Translator_Type_Script";
 			public const string Translator_Type_String = "Translator_Type_String";
 			public const string Translator_Type_XML = "Translator_Type_XML";
 			public const string TranslatorType_AIModel = "TranslatorType_AIModel";

@@ -95,7 +95,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Listener_Title, PipelineAdminResources.Names.Listener_Help, PipelineAdminResources.Names.Listener_Description,
-        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/listeners", GetUrl: "/api/pipeline/admin/listener/{id}", SaveUrl: "/api/pipeline/admin/listener", DeleteUrl: "/api/pipeline/admin/listener/{id}", 
+        FactoryUrl: "/api/pipeline/admin/listener/factory")]
     public class ListenerConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields
     {
 
@@ -592,5 +594,27 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         /// Populated at run time so any modules that need to create temporary storage for event hub checkpoint containers
         /// </summary>
         public string EventHubCheckPointContainerStorageAccessKey { get; set; }
+
+        public ListenerConfigurationSummary CreateSummary()
+        {
+            return new ListenerConfigurationSummary()
+            {
+                Id = Id,
+                Name = Name,
+                Key = Key,
+                IsPublic = IsPublic,
+                Description = Description
+            };
+        }
+    }
+
+
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Listener_Title, PipelineAdminResources.Names.Listener_Help, PipelineAdminResources.Names.Listener_Description,
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/listeners", GetUrl: "/api/pipeline/admin/listener/{id}", SaveUrl: "/api/pipeline/admin/listener", DeleteUrl: "/api/pipeline/admin/listener/{id}",
+        FactoryUrl: "/api/pipeline/admin/listener/factory")]
+    public class ListenerConfigurationSummary : SummaryData
+    {
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using LagoVista.IoT.Pipeline.Admin.Models;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Pipeline.Admin.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Repos
 
         Task<DataStream> GetDataStreamAsync(string id);
 
-        Task<IEnumerable<DataStreamSummary>> GetDataStreamsForOrgAsync(string orgId);
+        Task<ListResponse<DataStreamSummary>> GetDataStreamsForOrgAsync(string orgId, ListRequest listRequest);
 
         Task DeleteDataStreamAsync(string dataStreamId);
 

@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Models;
 using System;
@@ -12,7 +13,7 @@ namespace LagoVista.IoT.Pipeline.Admin
         Task<InvokeResult> AddApplicationCacheAsync(ApplicationCache stream,  EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateApplicationCacheAsync(ApplicationCache stream, EntityHeader org, EntityHeader user);
         Task<InvokeResult<ApplicationCache>> LoadFullApplicationCacheConfigurationAsync(String id, EntityHeader org, EntityHeader user);
-        Task<IEnumerable<ApplicationCacheSummary>> GetApplicationCachesForOrgAsync(string orgId, EntityHeader user);
+        Task<ListResponse<ApplicationCacheSummary>> GetApplicationCachesForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest);
         Task<ApplicationCache> GetApplicationCacheAsync(string applicationCacheId, EntityHeader org, EntityHeader user);
         Task<DependentObjectCheckResult> CheckApplicationCacheInUseAsync(string applicationCacheId, EntityHeader org, EntityHeader user);
         Task<InvokeResult> DeleteDatStreamAsync(string applicationCacheId, EntityHeader org, EntityHeader user);

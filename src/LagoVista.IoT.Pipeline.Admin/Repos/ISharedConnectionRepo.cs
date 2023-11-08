@@ -1,4 +1,5 @@
-﻿using LagoVista.IoT.Pipeline.Models;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Pipeline.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Repos
 
         Task<SharedConnection> GetSharedConnectionAsync(string id);
 
-        Task<IEnumerable<SharedConnectionSummary>> GetSharedConnectionsForOrgAsync(string orgId);
+        Task<ListResponse<SharedConnectionSummary>> GetSharedConnectionsForOrgAsync(string orgId, ListRequest listRequest);
 
         Task DeleteSharedConnectionAsync(string id);
 

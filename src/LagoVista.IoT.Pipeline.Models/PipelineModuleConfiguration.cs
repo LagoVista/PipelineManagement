@@ -33,6 +33,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         Custom,
     }
 
+
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help,
+        PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/inputtranslators", GetUrl: "/api/pipeline/admin/inputtranslator/{id}", SaveUrl: "/api/pipeline/admin/inputtranslator",
+        DeleteUrl: "/api/pipeline/admin/inputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/inputtranslator/factory")]
     public abstract class PipelineModuleConfiguration : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity
     {
         public const string PipelineModuleType_Listener = "listener";
@@ -63,22 +68,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public bool DebugMode { get; set; }
 
-        public PipelineModuleConfigurationSummary CreateSummary()
-        {
-            return new PipelineModuleConfigurationSummary()
-            {
-                Id = Id,
-                Name = Name,
-                Key = Key,
-                IsPublic = IsPublic,
-                Description = Description
-            };
-        }
     }
-
-    public class PipelineModuleConfigurationSummary : LagoVista.Core.Models.SummaryData
-    {
-
-    }
-
+ 
 }

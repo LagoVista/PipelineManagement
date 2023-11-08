@@ -8,7 +8,9 @@ using System.Collections.Generic;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.DataStreamField_Title, PipelineAdminResources.Names.DataStreamField_Help, PipelineAdminResources.Names.DataStreamField_Help, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.DataStreamField_Title, PipelineAdminResources.Names.DataStreamField_Help, 
+        PipelineAdminResources.Names.DataStreamField_Help, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        FactoryUrl: "/api/datastreamfield/factory")]
     public class DataStreamField : IValidateable, IFormDescriptor
     {
         [Newtonsoft.Json.JsonProperty("id")]
@@ -33,10 +35,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_DataType, EnumType: (typeof(ParameterTypes)), HelpResource: PipelineAdminResources.Names.DataStreamField_DataType_Help, FieldType: FieldTypes.Picker, WaterMark:PipelineAdminResources.Names.DataStreamField_DataType_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public EntityHeader<ParameterTypes> FieldType { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_UnitSet, FieldType: FieldTypes.EntityHeaderPicker, WaterMark: PipelineAdminResources.Names.DataStreamField_UnitSet_Watermark,  ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_UnitSet, FieldType: FieldTypes.EntityHeaderPicker, WaterMark: PipelineAdminResources.Names.DataStreamField_UnitSet_Watermark,
+           EntityHeaderPickerUrl: "/api/deviceadmin/unitsets", ResourceType: typeof(PipelineAdminResources))]
         public EntityHeader<UnitSet> UnitSet { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_StateSet, FieldType: FieldTypes.EntityHeaderPicker, WaterMark: PipelineAdminResources.Names.DataStreamField_StateSet_Watermark, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_StateSet, FieldType: FieldTypes.EntityHeaderPicker, WaterMark: PipelineAdminResources.Names.DataStreamField_StateSet_Watermark, 
+            EntityHeaderPickerUrl:"/api/statemachine/statesets", ResourceType: typeof(PipelineAdminResources))]
         public EntityHeader<StateSet> StateSet { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.DataStreamField_IsKey, HelpResource: PipelineAdminResources.Names.DataStreamField_IsKey_Description, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]

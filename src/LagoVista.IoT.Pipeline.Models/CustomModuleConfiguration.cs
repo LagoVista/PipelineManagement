@@ -35,10 +35,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         AuthenticationHeader,
     }
 
-
-
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.CustomModule_Title, PipelineAdminResources.Names.CustomModule_Help, 
-        PipelineAdminResources.Names.CustomModule_Description,EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
+        PipelineAdminResources.Names.CustomModule_Description,EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/custommodules", SaveUrl: "/api/pipeline/admin/custommodule", GetUrl: "/api/pipeline/admin/custommodule/{id}",
+        DeleteUrl: "/api/pipeline/admin/custommodule/{id}", FactoryUrl: "/api/pipeline/admin/custommodule/factory")]
     public class CustomModuleConfiguration : PipelineModuleConfiguration, IFormDescriptor
     {
         public const string CustomModuleType_Script = "script";
@@ -173,5 +173,27 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     break;
             }
         }
+
+        public CustomModuleConfigurationSummary CreateSummary()
+        {
+            return new CustomModuleConfigurationSummary()
+            {
+                Id = Id,
+                Name = Name,
+                Key = Key,
+                IsPublic = IsPublic,
+                Description = Description
+            };
+        }
+    }
+
+
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.CustomModule_Title, PipelineAdminResources.Names.CustomModule_Help,
+        PipelineAdminResources.Names.CustomModule_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        GetListUrl: "/api/pipeline/admin/custommodules", SaveUrl: "/api/pipeline/admin/custommodule", GetUrl: "/api/pipeline/admin/custommodule/{id}",
+        DeleteUrl: "/api/pipeline/admin/custommodule/{id}", FactoryUrl: "/api/pipeline/admin/custommodule/factory")]
+    public class CustomModuleConfigurationSummary : SummaryData
+    {
+
     }
 }

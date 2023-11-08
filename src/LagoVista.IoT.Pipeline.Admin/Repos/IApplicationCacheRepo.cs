@@ -1,7 +1,5 @@
-﻿using LagoVista.IoT.Pipeline.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Pipeline.Models;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Pipeline.Admin.Repos
@@ -14,7 +12,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Repos
 
         Task<ApplicationCache> GetApplicationCacheAsync(string id);
 
-        Task<IEnumerable<ApplicationCacheSummary>> GetApplicationCachesForOrgAsync(string orgId);
+        Task<ListResponse<ApplicationCacheSummary>> GetApplicationCachesForOrgAsync(string orgId, ListRequest listRequest);
 
         Task DeleteApplicationCacheAsync(string cacheId);
 

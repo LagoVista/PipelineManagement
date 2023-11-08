@@ -1,4 +1,5 @@
-﻿using LagoVista.IoT.Pipeline.Admin.Models;
+﻿using LagoVista.Core.Models.UIMetaData;
+using LagoVista.IoT.Pipeline.Admin.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +11,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Repos
     {
         Task AddPlannerConfigurationAsync(PlannerConfiguration sentinel);
         Task<PlannerConfiguration> GetPlannerConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetPlannerConfigurationsForOrgsAsync(string orgId);
+        Task<ListResponse<PlannerConfigurationSummary>> GetPlannerConfigurationsForOrgsAsync(string orgId, ListRequest listRequest);
         Task UpdatePlannerConfigurationAsync(PlannerConfiguration sentinel);
         Task DeletePlannerConfigurationAsync(string id);
         Task<bool> QueryKeyInUseAsync(String key, String orgId);

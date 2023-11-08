@@ -23,7 +23,9 @@ namespace LagoVista.IoT.Pipeline.Models
     }
 
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help, PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help, 
+        PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        GetListUrl: "/api/appcaches", GetUrl: "/api/appcache/{id}", SaveUrl: "/api/appcache", DeleteUrl: "/api/appcache/{id}", FactoryUrl: "/api/appcache/factory")]
     public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor
     {
         public ApplicationCache()
@@ -46,7 +48,8 @@ namespace LagoVista.IoT.Pipeline.Models
         public string Uri { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.AppCache_Password, HelpResource: PipelineAdminResources.Names.AppCache_Password_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.AppCache_Password, HelpResource: PipelineAdminResources.Names.AppCache_Password_Help, 
+            SecureIdFieldName:nameof(PasswordSecretId), FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string Password { get; set; }
 
 
@@ -79,7 +82,7 @@ namespace LagoVista.IoT.Pipeline.Models
         }
 
 
-        public new ApplicationCacheSummary CreateSummary()
+        public ApplicationCacheSummary CreateSummary()
         {
             return new ApplicationCacheSummary()
             {

@@ -24,13 +24,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
     [AppBuilder]
     public class ApplicationCacheController : LagoVistaBaseController
     {
-        IApplicationCacheManager _applicationCacheManager;
-        IAdminLogger _adminlogger;
-
+        private readonly IApplicationCacheManager _applicationCacheManager;
+      
         public ApplicationCacheController(IApplicationCacheManager applicationCacheManager, UserManager<AppUser> userManager, IAdminLogger logger) : base(userManager, logger)
         {
-            _applicationCacheManager = applicationCacheManager;
-            _adminlogger = logger;
+            _applicationCacheManager = applicationCacheManager ?? throw new ArgumentNullException(nameof(applicationCacheManager));
         }
 
         /// <summary>
@@ -72,12 +70,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/appcaches")]
-        public async Task<ListResponse<ApplicationCacheSummary>> GetApplicationCachesForOrgAsync()
+        public Task<ListResponse<ApplicationCacheSummary>> GetApplicationCachesForOrgAsync()
         {
-            var hostSummaries = await _applicationCacheManager.GetApplicationCachesForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            var response = ListResponse<ApplicationCacheSummary>.Create(hostSummaries);
-
-            return response;
+            return _applicationCacheManager.GetApplicationCachesForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>

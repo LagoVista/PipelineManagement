@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin.Models;
 
@@ -24,25 +25,25 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         Task<InvokeResult> DeleteTransmitterAsync(string id, EntityHeader org, EntityHeader user);
         Task<InputTranslatorConfiguration> GetInputTranslatorConfigurationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult<InputTranslatorConfiguration>> LoadFullInputTranslatorConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetInputTranslatorConfiugrationsForOrgAsync(string orgId, EntityHeader user);
+        Task<ListResponse<InputTranslatorConfigurationSummary>> GetInputTranslatorConfiugrationsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest);
         Task<ListenerConfiguration> GetListenerConfigurationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult<ListenerConfiguration>> LoadFullListenerConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetListenerConfiugrationsForOrgAsync(string orgId, EntityHeader user);
+        Task<ListResponse<ListenerConfigurationSummary>> GetListenerConfiugrationsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest);
         Task<OutputTranslatorConfiguration> GetOutputTranslatorConfigurationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult<OutputTranslatorConfiguration>> LoadFullOutputTranslatorConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetOutputTranslatorConfiugrationsForOrgAsync(string orgId, EntityHeader user);
+        Task<ListResponse<OutputTranslatorConfigurationSummary>> GetOutputTranslatorConfiugrationsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest);
         Task<CustomModuleConfiguration> GetCustomPipelineModuleConfigurationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult<CustomModuleConfiguration>> LoadFullCustomPipelineModuleConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetCustomPipelineModuleConfiugrationsForOrgAsync(string orgId, EntityHeader user);
+        Task<ListResponse<CustomModuleConfigurationSummary>> GetCustomPipelineModuleConfiugrationsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest);
         Task<SentinelConfiguration> GetSentinelConfigurationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult<SentinelConfiguration>> LoadFullSentinelConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetSentinelConfiugrationsForOrgAsync(string orgId, EntityHeader user);
+        Task<ListResponse<SentinelConfigurationSummary>> GetSentinelConfiugrationsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest);
         Task<PlannerConfiguration> GetPlannerConfigurationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult<PlannerConfiguration>> LoadFullPlannerConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetPlannerConfiugrationsForOrgAsync(string orgId, EntityHeader user);
+        Task<ListResponse<PlannerConfigurationSummary>> GetPlannerConfiugrationsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest);
         Task<TransmitterConfiguration> GetTransmitterConfigurationAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult<TransmitterConfiguration>> LoadFullTransmitterConfigurationAsync(string id);
-        Task<IEnumerable<PipelineModuleConfigurationSummary>> GetTransmitterConfiugrationsForOrgAsync(string orgId, EntityHeader user);
+        Task<ListResponse<TransmitterConfigurationSummary>> GetTransmitterConfiugrationsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest);
         
         Task<InvokeResult> UpdateInputTranslatorConfigurationAsync(InputTranslatorConfiguration inputTranslatorConfiguration, EntityHeader org, EntityHeader user);
         Task<InvokeResult> UpdateSentinelConfigurationAsync(SentinelConfiguration sentinalConfiguration, EntityHeader org, EntityHeader user);

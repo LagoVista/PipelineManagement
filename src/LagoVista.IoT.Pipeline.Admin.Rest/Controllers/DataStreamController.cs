@@ -71,12 +71,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/api/datastreams")]
-        public async Task<ListResponse<DataStreamSummary>> GetDataStreamsForOrgAsync()
+        public Task<ListResponse<DataStreamSummary>> GetDataStreamsForOrgAsync()
         {
-            var hostSummaries = await _dataStreamManager.GetDataStreamsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader);
-            var response = ListResponse<DataStreamSummary>.Create(hostSummaries);
-
-            return response;
+            return _dataStreamManager.GetDataStreamsForOrgAsync(OrgEntityHeader.Id, UserEntityHeader, GetListRequestFromHeader());
         }
 
         /// <summary>

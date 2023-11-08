@@ -1456,4 +1456,7 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Connection_Type_HostedMQTT" xml:space="preserve">
     <value>Internally Hosted MQTT</value>
   </data>
+  <data name="Translator_Type_Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
 </root>

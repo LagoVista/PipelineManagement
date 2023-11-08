@@ -608,10 +608,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return dataStream;
         }
 
-        public async Task<IEnumerable<DataStreamSummary>> GetDataStreamsForOrgAsync(string orgId, EntityHeader user)
+        public async Task<ListResponse<DataStreamSummary>> GetDataStreamsForOrgAsync(string orgId, EntityHeader user, ListRequest listRequest)
         {
             await AuthorizeOrgAccessAsync(user, orgId, typeof(DataStreamSummary));
-            return await _dataStreamRepo.GetDataStreamsForOrgAsync(orgId);
+            return await _dataStreamRepo.GetDataStreamsForOrgAsync(orgId, listRequest);
         }
 
         public Task<bool> QueryKeyInUseAsync(string key, EntityHeader org)
