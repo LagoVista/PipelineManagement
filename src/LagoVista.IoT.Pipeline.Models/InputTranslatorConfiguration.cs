@@ -41,7 +41,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_DelimterSequence, HelpResource: PipelineAdminResources.Names.InputTranslator_DelimiterSquence_Help, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string DelimiterSequence { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, ScriptTemplateName:"input_translator_script",  FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, ScriptTemplateName:"input_translator_script", WaterMark:PipelineAdminResources.Names.Common_EditScript, FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public String Script { get; set; }
 
 
@@ -62,6 +62,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(Name),
                 nameof(Key),
                 nameof(InputTranslatorType),
+                nameof(Script),
                 nameof(Model),
                 nameof(ModelRevision),
                 nameof(Description),

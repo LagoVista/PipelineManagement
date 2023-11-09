@@ -16,8 +16,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     {
         public PlannerConfiguration()
         {
-            DeviceIdParsers = new List<DeviceMessageDefinitionField>();
-            MessageTypeIdParsers = new List<DeviceMessageDefinitionField>();
+            DeviceIdParsers = new List<DeviceField>();
+            MessageTypeIdParsers = new List<DeviceField>();
         }
 
 
@@ -25,12 +25,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public EntityHeader<PipelineModuleConfiguration> PipelineModules { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Planner_DeviceIDParsers, HelpResource: PipelineAdminResources.Names.Planner_DeviceIDParsers_Help, FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
-        public List<DeviceMessageDefinitionField> DeviceIdParsers { get; set; }
+        [FormField(LabelResource: PipelineAdminResources.Names.Planner_DeviceIDParsers, HelpResource: PipelineAdminResources.Names.Planner_DeviceIDParsers_Help, 
+            FactoryUrl: "/api/device/envelope/field/factory", FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
+        public List<DeviceField> DeviceIdParsers { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Planner_MessageTypeIDParsers, HelpResource: PipelineAdminResources.Names.Planner_MessageTypeIDParsers_Help, FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
-        public List<DeviceMessageDefinitionField> MessageTypeIdParsers { get; set; }
+        [FormField(LabelResource: PipelineAdminResources.Names.Planner_MessageTypeIDParsers, HelpResource: PipelineAdminResources.Names.Planner_MessageTypeIDParsers_Help,
+            FactoryUrl: "/api/device/envelope/field/factory", FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
+        public List<DeviceField> MessageTypeIdParsers { get; set; }
 
         public override string ModuleType => PipelineModuleType_Planner;
 
@@ -60,7 +62,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             }
         }
 
-        public new PlannerConfigurationSummary CreateSummary()
+        public PlannerConfigurationSummary CreateSummary()
         {
             return new PlannerConfigurationSummary()
             {
