@@ -1,4 +1,4 @@
-﻿/*11/8/2023 8:52:26 AM*/
+﻿/*11/11/2023 9:02:15 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1329,9 +1329,42 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:SharedConnection_Help
 
 		public static string SharedConnection_Help { get { return GetResourceString("SharedConnection_Help"); } }
+//Resources:PipelineAdminResources:SharedConnection_MQTT
+
+		public static string SharedConnection_MQTT { get { return GetResourceString("SharedConnection_MQTT"); } }
+//Resources:PipelineAdminResources:SharedConnection_Mqtt_Password
+
+		public static string SharedConnection_Mqtt_Password { get { return GetResourceString("SharedConnection_Mqtt_Password"); } }
+//Resources:PipelineAdminResources:SharedConnection_Mqtt_Port
+
+		public static string SharedConnection_Mqtt_Port { get { return GetResourceString("SharedConnection_Mqtt_Port"); } }
+//Resources:PipelineAdminResources:SharedConnection_Mqtt_Secure
+
+		public static string SharedConnection_Mqtt_Secure { get { return GetResourceString("SharedConnection_Mqtt_Secure"); } }
+//Resources:PipelineAdminResources:SharedConnection_Mqtt_Url
+
+		public static string SharedConnection_Mqtt_Url { get { return GetResourceString("SharedConnection_Mqtt_Url"); } }
+//Resources:PipelineAdminResources:SharedConnection_Mqtt_UserName
+
+		public static string SharedConnection_Mqtt_UserName { get { return GetResourceString("SharedConnection_Mqtt_UserName"); } }
 //Resources:PipelineAdminResources:SharedConnection_Redis
 
 		public static string SharedConnection_Redis { get { return GetResourceString("SharedConnection_Redis"); } }
+//Resources:PipelineAdminResources:SharedConnection_Server
+
+		public static string SharedConnection_Server { get { return GetResourceString("SharedConnection_Server"); } }
+//Resources:PipelineAdminResources:SharedConnection_Server_Password
+
+		public static string SharedConnection_Server_Password { get { return GetResourceString("SharedConnection_Server_Password"); } }
+//Resources:PipelineAdminResources:SharedConnection_Server_Port
+
+		public static string SharedConnection_Server_Port { get { return GetResourceString("SharedConnection_Server_Port"); } }
+//Resources:PipelineAdminResources:SharedConnection_Server_Url
+
+		public static string SharedConnection_Server_Url { get { return GetResourceString("SharedConnection_Server_Url"); } }
+//Resources:PipelineAdminResources:SharedConnection_Server_UserName
+
+		public static string SharedConnection_Server_UserName { get { return GetResourceString("SharedConnection_Server_UserName"); } }
 //Resources:PipelineAdminResources:SharedConnection_Title
 
 		public static string SharedConnection_Title { get { return GetResourceString("SharedConnection_Title"); } }
@@ -1823,7 +1856,18 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string SharedConnection_Database = "SharedConnection_Database";
 			public const string SharedConnection_Description = "SharedConnection_Description";
 			public const string SharedConnection_Help = "SharedConnection_Help";
+			public const string SharedConnection_MQTT = "SharedConnection_MQTT";
+			public const string SharedConnection_Mqtt_Password = "SharedConnection_Mqtt_Password";
+			public const string SharedConnection_Mqtt_Port = "SharedConnection_Mqtt_Port";
+			public const string SharedConnection_Mqtt_Secure = "SharedConnection_Mqtt_Secure";
+			public const string SharedConnection_Mqtt_Url = "SharedConnection_Mqtt_Url";
+			public const string SharedConnection_Mqtt_UserName = "SharedConnection_Mqtt_UserName";
 			public const string SharedConnection_Redis = "SharedConnection_Redis";
+			public const string SharedConnection_Server = "SharedConnection_Server";
+			public const string SharedConnection_Server_Password = "SharedConnection_Server_Password";
+			public const string SharedConnection_Server_Port = "SharedConnection_Server_Port";
+			public const string SharedConnection_Server_Url = "SharedConnection_Server_Url";
+			public const string SharedConnection_Server_UserName = "SharedConnection_Server_UserName";
 			public const string SharedConnection_Title = "SharedConnection_Title";
 			public const string Translator_Type_Binary = "Translator_Type_Binary";
 			public const string Translator_Type_Custom = "Translator_Type_Custom";

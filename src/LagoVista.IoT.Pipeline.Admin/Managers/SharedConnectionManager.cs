@@ -102,6 +102,44 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                     connection.RedisPassword = null;
                 }
             }
+            else if (connection.ConnectionType.Value == SharedConnectionTypes.Server)
+            {
+                if (!String.IsNullOrEmpty(connection.ServerPassword))
+                {
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, connection.ServerPassword);
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
+
+                    if (!string.IsNullOrEmpty(connection.ServerPasswordSecureId))
+                    {
+                        await _secureStorage.RemoveSecretAsync(org, connection.ServerPasswordSecureId);
+                    }
+
+                    connection.ServerPasswordSecureId = addSecretResult.Result;
+                    connection.ServerPassword = null;
+                }
+            }
+            else if (connection.ConnectionType.Value == SharedConnectionTypes.Mqtt)
+            {
+                if (!String.IsNullOrEmpty(connection.MqttPassword))
+                {
+                    var addSecretResult = await _secureStorage.AddSecretAsync(org, connection.MqttPassword);
+                    if (!addSecretResult.Successful)
+                    {
+                        return addSecretResult.ToInvokeResult();
+                    }
+
+                    if (!string.IsNullOrEmpty(connection.MqttPasswordSecureId))
+                    {
+                        await _secureStorage.RemoveSecretAsync(org, connection.MqttPasswordSecureId);
+                    }
+
+                    connection.MqttPasswordSecureId = addSecretResult.Result;
+                    connection.MqttPassword = null;
+                }
+            }
 
             return InvokeResult.Success;
         }

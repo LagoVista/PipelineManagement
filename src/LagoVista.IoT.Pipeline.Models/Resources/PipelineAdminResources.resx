@@ -1462,4 +1462,37 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Common_EditScript" xml:space="preserve">
     <value>Edit Script</value>
   </data>
+  <data name="SharedConnection_MQTT" xml:space="preserve">
+    <value>MQTT</value>
+  </data>
+  <data name="SharedConnection_Mqtt_Password" xml:space="preserve">
+    <value>MQTT Password</value>
+  </data>
+  <data name="SharedConnection_Mqtt_Port" xml:space="preserve">
+    <value>MQTT Port</value>
+  </data>
+  <data name="SharedConnection_Mqtt_Secure" xml:space="preserve">
+    <value>Secure/TLS</value>
+  </data>
+  <data name="SharedConnection_Mqtt_Url" xml:space="preserve">
+    <value>MQTT Url</value>
+  </data>
+  <data name="SharedConnection_Mqtt_UserName" xml:space="preserve">
+    <value>MQTT User Name</value>
+  </data>
+  <data name="SharedConnection_Server" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="SharedConnection_Server_Password" xml:space="preserve">
+    <value>Server Password</value>
+  </data>
+  <data name="SharedConnection_Server_Port" xml:space="preserve">
+    <value>Server Port</value>
+  </data>
+  <data name="SharedConnection_Server_Url" xml:space="preserve">
+    <value>Server Url</value>
+  </data>
+  <data name="SharedConnection_Server_UserName" xml:space="preserve">
+    <value>Server User Name</value>
+  </data>
 </root>

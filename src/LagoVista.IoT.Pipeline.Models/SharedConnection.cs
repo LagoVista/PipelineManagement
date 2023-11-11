@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceAdmin.Interfaces;
 using LagoVista.IoT.Pipeline.Admin;
@@ -21,23 +22,32 @@ namespace LagoVista.IoT.Pipeline.Models
         Database,
         [EnumLabel(SharedConnection.SHARED_CONNECTION_TYPE_REDIS, PipelineAdminResources.Names.SharedConnection_Redis, typeof(PipelineAdminResources))]
         Redis,
+        [EnumLabel(SharedConnection.SHARED_CONNECTION_TYPE_MQTT, PipelineAdminResources.Names.SharedConnection_MQTT, typeof(PipelineAdminResources))]
+        Mqtt,
+        [EnumLabel(SharedConnection.SHARED_CONNECTION_TYPE_SERVER, PipelineAdminResources.Names.SharedConnection_Server, typeof(PipelineAdminResources))]
+        Server,
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnection_Title, PipelineAdminResources.Names.SharedConnection_Help, PipelineAdminResources.Names.SharedConnection_Description,
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
-        GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory", 
+        GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
         DeleteUrl: "/api/sharedconnection/{id}")]
-    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity, IFormDescriptor
+    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity, IFormDescriptor, IFormConditionalFields
     {
         public const string SHARED_CONNECTION_TYPE_AWS = "aws";
         public const string SHARED_CONNECTION_TYPE_AZURE = "azure";
         public const string SHARED_CONNECTION_TYPE_REDIS = "redis";
         public const string SHARED_CONNECTION_TYPE_DATABASE = "database";
+        public const string SHARED_CONNECTION_TYPE_SERVER = "server";
+        public const string SHARED_CONNECTION_TYPE_MQTT = "mqtt";
 
         public string AWSSecretKeySecureId { get; set; }
         public string AzureAccessKeySecureId { get; set; }
         public string DBPasswordSecureId { get; set; }
         public string RedisPasswordSecureId { get; set; }
+        public string ServerPasswordSecureId { get; set; }
+
+        public string MqttPasswordSecureId { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Key, HelpResource: PipelineAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: PipelineAdminResources.Names.Common_Key_Validation, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public String Key { get; set; }
@@ -59,7 +69,7 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureStorageName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureStorageAccountName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccessKey, SecureIdFieldName:nameof(AzureAccessKeySecureId),
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AzureAccessKey, SecureIdFieldName: nameof(AzureAccessKeySecureId),
             HelpResource: PipelineAdminResources.Names.DataStream_AzureAccessKeyHelp, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AzureAccessKey { get; set; }
 
@@ -70,7 +80,7 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSRegion, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AwsRegion { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSSecretKey, SecureIdFieldName:nameof(AWSSecretKeySecureId), 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_AWSSecretKey, SecureIdFieldName: "awsSecretKeySecureId",
             HelpResource: PipelineAdminResources.Names.DataStream_AWSSecretKey_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string AwsSecretKey { get; set; }
 
@@ -82,7 +92,7 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbUserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbUserName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbPassword, SecureIdFieldName:nameof(DBPasswordSecureId), 
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbPassword, SecureIdFieldName: nameof(DBPasswordSecureId),
             HelpResource: PipelineAdminResources.Names.DataStream_DbPassword_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbPassword { get; set; }
 
@@ -92,7 +102,39 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_DbName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string DbName { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisPassword, SecureIdFieldName:nameof(RedisPasswordSecureId), 
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_Server_Url, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string ServerUrl { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_Server_Port, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public int ServerPort { get; set; } = 80;
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_Server_UserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string ServerUserName { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_Server_Password, SecureIdFieldName: nameof(ServerPasswordSecureId), 
+            FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string ServerPassword { get; set; }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_Mqtt_Url, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string MqttUrl { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_Mqtt_Port, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public int MqttPort { get; set; } = 1883;
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_Mqtt_Secure, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string MqttSecure { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_Mqtt_UserName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string MqttUsername { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_Mqtt_Password, SecureIdFieldName: nameof(MqttPasswordSecureId), FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        public string MqttPassword { get; set; }
+
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_RedisPassword, SecureIdFieldName: nameof(RedisPasswordSecureId),
             HelpResource: PipelineAdminResources.Names.DataStream_RedisPassword_Help, FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string RedisPassword { get; set; }
 
@@ -209,6 +251,32 @@ namespace LagoVista.IoT.Pipeline.Models
                 }
             }
 
+            if (ConnectionType.Value == SharedConnectionTypes.Mqtt)
+            {
+                if (string.IsNullOrEmpty(MqttUrl)) result.Errors.Add(new ErrorMessage("URL of mqtt server is required for a mqtt server."));
+                if (string.IsNullOrEmpty(MqttUsername)) result.Errors.Add(new ErrorMessage("User name of mqtt server is required for a mqtt server."));
+
+                if (MqttPort == 0) result.Errors.Add(new ErrorMessage("MQTT Port should not be 0."));
+
+                if (string.IsNullOrEmpty(MqttPassword) && string.IsNullOrEmpty(MqttPasswordSecureId))
+                {
+                    result.Errors.Add(new ErrorMessage("MQTT Password or SecretKeyId are required for a a mqtt server, if you are updating and replacing the password you should provide the new mqtt Password otherwise you should return the original secret key id."));
+                }
+            }
+
+
+            if (ConnectionType.Value == SharedConnectionTypes.Server)
+            {
+                if (string.IsNullOrEmpty(ServerUrl)) result.Errors.Add(new ErrorMessage("URL of server is required for a server."));
+                if (string.IsNullOrEmpty(ServerUserName)) result.Errors.Add(new ErrorMessage("Server User Name is required for a server."));
+                if (ServerPort == 0) result.Errors.Add(new ErrorMessage("Server Port should not be 0."));
+
+                if (string.IsNullOrEmpty(ServerPassword) && string.IsNullOrEmpty(ServerPasswordSecureId))
+                {
+                    result.Errors.Add(new ErrorMessage("Server Password or SecretKeyId are required for a server, if you are updating and replacing the key you should provide the new server password otherwise you should return the original secret key id."));
+                }
+            }
+
             #region Azure Type
             if (ConnectionType.Value == SharedConnectionTypes.Azure)
             {
@@ -226,17 +294,19 @@ namespace LagoVista.IoT.Pipeline.Models
 
         public override string ToString()
         {
-            if(EntityHeader.IsNullOrEmpty(ConnectionType))
+            if (EntityHeader.IsNullOrEmpty(ConnectionType))
             {
                 return "Connection type not set.";
             }
 
-            switch(ConnectionType.Value)
+            switch (ConnectionType.Value)
             {
                 case SharedConnectionTypes.AWS: return $"{ConnectionType.Value} {AwsAccessKey}, {AwsRegion}";
                 case SharedConnectionTypes.Azure: return $"{ConnectionType.Value} {AzureStorageAccountName}, {AzureAccessKeySecureId}";
                 case SharedConnectionTypes.Database: return $"{ConnectionType.Value} {DbURL}, {DbName}, {DBPasswordSecureId}";
                 case SharedConnectionTypes.Redis: return $"{ConnectionType.Value} {RedisServerUris} - {RedisPasswordSecureId}";
+                case SharedConnectionTypes.Mqtt: return $"{ConnectionType.Value} {MqttUrl}:{MqttPort} {MqttUsername} - {RedisPasswordSecureId}";
+                case SharedConnectionTypes.Server: return $"{ConnectionType.Value} {ServerUrl}:{ServerPort}, {ServerUserName} - {RedisPasswordSecureId}";
             }
 
             return base.ToString();
@@ -262,11 +332,141 @@ namespace LagoVista.IoT.Pipeline.Models
                 nameof(DbSchema),
                 nameof(DbUserName),
                 nameof(DbPassword),
+                nameof(MqttUrl),
+                nameof(MqttPort),
+                nameof(MqttSecure),
+                nameof(MqttUsername),
+                nameof(MqttPassword),
+                nameof(ServerUrl),
+                nameof(ServerPort),
+                nameof(ServerUserName),
+                nameof(ServerPassword)
+            };
+        }
+
+        public FormConditionals GetConditionalFields()
+        {
+            return new FormConditionals()
+            {
+                ConditionalFields = new List<string>() { nameof(AwsAccessKey), nameof(AwsRegion), nameof(AwsSecretKey),
+                    nameof(MqttUrl), nameof(MqttPort), nameof(MqttSecure), nameof(MqttUsername), nameof(MqttPassword), nameof(MqttPasswordSecureId),
+                    nameof(ServerUrl), nameof(ServerPort), nameof(ServerUserName), nameof(ServerPassword),
+                    nameof(DbName), nameof(DbPassword), nameof(DbSchema), nameof(DbURL), nameof(DbUserName), nameof(DbURL),
+                    nameof(RedisPassword), nameof(RedisServerUris),
+                    nameof(AzureAccessKey), nameof(AzureStorageAccountName) },
+                Conditionals = new List<FormConditional>()
+                {
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_AWS,
+                        ForUpdate = true,
+                        ForCreate = false,
+                        VisibleFields = new List<string>() { nameof(AwsAccessKey), nameof(AwsRegion), nameof(AwsSecretKey)},
+                        RequiredFields = new List<string>() { nameof(AwsAccessKey), nameof(AwsRegion)},
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_AWS,
+                        VisibleFields = new List<string>() { nameof(AwsAccessKey), nameof(AwsRegion), nameof(AwsSecretKey)},
+                        RequiredFields = new List<string>() { nameof(AwsAccessKey), nameof(AwsRegion), nameof(AwsSecretKey)},
+                        ForCreate = true,
+                        ForUpdate = false,
+                    },
+
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_AZURE,
+                        ForCreate = false,
+                        VisibleFields = new List<string>() { nameof(AzureAccessKey), nameof(AzureStorageAccountName)},
+                        RequiredFields = new List<string>() {  nameof(AzureStorageAccountName)},
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_AZURE,
+                        ForUpdate = false,
+                        VisibleFields = new List<string>() { nameof(AzureAccessKey), nameof(AzureStorageAccountName)},
+                        RequiredFields = new List<string>() {  nameof(AzureAccessKey), nameof(AzureStorageAccountName)},
+                    },
+               
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_REDIS,
+                        ForCreate=false,
+                        VisibleFields = new List<string>() { nameof(RedisPassword), nameof(RedisServerUris)},
+                        RequiredFields = new List<string>() {  nameof(RedisServerUris)},
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_REDIS,
+                        ForUpdate = false,
+                        VisibleFields = new List<string>() { nameof(RedisPassword), nameof(RedisServerUris)},
+                        RequiredFields = new List<string>() {  nameof(RedisPassword), nameof(RedisServerUris)},
+                    },
+
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_DATABASE,
+                        ForCreate = false,
+                        VisibleFields = new List<string>() { nameof(DbURL), nameof(DbName),nameof(DbSchema),nameof(DbUserName),nameof(DbPassword)},
+                        RequiredFields = new List<string>() {  nameof(DbURL), nameof(DbName),nameof(DbSchema),nameof(DbUserName)},
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_DATABASE,
+                        ForUpdate = false,
+                        VisibleFields = new List<string>() { nameof(DbURL), nameof(DbName),nameof(DbSchema),nameof(DbUserName),nameof(DbPassword)},
+                        RequiredFields = new List<string>() {  nameof(DbURL), nameof(DbName),nameof(DbSchema),nameof(DbUserName),nameof(DbPassword)},
+                    },
+
+
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_SERVER,
+                        ForCreate = false,
+                        VisibleFields = new List<string>() { nameof(ServerUrl), nameof(ServerPort),nameof(ServerUserName),nameof(ServerPassword)},
+                        RequiredFields = new List<string>() { nameof(ServerUrl), nameof(ServerPort),nameof(ServerUserName)},
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_SERVER,
+                        ForUpdate = false,
+                        VisibleFields = new List<string>() { nameof(ServerUrl), nameof(ServerPort),nameof(ServerUserName),nameof(ServerPassword)},
+                        RequiredFields = new List<string>() { nameof(ServerUrl), nameof(ServerPort),nameof(ServerUserName),nameof(ServerPassword)},
+                    },
+
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_MQTT,
+                        ForCreate = false,
+                        VisibleFields = new List<string>() { nameof(MqttUrl), nameof(MqttPort),nameof(MqttSecure),nameof(MqttUsername),nameof(MqttPassword)},
+                        RequiredFields = new List<string>() {  nameof(MqttUrl), nameof(MqttPort),nameof(MqttUsername)},
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(ConnectionType),
+                        Value = SHARED_CONNECTION_TYPE_MQTT,
+                        ForUpdate = false,
+                        VisibleFields = new List<string>() { nameof(MqttUrl), nameof(MqttPort),nameof(MqttSecure),nameof(MqttUsername),nameof(MqttPassword)},
+                        RequiredFields = new List<string>() {  nameof(MqttUrl), nameof(MqttPort),nameof(MqttUsername),nameof(MqttPassword)},
+                    },
+                }
+
             };
         }
     }
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnection_Title, PipelineAdminResources.Names.SharedConnection_Help, 
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnection_Title, PipelineAdminResources.Names.SharedConnection_Help,
         PipelineAdminResources.Names.SharedConnection_Description,
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
         GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
