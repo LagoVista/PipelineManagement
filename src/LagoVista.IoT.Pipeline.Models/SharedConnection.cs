@@ -5,7 +5,6 @@ using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceAdmin.Interfaces;
 using LagoVista.IoT.Pipeline.Admin;
-using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
 using System.Collections.Generic;
@@ -32,7 +31,7 @@ namespace LagoVista.IoT.Pipeline.Models
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
         GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
         DeleteUrl: "/api/sharedconnection/{id}")]
-    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity, IFormDescriptor, IFormConditionalFields
+    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IPipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields
     {
         public const string SHARED_CONNECTION_TYPE_AWS = "aws";
         public const string SHARED_CONNECTION_TYPE_AZURE = "azure";
@@ -49,18 +48,7 @@ namespace LagoVista.IoT.Pipeline.Models
 
         public string MqttPasswordSecureId { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Key, HelpResource: PipelineAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: PipelineAdminResources.Names.Common_Key_Validation, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
-        public String Key { get; set; }
-
-        public String DatabaseName { get; set; }
-
-        public String EntityType { get; set; }
-
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_IsPublic, HelpResource: PipelineAdminResources.Names.Common_IsPublic_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
-        public bool IsPublic { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
-
+      
 
         [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_ConnectionType, EnumType: typeof(SharedConnectionTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources),
             WaterMark: PipelineAdminResources.Names.SharedConnection_ConnectionType_Select, IsRequired: true)]

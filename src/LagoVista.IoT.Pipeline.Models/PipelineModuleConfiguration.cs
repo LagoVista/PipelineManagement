@@ -1,11 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
-using LagoVista.Core.Interfaces;
-using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceAdmin.Interfaces;
-using LagoVista.IoT.Pipeline.Admin.Resources;
 using LagoVista.IoT.Pipeline.Models.Resources;
-using System;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
@@ -33,7 +29,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         Custom,
     }
 
-    public abstract class PipelineModuleConfiguration : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IKeyedEntity, IPipelineModuleConfiguration, IOwnedEntity, INoSQLEntity
+    public abstract class PipelineModuleConfiguration : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IPipelineModuleConfiguration
     {
         public const string PipelineModuleType_Listener = "listener";
         public const string PipelineModuleType_Planner = "planner";
@@ -46,18 +42,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string PipelineModuleType_DataStream = "datastream";
         public const string PipelineModuleType_ApplicationCache = "applicationcachce";
         public const string PipelineModuleType_Dictionary = "dictionary";
-
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Key, HelpResource: PipelineAdminResources.Names.Common_Key_Help, FieldType: FieldTypes.Key, RegExValidationMessageResource: PipelineAdminResources.Names.Common_Key_Validation, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
-        public String Key { get; set; }
-
-        public String DatabaseName { get; set; }
-
-        public String EntityType { get; set; }
-
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_IsPublic, HelpResource: PipelineAdminResources.Names.Common_IsPublic_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
-        public bool IsPublic { get; set; }
-        public EntityHeader OwnerOrganization { get; set; }
-        public EntityHeader OwnerUser { get; set; }
 
         public abstract string ModuleType { get; }
 

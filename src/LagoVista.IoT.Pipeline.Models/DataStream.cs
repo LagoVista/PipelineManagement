@@ -219,6 +219,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public List<DataStreamField> Fields { get; set; }
 
 
+        [FKeyProperty(nameof(Pipeline.Models.SharedConnection))]
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_SharedConnection, FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), 
            EntityHeaderPickerUrl: "/api/sharedconnections", WaterMark: PipelineAdminResources.Names.DataStream_SharedConnection_Select)]
         public EntityHeader<SharedConnection> SharedConnection { get; set; }
