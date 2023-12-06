@@ -11,13 +11,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Planner_Title, PipelineAdminResources.Names.Planner_Help, 
         PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-planner",
         GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
-        FactoryUrl: "/api/pipeline/admin/listener/factory")]
+        FactoryUrl: "/api/pipeline/admin/planner/factory")]
     public class PlannerConfiguration : PipelineModuleConfiguration, IFormDescriptor
     {
         public PlannerConfiguration()
         {
-            DeviceIdParsers = new List<DeviceField>();
-            MessageTypeIdParsers = new List<DeviceField>();
+            DeviceIdParsers = new List<MessageAttributeParser>();
+            MessageTypeIdParsers = new List<MessageAttributeParser>();
         }
 
 
@@ -26,13 +26,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Planner_DeviceIDParsers, HelpResource: PipelineAdminResources.Names.Planner_DeviceIDParsers_Help, 
-            FactoryUrl: "/api/device/envelope/field/factory", FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
-        public List<DeviceField> DeviceIdParsers { get; set; }
+            FactoryUrl: "/api/messageattributeparser/factory", FieldType: FieldTypes.ChildListInline, InPlaceEditing:false, ResourceType: typeof(PipelineAdminResources))]
+        public List<MessageAttributeParser> DeviceIdParsers { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Planner_MessageTypeIDParsers, HelpResource: PipelineAdminResources.Names.Planner_MessageTypeIDParsers_Help,
-            FactoryUrl: "/api/device/envelope/field/factory", FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
-        public List<DeviceField> MessageTypeIdParsers { get; set; }
+            FactoryUrl: "/api/messageattributeparser/factory", FieldType: FieldTypes.ChildListInline, InPlaceEditing: false, ResourceType: typeof(PipelineAdminResources))]
+        public List<MessageAttributeParser> MessageTypeIdParsers { get; set; }
 
         public override string ModuleType => PipelineModuleType_Planner;
 
@@ -78,7 +78,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Planners_Title, PipelineAdminResources.Names.Planner_Help,
         PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-planner",
         GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
-        FactoryUrl: "/api/pipeline/admin/listener/factory")]
+        FactoryUrl: "/api/pipeline/admin/planner/factory")]
     public class PlannerConfigurationSummary : SummaryData
     {
     }
