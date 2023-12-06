@@ -1,4 +1,4 @@
-﻿/*11/11/2023 9:02:15 AM*/
+﻿/*12/4/2023 6:11:13 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1248,6 +1248,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Planner_Title
 
 		public static string Planner_Title { get { return GetResourceString("Planner_Title"); } }
+//Resources:PipelineAdminResources:Planners_Title
+
+		public static string Planners_Title { get { return GetResourceString("Planners_Title"); } }
 //Resources:PipelineAdminResources:Sentinel_Description
 
 		public static string Sentinel_Description { get { return GetResourceString("Sentinel_Description"); } }
@@ -1829,6 +1832,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Planner_MessageTypeIDParsers_Help = "Planner_MessageTypeIDParsers_Help";
 			public const string Planner_PipelineModules = "Planner_PipelineModules";
 			public const string Planner_Title = "Planner_Title";
+			public const string Planners_Title = "Planners_Title";
 			public const string Sentinel_Description = "Sentinel_Description";
 			public const string Sentinel_Help = "Sentinel_Help";
 			public const string Sentinel_SecurityField = "Sentinel_SecurityField";
