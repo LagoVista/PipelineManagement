@@ -583,24 +583,24 @@
     <value>-select output translator-</value>
   </data>
   <data name="Planner_Description" xml:space="preserve">
-    <value>The Planner is used to map an Incoming Message to a Device Configuration then based on that Incoming Message it will create the an execution plan for the remaining Pipeline Modules to complete processing the data.</value>
+    <value>The Planner is used to identify the device that sent the message as well as the specific message that is being sent.  Based on those two peices of information, the Device Configuration can be used to create plan from the Route for that specific message as to how the message should be processed.</value>
   </data>
   <data name="Planner_DeviceIDParsers" xml:space="preserve">
     <value>Device ID Parsers</value>
   </data>
   <data name="Planner_DeviceIDParsers_Help" xml:space="preserve">
-    <value>Your Planner will be Provided the raw message information as well as the message envlope headers.  It is the Planners Job to Extract the Device ID and Optionally a Message Type Id so it can be mapped to a Device Configuration. 
+    <value>Your Planner will be provided the raw message information as well as the message envlope headers.  It is the Planners job to Extract the Device ID and Optionally a Message Type Id so it can be mapped to a Device Configuration. 
 
 This is a list of parsers that are executed in the order they appear, if a match is not found with one parser, the next one is executed.  Once the first value response is identified, it will no longer search for additional matches.</value>
   </data>
   <data name="Planner_Help" xml:space="preserve">
-    <value>The Planner is used to map an Incoming Message to a Device Configuration then based on that Incoming Message it will create the an execution plan for the remaining Pipeline Modules to complete processing the data.</value>
+    <value>The Planner is used to identify the device that sent the message as well as the specific message that is being sent.  Based on those two peices of information, the Device Configuration can be used to create plan from the Route for that specific message as to how the message should be processed.</value>
   </data>
   <data name="Planner_MessageTypeIDParsers" xml:space="preserve">
     <value>Message Type ID Parsers</value>
   </data>
   <data name="Planner_MessageTypeIDParsers_Help" xml:space="preserve">
-    <value>Your Planner will be Provided the raw message information as well as the message envlope headers.  It is the Planners Job to Extract the Device ID and Optionally a Message Type Id so it can be mapped to a Device Configuration.
+    <value>Your Planner will be provided the raw message information as well as the message envlope headers.  It is the Planners job to Extract the Device ID and Optionally a Message Type Id so it can be mapped to a Device Configuration. 
 
 This is a list of parsers that are executed in the order they appear, if a match is not found with one parser, the next one is executed.  Once the first value response is identified, it will no longer search for additional matches.</value>
   </data>
