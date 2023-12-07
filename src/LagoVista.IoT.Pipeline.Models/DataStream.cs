@@ -246,7 +246,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             return new FormConditionals()
             {
                 ConditionalFields = { nameof(ElasticSearchDomainName), nameof(ElasticSearchIndexName), nameof(ElasticSearchTypeName),
-                    nameof(AwsAccessKey), nameof(AwsSecretKey), nameof(RedisPassword), nameof(RedisServerUris), nameof(DbName),
+                    nameof(AwsAccessKey), nameof(AwsRegion), nameof(AwsSecretKey), nameof(RedisPassword), nameof(RedisServerUris), nameof(DbName),
                     nameof(DbPassword), nameof(DbUserName), nameof(DbTableName), nameof(DbURL), nameof(DbSchema), nameof(CreateTableDDL),
                     nameof(DbValidateSchema), nameof(S3BucketName), nameof(AzureAccessKey), nameof(AzureStorageAccountName), nameof(DateStorageFormat),
                     nameof(AzureBlobStorageContainerName), nameof(AzureEventHubEntityPath), nameof(AzureEventHubName), nameof(AzureTableStorageName),
@@ -263,7 +263,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     {
                         Field = nameof(StreamType),
                         Value = StreamType_AWS_ElasticSearch,
-                        VisibleFields =  {nameof(SharedConnection), nameof(ElasticSearchDomainName), nameof(ElasticSearchIndexName), nameof(ElasticSearchTypeName), nameof(AwsAccessKey), nameof(AwsSecretKey)}
+                        VisibleFields =  {nameof(SharedConnection), nameof(ElasticSearchDomainName), nameof(ElasticSearchIndexName), nameof(ElasticSearchTypeName), nameof(AwsAccessKey), nameof(AwsRegion), nameof(AwsSecretKey)}
                     },
                     new FormConditional()
                     {
@@ -337,6 +337,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(DateStorageFormat),
 
                 nameof(AwsAccessKey),
+                nameof(AwsRegion),
                 nameof(AwsSecretKey),
 
                 nameof(AzureStorageAccountName),
