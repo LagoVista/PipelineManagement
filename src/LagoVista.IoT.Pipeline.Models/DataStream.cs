@@ -215,7 +215,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public bool IsSummaryLevelData { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.DataStream_Fields, FieldType: FieldTypes.ChildListInline, InPlaceEditing:false, ResourceType: typeof(PipelineAdminResources))]
         public List<DataStreamField> Fields { get; set; }
 
 
@@ -250,15 +250,74 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     nameof(DbPassword), nameof(DbUserName), nameof(DbTableName), nameof(DbURL), nameof(DbSchema), nameof(CreateTableDDL),
                     nameof(DbValidateSchema), nameof(S3BucketName), nameof(AzureAccessKey), nameof(AzureStorageAccountName), nameof(DateStorageFormat),
                     nameof(AzureBlobStorageContainerName), nameof(AzureEventHubEntityPath), nameof(AzureEventHubName), nameof(AzureTableStorageName),
-                    nameof(AutoCreateSQLTable), nameof(DeviceIdFieldName), nameof(TimestampFieldName) },
+                    nameof(AutoCreateSQLTable), nameof(SharedConnection) },
                 Conditionals = new List<FormConditional>()
                 {
                     new FormConditional()
                     {
+                        ForCreate = false,
+                        ForUpdate = true,
+                        ReadOnlyFields = new List<string>() {nameof(StreamType) }   
+                    },
+                    new FormConditional()
+                    {
                         Field = nameof(StreamType),
                         Value = StreamType_AWS_ElasticSearch,
-                        VisibleFields =  {nameof(ElasticSearchDomainName), nameof(ElasticSearchIndexName), nameof(ElasticSearchTypeName), nameof(AwsAccessKey), nameof(AwsSecretKey)}
-                    }
+                        VisibleFields =  {nameof(SharedConnection), nameof(ElasticSearchDomainName), nameof(ElasticSearchIndexName), nameof(ElasticSearchTypeName), nameof(AwsAccessKey), nameof(AwsSecretKey)}
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_AWS_S3,
+                        VisibleFields =  {nameof(SharedConnection), nameof(AwsAccessKey), nameof(AwsRegion), nameof(AwsSecretKey)}
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_AzureBlob,
+                        VisibleFields =  {nameof(AzureStorageAccountName), nameof(AzureAccessKey), nameof(SharedConnection), nameof(AzureBlobStorageContainerName)}
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_AzureEventHub,
+                        VisibleFields =  {nameof(SharedConnection), nameof(AzureEventHubName), nameof(AzureEventHubEntityPath), nameof(AzureAccessKey)}
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_AzureTableStorage,
+                        VisibleFields =  { nameof(SharedConnection), nameof(AzureStorageAccountName), nameof(AzureTableStorageName), nameof(AzureAccessKey)}
+                    },
+                    new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_GeoSpatial,
+                        VisibleFields =  { nameof(SharedConnection), nameof(DbName), nameof(DbURL), nameof(DbUserName), nameof(DbPassword), nameof(DbSchema), nameof(DbTableName)}
+                    },
+                     new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_PostgreSQL,
+                        VisibleFields =  { nameof(SharedConnection), nameof(DbName), nameof(DbURL), nameof(DbUserName), nameof(DbPassword), nameof(DbSchema), nameof(DbTableName)}
+                    },
+                     new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_PostgreSQL,
+                        VisibleFields =  { nameof(SharedConnection), nameof(DbName), nameof(DbURL), nameof(DbUserName), nameof(DbPassword), nameof(DbSchema), nameof(DbTableName)}
+                    }, new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_Redis,
+                        VisibleFields =  { nameof(SharedConnection), nameof(RedisServerUris), nameof(RedisPassword)}
+                    },
+                      new FormConditional()
+                    {
+                        Field = nameof(StreamType),
+                        Value = StreamType_SQLServer,
+                        VisibleFields =  { nameof(SharedConnection), nameof(DbUserName), nameof(DbUserName), nameof(DbPassword), nameof(DbName), nameof(DbTableName)}
+                    },
                 }
                 
             };
@@ -308,7 +367,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(ElasticSearchTypeName),
 
                 nameof(S3BucketName),
-                nameof(Description)
+                nameof(Description),
+                nameof(Fields)
             };
         }
 
