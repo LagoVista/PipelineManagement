@@ -148,14 +148,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_DelimitedWithSOH_EOT, HelpResource: PipelineAdminResources.Names.Listener_DelimitedWithSOH_EOT_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public bool DelimitedWithSOHEOT { get; set; }
+        public bool? DelimitedWithSOHEOT { get; set; }
 
         [FormField(LabelResource: DeviceMessagingAdminResources.Names.DeviceMessage_ContentType, HelpResource: DeviceMessagingAdminResources.Names.DeviceMessage_ContentType_Help, FieldType: FieldTypes.Picker, WaterMark: DeviceMessagingAdminResources.Names.DeviceMessage_ContentType_Select, EnumType: typeof(MessageContentTypes), ResourceType: typeof(DeviceMessagingAdminResources), IsRequired: true)]
         public EntityHeader<MessageContentTypes> ContentType { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_MessageContainsLength, HelpResource: PipelineAdminResources.Names.Listener_MessageContainsLength_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public bool MessageLengthInMessage { get; set; }
+        public bool? MessageLengthInMessage { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Length_Location, HelpResource: PipelineAdminResources.Names.Listener_Length_Location_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public int? MessageLengthLocation { get; set; }
@@ -170,10 +170,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public EntityHeader<RESTServerTypes> RestServerType { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Anonymous, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
-        public bool Anonymous { get; set; }
+        public bool? Anonymous { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectSSLTLS, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
-        public bool SecureConnection { get; set; }
+        public bool? SecureConnection { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, HelpResource: PipelineAdminResources.Names.Listener_UserName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string UserName { get; set; }
@@ -284,7 +284,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 case ListenerTypes.AMQP:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for Connecting to an AMQP Server.");
-                    if (!Anonymous)
+                    if (Anonymous.HasValue && !Anonymous.Value)
                     {
                         if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your AMQP server for non-anonymous connections.");
                         if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to connect to your AMQP server for non-anonymous connections.");
@@ -323,7 +323,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     break;
                 case ListenerTypes.MQTTClient:
                     if (string.IsNullOrEmpty(HostName)) result.AddUserError("Host Name is required for Connecting to an MQTT Server.");
-                    if (!Anonymous)
+                    if (Anonymous.HasValue && !Anonymous.Value)
                     {
                         if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to connect to your MQTT Broker for non-anonymous connections.");
                         if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to connect to your MQTT Broker for non-anonymous connections.");
@@ -344,7 +344,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     if (HostName != null && HostName.ToLower().StartsWith("ws://")) HostName = HostName.Substring(4);
                     if (!string.IsNullOrEmpty(Path) && !Path.StartsWith("/")) Path = "/" + Path;
 
-                    if (!Anonymous)
+                    if (Anonymous.HasValue && !Anonymous.Value)
                     {
                         if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to be used to authenticate with your Web Socket Server.");
                         if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to be used to authenticate with your Web Socket Server..");
@@ -357,7 +357,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
                     break;
                 case ListenerTypes.MQTTListener:
-                    if (!Anonymous)
+                    if (Anonymous.HasValue && !Anonymous.Value)
                     {
                         if (string.IsNullOrEmpty(UserName)) result.AddUserError("User Name is Required to be used to authenticate MQTT clients authenticating with your broker.");
                         if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Password is Required to be used to authenticate MQTT clients authenticating with your broker.");
@@ -385,7 +385,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 case ListenerTypes.Rest:
                     if (!ListenOnPort.HasValue) result.AddUserError("Please provide a port that your REST listenr will listen for incoming messages, this is usually port 80 for HTTP and 443 for HTTPS.");
                     if (EntityHeader.IsNullOrEmpty(RestServerType)) result.AddUserError("Allowable Connection Type is required for an REST Listener.");
-                    if (!Anonymous)
+                    if (Anonymous.HasValue && !Anonymous.Value)
                     {
                         if (string.IsNullOrEmpty(UserName)) result.AddUserError("Anonymous connections are not enabled, you must provide a user name that will be used to connect to your REST endpoint.");
                         if (string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(SecurePasswordId)) result.AddUserError("Anonymous connections are not enabled, you must provide a password that will be used to connect to your REST endpoint.");
@@ -476,7 +476,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_AMQP,
-                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(Topic), nameof(AmqpSubscriptions)}
+                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(Topic), nameof(AmqpSubscriptions)}
                      },
                      new FormConditional()
                      {
@@ -494,7 +494,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_REDIS,
-                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(MqttSubscriptions) }
+                          VisibleFields = {nameof(HostName), nameof(Anonymous),  nameof(MqttSubscriptions) }
                      },
                      new FormConditional()
                      {
@@ -506,7 +506,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_WebSocket,
-                          VisibleFields = {nameof(Anonymous), nameof(UserName), nameof(Password), nameof(HostName), nameof(SupportedProtocol), nameof(Path), nameof(Origin) }
+                          VisibleFields = {nameof(Anonymous),  nameof(HostName), nameof(SupportedProtocol), nameof(Path), nameof(Origin) }
                      },
                      new FormConditional()
                      {
@@ -530,25 +530,25 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Client,
-                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection), nameof(UserName), nameof(Password), nameof(HostName), nameof(ConnectToPort), nameof(MqttSubscriptions) }
+                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection),  nameof(HostName), nameof(ConnectToPort), nameof(MqttSubscriptions) }
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Listener,
-                          VisibleFields = { nameof(Anonymous), nameof(UserName), nameof(Password), nameof(ListenOnPort) }
+                          VisibleFields = { nameof(Anonymous),  nameof(ListenOnPort) }
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_RabbitMQ,
-                          VisibleFields = { nameof(HostName), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(ListenOnPort), nameof(Queue), nameof(ExchangeName), nameof(MqttSubscriptions) }
+                          VisibleFields = { nameof(HostName), nameof(Anonymous), nameof(ListenOnPort), nameof(Queue), nameof(ExchangeName), nameof(MqttSubscriptions) }
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Broker,
-                          VisibleFields = { nameof(Endpoint), nameof(Anonymous), nameof(UserName), nameof(Password), nameof(Queue), nameof(ExchangeName) }
+                          VisibleFields = { nameof(Endpoint), nameof(Anonymous),  nameof(Queue), nameof(ExchangeName) }
                      },
                      new FormConditional()
                      {
@@ -572,7 +572,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_REST,
-                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort), nameof(KeepAliveToSendReply), nameof(KeepAliveToSendReplyTimeoutMS), nameof(RestServerType), nameof(UserName), nameof(Password) }
+                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort), nameof(KeepAliveToSendReply), nameof(KeepAliveToSendReplyTimeoutMS), nameof(RestServerType)}
                      },
                      new FormConditional()
                      {
