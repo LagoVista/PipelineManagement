@@ -26,7 +26,7 @@ namespace LagoVista.IoT.Pipeline.Models
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help, 
         PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
         GetListUrl: "/api/appcaches", GetUrl: "/api/appcache/{id}", SaveUrl: "/api/appcache", DeleteUrl: "/api/appcache/{id}", FactoryUrl: "/api/appcache/factory")]
-    public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor
+    public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, ISummaryFactory
     {
         public ApplicationCache()
         {
@@ -56,7 +56,7 @@ namespace LagoVista.IoT.Pipeline.Models
         public string PasswordSecretId { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.AppCache_InitializationValues, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.AppCache_InitializationValues, FieldType: FieldTypes.ChildList, FactoryUrl: "/api/appcache/value/factory", ResourceType: typeof(PipelineAdminResources))]
         public List<ApplicationCacheValue> DefaultValues { get; set; }
 
         public List<string> GetFormFields()
@@ -69,6 +69,7 @@ namespace LagoVista.IoT.Pipeline.Models
                 nameof(Uri),
                 nameof(Password),
                 nameof(Description),
+                nameof(DefaultValues)
             };
         }
 
@@ -95,6 +96,11 @@ namespace LagoVista.IoT.Pipeline.Models
                 Key = Key
             };
         }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
+        }
     }
 
     public enum CacheValueDataTypes
@@ -106,7 +112,9 @@ namespace LagoVista.IoT.Pipeline.Models
         Number,
     }
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.ApplicationCacheValue_Title, PipelineAdminResources.Names.ApplicationCacheValue_Help, PipelineAdminResources.Names.ApplicationCacheValue_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.ApplicationCacheValue_Title, PipelineAdminResources.Names.ApplicationCacheValue_Help, 
+        PipelineAdminResources.Names.ApplicationCacheValue_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        FactoryUrl: "/api/appcache/value/factory")]
     public class ApplicationCacheValue
     {
         public const string ValueType_String = "string";
