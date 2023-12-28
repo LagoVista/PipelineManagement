@@ -13,7 +13,7 @@ using LagoVista.IoT.Pipeline.Models.Resources;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Transmitter_Title, PipelineAdminResources.Names.Transmitter_Help,
-        PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-send-email",
         GetListUrl: "/api/pipeline/admin/transmitters", SaveUrl: "/api/pipeline/admin/transmitter", GetUrl: "/api/pipeline/admin/transmitter/{id}", FactoryUrl: "/api/pipeline/admin/transmitter/factory",
         DeleteUrl: "/api/pipeline/admin/transmitter/{id}")]
     public class TransmitterConfiguration : PipelineModuleConfiguration, IFormDescriptor
@@ -254,8 +254,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         }
     }
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Transmitter_Title, PipelineAdminResources.Names.Transmitter_Help,
-        PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Transmitters_Title, PipelineAdminResources.Names.Transmitter_Help,
+        PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-send-email",
         GetListUrl: "/api/pipeline/admin/transmitters", SaveUrl: "/api/pipeline/admin/transmitter", GetUrl: "/api/pipeline/admin/transmitter/{id}", FactoryUrl: "/api/pipeline/admin/transmitter/factory",
         DeleteUrl: "/api/pipeline/admin/transmitter/{id}")]
     public class TransmitterConfigurationSummary : SummaryData

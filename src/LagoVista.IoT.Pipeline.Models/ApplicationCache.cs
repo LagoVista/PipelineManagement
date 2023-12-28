@@ -24,7 +24,7 @@ namespace LagoVista.IoT.Pipeline.Models
 
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help, 
-        PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-ae-database-3",
         GetListUrl: "/api/appcaches", GetUrl: "/api/appcache/{id}", SaveUrl: "/api/appcache", DeleteUrl: "/api/appcache/{id}", FactoryUrl: "/api/appcache/factory")]
     public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, ISummaryFactory
     {
@@ -56,7 +56,7 @@ namespace LagoVista.IoT.Pipeline.Models
         public string PasswordSecretId { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.AppCache_InitializationValues, FieldType: FieldTypes.ChildList, FactoryUrl: "/api/appcache/value/factory", ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.AppCache_InitializationValues, FieldType: FieldTypes.ChildListInline, FactoryUrl: "/api/appcache/value/factory", ResourceType: typeof(PipelineAdminResources))]
         public List<ApplicationCacheValue> DefaultValues { get; set; }
 
         public List<string> GetFormFields()
@@ -113,9 +113,9 @@ namespace LagoVista.IoT.Pipeline.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.ApplicationCacheValue_Title, PipelineAdminResources.Names.ApplicationCacheValue_Help, 
-        PipelineAdminResources.Names.ApplicationCacheValue_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        PipelineAdminResources.Names.ApplicationCacheValue_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
         FactoryUrl: "/api/appcache/value/factory")]
-    public class ApplicationCacheValue
+    public class ApplicationCacheValue : IFormDescriptor
     {
         public const string ValueType_String = "string";
 
@@ -141,6 +141,18 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Description, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string Description { get; set; }
 
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(ValueType),
+                nameof(Value),
+                nameof(Description)
+            };
+        }
+
         [CustomValidator]
         public void Validate(ValidationResult res, Actions action)
         {            
@@ -154,6 +166,9 @@ namespace LagoVista.IoT.Pipeline.Models
         }
     }
 
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help,
+       PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-database-3",
+       GetListUrl: "/api/appcaches", GetUrl: "/api/appcache/{id}", SaveUrl: "/api/appcache", DeleteUrl: "/api/appcache/{id}", FactoryUrl: "/api/appcache/factory")]
     public class ApplicationCacheSummary : SummaryData
     {
         public string CacheTypeId { get; set; }

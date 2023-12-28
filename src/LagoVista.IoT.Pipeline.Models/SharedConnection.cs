@@ -28,7 +28,7 @@ namespace LagoVista.IoT.Pipeline.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnection_Title, PipelineAdminResources.Names.SharedConnection_Help, PipelineAdminResources.Names.SharedConnection_Description,
-        EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),Icon: "icon-ae-connection-1",
         GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
         DeleteUrl: "/api/sharedconnection/{id}")]
     public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IPipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields
@@ -454,9 +454,9 @@ namespace LagoVista.IoT.Pipeline.Models
         }
     }
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnection_Title, PipelineAdminResources.Names.SharedConnection_Help,
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnections_Title, PipelineAdminResources.Names.SharedConnection_Help,
         PipelineAdminResources.Names.SharedConnection_Description,
-        EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-connection-1",
         GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
         DeleteUrl: "/api/sharedconnection/{id}")]
     public class SharedConnectionSummary : SummaryData

@@ -1498,4 +1498,25 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Planners_Title" xml:space="preserve">
     <value>Planners</value>
   </data>
+  <data name="DataStreams_Title" xml:space="preserve">
+    <value>Data Stream Writers</value>
+  </data>
+  <data name="InputTranslators_Title" xml:space="preserve">
+    <value>Input Translators</value>
+  </data>
+  <data name="Listeners_Title" xml:space="preserve">
+    <value>Listeners</value>
+  </data>
+  <data name="OutputTranslators_Title" xml:space="preserve">
+    <value>Output Translators</value>
+  </data>
+  <data name="Sentinels_Title" xml:space="preserve">
+    <value>Sentintels</value>
+  </data>
+  <data name="SharedConnections_Title" xml:space="preserve">
+    <value>Shared Connections</value>
+  </data>
+  <data name="Transmitters_Title" xml:space="preserve">
+    <value>Transmitters</value>
+  </data>
 </root>

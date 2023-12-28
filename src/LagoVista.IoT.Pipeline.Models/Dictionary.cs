@@ -19,6 +19,8 @@ namespace LagoVista.IoT.Pipeline.Models
         Redis,
     }
 
+
+    // NOTE: Not currently fully implemented nor being used.
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Dictionary_Title, PipelineAdminResources.Names.Dictionary_Help, PipelineAdminResources.Names.Dictionary_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources))]
     public class Dictionary : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor
     {

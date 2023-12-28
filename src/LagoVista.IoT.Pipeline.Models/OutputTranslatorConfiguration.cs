@@ -8,7 +8,7 @@ using System;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslator_Title, PipelineAdminResources.Names.OutputTranslator_Help, 
-        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources),
+        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2",
         GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
         DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
     public class OutputTranslatorConfiguration : PipelineModuleConfiguration
@@ -58,8 +58,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         }
     }
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslator_Title, PipelineAdminResources.Names.OutputTranslator_Help,
-        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslators_Title, PipelineAdminResources.Names.OutputTranslator_Help,
+        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2",
         GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
         DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
     public class OutputTranslatorConfigurationSummary : SummaryData

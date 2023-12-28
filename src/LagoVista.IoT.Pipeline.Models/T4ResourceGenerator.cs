@@ -1,4 +1,4 @@
-﻿/*12/4/2023 6:11:13 PM*/
+﻿/*12/28/2023 8:22:45 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -645,6 +645,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:DataStreamField_UnitSet_Watermark
 
 		public static string DataStreamField_UnitSet_Watermark { get { return GetResourceString("DataStreamField_UnitSet_Watermark"); } }
+//Resources:PipelineAdminResources:DataStreams_Title
+
+		public static string DataStreams_Title { get { return GetResourceString("DataStreams_Title"); } }
 //Resources:PipelineAdminResources:Dictionary_Description
 
 		public static string Dictionary_Description { get { return GetResourceString("Dictionary_Description"); } }
@@ -741,6 +744,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:InputTranslator_TranslatorType_Select
 
 		public static string InputTranslator_TranslatorType_Select { get { return GetResourceString("InputTranslator_TranslatorType_Select"); } }
+//Resources:PipelineAdminResources:InputTranslators_Title
+
+		public static string InputTranslators_Title { get { return GetResourceString("InputTranslators_Title"); } }
 //Resources:PipelineAdminResources:Listener_AccessKey
 
 		public static string Listener_AccessKey { get { return GetResourceString("Listener_AccessKey"); } }
@@ -939,6 +945,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Listener_UserName_Help
 
 		public static string Listener_UserName_Help { get { return GetResourceString("Listener_UserName_Help"); } }
+//Resources:PipelineAdminResources:Listeners_Title
+
+		public static string Listeners_Title { get { return GetResourceString("Listeners_Title"); } }
 //Resources:PipelineAdminResources:MessageFieldParseConfiguration_BinaryOffset_Help
 
 		public static string MessageFieldParseConfiguration_BinaryOffset_Help { get { return GetResourceString("MessageFieldParseConfiguration_BinaryOffset_Help"); } }
@@ -1197,6 +1206,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:OutputTranslator_TranslatorType_Select
 
 		public static string OutputTranslator_TranslatorType_Select { get { return GetResourceString("OutputTranslator_TranslatorType_Select"); } }
+//Resources:PipelineAdminResources:OutputTranslators_Title
+
+		public static string OutputTranslators_Title { get { return GetResourceString("OutputTranslators_Title"); } }
 //Resources:PipelineAdminResources:PipelineModuleType_Custom
 
 		public static string PipelineModuleType_Custom { get { return GetResourceString("PipelineModuleType_Custom"); } }
@@ -1305,6 +1317,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Sentinel_Title
 
 		public static string Sentinel_Title { get { return GetResourceString("Sentinel_Title"); } }
+//Resources:PipelineAdminResources:Sentinels_Title
+
+		public static string Sentinels_Title { get { return GetResourceString("Sentinels_Title"); } }
 //Resources:PipelineAdminResources:SerialPort_BaudRate
 
 		public static string SerialPort_BaudRate { get { return GetResourceString("SerialPort_BaudRate"); } }
@@ -1371,6 +1386,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:SharedConnection_Title
 
 		public static string SharedConnection_Title { get { return GetResourceString("SharedConnection_Title"); } }
+//Resources:PipelineAdminResources:SharedConnections_Title
+
+		public static string SharedConnections_Title { get { return GetResourceString("SharedConnections_Title"); } }
 //Resources:PipelineAdminResources:Translator_Type_Binary
 
 		public static string Translator_Type_Binary { get { return GetResourceString("Translator_Type_Binary"); } }
@@ -1431,6 +1449,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Transmitter_TransmitterType_SMTP
 
 		public static string Transmitter_TransmitterType_SMTP { get { return GetResourceString("Transmitter_TransmitterType_SMTP"); } }
+//Resources:PipelineAdminResources:Transmitters_Title
+
+		public static string Transmitters_Title { get { return GetResourceString("Transmitters_Title"); } }
 
 		public static class Names
 		{
@@ -1631,6 +1652,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string DataStreamField_Title = "DataStreamField_Title";
 			public const string DataStreamField_UnitSet = "DataStreamField_UnitSet";
 			public const string DataStreamField_UnitSet_Watermark = "DataStreamField_UnitSet_Watermark";
+			public const string DataStreams_Title = "DataStreams_Title";
 			public const string Dictionary_Description = "Dictionary_Description";
 			public const string Dictionary_Help = "Dictionary_Help";
 			public const string Dictionary_Password = "Dictionary_Password";
@@ -1663,6 +1685,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string InputTranslator_Title = "InputTranslator_Title";
 			public const string InputTranslator_TranslatorType = "InputTranslator_TranslatorType";
 			public const string InputTranslator_TranslatorType_Select = "InputTranslator_TranslatorType_Select";
+			public const string InputTranslators_Title = "InputTranslators_Title";
 			public const string Listener_AccessKey = "Listener_AccessKey";
 			public const string Listener_AccessKey_Help = "Listener_AccessKey_Help";
 			public const string Listener_AccessKeyName = "Listener_AccessKeyName";
@@ -1729,6 +1752,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Listener_Topic = "Listener_Topic";
 			public const string Listener_UserName = "Listener_UserName";
 			public const string Listener_UserName_Help = "Listener_UserName_Help";
+			public const string Listeners_Title = "Listeners_Title";
 			public const string MessageFieldParseConfiguration_BinaryOffset_Help = "MessageFieldParseConfiguration_BinaryOffset_Help";
 			public const string MessageFieldParserConfiguration_BinaryOffset = "MessageFieldParserConfiguration_BinaryOffset";
 			public const string MessageFieldParserConfiguration_BinaryType = "MessageFieldParserConfiguration_BinaryType";
@@ -1815,6 +1839,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string OutputTranslator_Title = "OutputTranslator_Title";
 			public const string OutputTranslator_TranslatorType = "OutputTranslator_TranslatorType";
 			public const string OutputTranslator_TranslatorType_Select = "OutputTranslator_TranslatorType_Select";
+			public const string OutputTranslators_Title = "OutputTranslators_Title";
 			public const string PipelineModuleType_Custom = "PipelineModuleType_Custom";
 			public const string PipelineModuleType_DataStream = "PipelineModuleType_DataStream";
 			public const string PipelineModuleType_InputTranslator = "PipelineModuleType_InputTranslator";
@@ -1851,6 +1876,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Sentinel_SecurityField_Type_Select = "Sentinel_SecurityField_Type_Select";
 			public const string Sentinel_SecurityField_Type_SharedSignature = "Sentinel_SecurityField_Type_SharedSignature";
 			public const string Sentinel_Title = "Sentinel_Title";
+			public const string Sentinels_Title = "Sentinels_Title";
 			public const string SerialPort_BaudRate = "SerialPort_BaudRate";
 			public const string SerialPort_PortName = "SerialPort_PortName";
 			public const string SharedConnection_AWS = "SharedConnection_AWS";
@@ -1873,6 +1899,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string SharedConnection_Server_Url = "SharedConnection_Server_Url";
 			public const string SharedConnection_Server_UserName = "SharedConnection_Server_UserName";
 			public const string SharedConnection_Title = "SharedConnection_Title";
+			public const string SharedConnections_Title = "SharedConnections_Title";
 			public const string Translator_Type_Binary = "Translator_Type_Binary";
 			public const string Translator_Type_Custom = "Translator_Type_Custom";
 			public const string Translator_Type_Delimited = "Translator_Type_Delimited";
@@ -1893,6 +1920,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Transmitter_TransmitterType_SerialPort = "Transmitter_TransmitterType_SerialPort";
 			public const string Transmitter_TransmitterType_SMS = "Transmitter_TransmitterType_SMS";
 			public const string Transmitter_TransmitterType_SMTP = "Transmitter_TransmitterType_SMTP";
+			public const string Transmitters_Title = "Transmitters_Title";
 		}
 	}
 }
