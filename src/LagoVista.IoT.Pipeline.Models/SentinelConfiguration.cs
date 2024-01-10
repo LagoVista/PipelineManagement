@@ -19,7 +19,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public override string ModuleType => PipelineModuleType_Sentinel;
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Sentinel_SecurityField, HelpResource: PipelineAdminResources.Names.Sentinel_SecurityField_Help, FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.Sentinel_SecurityField, 
+            HelpResource: PipelineAdminResources.Names.Sentinel_SecurityField_Help, FieldType: FieldTypes.ChildListInline, 
+            ResourceType: typeof(PipelineAdminResources), FactoryUrl: "/api/pipeline/admin/sentinel/securityfield/factory")]
         public List<SecurityField> SecurityFields { get; set; }
 
         public List<string> GetFormFields()

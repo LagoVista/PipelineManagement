@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Resources;
@@ -26,8 +27,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     }
 
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Sentinel_SecurityField_Title, PipelineAdminResources.Names.Sentinel_SecurityField_Help, PipelineAdminResources.Names.Sentinel_SecurityField_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources))]
-    public class SecurityField : IKeyedEntity, INamedEntity, IValidateable, IFormDescriptor
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Sentinel_SecurityField_Title,
+        PipelineAdminResources.Names.Sentinel_SecurityField_Help, PipelineAdminResources.Names.Sentinel_SecurityField_Description,
+        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), FactoryUrl: "/api/pipeline/admin/sentinel/securityfield/factory")]
+    public class SecurityField : IKeyedEntity, INamedEntity, IValidateable, IFormDescriptor, IFormConditionalFields
     {
         public const string FieldType_AccessKey = "accesskey";
         public const string FieldType_BasicAccess = "basicaccess";
@@ -44,14 +47,32 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public String Name { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Sentinel_SecurityField_Locator, HelpResource: PipelineAdminResources.Names.Sentinel_SecurityField_Locator, FieldType: FieldTypes.EntityHeaderPicker, WaterMark:PipelineAdminResources.Names.Sentinel_SecurityField_Locator_Select,  ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.Sentinel_SecurityField_Locator, FactoryUrl: "/api/devicemessagetype/field/factory",
+            HelpResource: PipelineAdminResources.Names.Sentinel_SecurityField_Locator, FieldType: FieldTypes.EntityHeaderPicker, 
+            WaterMark: PipelineAdminResources.Names.Sentinel_SecurityField_Locator_Select, ResourceType: typeof(PipelineAdminResources))]
         public EntityHeader<DeviceMessageDefinitionField> Locator { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources))]
         public String Script { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Sentinel_SecurityField_Type, HelpResource: PipelineAdminResources.Names.Sentinel_SecurityField_Type_Help, FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.Sentinel_SecurityField_Type_Select, EnumType: typeof(SecurityFieldType), IsRequired:true, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.Sentinel_SecurityField_Type, HelpResource: PipelineAdminResources.Names.Sentinel_SecurityField_Type_Help, FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.Sentinel_SecurityField_Type_Select, EnumType: typeof(SecurityFieldType), IsRequired: true, ResourceType: typeof(PipelineAdminResources))]
         public EntityHeader<SecurityFieldType> FieldType { get; set; }
+
+        public FormConditionals GetConditionalFields()
+        {
+            return new FormConditionals()
+            {
+                ConditionalFields = new List<string>() { nameof(Script) },
+                Conditionals = new List<FormConditional>() {
+                    new FormConditional()
+                    {
+                        Field = nameof(FieldType),
+                        Value = FieldType_Script,
+                        VisibleFields =  new List<string>() { nameof(Script) },
+                    }
+                }
+            };
+        }
 
         public List<string> GetFormFields()
         {
@@ -68,7 +89,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [CustomValidator]
         public void Validate(ValidationResult result)
         {
-            
+
         }
     }
 }
