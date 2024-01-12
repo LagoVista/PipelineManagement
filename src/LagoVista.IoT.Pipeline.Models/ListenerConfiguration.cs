@@ -258,9 +258,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_MaxMessageSize, HelpResource: PipelineAdminResources.Names.Listener_MaxMessageSize_Help, FieldType: FieldTypes.Integer, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public int? MaxMessageSize { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Subscriptions, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Subscriptions, FactoryUrl: "/api/pipeline/admin/listener/subscription/factory", FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources))]
         public List<MQTTSubscription> MqttSubscriptions { get; set; }
-
 
         [FormField(LabelResource: PipelineAdminResources.Names.SerialPort_BaudRate, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string BaudRate { get; set; }

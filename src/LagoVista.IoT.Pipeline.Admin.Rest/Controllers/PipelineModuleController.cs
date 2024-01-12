@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Networking.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Managers;
@@ -120,6 +121,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Rest.Controllers
 
             return listener;
         }
+
+        /// <summary>
+        /// Listener - Create New
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/api/pipeline/admin/listener/subscription/factory")]
+        public DetailResponse<MQTTSubscription> CreateListenerSubscription()
+        {
+            return DetailResponse<MQTTSubscription>.Create();
+        }
+
         #endregion
 
         #region Input Translator CRUD and Company...
