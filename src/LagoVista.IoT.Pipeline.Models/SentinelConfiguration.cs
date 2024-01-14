@@ -10,12 +10,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.Sentinel_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-ae-coding-badge",
         GetListUrl: "/api/pipeline/admin/sentinels", GetUrl: "/api/pipeline/admin/sentinel/{id}", SaveUrl: "/api/pipeline/admin/sentinel",
         FactoryUrl: "/api/pipeline/admin/sentinel/factory", DeleteUrl: "/api/pipeline/admin/sentinel/{id}")]
-    public class SentinelConfiguration : PipelineModuleConfiguration, IFormDescriptor
+    public class SentinelConfiguration : PipelineModuleConfiguration, IFormDescriptor, IIconEntity, ISummaryFactory
     {
         public SentinelConfiguration()
         {
             SecurityFields = new List<SecurityField>();
+            Icon = "icon-ae-coding-badge";
         }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Icon { get; set; }
+
 
         public override string ModuleType => PipelineModuleType_Sentinel;
 
@@ -30,6 +35,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 nameof(Name),
                 nameof(Key),
+                nameof(Icon),
                 nameof(Description),
                 nameof(SecurityFields)
             };
@@ -41,10 +47,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 Id = Id,
                 Name = Name,
+                Icon = Icon,
                 Key = Key,
                 IsPublic = IsPublic,
                 Description = Description
             };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 

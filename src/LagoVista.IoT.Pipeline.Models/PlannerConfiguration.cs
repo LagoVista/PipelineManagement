@@ -12,13 +12,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-planner",
         GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
         FactoryUrl: "/api/pipeline/admin/planner/factory")]
-    public class PlannerConfiguration : PipelineModuleConfiguration, IFormDescriptor
+    public class PlannerConfiguration : PipelineModuleConfiguration, IFormDescriptor, IIconEntity, ISummaryFactory
     {
         public PlannerConfiguration()
         {
             DeviceIdParsers = new List<MessageAttributeParser>();
             MessageTypeIdParsers = new List<MessageAttributeParser>();
+            Icon = "icon-pz-planner";
         }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Icon { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Planner_PipelineModules, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
@@ -42,6 +47,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 nameof(Name),
                 nameof(Key),
+                nameof(Icon),
                 nameof(Description),
                 nameof(DeviceIdParsers),
                 nameof(MessageTypeIdParsers),
@@ -69,9 +75,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Id = Id,
                 Name = Name,
                 Key = Key,
+                Icon = Icon,
                 IsPublic = IsPublic,
                 Description = Description
             };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 

@@ -1,17 +1,20 @@
 ﻿
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.IoT.Pipeline.Admin.Resources;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
+using System.Collections.Generic;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslator_Title, PipelineAdminResources.Names.OutputTranslator_Help, 
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslator_Title, PipelineAdminResources.Names.OutputTranslator_Help,
         PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2",
         GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
         DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
-    public class OutputTranslatorConfiguration : PipelineModuleConfiguration
+    public class OutputTranslatorConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
     {
         public enum OutputTranslatorTypes
         {
@@ -34,14 +37,19 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public OutputTranslatorConfiguration()
         {
             OutputTranslatorType = EntityHeader<OutputTranslatorTypes>.Create(OutputTranslatorTypes.MessageBased);
+            Icon = "icon-pz-translate-2";
         }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Icon { get; set; }
+
 
         public override string ModuleType => PipelineModuleType_OutputTranslator;
 
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_TranslatorType, EnumType: (typeof(OutputTranslatorTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_TranslatorType_Select, IsRequired: true, IsUserEditable: true)]
         public EntityHeader<OutputTranslatorTypes> OutputTranslatorType { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Script,  FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources))]
         public String Script { get; set; }
 
 
@@ -52,9 +60,46 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Id = Id,
                 Name = Name,
                 Key = Key,
+                Icon = Icon,
                 IsPublic = IsPublic,
-                Description = Description
+                Description = Description,
+                OutputTranslatorIypeId = OutputTranslatorType.Id,
+                OutputTranslatorType = OutputTranslatorType.Text
             };
+        }
+
+        public FormConditionals GetConditionalFields()
+        {
+            return new FormConditionals()
+            {
+                ConditionalFields = new List<string>() { nameof(Script) },
+                Conditionals = new List<FormConditional>()
+                {
+                    new FormConditional()
+                    {
+                         Field = nameof(OutputTranslatorType),
+                         Value = "custom",
+                         VisibleFields = new List<string>() {nameof(Script)}
+                    }
+                }
+            };
+        }
+
+        public List<string> GetFormFields()
+        {
+            return new List<string>()
+            {
+                nameof(Name),
+                nameof(Key),
+                nameof(Icon),
+                nameof(OutputTranslatorType),
+                nameof(Script)
+            };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 
@@ -64,6 +109,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
     public class OutputTranslatorConfigurationSummary : SummaryData
     {
-
+        public string OutputTranslatorType { get; set; }
+        public string OutputTranslatorIypeId { get; set; }
     }
 }

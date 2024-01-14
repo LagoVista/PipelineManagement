@@ -1,4 +1,4 @@
-﻿/*12/28/2023 8:22:45 AM*/
+﻿/*1/14/2024 8:36:03 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -126,6 +126,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Common_EditScript
 
 		public static string Common_EditScript { get { return GetResourceString("Common_EditScript"); } }
+//Resources:PipelineAdminResources:Common_Icon
+
+		public static string Common_Icon { get { return GetResourceString("Common_Icon"); } }
 //Resources:PipelineAdminResources:Common_IsPublic
 
 		public static string Common_IsPublic { get { return GetResourceString("Common_IsPublic"); } }
@@ -1479,6 +1482,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string ApplicationCacheValue_Value_Type_Select = "ApplicationCacheValue_Value_Type_Select";
 			public const string Common_Description = "Common_Description";
 			public const string Common_EditScript = "Common_EditScript";
+			public const string Common_Icon = "Common_Icon";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_IsPublic_Help = "Common_IsPublic_Help";
 			public const string Common_Key = "Common_Key";

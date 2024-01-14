@@ -31,8 +31,13 @@ namespace LagoVista.IoT.Pipeline.Models
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),Icon: "icon-ae-connection-1",
         GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
         DeleteUrl: "/api/sharedconnection/{id}")]
-    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IPipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields
+    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IPipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
     {
+        public SharedConnection()
+        {
+            Icon = "icon-ae-connection-1";
+        }
+
         public const string SHARED_CONNECTION_TYPE_AWS = "aws";
         public const string SHARED_CONNECTION_TYPE_AZURE = "azure";
         public const string SHARED_CONNECTION_TYPE_REDIS = "redis";
@@ -48,7 +53,10 @@ namespace LagoVista.IoT.Pipeline.Models
 
         public string MqttPasswordSecureId { get; set; }
 
-      
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Icon { get; set; }
+
 
         [FormField(LabelResource: PipelineAdminResources.Names.SharedConnection_ConnectionType, EnumType: typeof(SharedConnectionTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources),
             WaterMark: PipelineAdminResources.Names.SharedConnection_ConnectionType_Select, IsRequired: true)]
@@ -139,6 +147,7 @@ namespace LagoVista.IoT.Pipeline.Models
                 Description = Description,
                 Id = Id,
                 IsPublic = false,
+                Icon = Icon,
                 Key = Key,
                 Name = Name
             };
@@ -305,8 +314,9 @@ namespace LagoVista.IoT.Pipeline.Models
             return new List<string>()
             {
                 nameof(Name),
-                nameof(ConnectionType),
                 nameof(Key),
+                nameof(Icon),
+                nameof(ConnectionType),
                 nameof(Description),
                 nameof(RedisPassword),
                 nameof(RedisServerUris),
@@ -451,6 +461,11 @@ namespace LagoVista.IoT.Pipeline.Models
                 }
 
             };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 

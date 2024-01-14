@@ -54,7 +54,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.DataStream_Description, 
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-ae-database-2",
         GetUrl: "/api/datastream/{id}", SaveUrl: "/api/datastream", GetListUrl: "/api/datastreams", FactoryUrl: "/api/datastream/factory", DeleteUrl: "/api/datastream/{id}")]
-    public class DataStream : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, IFormConditionalFields
+    public class DataStream : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
     {
         public const string StreamType_AWS_S3 = "awss3";
         public const string StreamType_AWS_ElasticSearch = "awselasticsearch";
@@ -81,6 +81,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             TimestampFieldName = "timeStamp";
             DeviceIdFieldName = "deviceId";
             DateStorageFormat = EntityHeader<DateStorageFormats>.Create(DateStorageFormats.ISO8601);
+            Icon = "icon-ae-database-2";
         }
 
         public string AWSSecretKeySecureId { get; set; }
@@ -94,6 +95,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_StreamType, EnumType: typeof(DataStreamTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.DataStream_StreamType_Select, IsRequired: true)]
         public EntityHeader<DataStreamTypes> StreamType { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Icon { get; set; }
 
         #region Data Formatting Properties
         [FormField(LabelResource: PipelineAdminResources.Names.DataStream_TimeStampFieldName, ValidationRegEx: @"^[a-zA-Z][a-zA-Z0-9_]{2,64}$",
@@ -234,6 +237,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Name = Name,
                 IsPublic = IsPublic,
                 Key = Key,
+                Icon = Icon,
                 StreamType = StreamType.Text,
                 StreamTypeKey = StreamType.Id,
                 DeviceIdFieldName = DeviceIdFieldName,
@@ -329,6 +333,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 nameof(Name),
                 nameof(Key),
+                nameof(Icon),
                 nameof(StreamType),
                 nameof(SharedConnection),
                 nameof(IsSummaryLevelData),
@@ -599,6 +604,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 }
             }
             #endregion
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 

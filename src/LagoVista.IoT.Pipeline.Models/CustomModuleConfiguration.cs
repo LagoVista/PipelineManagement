@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using System;
@@ -36,10 +37,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.CustomModule_Title, PipelineAdminResources.Names.CustomModule_Help, 
-        PipelineAdminResources.Names.CustomModule_Description,EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        PipelineAdminResources.Names.CustomModule_Description,EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-coding-2",
         GetListUrl: "/api/pipeline/admin/custommodules", SaveUrl: "/api/pipeline/admin/custommodule", GetUrl: "/api/pipeline/admin/custommodule/{id}",
         DeleteUrl: "/api/pipeline/admin/custommodule/{id}", FactoryUrl: "/api/pipeline/admin/custommodule/factory")]
-    public class CustomModuleConfiguration : PipelineModuleConfiguration, IFormDescriptor
+    public class CustomModuleConfiguration : PipelineModuleConfiguration, IFormDescriptor, IIconEntity, ISummaryFactory, IFormConditionalFields
     {
         public const string CustomModuleType_Script = "script";
         public const string CustomModuleType_Container = "container";
@@ -50,6 +51,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string AuthenticationType_BasicAuth = "basicauth";
         public const string AuthenticationType_AuthenticationHeader = "authheader";
 
+        public CustomModuleConfiguration()
+        {
+            Icon = "icon-ae-coding-2";
+        }
+
         
         public override string ModuleType => PipelineModuleType_Custom;
 
@@ -58,6 +64,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.CustomModule_AuthenticationType, EnumType:(typeof(UriAuthenticationTypes)), FieldType: FieldTypes.Picker, WaterMark: PipelineAdminResources.Names.CustomModule_AuthenticationType_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public EntityHeader<UriAuthenticationTypes> AuthenticationType { get; set; }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Icon { get; set; }
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
@@ -99,18 +109,24 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 nameof(Name),
                 nameof(Key),
+                nameof(Icon),
                 nameof(CustomModuleType),
+                nameof(Description),
+                
                 nameof(Uri),
+                
                 nameof(Script),
+                
                 nameof(AuthenticationType),
                 nameof(AccountId),
                 nameof(AccountPassword),
                 nameof(AuthenticationHeader),
+                
                 nameof(ContainerRepository),
                 nameof(ContainerTag),
+                
                 nameof(DotNetAssembly),
                 nameof(DotNetClass),
-                nameof(Description)
             };
         }
 
@@ -180,20 +196,82 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 Id = Id,
                 Name = Name,
+                Icon = Icon,
                 Key = Key,
                 IsPublic = IsPublic,
-                Description = Description
+                Description = Description,
+                CustomModuleTypeId = CustomModuleType.Id,
+                CustomModuleType = CustomModuleType.Text,
+            };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
+        }
+
+        public FormConditionals GetConditionalFields()
+        {
+            return new FormConditionals()
+            {
+                ConditionalFields = new List<string>() { nameof(ContainerRepository), nameof(ContainerTag), nameof(DotNetAssembly), nameof(DotNetClass), nameof(Script),
+                         nameof(Uri), nameof(AccountPassword), nameof(AccountId)},
+                Conditionals = new List<FormConditional>()
+                {
+                    new FormConditional()
+                    {
+                         Field = nameof(CustomModuleType),
+                         Value = CustomModuleType_Container,
+                         VisibleFields = new List<string>() {nameof(ContainerRepository), nameof(ContainerTag)},
+                         RequiredFields = new List<string>() {nameof(ContainerRepository), nameof(ContainerTag)},
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(CustomModuleType),
+                         Value = CustomModuleType_DotNetAssembly,
+                         VisibleFields = new List<string>() {nameof(DotNetAssembly), nameof(DotNetClass)},
+                         RequiredFields = new List<string>() {nameof(DotNetAssembly), nameof(DotNetClass) },
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(CustomModuleType),
+                         Value = CustomModuleType_Script,
+                         VisibleFields = new List<string>() {nameof(Script)},
+                         RequiredFields = new List<string>() {nameof(Script)},
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(CustomModuleType),
+                         Value = CustomModuleType_WebFunction,
+                         VisibleFields = new List<string>() {nameof(Uri), nameof(AuthenticationType)},
+                         RequiredFields = new List<string>() {nameof(Uri), nameof(AuthenticationType) },
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(AuthenticationType),
+                         Value = AuthenticationType_AuthenticationHeader,
+                         VisibleFields = new List<string>() {nameof(AccountPassword)},
+                         RequiredFields = new List<string>() {nameof(AccountPassword)},
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(AuthenticationType),
+                         Value = AuthenticationType_BasicAuth,
+                         VisibleFields = new List<string>() {nameof(AccountId), nameof(AccountPassword)},
+                         RequiredFields = new List<string>() {nameof(AccountId), nameof(AccountPassword)},
+                    },
+                }
             };
         }
     }
 
-
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.CustomModule_Title, PipelineAdminResources.Names.CustomModule_Help,
-        PipelineAdminResources.Names.CustomModule_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),
+        PipelineAdminResources.Names.CustomModule_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-coding-2",
         GetListUrl: "/api/pipeline/admin/custommodules", SaveUrl: "/api/pipeline/admin/custommodule", GetUrl: "/api/pipeline/admin/custommodule/{id}",
         DeleteUrl: "/api/pipeline/admin/custommodule/{id}", FactoryUrl: "/api/pipeline/admin/custommodule/factory")]
     public class CustomModuleConfigurationSummary : SummaryData
     {
-
+        public string CustomModuleType { get; set; }
+        public string CustomModuleTypeId { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using LagoVista.IoT.Pipeline.Models.Resources;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
@@ -16,11 +17,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-send-email",
         GetListUrl: "/api/pipeline/admin/transmitters", SaveUrl: "/api/pipeline/admin/transmitter", GetUrl: "/api/pipeline/admin/transmitter/{id}", FactoryUrl: "/api/pipeline/admin/transmitter/factory",
         DeleteUrl: "/api/pipeline/admin/transmitter/{id}")]
-    public class TransmitterConfiguration : PipelineModuleConfiguration, IFormDescriptor
+    public class TransmitterConfiguration : PipelineModuleConfiguration, IFormDescriptor, IIconEntity, IFormConditionalFields, ISummaryFactory
     {
         public TransmitterConfiguration()
         {
             Headers = new List<Header>();
+            Icon = "icon-pz-send-email";
         }
 
         public enum TransmitterTypes
@@ -70,6 +72,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             /*[EnumLabel("custom", PipelineAdminResources.Names.Connection_Type_Custom, typeof(PipelineAdminResources))]
             Custom*/
         }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Icon { get; set; }
 
         IConnectionSettings ConnectionSettings { get; set; }
 
@@ -224,8 +230,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Id = Id,
                 Name = Name,
                 Key = Key,
+                Icon = Icon,
                 IsPublic = IsPublic,
-                Description = Description
+                Description = Description,
+                TransmitterType = TransmitterType.Text,
+                TransmitterTypeId = TransmitterType.Id,
             };
         }
 
@@ -235,6 +244,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 nameof(Name),
                 nameof(Key),
+                nameof(Icon),
                 nameof(TransmitterType),
                 nameof(HostName),
                 nameof(SecureConnection),
@@ -252,6 +262,111 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(Headers)
             };
         }
+
+        public FormConditionals GetConditionalFields()
+        {
+            return new FormConditionals()
+            {
+                ConditionalFields = new List<string>()
+                {
+                    nameof(HostName), nameof(HubName), nameof(AccessKeyName), nameof(AccessKey), nameof(ConnectToPort), nameof(Anonymous), nameof(UserName), nameof(Password),
+                    nameof(Headers), nameof(ExchangeName), nameof(Queue), nameof(HubName), nameof(PortName), nameof(BaudRate), nameof(SecureConnection)
+                },
+                Conditionals = new List<FormConditional>()
+                {
+                    new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "amqp",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(UserName), nameof(Password), nameof(Queue)},
+                         RequiredFields = new List<string>() {nameof(HostName), nameof(UserName), nameof(Password), nameof(Queue)},
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "azureserivcebus",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(AccessKeyName), nameof(AccessKey), nameof(Queue)},
+                         RequiredFields = new List<string>() {nameof(HostName), nameof(AccessKeyName), nameof(AccessKey), nameof(Queue)},
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "azureeventhub",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(AccessKeyName), nameof(AccessKey), nameof(HubName)},
+                         RequiredFields = new List<string>() {nameof(HostName), nameof(AccessKeyName), nameof(AccessKey), nameof(HubName)},
+                    }, new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "azureiothub",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(AccessKeyName), nameof(AccessKey)},
+                         RequiredFields = new List<string>() {nameof(HostName), nameof(AccessKeyName), nameof(AccessKey)},
+                    }, new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "kafka",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(ConnectToPort), nameof(UserName), nameof(Password)},
+                         RequiredFields = new List<string>() {nameof(HostName), nameof(ConnectToPort)}
+                    }, 
+                    new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "mqttclient",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(ConnectToPort), nameof(Anonymous)},
+                         RequiredFields = new List<string>() {nameof(HostName), nameof(ConnectToPort)}
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(Anonymous),
+                         Value = "false",
+                         VisibleFields = new List<string>() {nameof(UserName), nameof(Password)},
+                         RequiredFields = new List<string>() {nameof(UserName), nameof(Password)}
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "rabbitmq",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(ExchangeName), nameof(Queue), nameof(Anonymous)},
+                         RequiredFields = new List<string>() {nameof(HostName), nameof(ExchangeName), nameof(Queue)}
+                    },new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "redis",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(ConnectToPort), nameof(Password)},
+                         RequiredFields = new List<string>() {nameof(HostName)}
+                    },
+                    new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "rest",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(Anonymous)},
+                         RequiredFields = new List<string>() {nameof(HostName)}
+                    },new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "rawtcp",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(ConnectToPort)},
+                         RequiredFields = new List<string>() { nameof(HostName), nameof(ConnectToPort) }
+                    },new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "rawudp",
+                         VisibleFields = new List<string>() {nameof(HostName), nameof(ConnectToPort)},
+                         RequiredFields = new List<string>() { nameof(HostName), nameof(ConnectToPort) }
+                    },new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "serialport",
+                         VisibleFields = new List<string>() {nameof(PortName), nameof(BaudRate)},
+                         RequiredFields = new List<string>() { nameof(PortName), nameof(BaudRate) }
+                    }
+                }
+            };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
+        }
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Transmitters_Title, PipelineAdminResources.Names.Transmitter_Help,
@@ -260,7 +375,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         DeleteUrl: "/api/pipeline/admin/transmitter/{id}")]
     public class TransmitterConfigurationSummary : SummaryData
     {
-
+        public string TransmitterType { get; set; }
+        public string TransmitterTypeId { get; set; }
     }
 
 }

@@ -13,7 +13,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-1",
         GetListUrl: "/api/pipeline/admin/inputtranslators", GetUrl: "/api/pipeline/admin/inputtranslator/{id}", SaveUrl: "/api/pipeline/admin/inputtranslator",
         DeleteUrl: "/api/pipeline/admin/inputtranslator/{id}",  FactoryUrl: "/api/pipeline/admin/inputtranslator/factory")]
-    public class InputTranslatorConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields
+    public class InputTranslatorConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
     {
         public enum InputTranslatorTypes
         {
@@ -33,7 +33,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public InputTranslatorConfiguration()
         {
             InputTranslatorType = EntityHeader<InputTranslatorTypes>.Create(InputTranslatorTypes.MessageBased);
+            Icon = "icon-pz-translate-1";
         }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Icon { get; set; }
+
 
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_TranslatorType, EnumType: (typeof(InputTranslatorTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_TranslatorType_Select, IsRequired: true, IsUserEditable: true)]
         public EntityHeader<InputTranslatorTypes> InputTranslatorType { get; set; }
@@ -61,6 +66,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 nameof(Name),
                 nameof(Key),
+                nameof(Icon),
                 nameof(InputTranslatorType),
                 nameof(Script),
                 nameof(Model),
@@ -101,9 +107,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Id = Id,
                 Name = Name,
                 Key = Key,
+                Icon = Icon,
                 IsPublic = IsPublic,
-                Description = Description
+                Description = Description,
+                InputTranslatorType = InputTranslatorType.Text,
+                InputTranslatorTypeId = InputTranslatorType.Id,
             };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
         }
     }
 
@@ -114,6 +128,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         DeleteUrl: "/api/pipeline/admin/inputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/inputtranslator/factory")]
     public class InputTranslatorConfigurationSummary : SummaryData
     {
-
+        public string InputTranslatorType { get; set; }
+        public string InputTranslatorTypeId { get; set; }
     }
 }

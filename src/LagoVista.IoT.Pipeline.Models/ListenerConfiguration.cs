@@ -98,7 +98,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-fo-listening",
         GetListUrl: "/api/pipeline/admin/listeners", GetUrl: "/api/pipeline/admin/listener/{id}", SaveUrl: "/api/pipeline/admin/listener", DeleteUrl: "/api/pipeline/admin/listener/{id}", 
         FactoryUrl: "/api/pipeline/admin/listener/factory")]
-    public class ListenerConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields
+    public class ListenerConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
     {
 
         public const string MessageLengthSize_One = "one";
@@ -139,7 +139,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             MqttSubscriptions = new List<MQTTSubscription>();
             AmqpSubscriptions = new List<string>();
             RESTListenerType = RESTListenerTypes.PipelineModule;
+            Icon = "icon-fo-listening";
         }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
+        public string Icon { get; set; }
+
 
         public RESTListenerTypes RESTListenerType { get; set; }
 
@@ -407,6 +413,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             {
                 nameof(Name),
                 nameof(Key),
+                nameof(Icon),
                 nameof(ListenerType),
                 nameof(ContentType),
                 nameof(ListenOnPort),
@@ -601,9 +608,17 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Id = Id,
                 Name = Name,
                 Key = Key,
+                Icon = Icon,
+                ListenerType = ListenerType.Text,
+                ListenerTypeId = ListenerType.Id,
                 IsPublic = IsPublic,
                 Description = Description
             };
+        }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary(); 
         }
     }
 
@@ -614,6 +629,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         FactoryUrl: "/api/pipeline/admin/listener/factory")]
     public class ListenerConfigurationSummary : SummaryData
     {
-
+        public string ListenerType { get; set; }
+        public string ListenerTypeId { get; set; }
     }
 }
