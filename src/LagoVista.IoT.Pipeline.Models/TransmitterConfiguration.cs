@@ -3,10 +3,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceMessaging.Admin.Models;
-using LagoVista.IoT.Pipeline.Admin.Resources;
 using System;
-using System.Linq;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using LagoVista.Core.Models.UIMetaData;
@@ -23,6 +20,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         {
             Headers = new List<Header>();
             Icon = "icon-pz-send-email";
+            Anonymous = true;
         }
 
         public enum TransmitterTypes
@@ -247,6 +245,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(Icon),
                 nameof(TransmitterType),
                 nameof(HostName),
+                nameof(ConnectToPort),
                 nameof(SecureConnection),
                 nameof(ExchangeName),
                 nameof(Queue),
