@@ -38,8 +38,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 
         public async Task<ListResponse<ListenerConfigurationSummary>> GetListenerConfigurationsForOrgsAsync(string orgId, ListRequest listRequest)
         {
-            var items = await base.QueryAsync(qry => qry.IsPublic == true || qry.OwnerOrganization.Id == orgId, qry => qry.Name, listRequest);
-            return ListResponse<ListenerConfigurationSummary>.Create(items.Model.Select(itm => itm.CreateSummary()), items);
+            return await base.QuerySummaryAsync<ListenerConfigurationSummary, ListenerConfiguration>(qry => qry.IsPublic == true || qry.OwnerOrganization.Id == orgId, qry => qry.Name, listRequest);
         }
 
         public async Task<bool> QueryKeyInUseAsync(string key, string orgId)

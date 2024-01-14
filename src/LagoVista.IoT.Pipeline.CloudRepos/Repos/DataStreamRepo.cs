@@ -39,8 +39,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 
         public async Task<ListResponse<DataStreamSummary>> GetDataStreamsForOrgAsync(string orgId, ListRequest listRequest)
         {
-            var items = await base.QueryAsync(qry => qry.IsPublic == true || qry.OwnerOrganization.Id == orgId, qry => qry.Name, listRequest);
-            return ListResponse<DataStreamSummary>.Create(items.Model.Select(itm => itm.CreateSummary()), items);
+            return await base.QuerySummaryAsync<DataStreamSummary, DataStream>(qry => qry.IsPublic == true || qry.OwnerOrganization.Id == orgId, qry => qry.Name, listRequest);
         }
 
         public async Task<bool> QueryKeyInUseAsync(string key, string orgId)
