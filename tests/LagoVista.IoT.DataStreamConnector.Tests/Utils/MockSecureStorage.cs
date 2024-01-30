@@ -26,6 +26,11 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Utils
             return AddSecretAsync(org, Guid.NewGuid().ToId(), value);
         }
 
+        public Task<InvokeResult<string>> AddUserSecretAsync(EntityHeader user, string value)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<InvokeResult<string>> GetSecretAsync(EntityHeader org, string id, EntityHeader user)
         {
             if (_storage.ContainsKey(id))
@@ -34,11 +39,21 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Utils
                 return Task.FromResult(InvokeResult<string>.FromError("Could not find key."));
         }
 
+        public Task<InvokeResult<string>> GetUserSecretAsync(EntityHeader user, string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<InvokeResult> RemoveSecretAsync(EntityHeader org, string id)
         {
             _storage.Remove(id);
 
             return Task.FromResult( InvokeResult.Success);
+        }
+
+        public Task<InvokeResult> RemoveUserSecretAsync(EntityHeader user, string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
