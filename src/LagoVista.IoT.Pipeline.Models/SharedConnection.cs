@@ -28,10 +28,11 @@ namespace LagoVista.IoT.Pipeline.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.SharedConnection_Title, PipelineAdminResources.Names.SharedConnection_Help, PipelineAdminResources.Names.SharedConnection_Description,
-        EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources),Icon: "icon-ae-connection-1",
+        EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources),Icon: "icon-ae-connection-1",
         GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
+        ListUIUrl: "/iotstudio/settings/sharedconnections", CreateUIUrl: "/iotstudio/settings/sharedconnection/add", EditUIUrl: "/iotstudio/settings/sharedconnection/",
         DeleteUrl: "/api/sharedconnection/{id}")]
-    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IPipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
+    public class SharedConnection : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IPipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory, ICategorized
     {
         public SharedConnection()
         {
@@ -53,6 +54,10 @@ namespace LagoVista.IoT.Pipeline.Models
 
         public string MqttPasswordSecureId { get; set; }
 
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: PipelineAdminResources.Names.Common_Category_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public EntityHeader Category { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string Icon { get; set; }
@@ -149,7 +154,8 @@ namespace LagoVista.IoT.Pipeline.Models
                 IsPublic = false,
                 Icon = Icon,
                 Key = Key,
-                Name = Name
+                Name = Name,
+                Category = Category
             };
         }
 
@@ -316,6 +322,7 @@ namespace LagoVista.IoT.Pipeline.Models
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(Category),
                 nameof(ConnectionType),
                 nameof(Description),
                 nameof(RedisPassword),
@@ -474,7 +481,7 @@ namespace LagoVista.IoT.Pipeline.Models
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-connection-1",
         GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
         DeleteUrl: "/api/sharedconnection/{id}")]
-    public class SharedConnectionSummary : SummaryData
+    public class SharedConnectionSummary : CategorizedSummaryData
     {
         public string ConnectionType { get; set; }
         public string ConnectionTypeId { get; set; }

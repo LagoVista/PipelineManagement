@@ -37,8 +37,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.CustomModule_Title, PipelineAdminResources.Names.CustomModule_Help, 
-        PipelineAdminResources.Names.CustomModule_Description,EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-coding-2",
+        PipelineAdminResources.Names.CustomModule_Description,EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-ae-coding-2",
         GetListUrl: "/api/pipeline/admin/custommodules", SaveUrl: "/api/pipeline/admin/custommodule", GetUrl: "/api/pipeline/admin/custommodule/{id}",
+        ListUIUrl: "/iotstudio/make/custommodules", EditUIUrl: "/iotstudio/make/custommodule/{0}", CreateUIUrl: "/iotstudio/make/custommodule/add",
         DeleteUrl: "/api/pipeline/admin/custommodule/{id}", FactoryUrl: "/api/pipeline/admin/custommodule/factory")]
     public class CustomModuleConfiguration : PipelineModuleConfiguration, IFormDescriptor, IIconEntity, ISummaryFactory, IFormConditionalFields
     {
@@ -110,6 +111,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(Category),
                 nameof(CustomModuleType),
                 nameof(Description),
                 
@@ -200,6 +202,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Key = Key,
                 IsPublic = IsPublic,
                 Description = Description,
+                Category = Category,
                 CustomModuleTypeId = CustomModuleType.Id,
                 CustomModuleType = CustomModuleType.Text,
             };
@@ -269,7 +272,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.CustomModule_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-coding-2",
         GetListUrl: "/api/pipeline/admin/custommodules", SaveUrl: "/api/pipeline/admin/custommodule", GetUrl: "/api/pipeline/admin/custommodule/{id}",
         DeleteUrl: "/api/pipeline/admin/custommodule/{id}", FactoryUrl: "/api/pipeline/admin/custommodule/factory")]
-    public class CustomModuleConfigurationSummary : SummaryData
+    public class CustomModuleConfigurationSummary : CategorizedSummaryData
     {
         public string CustomModuleType { get; set; }
         public string CustomModuleTypeId { get; set; }

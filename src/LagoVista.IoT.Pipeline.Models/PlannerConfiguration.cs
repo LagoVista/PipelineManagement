@@ -9,7 +9,8 @@ using System.Collections.Generic;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Planner_Title, PipelineAdminResources.Names.Planner_Help, 
-        PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-planner",
+        PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-planner",
+        ListUIUrl: "/iotstudio/make/planners", EditUIUrl: "/iotstudio/make/planner/{0}", CreateUIUrl: "/iotstudio/make/planner/add",
         GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
         FactoryUrl: "/api/pipeline/admin/planner/factory")]
     public class PlannerConfiguration : PipelineModuleConfiguration, IFormDescriptor, IIconEntity, ISummaryFactory
@@ -48,6 +49,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(Category),
                 nameof(Description),
                 nameof(DeviceIdParsers),
                 nameof(MessageTypeIdParsers),
@@ -77,7 +79,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Key = Key,
                 Icon = Icon,
                 IsPublic = IsPublic,
-                Description = Description
+                Description = Description,
+                Category = Category
             };
         }
 
@@ -91,7 +94,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-planner",
         GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
         FactoryUrl: "/api/pipeline/admin/planner/factory")]
-    public class PlannerConfigurationSummary : SummaryData
+    public class PlannerConfigurationSummary : CategorizedSummaryData
     {
     }
 }

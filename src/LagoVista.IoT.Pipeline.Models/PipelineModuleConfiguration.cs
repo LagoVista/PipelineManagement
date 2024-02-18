@@ -1,4 +1,6 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.DeviceAdmin.Interfaces;
 using LagoVista.IoT.Pipeline.Models.Resources;
@@ -29,7 +31,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         Custom,
     }
 
-    public abstract class PipelineModuleConfiguration : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IPipelineModuleConfiguration
+    public abstract class PipelineModuleConfiguration : LagoVista.IoT.DeviceAdmin.Models.IoTModelBase, IValidateable, IPipelineModuleConfiguration, ICategorized
     {
         public const string PipelineModuleType_Listener = "listener";
         public const string PipelineModuleType_Planner = "planner";
@@ -47,6 +49,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public bool DebugMode { get; set; }
 
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: PipelineAdminResources.Names.Common_Category_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public EntityHeader Category { get; set; }
+
     }
- 
+
 }

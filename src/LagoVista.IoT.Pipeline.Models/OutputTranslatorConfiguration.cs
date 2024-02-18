@@ -11,8 +11,9 @@ using System.Collections.Generic;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslator_Title, PipelineAdminResources.Names.OutputTranslator_Help,
-        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2",
+        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2",
         GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
+        ListUIUrl: "/iotstudio/make/outputtranslators", EditUIUrl: "/iotstudio/make/outputtranslator/{0}", CreateUIUrl: "/iotstudio/make/outputtranslator/add",
         DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
     public class OutputTranslatorConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
     {
@@ -64,7 +65,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 IsPublic = IsPublic,
                 Description = Description,
                 OutputTranslatorIypeId = OutputTranslatorType.Id,
-                OutputTranslatorType = OutputTranslatorType.Text
+                OutputTranslatorType = OutputTranslatorType.Text,
+                Category = Category
             };
         }
 
@@ -92,6 +94,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(Category),
                 nameof(OutputTranslatorType),
                 nameof(Script)
             };
@@ -107,7 +110,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2",
         GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
         DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
-    public class OutputTranslatorConfigurationSummary : SummaryData
+    public class OutputTranslatorConfigurationSummary : CategorizedSummaryData
     {
         public string OutputTranslatorType { get; set; }
         public string OutputTranslatorIypeId { get; set; }

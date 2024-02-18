@@ -24,7 +24,8 @@ namespace LagoVista.IoT.Pipeline.Models
 
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help, 
-        PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-ae-database-3",
+        PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-ae-database-3",
+        ListUIUrl: "/iotstudio/make/appcaches", EditUIUrl: "/iotstudio/make/appcache/{0}", CreateUIUrl: "/iotstudio/make/appcache/add",
         GetListUrl: "/api/appcaches", GetUrl: "/api/appcache/{id}", SaveUrl: "/api/appcache", DeleteUrl: "/api/appcache/{id}", FactoryUrl: "/api/appcache/factory")]
     public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, ISummaryFactory, IIconEntity
     {
@@ -46,7 +47,6 @@ namespace LagoVista.IoT.Pipeline.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string Icon { get; set; }
-
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.AppCache_Uri, HelpResource: PipelineAdminResources.Names.AppCache_Uri_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
@@ -71,6 +71,7 @@ namespace LagoVista.IoT.Pipeline.Models
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(Category),
                 nameof(CacheType),
                 nameof(Uri),
                 nameof(Password),
@@ -100,7 +101,8 @@ namespace LagoVista.IoT.Pipeline.Models
                 Icon = Icon,
                 Description = Description,
                 IsPublic = IsPublic,
-                Key = Key
+                Key = Key,
+                Category = Category
             };
         }
 
@@ -176,7 +178,7 @@ namespace LagoVista.IoT.Pipeline.Models
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help,
        PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-database-3",
        GetListUrl: "/api/appcaches", GetUrl: "/api/appcache/{id}", SaveUrl: "/api/appcache", DeleteUrl: "/api/appcache/{id}", FactoryUrl: "/api/appcache/factory")]
-    public class ApplicationCacheSummary : SummaryData
+    public class ApplicationCacheSummary : CategorizedSummaryData
     {
         public string CacheTypeId { get; set; }
         public string CacheType { get; set; }

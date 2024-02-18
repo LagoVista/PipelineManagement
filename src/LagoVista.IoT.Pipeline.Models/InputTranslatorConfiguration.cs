@@ -10,8 +10,9 @@ using System.Collections.Generic;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, 
-        PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-1",
+        PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-1",
         GetListUrl: "/api/pipeline/admin/inputtranslators", GetUrl: "/api/pipeline/admin/inputtranslator/{id}", SaveUrl: "/api/pipeline/admin/inputtranslator",
+        ListUIUrl: "/iotstudio/make/inputtranslators", EditUIUrl: "/iotstudio/make/inputtranslator/{0}", CreateUIUrl: "/iotstudio/make/inputtranslator/add",
         DeleteUrl: "/api/pipeline/admin/inputtranslator/{id}",  FactoryUrl: "/api/pipeline/admin/inputtranslator/factory")]
     public class InputTranslatorConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
     {
@@ -67,6 +68,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(Category),
                 nameof(InputTranslatorType),
                 nameof(Script),
                 nameof(Model),
@@ -112,6 +114,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Description = Description,
                 InputTranslatorType = InputTranslatorType.Text,
                 InputTranslatorTypeId = InputTranslatorType.Id,
+                Category = Category
             };
         }
 
@@ -126,7 +129,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-translate-1",
         GetListUrl: "/api/pipeline/admin/inputtranslators", GetUrl: "/api/pipeline/admin/inputtranslator/{id}", SaveUrl: "/api/pipeline/admin/inputtranslator",
         DeleteUrl: "/api/pipeline/admin/inputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/inputtranslator/factory")]
-    public class InputTranslatorConfigurationSummary : SummaryData
+    public class InputTranslatorConfigurationSummary : CategorizedSummaryData
     {
         public string InputTranslatorType { get; set; }
         public string InputTranslatorTypeId { get; set; }

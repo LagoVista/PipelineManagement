@@ -1,4 +1,4 @@
-﻿/*1/14/2024 8:36:03 AM*/
+﻿/*2/18/2024 6:58:55 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -120,6 +120,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:ApplicationCacheValue_Value_Type_Select
 
 		public static string ApplicationCacheValue_Value_Type_Select { get { return GetResourceString("ApplicationCacheValue_Value_Type_Select"); } }
+//Resources:PipelineAdminResources:Common_Category
+
+		public static string Common_Category { get { return GetResourceString("Common_Category"); } }
+//Resources:PipelineAdminResources:Common_Category_Select
+
+		public static string Common_Category_Select { get { return GetResourceString("Common_Category_Select"); } }
 //Resources:PipelineAdminResources:Common_Description
 
 		public static string Common_Description { get { return GetResourceString("Common_Description"); } }
@@ -1480,6 +1486,8 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string ApplicationCacheValue_Value_String = "ApplicationCacheValue_Value_String";
 			public const string ApplicationCacheValue_Value_Type = "ApplicationCacheValue_Value_Type";
 			public const string ApplicationCacheValue_Value_Type_Select = "ApplicationCacheValue_Value_Type_Select";
+			public const string Common_Category = "Common_Category";
+			public const string Common_Category_Select = "Common_Category_Select";
 			public const string Common_Description = "Common_Description";
 			public const string Common_EditScript = "Common_EditScript";
 			public const string Common_Icon = "Common_Icon";

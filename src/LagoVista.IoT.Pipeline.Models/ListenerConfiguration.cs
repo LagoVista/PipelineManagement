@@ -95,8 +95,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Listener_Title, PipelineAdminResources.Names.Listener_Help, PipelineAdminResources.Names.Listener_Description,
-        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-fo-listening",
-        GetListUrl: "/api/pipeline/admin/listeners", GetUrl: "/api/pipeline/admin/listener/{id}", SaveUrl: "/api/pipeline/admin/listener", DeleteUrl: "/api/pipeline/admin/listener/{id}", 
+        EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-fo-listening",
+        GetListUrl: "/api/pipeline/admin/listeners", GetUrl: "/api/pipeline/admin/listener/{id}", SaveUrl: "/api/pipeline/admin/listener", DeleteUrl: "/api/pipeline/admin/listener/{id}",
+        ListUIUrl: "/iotstudio/make/listeners", EditUIUrl: "/iotstudio/make/listener/{0}", CreateUIUrl: "/iotstudio/make/listener/add",
         FactoryUrl: "/api/pipeline/admin/listener/factory")]
     public class ListenerConfiguration : PipelineModuleConfiguration, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
     {
@@ -414,6 +415,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(Category),
                 nameof(ListenerType),
                 nameof(ContentType),
                 nameof(ListenOnPort),
@@ -612,7 +614,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 ListenerType = ListenerType.Text,
                 ListenerTypeId = ListenerType.Id,
                 IsPublic = IsPublic,
-                Description = Description
+                Description = Description,
+                Category = Category
             };
         }
 
@@ -627,7 +630,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-fo-listening",
         GetListUrl: "/api/pipeline/admin/listeners", GetUrl: "/api/pipeline/admin/listener/{id}", SaveUrl: "/api/pipeline/admin/listener", DeleteUrl: "/api/pipeline/admin/listener/{id}",
         FactoryUrl: "/api/pipeline/admin/listener/factory")]
-    public class ListenerConfigurationSummary : SummaryData
+    public class ListenerConfigurationSummary : CategorizedSummaryData
     {
         public string ListenerType { get; set; }
         public string ListenerTypeId { get; set; }

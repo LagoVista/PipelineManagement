@@ -52,7 +52,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.DataStream_Title, PipelineAdminResources.Names.DataStream_Help, 
         PipelineAdminResources.Names.DataStream_Description, 
-        EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-ae-database-2",
+        EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-ae-database-2",
+        ListUIUrl: "/iotstudio/make/datastreams",EditUIUrl: "/iotstudio/make/datastream/{0}", CreateUIUrl: "/iotstudio/make/datastream/add",
         GetUrl: "/api/datastream/{id}", SaveUrl: "/api/datastream", GetListUrl: "/api/datastreams", FactoryUrl: "/api/datastream/factory", DeleteUrl: "/api/datastream/{id}")]
     public class DataStream : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, IFormConditionalFields, IIconEntity, ISummaryFactory
     {
@@ -238,6 +239,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 IsPublic = IsPublic,
                 Key = Key,
                 Icon = Icon,
+                Category = Category,
                 StreamType = StreamType.Text,
                 StreamTypeKey = StreamType.Id,
                 DeviceIdFieldName = DeviceIdFieldName,
@@ -616,7 +618,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.DataStream_Description,
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-database-2",
         GetUrl: "/api/datastream/{id}", SaveUrl: "/api/datastream", GetListUrl: "/api/datastreams", FactoryUrl: "/api/datastream/factory", DeleteUrl: "/api/datastream/{id}")]
-    public class DataStreamSummary : SummaryData
+    public class DataStreamSummary : CategorizedSummaryData
     {
         public string StreamType { get; set; }
         public string StreamTypeKey { get; set; }

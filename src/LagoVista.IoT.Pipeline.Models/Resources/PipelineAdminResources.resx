@@ -1522,4 +1522,10 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Common_Icon" xml:space="preserve">
     <value>Icon</value>
   </data>
+  <data name="Common_Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="Common_Category_Select" xml:space="preserve">
+    <value>-select category-</value>
+  </data>
 </root>

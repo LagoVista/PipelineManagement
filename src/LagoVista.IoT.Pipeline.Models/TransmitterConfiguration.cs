@@ -11,8 +11,9 @@ using LagoVista.Core.Models.UIMetaData;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Transmitter_Title, PipelineAdminResources.Names.Transmitter_Help,
-        PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-pz-send-email",
+        PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-send-email",
         GetListUrl: "/api/pipeline/admin/transmitters", SaveUrl: "/api/pipeline/admin/transmitter", GetUrl: "/api/pipeline/admin/transmitter/{id}", FactoryUrl: "/api/pipeline/admin/transmitter/factory",
+        ListUIUrl: "/iotstudio/make/transmitters", EditUIUrl: "/iotstudio/make/transmitter/{0}", CreateUIUrl: "/iotstudio/make/transmitter/add",
         DeleteUrl: "/api/pipeline/admin/transmitter/{id}")]
     public class TransmitterConfiguration : PipelineModuleConfiguration, IFormDescriptor, IIconEntity, IFormConditionalFields, ISummaryFactory
     {
@@ -233,6 +234,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Description = Description,
                 TransmitterType = TransmitterType.Text,
                 TransmitterTypeId = TransmitterType.Id,
+                Category = Category
             };
         }
 
@@ -243,6 +245,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(Name),
                 nameof(Key),
                 nameof(Icon),
+                nameof(Category),
                 nameof(TransmitterType),
                 nameof(HostName),
                 nameof(ConnectToPort),
@@ -372,7 +375,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-send-email",
         GetListUrl: "/api/pipeline/admin/transmitters", SaveUrl: "/api/pipeline/admin/transmitter", GetUrl: "/api/pipeline/admin/transmitter/{id}", FactoryUrl: "/api/pipeline/admin/transmitter/factory",
         DeleteUrl: "/api/pipeline/admin/transmitter/{id}")]
-    public class TransmitterConfigurationSummary : SummaryData
+    public class TransmitterConfigurationSummary : CategorizedSummaryData
     {
         public string TransmitterType { get; set; }
         public string TransmitterTypeId { get; set; }
