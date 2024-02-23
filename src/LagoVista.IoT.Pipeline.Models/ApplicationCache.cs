@@ -26,7 +26,7 @@ namespace LagoVista.IoT.Pipeline.Models
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help, 
         PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-ae-database-3",
-        ListUIUrl: "/iotstudio/make/appcaches", EditUIUrl: "/iotstudio/make/appcache/{0}", CreateUIUrl: "/iotstudio/make/appcache/add",
+        ListUIUrl: "/iotstudio/make/applicationcache/appcaches", EditUIUrl: "/iotstudio/make/applicationcache/{0}", CreateUIUrl: "/iotstudio/make/applicationcache/add",
         GetListUrl: "/api/appcaches", GetUrl: "/api/appcache/{id}", SaveUrl: "/api/appcache", DeleteUrl: "/api/appcache/{id}", FactoryUrl: "/api/appcache/factory")]
     public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, ISummaryFactory, IIconEntity,IFormConditionalFields
     {

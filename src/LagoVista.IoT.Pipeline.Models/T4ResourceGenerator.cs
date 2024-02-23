@@ -1,4 +1,4 @@
-﻿/*2/18/2024 6:58:55 AM*/
+﻿/*2/23/2024 8:41:37 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -312,6 +312,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:CustomModule_Script
 
 		public static string CustomModule_Script { get { return GetResourceString("CustomModule_Script"); } }
+//Resources:PipelineAdminResources:CustomModule_Script_Watermark
+
+		public static string CustomModule_Script_Watermark { get { return GetResourceString("CustomModule_Script_Watermark"); } }
 //Resources:PipelineAdminResources:CustomModule_Title
 
 		public static string CustomModule_Title { get { return GetResourceString("CustomModule_Title"); } }
@@ -327,6 +330,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:CustomModule_Uri_AccountPassword_Help
 
 		public static string CustomModule_Uri_AccountPassword_Help { get { return GetResourceString("CustomModule_Uri_AccountPassword_Help"); } }
+//Resources:PipelineAdminResources:CustomModules_Title
+
+		public static string CustomModules_Title { get { return GetResourceString("CustomModules_Title"); } }
 //Resources:PipelineAdminResources:DataaStream_SummaryLevel
 
 		public static string DataaStream_SummaryLevel { get { return GetResourceString("DataaStream_SummaryLevel"); } }
@@ -1550,11 +1556,13 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string CustomModule_DotNetClass = "CustomModule_DotNetClass";
 			public const string CustomModule_Help = "CustomModule_Help";
 			public const string CustomModule_Script = "CustomModule_Script";
+			public const string CustomModule_Script_Watermark = "CustomModule_Script_Watermark";
 			public const string CustomModule_Title = "CustomModule_Title";
 			public const string CustomModule_Uri = "CustomModule_Uri";
 			public const string CustomModule_Uri_AccountId = "CustomModule_Uri_AccountId";
 			public const string CustomModule_Uri_AccountPassword = "CustomModule_Uri_AccountPassword";
 			public const string CustomModule_Uri_AccountPassword_Help = "CustomModule_Uri_AccountPassword_Help";
+			public const string CustomModules_Title = "CustomModules_Title";
 			public const string DataaStream_SummaryLevel = "DataaStream_SummaryLevel";
 			public const string DataStream_AutoCreateTable = "DataStream_AutoCreateTable";
 			public const string DataStream_AutoCreateTable_Help = "DataStream_AutoCreateTable_Help";

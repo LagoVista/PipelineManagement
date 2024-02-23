@@ -1528,4 +1528,10 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Common_Category_Select" xml:space="preserve">
     <value>-select category-</value>
   </data>
+  <data name="CustomModules_Title" xml:space="preserve">
+    <value>Custom Modules</value>
+  </data>
+  <data name="CustomModule_Script_Watermark" xml:space="preserve">
+    <value>-add script-</value>
+  </data>
 </root>

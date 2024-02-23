@@ -71,7 +71,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string Icon { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, FieldType: FieldTypes.NodeScript, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+        [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, FieldType: FieldTypes.NodeScript, ScriptTemplateName:"customPipelineModule", WaterMark: PipelineAdminResources.Names.CustomModule_Script_Watermark, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public String Script { get; set; }
 
 
@@ -169,7 +169,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                                 }
                                 else if(action== Actions.Update)
                                 {
-                                    if (String.IsNullOrEmpty(AccountPassword)) result.AddUserError("Authorization Header or Authorization Header secure id is required when updating.");
+                                    if (String.IsNullOrEmpty(AccountPassword) && String.IsNullOrEmpty(AccountPasswordSecureId)) result.AddUserError("Authorization Header or Authorization Header secure id is required when updating.");
                                 }
                                 break;
                             case UriAuthenticationTypes.BasicAuth:
@@ -218,7 +218,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             return new FormConditionals()
             {
                 ConditionalFields = new List<string>() { nameof(ContainerRepository), nameof(ContainerTag), nameof(DotNetAssembly), nameof(DotNetClass), nameof(Script),
-                         nameof(Uri), nameof(AccountPassword), nameof(AccountId)},
+                         nameof(AuthenticationType), nameof(AuthenticationHeader), nameof(Uri), nameof(AccountPassword), nameof(AccountId)},
                 Conditionals = new List<FormConditional>()
                 {
                     new FormConditional()
@@ -268,7 +268,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         }
     }
 
-    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.CustomModule_Title, PipelineAdminResources.Names.CustomModule_Help,
+    [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.CustomModules_Title, PipelineAdminResources.Names.CustomModule_Help,
         PipelineAdminResources.Names.CustomModule_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-coding-2",
         GetListUrl: "/api/pipeline/admin/custommodules", SaveUrl: "/api/pipeline/admin/custommodule", GetUrl: "/api/pipeline/admin/custommodule/{id}",
         DeleteUrl: "/api/pipeline/admin/custommodule/{id}", FactoryUrl: "/api/pipeline/admin/custommodule/factory")]
