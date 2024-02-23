@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin;
 using LagoVista.IoT.Pipeline.Admin.Models;
@@ -27,7 +28,7 @@ namespace LagoVista.IoT.Pipeline.Models
         PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-ae-database-3",
         ListUIUrl: "/iotstudio/make/appcaches", EditUIUrl: "/iotstudio/make/appcache/{0}", CreateUIUrl: "/iotstudio/make/appcache/add",
         GetListUrl: "/api/appcaches", GetUrl: "/api/appcache/{id}", SaveUrl: "/api/appcache", DeleteUrl: "/api/appcache/{id}", FactoryUrl: "/api/appcache/factory")]
-    public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, ISummaryFactory, IIconEntity
+    public class ApplicationCache : PipelineModuleConfiguration, IOwnedEntity, IKeyedEntity, INoSQLEntity, IValidateable, IFormDescriptor, ISummaryFactory, IIconEntity,IFormConditionalFields
     {
         public ApplicationCache()
         {
@@ -54,9 +55,8 @@ namespace LagoVista.IoT.Pipeline.Models
 
 
         [FormField(LabelResource: PipelineAdminResources.Names.AppCache_Password, HelpResource: PipelineAdminResources.Names.AppCache_Password_Help, 
-            SecureIdFieldName:nameof(PasswordSecretId), FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
+            SecureIdFieldName:nameof(PasswordSecretId), FieldType: FieldTypes.Password, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string Password { get; set; }
-
 
         public string PasswordSecretId { get; set; }
 
@@ -75,8 +75,8 @@ namespace LagoVista.IoT.Pipeline.Models
                 nameof(CacheType),
                 nameof(Uri),
                 nameof(Password),
-                nameof(Description),
-                nameof(DefaultValues)
+                nameof(DefaultValues),
+                nameof(Description)
             };
         }
 
@@ -109,6 +109,24 @@ namespace LagoVista.IoT.Pipeline.Models
         ISummaryData ISummaryFactory.CreateSummary()
         {
             return CreateSummary();
+        }
+
+        public FormConditionals GetConditionalFields()
+        {
+            return new FormConditionals()
+            {
+                ConditionalFields = new List<string>() { nameof(Uri), nameof(Password) },
+                Conditionals = new List<FormConditional>()
+                {
+                    new FormConditional()
+                    {
+                       Field = nameof(CacheType),
+                       Value = CacheType_Redis,
+                       RequiredFields = new List<string>() { nameof(Uri)},
+                       VisibleFields = new List<string>() {nameof(Uri), nameof(Password)}
+                    }
+                }
+            };
         }
     }
 
