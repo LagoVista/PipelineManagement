@@ -7,9 +7,10 @@ using System.Collections.Generic;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Sentinel_Title, PipelineAdminResources.Names.Sentinel_Help, 
-        PipelineAdminResources.Names.Sentinel_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(PipelineAdminResources), Icon: "icon-ae-coding-badge",
+        PipelineAdminResources.Names.Sentinel_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-ae-coding-badge",
         GetListUrl: "/api/pipeline/admin/sentinels", GetUrl: "/api/pipeline/admin/sentinel/{id}", SaveUrl: "/api/pipeline/admin/sentinel",
-        FactoryUrl: "/api/pipeline/admin/sentinel/factory", DeleteUrl: "/api/pipeline/admin/sentinel/{id}")]
+        FactoryUrl: "/api/pipeline/admin/sentinel/factory", DeleteUrl: "/api/pipeline/admin/sentinel/{id}",
+        ListUIUrl: "/iotstudio/make/sentinels", CreateUIUrl: "/iotstudio/make/sentinel/add", EditUIUrl: "/iotstudio/make/sentinel/{id}")]
     public class SentinelConfiguration : PipelineModuleConfiguration, IFormDescriptor, IIconEntity, ISummaryFactory
     {
         public SentinelConfiguration()
