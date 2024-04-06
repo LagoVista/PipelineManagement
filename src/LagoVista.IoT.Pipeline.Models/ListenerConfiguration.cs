@@ -484,13 +484,16 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_AMQP,
-                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(Topic), nameof(AmqpSubscriptions)}
+                          VisibleFields = {nameof(HostName), nameof(Anonymous), nameof(Topic), nameof(AmqpSubscriptions)},
+                          RequiredFields = {nameof(HostName)},
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_Kafka,
-                          VisibleFields = {nameof(HostName), nameof(ConsumerGroup), nameof(MqttSubscriptions) }
+                          VisibleFields = {nameof(HostName), nameof(ConsumerGroup), nameof(MqttSubscriptions) },
+                          RequiredFields = {nameof(HostName), nameof(ConsumerGroup), nameof(MqttSubscriptions) }
+
                      },
                      new FormConditional()
                      {
@@ -508,7 +511,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_AzureEventHub,
-                          VisibleFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(ConsumerGroup), nameof(HostName), nameof(HubName) }
+                          VisibleFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(ConsumerGroup), nameof(HostName), nameof(HubName) },
+                          RequiredFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(ConsumerGroup), nameof(HostName), nameof(HubName) },
                      },
                      new FormConditional()
                      {
@@ -520,13 +524,15 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_AzureIoTHub,
-                          VisibleFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(ResourceName), nameof(ConsumerGroup), nameof(HostName) }
+                          VisibleFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(ResourceName), nameof(ConsumerGroup), nameof(HostName) },
+                          RequiredFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(ResourceName), nameof(ConsumerGroup), nameof(HostName) }
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_AzureServiceBus,
-                          VisibleFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(Queue),  nameof(HostName) }
+                          VisibleFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(Queue),  nameof(HostName) },
+                          RequiredFields = {nameof(AccessKey), nameof(AccessKeyName), nameof(Queue),  nameof(HostName) },
                      },
                      new FormConditional()
                      {
@@ -538,55 +544,66 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Client,
-                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection),  nameof(HostName), nameof(ConnectToPort), nameof(MqttSubscriptions) }
+                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection),  nameof(HostName), nameof(ConnectToPort), nameof(MqttSubscriptions) },
+                          RequiredFields = {nameof(HostName), nameof(ConnectToPort)}
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Listener,
-                          VisibleFields = { nameof(Anonymous),  nameof(ListenOnPort) }
+                          VisibleFields = { nameof(Anonymous),  nameof(ListenOnPort) },
+                          RequiredFields = { nameof(ListenOnPort) }
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_RabbitMQ,
-                          VisibleFields = { nameof(HostName), nameof(Anonymous), nameof(ListenOnPort), nameof(Queue), nameof(ExchangeName), nameof(MqttSubscriptions) }
+                          VisibleFields = { nameof(HostName), nameof(Anonymous), nameof(ListenOnPort), nameof(Queue), nameof(ExchangeName), nameof(MqttSubscriptions) },
+                          RequiredFields = { nameof(HostName), nameof(ListenOnPort), nameof(Queue), nameof(ExchangeName) },
+
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Broker,
-                          VisibleFields = { nameof(Endpoint), nameof(Anonymous),  nameof(Queue), nameof(ExchangeName) }
+                          VisibleFields = { nameof(Endpoint), nameof(Anonymous),  nameof(Queue), nameof(ExchangeName) },
+                          RequiredFields = { nameof(Endpoint),  nameof(Queue), nameof(ExchangeName) }
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_RawTCP,
-                          VisibleFields = { nameof(ListenOnPort) }
+                          VisibleFields = { nameof(ListenOnPort)},
+                          RequiredFields = {nameof(ListenOnPort)}
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_RawUdp,
-                          VisibleFields = { nameof(ListenOnPort) }
+                          VisibleFields = { nameof(ListenOnPort) },
+                          RequiredFields = {nameof(ListenOnPort)}
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_FTP,
-                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort) }
+                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort) },
+                          RequiredFields = {nameof(ListenOnPort)}
                      },
                      new FormConditional()
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_REST,
-                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort), nameof(KeepAliveToSendReply), nameof(KeepAliveToSendReplyTimeoutMS), nameof(RestServerType)}
+                          VisibleFields = { nameof(Anonymous), nameof(ListenOnPort), nameof(KeepAliveToSendReply), nameof(KeepAliveToSendReplyTimeoutMS), nameof(RestServerType)},
+                          RequiredFields = { nameof(ListenOnPort), nameof(RestServerType)},
+
                      },
                      new FormConditional()
                      {
                           Field = nameof(Anonymous),
                           Value = "false",
-                          VisibleFields = { nameof(UserName), nameof(Password) }
+                          VisibleFields = { nameof(UserName), nameof(Password) },
+                          RequiredFields = { nameof(UserName), nameof(Password) },
                      },
                  }
 
