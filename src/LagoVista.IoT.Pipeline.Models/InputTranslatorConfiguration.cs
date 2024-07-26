@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslator_Title, PipelineAdminResources.Names.InputTranslator_Help, 
-        PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-1",
+        PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-1", Cloneable:true,
         GetListUrl: "/api/pipeline/admin/inputtranslators", GetUrl: "/api/pipeline/admin/inputtranslator/{id}", SaveUrl: "/api/pipeline/admin/inputtranslator",
         ListUIUrl: "/iotstudio/make/inputtranslators", EditUIUrl: "/iotstudio/make/inputtranslator/{0}", CreateUIUrl: "/iotstudio/make/inputtranslator/add",
         DeleteUrl: "/api/pipeline/admin/inputtranslator/{id}",  FactoryUrl: "/api/pipeline/admin/inputtranslator/factory")]
@@ -126,7 +126,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.InputTranslators_Title, PipelineAdminResources.Names.InputTranslator_Help,
-        PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-translate-1",
+        PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-translate-1", Cloneable: true,
         GetListUrl: "/api/pipeline/admin/inputtranslators", GetUrl: "/api/pipeline/admin/inputtranslator/{id}", SaveUrl: "/api/pipeline/admin/inputtranslator",
         DeleteUrl: "/api/pipeline/admin/inputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/inputtranslator/factory")]
     public class InputTranslatorConfigurationSummary : CategorizedSummaryData

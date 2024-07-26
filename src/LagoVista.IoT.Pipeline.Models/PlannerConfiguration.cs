@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Planner_Title, PipelineAdminResources.Names.Planner_Help, 
-        PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-planner",
+        PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-planner", Cloneable: true,
         ListUIUrl: "/iotstudio/make/planners", EditUIUrl: "/iotstudio/make/planner/{0}", CreateUIUrl: "/iotstudio/make/planner/add",
         GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
         FactoryUrl: "/api/pipeline/admin/planner/factory")]
@@ -91,7 +91,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.Planners_Title, PipelineAdminResources.Names.Planner_Help,
-        PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-planner",
+        PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-planner", Cloneable: true,
         GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
         FactoryUrl: "/api/pipeline/admin/planner/factory")]
     public class PlannerConfigurationSummary : CategorizedSummaryData

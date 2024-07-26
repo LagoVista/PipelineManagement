@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslator_Title, PipelineAdminResources.Names.OutputTranslator_Help,
-        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2",
+        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.CoreIoTModel, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2", Cloneable: true,
         GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
         ListUIUrl: "/iotstudio/make/outputtranslators", EditUIUrl: "/iotstudio/make/outputtranslator/{0}", CreateUIUrl: "/iotstudio/make/outputtranslator/add",
         DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
@@ -107,7 +107,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     }
 
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.OutputTranslators_Title, PipelineAdminResources.Names.OutputTranslator_Help,
-        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2",
+        PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2", Cloneable: true,
         GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
         DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
     public class OutputTranslatorConfigurationSummary : CategorizedSummaryData
