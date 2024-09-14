@@ -9,6 +9,7 @@ using LagoVista.IoT.DeviceMessaging.Models.Resources;
 using LagoVista.IoT.Pipeline.Models.Resources;
 using System.Collections.Generic;
 using System.Linq;
+using static LagoVista.IoT.Pipeline.Admin.Models.TransmitterConfiguration;
 
 namespace LagoVista.IoT.Pipeline.Admin.Models
 {
@@ -62,8 +63,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [EnumLabel(ListenerConfiguration.ListenerTypes_FTP, PipelineAdminResources.Names.Connection_Type_FTP, typeof(PipelineAdminResources))]
         FTP,
+       
         [EnumLabel(ListenerConfiguration.ListenerTypes_MQTT_SharedBroker, PipelineAdminResources.Names.Connection_MQTT_SharedBroker, typeof(PipelineAdminResources))]
         SharedMqttListener,
+
+        [EnumLabel(ListenerConfiguration.ListenerTypes_CoT, PipelineAdminResources.Names.Connection_CoT, typeof(PipelineAdminResources))]
+        TakCursorOnTarget,
 
         /*
             Soap,
@@ -132,6 +137,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public const string ListenerTypes_SerialPort = "serialport";
         public const string ListenerTypes_WebSocket = "websocket";
         public const string ListenerTypes_FTP = "ftp";
+        public const string ListenerTypes_CoT = "cottak";
 
         public override string ModuleType => PipelineModuleType_Listener;
 
@@ -277,6 +283,14 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Subscriptions, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public List<string> AmqpSubscriptions { get; set; }
 
+
+        public string CredentialsFileSecretId { get; set; }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_CredentialsFile, FieldType: FieldTypes.FileUpload, ResourceType: typeof(PipelineAdminResources))]
+        public EntityHeader CredentialsFile { get; set; }
+
+
         [CustomValidator]
         public void Validate(ValidationResult result)
         {
@@ -401,8 +415,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                         UserName = null;
                         Password = null;
                     }
-
-
+                    break;
+                case ListenerTypes.TakCursorOnTarget:
+                    if (EntityHeader.IsNullOrEmpty(CredentialsFile))
+                        result.AddUserError("Must upload credentials file for TAK Server");
                     break;
             }
 
@@ -419,6 +435,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(ListenerType),
                 nameof(ContentType),
                 nameof(ListenOnPort),
+                nameof(CredentialsFile),
 
                 nameof(MessageReceiveTimeoutMS),
 
@@ -476,8 +493,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                                       nameof(MaxMessageSize), nameof(MessageLengthInMessage), nameof(MessageLengthLocation), nameof(MessageLengthSize),nameof(MessageLengthByteCountEndiness),
                                       nameof(Anonymous), nameof(UserName), nameof(AccessKey), nameof(Queue), nameof(ExchangeName), nameof(HubName), nameof(AccessKey), nameof(AccessKeyName), nameof(Password),
                                       nameof(ConsumerGroup), nameof(ResourceName), nameof(SecureConnection), nameof(RestServerType), nameof(HostName), nameof(Endpoint), nameof(ConnectToPort), nameof(Path),
-                                      nameof(Origin), nameof(SupportedProtocol), nameof(BaudRate), nameof(PortName), nameof(Topic), nameof(AmqpSubscriptions), nameof(MqttSubscriptions), nameof(DelimitedWithSOHEOT) /* Per Kevin, this is related to content type */,
-				},
+                                      nameof(Origin), nameof(SupportedProtocol), nameof(BaudRate), nameof(PortName), nameof(Topic), nameof(AmqpSubscriptions), nameof(MqttSubscriptions), nameof(DelimitedWithSOHEOT),
+                                      nameof(CredentialsFile),
+				
+                },
                  Conditionals = new List<FormConditional>()
                  {
                      new FormConditional()
@@ -604,6 +623,13 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                           Value = "false",
                           VisibleFields = { nameof(UserName), nameof(Password) },
                           RequiredFields = { nameof(UserName), nameof(Password) },
+                     },
+                     new FormConditional()
+                     {
+                          Field = nameof(ListenerType),
+                          Value = ListenerTypes_CoT,
+                          VisibleFields = { nameof(CredentialsFile) },
+                          RequiredFields = { nameof(CredentialsFile) },
                      },
                  }
 

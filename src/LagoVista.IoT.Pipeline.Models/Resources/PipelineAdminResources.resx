@@ -1534,4 +1534,16 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="CustomModule_Script_Watermark" xml:space="preserve">
     <value>-add script-</value>
   </data>
+  <data name="Connection_CoT" xml:space="preserve">
+    <value>Cursor on Target (TAK)</value>
+  </data>
+  <data name="Transmitter_TransmitterType_CoT" xml:space="preserve">
+    <value>Curosr on Target (TAK)</value>
+  </data>
+  <data name="Listener_CredentialsFile" xml:space="preserve">
+    <value>Credentials File</value>
+  </data>
+  <data name="Transmitter_CredentialsFile" xml:space="preserve">
+    <value>Credentials File</value>
+  </data>
 </root>

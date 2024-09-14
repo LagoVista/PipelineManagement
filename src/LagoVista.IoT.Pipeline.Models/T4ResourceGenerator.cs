@@ -1,4 +1,4 @@
-﻿/*2/23/2024 8:41:37 AM*/
+﻿/*9/9/2024 6:12:38 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -162,6 +162,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Common_UniqueId
 
 		public static string Common_UniqueId { get { return GetResourceString("Common_UniqueId"); } }
+//Resources:PipelineAdminResources:Connection_CoT
+
+		public static string Connection_CoT { get { return GetResourceString("Connection_CoT"); } }
 //Resources:PipelineAdminResources:Connection_MQTT_SharedBroker
 
 		public static string Connection_MQTT_SharedBroker { get { return GetResourceString("Connection_MQTT_SharedBroker"); } }
@@ -786,6 +789,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Listener_ConsumerGroup_Help
 
 		public static string Listener_ConsumerGroup_Help { get { return GetResourceString("Listener_ConsumerGroup_Help"); } }
+//Resources:PipelineAdminResources:Listener_CredentialsFile
+
+		public static string Listener_CredentialsFile { get { return GetResourceString("Listener_CredentialsFile"); } }
 //Resources:PipelineAdminResources:Listener_DefaultResponse
 
 		public static string Listener_DefaultResponse { get { return GetResourceString("Listener_DefaultResponse"); } }
@@ -1434,6 +1440,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:TranslatorType_SevenSegmentParser
 
 		public static string TranslatorType_SevenSegmentParser { get { return GetResourceString("TranslatorType_SevenSegmentParser"); } }
+//Resources:PipelineAdminResources:Transmitter_CredentialsFile
+
+		public static string Transmitter_CredentialsFile { get { return GetResourceString("Transmitter_CredentialsFile"); } }
 //Resources:PipelineAdminResources:Transmitter_Description
 
 		public static string Transmitter_Description { get { return GetResourceString("Transmitter_Description"); } }
@@ -1449,6 +1458,9 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Transmitter_TransmitterType
 
 		public static string Transmitter_TransmitterType { get { return GetResourceString("Transmitter_TransmitterType"); } }
+//Resources:PipelineAdminResources:Transmitter_TransmitterType_CoT
+
+		public static string Transmitter_TransmitterType_CoT { get { return GetResourceString("Transmitter_TransmitterType_CoT"); } }
 //Resources:PipelineAdminResources:Transmitter_TransmitterType_OriginalListener
 
 		public static string Transmitter_TransmitterType_OriginalListener { get { return GetResourceString("Transmitter_TransmitterType_OriginalListener"); } }
@@ -1506,6 +1518,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Common_Notes = "Common_Notes";
 			public const string Common_Script = "Common_Script";
 			public const string Common_UniqueId = "Common_UniqueId";
+			public const string Connection_CoT = "Connection_CoT";
 			public const string Connection_MQTT_SharedBroker = "Connection_MQTT_SharedBroker";
 			public const string Connection_Select_Type = "Connection_Select_Type";
 			public const string Connection_Type_AMQP = "Connection_Type_AMQP";
@@ -1714,6 +1727,7 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Listener_ConnectSSLTLS = "Listener_ConnectSSLTLS";
 			public const string Listener_ConnectToPort = "Listener_ConnectToPort";
 			public const string Listener_ConsumerGroup_Help = "Listener_ConsumerGroup_Help";
+			public const string Listener_CredentialsFile = "Listener_CredentialsFile";
 			public const string Listener_DefaultResponse = "Listener_DefaultResponse";
 			public const string Listener_DelimitedWithSOH_EOT = "Listener_DelimitedWithSOH_EOT";
 			public const string Listener_DelimitedWithSOH_EOT_Help = "Listener_DelimitedWithSOH_EOT_Help";
@@ -1930,11 +1944,13 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Translator_Type_XML = "Translator_Type_XML";
 			public const string TranslatorType_AIModel = "TranslatorType_AIModel";
 			public const string TranslatorType_SevenSegmentParser = "TranslatorType_SevenSegmentParser";
+			public const string Transmitter_CredentialsFile = "Transmitter_CredentialsFile";
 			public const string Transmitter_Description = "Transmitter_Description";
 			public const string Transmitter_Headers = "Transmitter_Headers";
 			public const string Transmitter_Help = "Transmitter_Help";
 			public const string Transmitter_Title = "Transmitter_Title";
 			public const string Transmitter_TransmitterType = "Transmitter_TransmitterType";
+			public const string Transmitter_TransmitterType_CoT = "Transmitter_TransmitterType_CoT";
 			public const string Transmitter_TransmitterType_OriginalListener = "Transmitter_TransmitterType_OriginalListener";
 			public const string Transmitter_TransmitterType_Outbox = "Transmitter_TransmitterType_Outbox";
 			public const string Transmitter_TransmitterType_SerialPort = "Transmitter_TransmitterType_SerialPort";

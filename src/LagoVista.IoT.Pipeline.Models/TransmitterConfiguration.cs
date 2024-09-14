@@ -54,6 +54,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             SerialPort,
             [EnumLabel("hostedmqtt", PipelineAdminResources.Names.Connection_Type_HostedMQTT, typeof(PipelineAdminResources))]
             HostedMQTT,
+            [EnumLabel("cottak", PipelineAdminResources.Names.Transmitter_TransmitterType_CoT, typeof(PipelineAdminResources))]
+            TakCursorOnTarget,
+
 
             /*[EnumLabel("mqtt", PipelineAdminResources.Names.Connection_Type_Rest, typeof(PipelineAdminResources))]
             MQTT,
@@ -127,7 +130,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.SerialPort_PortName, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string PortName { get; set; }
+        public string CredentialsFileSecretId { get; set; }
 
+        [FormField(LabelResource: PipelineAdminResources.Names.Transmitter_CredentialsFile, FieldType: FieldTypes.FileUpload, ResourceType: typeof(PipelineAdminResources))]
+        public EntityHeader CredentialsFile { get; set; }
 
         public override string ModuleType => PipelineModuleType_Transmitter;
 
@@ -219,6 +225,11 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                     }
 
                     break;
+                case TransmitterTypes.TakCursorOnTarget:
+                    if (EntityHeader.IsNullOrEmpty(CredentialsFile))
+                        result.AddUserError("Must upload credentials file for TAK Server");
+                    
+                    break;
             }
         }
 
@@ -250,6 +261,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(HostName),
                 nameof(ConnectToPort),
                 nameof(SecureConnection),
+                nameof(CredentialsFile),
                 nameof(ExchangeName),
                 nameof(Queue),
                 nameof(HubName),
@@ -272,7 +284,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 ConditionalFields = new List<string>()
                 {
                     nameof(HostName), nameof(HubName), nameof(AccessKeyName), nameof(AccessKey), nameof(ConnectToPort), nameof(Anonymous), nameof(UserName), nameof(Password),
-                    nameof(Headers), nameof(ExchangeName), nameof(Queue), nameof(HubName), nameof(PortName), nameof(BaudRate), nameof(SecureConnection)
+                    nameof(Headers), nameof(ExchangeName), nameof(Queue), nameof(HubName), nameof(PortName), nameof(BaudRate), nameof(SecureConnection), nameof(CredentialsFile)
                 },
                 Conditionals = new List<FormConditional>()
                 {
@@ -360,6 +372,12 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                          Value = "serialport",
                          VisibleFields = new List<string>() {nameof(PortName), nameof(BaudRate)},
                          RequiredFields = new List<string>() { nameof(PortName), nameof(BaudRate) }
+                    },new FormConditional()
+                    {
+                         Field = nameof(TransmitterType),
+                         Value = "cottak",
+                         VisibleFields = new List<string>() {nameof(CredentialsFile)},
+                         RequiredFields = new List<string>() {nameof(CredentialsFile)}
                     }
                 }
             };
