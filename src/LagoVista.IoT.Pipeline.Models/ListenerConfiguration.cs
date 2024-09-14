@@ -188,6 +188,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public bool? SecureConnection { get; set; }
 
 
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_ClientId, HelpResource: PipelineAdminResources.Names.Listener_ClientId_Help, FieldType: FieldTypes.Text,  ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string ClientId { get; set; }
+
+
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_Certificate,  FieldType: FieldTypes.SecureCertificate, SecureIdFieldName: nameof(CertificateSecureId), ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string Certificate { get; set; }
 
@@ -482,6 +486,10 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 nameof(AccessKeyName),
                 nameof(AccessKey),
 
+                nameof(Certificate),
+                nameof(CertificatePassword),
+                nameof(ClientId),
+
                 nameof(Path),
                 nameof(SupportedProtocol),
                 nameof(Origin),
@@ -505,7 +513,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                                       nameof(Anonymous), nameof(UserName), nameof(AccessKey), nameof(Queue), nameof(ExchangeName), nameof(HubName), nameof(AccessKey), nameof(AccessKeyName), nameof(Password),
                                       nameof(ConsumerGroup), nameof(ResourceName), nameof(SecureConnection), nameof(RestServerType), nameof(HostName), nameof(Endpoint), nameof(ConnectToPort), nameof(Path),
                                       nameof(Origin), nameof(SupportedProtocol), nameof(BaudRate), nameof(PortName), nameof(Topic), nameof(AmqpSubscriptions), nameof(MqttSubscriptions), nameof(DelimitedWithSOHEOT),
-                                      nameof(CredentialsFile), nameof(Certificate), nameof(CertificatePassword),
+                                      nameof(CredentialsFile), nameof(Certificate), nameof(CertificatePassword), nameof(ClientId),
 
                 },
                  Conditionals = new List<FormConditional>()
@@ -574,7 +582,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Client,
-                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection), nameof(Certificate), nameof(CertificatePassword),  nameof(HostName), nameof(ConnectToPort), nameof(MqttSubscriptions) },
+                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection), nameof(Certificate), nameof(CertificatePassword), nameof(ClientId), nameof(HostName), nameof(ConnectToPort), nameof(MqttSubscriptions) },
                           RequiredFields = {nameof(HostName), nameof(ConnectToPort)}
                      },
                      new FormConditional()

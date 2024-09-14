@@ -1552,4 +1552,10 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Listener_Certificate_Password" xml:space="preserve">
     <value>Certificate Password</value>
   </data>
+  <data name="Listener_ClientId" xml:space="preserve">
+    <value>Client Id</value>
+  </data>
+  <data name="Listener_ClientId_Help" xml:space="preserve">
+    <value>The Client Id to be passed to the listener server, if this is blank the key will be used.</value>
+  </data>
 </root>
