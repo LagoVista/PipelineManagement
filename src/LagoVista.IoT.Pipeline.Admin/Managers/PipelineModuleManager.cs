@@ -67,6 +67,24 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 listenerConfiguration.Password = null;
             }
 
+            if (!String.IsNullOrEmpty(listenerConfiguration.Certificate))
+            {
+                var result = await _secureStorage.AddSecretAsync(org, listenerConfiguration.Certificate);
+                if (!result.Successful) return result.ToInvokeResult();
+
+                listenerConfiguration.CertificateSecureId = result.Result;
+                listenerConfiguration.Certificate = null;
+            }
+
+            if (!String.IsNullOrEmpty(listenerConfiguration.CertificatePassword))
+            {
+                var result = await _secureStorage.AddSecretAsync(org, listenerConfiguration.CertificatePassword);
+                if (!result.Successful) return result.ToInvokeResult();
+
+                listenerConfiguration.CertificatePasswordSecureId = result.Result;
+                listenerConfiguration.CertificatePassword = null;
+            }
+
             await _listenerConfigurationRepo.AddListenerConfigurationAsync(listenerConfiguration);
             return InvokeResult.Success;
         }
@@ -185,6 +203,34 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
                 if (!addSecretResult.Successful) return addSecretResult.ToInvokeResult();
                 listenerConfiguration.SecurePasswordId = addSecretResult.Result;
                 listenerConfiguration.Password = null;
+            }
+
+            if (!String.IsNullOrEmpty(listenerConfiguration.Certificate))
+            {
+                if (!String.IsNullOrEmpty(listenerConfiguration.CertificateSecureId))
+                {
+                    await _secureStorage.RemoveSecretAsync(org, listenerConfiguration.CertificateSecureId);
+                }
+
+                var result = await _secureStorage.AddSecretAsync(org, listenerConfiguration.Certificate);
+                if (!result.Successful) return result.ToInvokeResult();
+
+                listenerConfiguration.CertificateSecureId = result.Result;
+                listenerConfiguration.Certificate = null;
+            }
+
+            if (!String.IsNullOrEmpty(listenerConfiguration.CertificatePassword))
+            {
+                if (!String.IsNullOrEmpty(listenerConfiguration.CertificatePasswordSecureId))
+                {
+                    await _secureStorage.RemoveSecretAsync(org, listenerConfiguration.CertificatePasswordSecureId);
+                }
+
+                var result = await _secureStorage.AddSecretAsync(org, listenerConfiguration.CertificatePassword);
+                if (!result.Successful) return result.ToInvokeResult();
+
+                listenerConfiguration.CertificatePasswordSecureId = result.Result;
+                listenerConfiguration.CertificatePassword = null;
             }
 
             await _listenerConfigurationRepo.UpdateListenerConfigurationAsync(listenerConfiguration);

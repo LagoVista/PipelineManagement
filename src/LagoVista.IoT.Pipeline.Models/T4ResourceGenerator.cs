@@ -1,4 +1,4 @@
-﻿/*9/9/2024 6:12:38 AM*/
+﻿/*9/14/2024 5:07:35 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -780,6 +780,12 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 //Resources:PipelineAdminResources:Listener_Anonymous
 
 		public static string Listener_Anonymous { get { return GetResourceString("Listener_Anonymous"); } }
+//Resources:PipelineAdminResources:Listener_Certificate
+
+		public static string Listener_Certificate { get { return GetResourceString("Listener_Certificate"); } }
+//Resources:PipelineAdminResources:Listener_Certificate_Password
+
+		public static string Listener_Certificate_Password { get { return GetResourceString("Listener_Certificate_Password"); } }
 //Resources:PipelineAdminResources:Listener_ConnectSSLTLS
 
 		public static string Listener_ConnectSSLTLS { get { return GetResourceString("Listener_ConnectSSLTLS"); } }
@@ -1724,6 +1730,8 @@ namespace LagoVista.IoT.Pipeline.Models.Resources
 			public const string Listener_AccessKeyName = "Listener_AccessKeyName";
 			public const string Listener_AccessKeyName_Help = "Listener_AccessKeyName_Help";
 			public const string Listener_Anonymous = "Listener_Anonymous";
+			public const string Listener_Certificate = "Listener_Certificate";
+			public const string Listener_Certificate_Password = "Listener_Certificate_Password";
 			public const string Listener_ConnectSSLTLS = "Listener_ConnectSSLTLS";
 			public const string Listener_ConnectToPort = "Listener_ConnectToPort";
 			public const string Listener_ConsumerGroup_Help = "Listener_ConsumerGroup_Help";

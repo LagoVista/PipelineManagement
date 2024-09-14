@@ -153,7 +153,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string Icon { get; set; }
 
-
         public RESTListenerTypes RESTListenerType { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ListenerType, EnumType: (typeof(ListenerTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.Connection_Select_Type, IsRequired: true, IsUserEditable: true)]
@@ -187,6 +186,18 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_ConnectSSLTLS, FieldType: FieldTypes.CheckBox, ResourceType: typeof(PipelineAdminResources))]
         public bool? SecureConnection { get; set; }
+
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Certificate,  FieldType: FieldTypes.SecureCertificate, SecureIdFieldName: nameof(CertificateSecureId), ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string Certificate { get; set; }
+
+        public string CertificateSecureId { get; set; }
+
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_Certificate, FieldType: FieldTypes.Password, SecureIdFieldName: nameof(CertificatePasswordSecureId), ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
+        public string CertificatePassword { get; set; }
+
+        public string CertificatePasswordSecureId { get; set; }
+
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_UserName, HelpResource: PipelineAdminResources.Names.Listener_UserName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string UserName { get; set; }
@@ -287,7 +298,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string CredentialsFileSecretId { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Listener_CredentialsFile, FieldType: FieldTypes.FileUpload, ResourceType: typeof(PipelineAdminResources))]
+        [FormField(LabelResource: PipelineAdminResources.Names.Listener_CredentialsFile, FieldType: FieldTypes.FileUpload,PrivateFileUpload:true, ResourceType: typeof(PipelineAdminResources))]
         public EntityHeader CredentialsFile { get; set; }
 
 
@@ -494,8 +505,8 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                                       nameof(Anonymous), nameof(UserName), nameof(AccessKey), nameof(Queue), nameof(ExchangeName), nameof(HubName), nameof(AccessKey), nameof(AccessKeyName), nameof(Password),
                                       nameof(ConsumerGroup), nameof(ResourceName), nameof(SecureConnection), nameof(RestServerType), nameof(HostName), nameof(Endpoint), nameof(ConnectToPort), nameof(Path),
                                       nameof(Origin), nameof(SupportedProtocol), nameof(BaudRate), nameof(PortName), nameof(Topic), nameof(AmqpSubscriptions), nameof(MqttSubscriptions), nameof(DelimitedWithSOHEOT),
-                                      nameof(CredentialsFile),
-				
+                                      nameof(CredentialsFile), nameof(Certificate), nameof(CertificatePassword),
+
                 },
                  Conditionals = new List<FormConditional>()
                  {
@@ -563,7 +574,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                      {
                           Field = nameof(ListenerType),
                           Value = ListenerTypes_MQTT_Client,
-                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection),  nameof(HostName), nameof(ConnectToPort), nameof(MqttSubscriptions) },
+                          VisibleFields = { nameof(Anonymous), nameof(SecureConnection), nameof(Certificate), nameof(CertificatePassword),  nameof(HostName), nameof(ConnectToPort), nameof(MqttSubscriptions) },
                           RequiredFields = {nameof(HostName), nameof(ConnectToPort)}
                      },
                      new FormConditional()

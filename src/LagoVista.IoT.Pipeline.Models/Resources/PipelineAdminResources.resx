@@ -1546,4 +1546,10 @@ This is a list of parsers that are executed in the order they appear, if a match
   <data name="Transmitter_CredentialsFile" xml:space="preserve">
     <value>Credentials File</value>
   </data>
+  <data name="Listener_Certificate" xml:space="preserve">
+    <value>Certificate</value>
+  </data>
+  <data name="Listener_Certificate_Password" xml:space="preserve">
+    <value>Certificate Password</value>
+  </data>
 </root>
