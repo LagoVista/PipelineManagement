@@ -202,7 +202,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Key = Key,
                 IsPublic = IsPublic,
                 Description = Description,
-                Category = Category,
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key,
                 CustomModuleTypeId = CustomModuleType.Id,
                 CustomModuleType = CustomModuleType.Text,
             };
@@ -272,7 +274,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.CustomModule_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-coding-2",
         GetListUrl: "/api/pipeline/admin/custommodules", SaveUrl: "/api/pipeline/admin/custommodule", GetUrl: "/api/pipeline/admin/custommodule/{id}",
         DeleteUrl: "/api/pipeline/admin/custommodule/{id}", FactoryUrl: "/api/pipeline/admin/custommodule/factory")]
-    public class CustomModuleConfigurationSummary : CategorizedSummaryData
+    public class CustomModuleConfigurationSummary : SummaryData
     {
         public string CustomModuleType { get; set; }
         public string CustomModuleTypeId { get; set; }

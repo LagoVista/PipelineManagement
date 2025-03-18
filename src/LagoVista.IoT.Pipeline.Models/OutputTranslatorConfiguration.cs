@@ -66,7 +66,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Description = Description,
                 OutputTranslatorIypeId = OutputTranslatorType.Id,
                 OutputTranslatorType = OutputTranslatorType.Text,
-                Category = Category
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key,
             };
         }
 
@@ -110,7 +112,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.OutputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-translate-2", Cloneable: true,
         GetListUrl: "/api/pipeline/admin/outputtranslators", GetUrl: "/api/pipeline/admin/outputtranslator/{id}", SaveUrl: "/api/pipeline/admin/outputtranslator",
         DeleteUrl: "/api/pipeline/admin/outputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/outputtranslator/factory")]
-    public class OutputTranslatorConfigurationSummary : CategorizedSummaryData
+    public class OutputTranslatorConfigurationSummary : SummaryData
     {
         public string OutputTranslatorType { get; set; }
         public string OutputTranslatorIypeId { get; set; }

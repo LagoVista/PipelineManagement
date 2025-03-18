@@ -245,7 +245,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Description = Description,
                 TransmitterType = TransmitterType.Text,
                 TransmitterTypeId = TransmitterType.Id,
-                Category = Category
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key,
             };
         }
 
@@ -393,7 +395,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.Transmitter_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-send-email",
         GetListUrl: "/api/pipeline/admin/transmitters", SaveUrl: "/api/pipeline/admin/transmitter", GetUrl: "/api/pipeline/admin/transmitter/{id}", FactoryUrl: "/api/pipeline/admin/transmitter/factory",
         DeleteUrl: "/api/pipeline/admin/transmitter/{id}")]
-    public class TransmitterConfigurationSummary : CategorizedSummaryData
+    public class TransmitterConfigurationSummary : SummaryData
     {
         public string TransmitterType { get; set; }
         public string TransmitterTypeId { get; set; }

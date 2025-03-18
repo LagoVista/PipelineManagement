@@ -155,7 +155,9 @@ namespace LagoVista.IoT.Pipeline.Models
                 Icon = Icon,
                 Key = Key,
                 Name = Name,
-                Category = Category
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key,
             };
         }
 
@@ -481,7 +483,7 @@ namespace LagoVista.IoT.Pipeline.Models
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-connection-1",
         GetListUrl: "/api/sharedconnections", GetUrl: "/api/sharedconnection/{id}", SaveUrl: "/api/sharedconnection", FactoryUrl: "/api/sharedconnection/factory",
         DeleteUrl: "/api/sharedconnection/{id}")]
-    public class SharedConnectionSummary : CategorizedSummaryData
+    public class SharedConnectionSummary : SummaryData
     {
         public string ConnectionType { get; set; }
         public string ConnectionTypeId { get; set; }

@@ -114,7 +114,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Description = Description,
                 InputTranslatorType = InputTranslatorType.Text,
                 InputTranslatorTypeId = InputTranslatorType.Id,
-                Category = Category
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key,
             };
         }
 
@@ -129,7 +131,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.InputTranslator_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-translate-1", Cloneable: true,
         GetListUrl: "/api/pipeline/admin/inputtranslators", GetUrl: "/api/pipeline/admin/inputtranslator/{id}", SaveUrl: "/api/pipeline/admin/inputtranslator",
         DeleteUrl: "/api/pipeline/admin/inputtranslator/{id}", FactoryUrl: "/api/pipeline/admin/inputtranslator/factory")]
-    public class InputTranslatorConfigurationSummary : CategorizedSummaryData
+    public class InputTranslatorConfigurationSummary : SummaryData
     {
         public string InputTranslatorType { get; set; }
         public string InputTranslatorTypeId { get; set; }

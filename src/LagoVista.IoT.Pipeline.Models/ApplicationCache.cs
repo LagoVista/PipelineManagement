@@ -102,7 +102,9 @@ namespace LagoVista.IoT.Pipeline.Models
                 Description = Description,
                 IsPublic = IsPublic,
                 Key = Key,
-                Category = Category
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key,
             };
         }
 
@@ -196,7 +198,7 @@ namespace LagoVista.IoT.Pipeline.Models
     [EntityDescription(PipelineAdminDomain.PipelineAdmin, PipelineAdminResources.Names.AppCache_Title, PipelineAdminResources.Names.AppCache_Help,
        PipelineAdminResources.Names.AppCache_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-database-3",
        GetListUrl: "/api/appcaches", GetUrl: "/api/appcache/{id}", SaveUrl: "/api/appcache", DeleteUrl: "/api/appcache/{id}", FactoryUrl: "/api/appcache/factory")]
-    public class ApplicationCacheSummary : CategorizedSummaryData
+    public class ApplicationCacheSummary : SummaryData
     {
         public string CacheTypeId { get; set; }
         public string CacheType { get; set; }

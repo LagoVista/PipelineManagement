@@ -80,7 +80,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 Icon = Icon,
                 IsPublic = IsPublic,
                 Description = Description,
-                Category = Category
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key,
             };
         }
 
@@ -94,7 +96,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.Planner_Description, EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-pz-planner", Cloneable: true,
         GetListUrl: "/api/pipeline/admin/planners", GetUrl: "/api/pipeline/admin/planner/{id}", SaveUrl: "/api/pipeline/admin/planner", DeleteUrl: "/api/pipeline/admin/planner",
         FactoryUrl: "/api/pipeline/admin/planner/factory")]
-    public class PlannerConfigurationSummary : CategorizedSummaryData
+    public class PlannerConfigurationSummary : SummaryData
     {
     }
 }

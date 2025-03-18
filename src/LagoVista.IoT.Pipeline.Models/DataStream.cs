@@ -239,7 +239,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 IsPublic = IsPublic,
                 Key = Key,
                 Icon = Icon,
-                Category = Category,
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key,
                 StreamType = StreamType.Text,
                 StreamTypeKey = StreamType.Id,
                 DeviceIdFieldName = DeviceIdFieldName,
@@ -618,7 +620,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         PipelineAdminResources.Names.DataStream_Description,
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-ae-database-2", Cloneable: true,
         GetUrl: "/api/datastream/{id}", SaveUrl: "/api/datastream", GetListUrl: "/api/datastreams", FactoryUrl: "/api/datastream/factory", DeleteUrl: "/api/datastream/{id}")]
-    public class DataStreamSummary : CategorizedSummaryData
+    public class DataStreamSummary : SummaryData
     {
         public string StreamType { get; set; }
         public string StreamTypeKey { get; set; }

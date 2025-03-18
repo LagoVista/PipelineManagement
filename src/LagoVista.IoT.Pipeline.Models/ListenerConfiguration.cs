@@ -677,7 +677,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                 ListenerTypeId = ListenerType.Id,
                 IsPublic = IsPublic,
                 Description = Description,
-                Category = Category
+                Category = Category?.Text,
+                CategoryId = Category?.Id,
+                CategoryKey = Category?.Key,
             };
         }
 
@@ -692,7 +694,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         EntityDescriptionAttribute.EntityTypes.Summary, typeof(PipelineAdminResources), Icon: "icon-fo-listening", Cloneable: true,
         GetListUrl: "/api/pipeline/admin/listeners", GetUrl: "/api/pipeline/admin/listener/{id}", SaveUrl: "/api/pipeline/admin/listener", DeleteUrl: "/api/pipeline/admin/listener/{id}",
         FactoryUrl: "/api/pipeline/admin/listener/factory")]
-    public class ListenerConfigurationSummary : CategorizedSummaryData
+    public class ListenerConfigurationSummary : SummaryData
     {
         public string ListenerType { get; set; }
         public string ListenerTypeId { get; set; }
