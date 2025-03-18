@@ -49,10 +49,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
 
         public bool DebugMode { get; set; }
 
-
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: PipelineAdminResources.Names.Common_Category_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public EntityHeader Category { get; set; }
-
     }
 
 }
