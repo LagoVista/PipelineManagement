@@ -3,9 +3,9 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="3.0.2055.1054" />
-    <PackageReference Include="LagoVista.AI" Version="3.0.2055.1054" />
-    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="3.0.2055.1054" />
+    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="3.0.3043.1839" />
+    <PackageReference Include="LagoVista.AI" Version="3.0.3043.1839" />
+    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="3.0.3043.1839" />
     <PackageReference Include="Npgsql" Version="6.0.7" />
   </ItemGroup>
   <ItemGroup>
