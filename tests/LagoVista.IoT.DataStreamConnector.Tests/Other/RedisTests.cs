@@ -14,6 +14,13 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Redis
     [TestClass]
     public class RedisTests : DataStreamConnectorTestBase
     {
+        /* To run tests...
+         * startup a local docker image 
+         * docker run -d -p 6379:6379 --name my-redis redis
+         */
+
+        static bool dockerTest = true;
+
         static DataStream _currentStream;
         static IInstanceLogger _logger;
         protected static DataStream GetValidStream()
@@ -39,11 +46,11 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Redis
                 LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
             };
 
-            _currentStream.RedisServerUris = Environment.GetEnvironmentVariable("REDIS_CACHE_URI", EnvironmentVariableTarget.User);
-            _currentStream.RedisPassword = Environment.GetEnvironmentVariable("REDIS_CACHE_PWD", EnvironmentVariableTarget.User);
+            _currentStream.RedisServerUris = dockerTest ? "localhost" : Environment.GetEnvironmentVariable("REDIS_CACHE_URI", EnvironmentVariableTarget.User);
+            _currentStream.RedisPassword = dockerTest ? null : Environment.GetEnvironmentVariable("REDIS_CACHE_PWD", EnvironmentVariableTarget.User);
 
             Assert.IsFalse(String.IsNullOrEmpty(_currentStream.RedisServerUris), "Must provide at a minimum one URI for a Redis Server");
-            Assert.IsFalse(String.IsNullOrEmpty(_currentStream.RedisPassword), "Database must be in an environment variable as [REDIS_CACHE_PWD]");
+            Assert.IsFalse(!dockerTest && String.IsNullOrEmpty(_currentStream.RedisPassword), "Database must be in an environment variable as [REDIS_CACHE_PWD]");
 
             _currentStream.Fields.Add(new DataStreamField()
             {

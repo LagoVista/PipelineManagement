@@ -132,12 +132,15 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         [ExpectedException(typeof(NotSupportedException))]
         public async Task DataStream_Azure_Blob_Get_Test()
         {
-            var stream = GetValidStream();
+            await Assert.ThrowsExactlyAsync<NotSupportedException>(async () =>
+            {
+                var stream = GetValidStream();
 
-            var connector = new AzureBlobConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
-            await connector.InitAsync(stream);
+                var connector = new AzureBlobConnector(new InstanceLogger(new Utils.LogWriter(), "HOSTID", "1234", "INSTID"));
+                await connector.InitAsync(stream);
 
-            await connector.GetItemsAsync("devid", new Core.Models.UIMetaData.ListRequest());
+                await connector.GetItemsAsync("devid", new Core.Models.UIMetaData.ListRequest());
+            });
         }
 
         [TestMethod]

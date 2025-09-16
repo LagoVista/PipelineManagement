@@ -118,7 +118,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
         public void Init()
         {
             _dataStreamManager = new DataStreamManager(new Mock<IDataStreamRepo>().Object, new Mock<ISharedConnectionManager>().Object, _connectionSettings.Object, _orgUtils.Object, new AdminLogger(new Utils.LogWriter()),
-                _secureStorage, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, _security.Object);
+            _secureStorage, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, _security.Object);
 
             _security.Setup(sec => sec.AuthorizeAsync(It.IsAny<EntityHeader>(), It.IsAny<EntityHeader>(), It.IsAny<string>(), It.IsAny<object>()));
 
