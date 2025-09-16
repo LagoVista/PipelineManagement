@@ -12,6 +12,7 @@ using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.Core.Models;
 using LagoVista.UserAdmin;
 using System.Diagnostics;
+using LagoVista.IoT.Pipeline.Admin.Interfaces;
 
 namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
 {
@@ -39,7 +40,7 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
         [TestInitialize]
         public void TestInit()
         {
-            _dataStreamManager = new DataStreamManager(_repo.Object, new Mock<ISharedConnectionManager>().Object, _mockSettings.Object, _orgUtils.Object, new Logging.Loggers.AdminLogger(new Utils.LogWriter()), _secureStorage.Object, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, new Mock<ISecurity>().Object);
+            _dataStreamManager = new DataStreamManager(_repo.Object, new Mock<IPostgresqlServices>().Object, new Mock<ISharedConnectionManager>().Object, _mockSettings.Object, _orgUtils.Object, new Logging.Loggers.AdminLogger(new Utils.LogWriter()), _secureStorage.Object, new Mock<IAppConfig>().Object, new Mock<IDependencyManager>().Object, new Mock<ISecurity>().Object);
 
             _mockSettings.Setup(ms => ms.DefaultInternalDataStreamConnectionSettingsTableStorage).Returns(new ConnectionSettings() { AccessKey = DEFAULT_TS_ACCESS_KEY, AccountId = DEFAULT_TS_ACCOUNT_ID });
 

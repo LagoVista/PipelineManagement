@@ -6,7 +6,8 @@
     <PackageId>LagoVista.IoT.DeviceAdmin.Tests</PackageId>
    </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3044.0837" />
+    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3044.1501" />
+    <PackageReference Include="Npgsql" Version="9.0.3" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System" />

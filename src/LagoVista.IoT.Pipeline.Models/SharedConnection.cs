@@ -55,10 +55,6 @@ namespace LagoVista.IoT.Pipeline.Models
         public string MqttPasswordSecureId { get; set; }
 
 
-
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: PipelineAdminResources.Names.Common_Category_Select, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
-        public EntityHeader Category { get; set; }
-
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
         public string Icon { get; set; }
 

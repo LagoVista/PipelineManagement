@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Interfaces;
+using LagoVista.IoT.Pipeline.Admin.Interfaces;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.CloudRepos.Repos;
 
@@ -18,6 +19,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos
             services.AddTransient<ISentinelConfigurationRepo, SentinelConfigurationRepo>();
             services.AddTransient<IPlannerConfigurationRepo, PlannerConfigurationRepo>();
             services.AddTransient<ITransmitterConfigurationRepo, TransmitterConfigurationRepo>();
+            services.AddTransient<IPostgresqlServices, PostgresqlServices>();
         }
     }
 }

@@ -129,7 +129,6 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotSupportedException))]
         public async Task DataStream_Azure_Blob_Get_Test()
         {
             await Assert.ThrowsExactlyAsync<NotSupportedException>(async () =>

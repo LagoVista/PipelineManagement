@@ -6,13 +6,12 @@ using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.IoT.Pipeline.Admin.Interfaces;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Resources;
 using LagoVista.UserAdmin;
-using Npgsql;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Pipeline.Admin.Managers
@@ -23,8 +22,9 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
         private readonly ISecureStorage _secureStorage;
         private readonly IDefaultInternalDataStreamConnectionSettings _defaultConnectionSettings;
         private readonly IOrgUtils _orgUtils;
+        private readonly IPostgresqlServices _postgressqlServices;
         private readonly ISharedConnectionManager _sharedDataStreamConnectionManager;
-        public DataStreamManager(IDataStreamRepo dataStreamRepo, ISharedConnectionManager sharedDataStreamConnectionManager, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings, IOrgUtils orgUtils, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
+        public DataStreamManager(IDataStreamRepo dataStreamRepo, IPostgresqlServices postgressqlServices, ISharedConnectionManager sharedDataStreamConnectionManager, IDefaultInternalDataStreamConnectionSettings defaultConnectionSettings, IOrgUtils orgUtils, IAdminLogger logger, ISecureStorage secureStorage, IAppConfig appConfig, IDependencyManager depmanager, ISecurity security) :
             base(logger, appConfig, depmanager, security)
         {
             _dataStreamRepo = dataStreamRepo ?? throw new ArgumentNullException(nameof(IDataStreamRepo));
@@ -32,6 +32,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             _defaultConnectionSettings = defaultConnectionSettings ?? throw new ArgumentNullException(nameof(IDefaultInternalDataStreamConnectionSettings));
             _sharedDataStreamConnectionManager = sharedDataStreamConnectionManager ?? throw new ArgumentNullException(nameof(SharedConnectionManager));
             _orgUtils = orgUtils ?? throw new ArgumentNullException(nameof(IOrgUtils));
+            _postgressqlServices = postgressqlServices ?? throw new ArgumentNullException(nameof(IPostgresqlServices));
         }
 
         private async Task<InvokeResult> CreatePointArrayStorageAsync(DataStream stream, EntityHeader org, EntityHeader user)
@@ -125,7 +126,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             this.ValidationCheck(stream, Actions.Create);
 
-            await CreatePostgresStorage(stream, stream.DbPassword, true);
+            await _postgressqlServices.CreatePostgresStorage(stream, stream.DbPassword, true);
 
             stream.DbPassword = null;
 
@@ -217,7 +218,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
 
             this.ValidationCheck(stream, Actions.Create);
 
-            await CreatePostgresStorage(stream, stream.DbPassword, false);
+            await _postgressqlServices.CreatePostgresStorage(stream, stream.DbPassword, false);
 
             stream.DbPassword = null;
 
@@ -327,80 +328,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Managers
             return InvokeResult.Success;
         }
 
-        private async Task<InvokeResult> CreatePostgresStorage(DataStream stream, String dbPassword, bool foforPointStorage)
-        {
-            var connString = foforPointStorage ? 
-                             $"Host={_defaultConnectionSettings.PointArrayConnectionSettings.Uri};Username={_defaultConnectionSettings.PointArrayConnectionSettings.UserName};Password={_defaultConnectionSettings.PointArrayConnectionSettings.Password};" :
-                             $"Host={_defaultConnectionSettings.GeoSpatialConnectionSettings.Uri};Username={_defaultConnectionSettings.GeoSpatialConnectionSettings.UserName};Password={_defaultConnectionSettings.GeoSpatialConnectionSettings.Password};";
-            
-            using (var conn = new NpgsqlConnection(connString))
-            using (var cmd = new NpgsqlCommand())
-            {
-                conn.Open();
-                Console.WriteLine($"[DataStreamManager__CreatePostgresStorage] - Check User {stream.DbUserName}");
-                // Create the user.
-                cmd.Connection = conn;
-                cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
-                cmd.Parameters.AddWithValue("@userName", stream.DbUserName);
-                var result = await cmd.ExecuteScalarAsync();
-                if (result == null)
-                {
-                    Console.WriteLine($"[DataStreamManager__CreatePostgresStorage] - Does Not Exist - creating {stream.DbUserName}");
-                    cmd.Parameters.Clear();
-
-                    cmd.CommandText = $"CREATE USER {stream.DbUserName} with SUPERUSER LOGIN PASSWORD '{dbPassword}';";
-                    result = await cmd.ExecuteScalarAsync();
-
-                    cmd.CommandText = "SELECT 1 FROM pg_roles WHERE rolname = @userName";
-                    cmd.Parameters.AddWithValue("@userName", stream.DbUserName);
-                    result = await cmd.ExecuteScalarAsync();
-                    if (result == null)
-                    {
-                        return InvokeResult.FromError("Could not create local user.");
-                    }
-                    Console.WriteLine($"[DataStreamManager__CreatePostgresStorage] - Does Not Exist - created {stream.DbUserName}");
-                }
-                else
-                    Console.WriteLine($"[DataStreamManager__CreatePostgresStorage] - Exists {stream.DbUserName}");
-
-                // Create teh database.
-                cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
-                cmd.Parameters.AddWithValue("@dbname", stream.DatabaseName);
-                result = await cmd.ExecuteScalarAsync();
-                if (result == null)
-                {
-                    cmd.Parameters.Clear();
-
-                    cmd.CommandText = $"CREATE DATABASE {stream.DatabaseName};";
-                    result = await cmd.ExecuteScalarAsync();
-
-                    cmd.CommandText = "select 1 from pg_database where datname = @dbname;";
-                    cmd.Parameters.AddWithValue("@dbname", stream.DatabaseName);
-                    result = await cmd.ExecuteScalarAsync();
-                    if (result == null)
-                    {
-                        return InvokeResult.FromError("Could not create local database.");
-                    }
-                }
-
-                conn.Close();
-            }
-
-            // now login to postgres with the user for this org.
-            connString = $"Host={stream.DbURL};Username={stream.DbUserName};Password={dbPassword};Database={stream.DbName}";
-            using (var conn = new NpgsqlConnection(connString))
-            using (var cmd = new NpgsqlCommand())
-            {
-                // Create storage.
-                conn.Open();
-                cmd.Connection = conn;
-                cmd.Parameters.Clear();
-                cmd.CommandText = stream.CreateTableDDL;
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                return InvokeResult.Success;
-            }
-        }
+        
 
         private string GetPointArrayDataStorageSQL_DDL(String tableName)
         {

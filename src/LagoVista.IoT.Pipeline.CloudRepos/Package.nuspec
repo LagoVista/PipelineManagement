@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.IoT.Pipeline.CloudRepos</id>
-    <version>3.0.3044.0837</version>
+    <version>3.0.3044.1501</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,18 +12,18 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT Cloud</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 9/16/2025 12:37:39 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 9/16/2025 7:01:14 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
-      <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.CloudStorage" version="3.0.3044.0837" />
-        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.3044.0837" />
+      <group targetFramework="net9.0">
+        <dependency id="LagoVista.CloudStorage" version="3.0.3044.1501" />
+        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.3044.1501" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard2.1\LagoVista.IoT.Pipeline.CloudRepos.dll" target="lib\netstandard2.1\LagoVista.IoT.Pipeline.CloudRepos.dll" />
-    <file src="bin\release\netstandard2.1\LagoVista.IoT.Pipeline.CloudRepos.pdb" target="lib\netstandard2.1\LagoVista.IoT.Pipeline.CloudRepos.pdb" />
+    <file src="bin\release\net9.0\LagoVista.IoT.Pipeline.CloudRepos.dll" target="lib\net9.0\LagoVista.IoT.Pipeline.CloudRepos.dll" />
+    <file src="bin\release\net9.0\LagoVista.IoT.Pipeline.CloudRepos.pdb" target="lib\net9.0\LagoVista.IoT.Pipeline.CloudRepos.pdb" />
   </files>
 </package>
