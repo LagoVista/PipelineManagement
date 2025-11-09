@@ -1,4 +1,8 @@
-﻿using Elasticsearch.Net;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: cf066c2d1c5bf3b8a26190b2ca82cd7317770a3ae91963abac1118bf144dfe69
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using Elasticsearch.Net;
 using Elasticsearch.Net.Aws;
 using LagoVista.Core.Validation;
 using LagoVista.IoT.Pipeline.Admin;

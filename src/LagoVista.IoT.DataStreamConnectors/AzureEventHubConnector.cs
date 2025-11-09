@@ -1,4 +1,8 @@
-﻿using Azure.Messaging.EventHubs;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: b1dc8c80526ea8dda324c5c61c31897cfe752939c50b32163d1fbbf9729404df
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
 using LagoVista.Core;
 using LagoVista.Core.Models;

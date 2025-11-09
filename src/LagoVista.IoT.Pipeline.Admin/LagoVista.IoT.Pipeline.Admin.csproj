@@ -3,9 +3,9 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="3.0.3044.1501" />
-    <PackageReference Include="LagoVista.AI" Version="3.0.3044.1501" />
-    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="3.0.3044.1501" />
+    <PackageReference Include="LagoVista.IoT.DeviceAdmin" Version="3.0.3097.0925" />
+    <PackageReference Include="LagoVista.AI" Version="3.0.3097.0925" />
+    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Admin" Version="3.0.3097.0925" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.Models\LagoVista.IoT.Pipeline.Models.csproj" />

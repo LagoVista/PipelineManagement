@@ -1,4 +1,8 @@
-﻿using LagoVista.IoT.Pipeline.Admin.Models;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: a34b4cc433d23921f380455bdfc07b6edc596f144a8330f373fab709e65515c9
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using LagoVista.IoT.Pipeline.Admin.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

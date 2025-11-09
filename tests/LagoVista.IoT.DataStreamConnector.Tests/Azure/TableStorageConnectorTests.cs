@@ -1,4 +1,8 @@
-﻿using LagoVista.IoT.DataStreamConnectors;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 0d60f9601ee68d98c342f3a4bf1d319fd607e3aea3c1cb10afc525d3f233d9bf
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.DataStreamConnectors.Models;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin;

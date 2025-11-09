@@ -1,4 +1,8 @@
-﻿using Amazon;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 5514ce7c729f29473cd36c3aedf90bd9fb4c8fcdc83c0377f32b6b1a92ec6213
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using Amazon;
 using Amazon.Runtime.CredentialManagement;
 using Amazon.S3;
 using Amazon.S3.Model;

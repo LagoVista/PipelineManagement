@@ -1,4 +1,8 @@
-﻿using Amazon.Runtime.CredentialManagement;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 51647c25ccdb985dbd6afc31e42105b71471ba900c765e9a36c2b5d7886afd7d
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using Amazon.Runtime.CredentialManagement;
 using Amazon.S3;
 using Amazon.S3.Model;
 using LagoVista.Core;

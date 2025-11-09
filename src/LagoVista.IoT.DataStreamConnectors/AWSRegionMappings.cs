@@ -1,4 +1,8 @@
-﻿using Amazon;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 51e16a2b32040fdaaa70c59d749f1e2c20278c73e65da0db39ad712260b7ebea
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using Amazon;
 using LagoVista.IoT.Pipeline.Models;
 using System;
 

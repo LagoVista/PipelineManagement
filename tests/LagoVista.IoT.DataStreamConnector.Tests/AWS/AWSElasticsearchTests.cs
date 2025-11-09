@@ -1,4 +1,8 @@
-﻿using Elasticsearch.Net;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 998d0c2603a02b7a57af7ed1ca1a18feea229eddb382a8b7d17ede085510945e
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using Elasticsearch.Net;
 using Elasticsearch.Net.Aws;
 using LagoVista.IoT.DataStreamConnectors;
 using LagoVista.IoT.Logging.Loggers;
