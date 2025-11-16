@@ -7,7 +7,7 @@
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.IoT.Web.Common" Version="3.0.3097.0925" />
+    <PackageReference Include="LagoVista.IoT.Web.Common" Version="3.0.3099.1426" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.DataStreamConnectors\LagoVista.IoT.DataStreamConnectors.csproj" />

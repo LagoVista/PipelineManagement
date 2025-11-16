@@ -11,9 +11,9 @@
     <None Remove="LagoVista\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.AI.Models" Version="3.0.3097.0925" />
-    <PackageReference Include="LagoVista.IoT.DeviceAdmin.Models" Version="3.0.3097.0925" />
-    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Models" Version="3.0.3097.0925" />
+    <PackageReference Include="LagoVista.AI.Models" Version="3.0.3099.1426" />
+    <PackageReference Include="LagoVista.IoT.DeviceAdmin.Models" Version="3.0.3099.1426" />
+    <PackageReference Include="LagoVista.IoT.DeviceMessaging.Models" Version="3.0.3099.1426" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="T4ResourceGenerator.cs">

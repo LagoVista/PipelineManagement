@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.IoT.DataStreamConnectors</id>
-    <version>3.0.3097.0925</version>
+    <version>3.0.3099.1426</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,7 +12,7 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT Cloud LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/8/2025 2:25:52 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 11/10/2025 7:26:04 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
@@ -26,13 +26,13 @@
         <dependency id="Azure.Storage.Blobs" version="12.25.0" />
         <dependency id="Elasticsearch.Net" version="7.17.4" />
         <dependency id="Elasticsearch.Net.Aws" version="7.2.2" />
-        <dependency id="LagoVista.IoT.Logging" version="3.0.3097.0925" />
+        <dependency id="LagoVista.IoT.Logging" version="3.0.3099.1426" />
         <dependency id="Microsoft.Data.SqlClient" version="6.1.1" />
         <dependency id="Microsoft.Spatial" version="8.4.0" />
         <dependency id="NEST" version="7.17.4" />
         <dependency id="StackExchange.Redis" version="2.9.17" />
-        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.3097.0925" />
-        <dependency id="LagoVista.IoT.Pipeline.Models" version="3.0.3097.0925" />
+        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.3099.1426" />
+        <dependency id="LagoVista.IoT.Pipeline.Models" version="3.0.3099.1426" />
       </group>
     </dependencies>
   </metadata>

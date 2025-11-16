@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Npgsql" Version="9.0.3" />
-    <PackageReference Include="LagoVista.CloudStorage" Version="3.0.3097.0925" />
+    <PackageReference Include="LagoVista.CloudStorage" Version="3.0.3099.1426" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.Admin\LagoVista.IoT.Pipeline.Admin.csproj" />
