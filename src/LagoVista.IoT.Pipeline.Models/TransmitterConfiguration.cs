@@ -23,7 +23,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
     {
         public TransmitterConfiguration()
         {
-            Headers = new List<Header>();
+            Headers = new List<SampleMessageHeader>();
             Icon = "icon-pz-send-email";
             Anonymous = true;
         }
@@ -115,7 +115,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public string SecureAccessKeyId { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Transmitter_Headers, FieldType: FieldTypes.ChildListInline, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
-        public List<Header> Headers { get; set; }
+        public List<SampleMessageHeader> Headers { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.Listener_HubName, HelpResource: PipelineAdminResources.Names.Listener_HubName_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false, IsUserEditable: true)]
         public string HubName { get; set; }
@@ -220,7 +220,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
                         this.UserName = null;
                     }
 
-                    if (Headers == null) Headers = new List<Header>();
+                    if (Headers == null) Headers = new List<SampleMessageHeader>();
                     Headers.RemoveAll(hdr => String.IsNullOrEmpty(hdr.Name) && String.IsNullOrEmpty(hdr.Value));
 
                     foreach (var header in Headers)
