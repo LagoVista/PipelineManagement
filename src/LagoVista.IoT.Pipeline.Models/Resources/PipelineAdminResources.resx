@@ -178,10 +178,10 @@
     <value>UDP</value>
   </data>
   <data name="CustomModule_Description" xml:space="preserve">
-    <value>A Custom Module is Pipeline Execution Module that can be developed in any language that supports .NET and uploaded to the system</value>
+    <value>A custom module is a pipeline execution component that you develop in any .NET-supported .NET language and upload to the system.</value>
   </data>
   <data name="CustomModule_Help" xml:space="preserve">
-    <value>A Custom Module is Pipeline Execution Module that can be developed in any language that supports .NET and uploaded to the system</value>
+    <value>.NET-based pipeline modules that you develop and upload to the system.</value>
   </data>
   <data name="CustomModule_Title" xml:space="preserve">
     <value>Custom Module</value>
@@ -193,10 +193,10 @@
     <value>Delimiter</value>
   </data>
   <data name="InputTranslator_Description" xml:space="preserve">
-    <value>The Input Translator is used to Transform the Raw Message received from the device to a set of key value pairs that can be used within your device workflow</value>
+    <value>Use input translators to convert raw device messages into key-value pairs for use in device workflows.</value>
   </data>
   <data name="InputTranslator_Help" xml:space="preserve">
-    <value>The Input Translator is used to Transform the Raw Message received from the device to a set of key value pairs that can be used within your device workflow</value>
+    <value>Configure how raw device messages are translated into key-value pairs for device workflows.</value>
   </data>
   <data name="InputTranslator_Title" xml:space="preserve">
     <value>Input Translator</value>
@@ -220,7 +220,7 @@
     <value>Select this option if the first character of the messages you are receiving start with SOH (ascii 0x01)and ended with EOT (ascii 0x04)</value>
   </data>
   <data name="Listener_Description" xml:space="preserve">
-    <value>Listeners are used to Monitor a Port, Protocol or Service for Messages from your Devices</value>
+    <value>Configure how this listener receives and processes device messages, including connection settings, message formats, and timeouts.</value>
   </data>
   <data name="Listener_EndMessageSequence" xml:space="preserve">
     <value>End Message Sequence</value>
@@ -232,7 +232,7 @@
     <value>Endpoint</value>
   </data>
   <data name="Listener_Help" xml:space="preserve">
-    <value>Listeners are used to Monitor a Port, Protocol or Service for Messages from your Devices</value>
+    <value>Monitor network ports, protocols, or services for incoming messages from your devices.</value>
   </data>
   <data name="Listener_KeepAliveToSendReply" xml:space="preserve">
     <value>Keep Alive to Send Reply</value>
@@ -568,10 +568,10 @@
     <value>You can define and XPath Expression to Extra a value from an XML Document</value>
   </data>
   <data name="OutputTranslator_Description" xml:space="preserve">
-    <value>The Output Translator is used to Transform the Key Value Pairs that are created as part of the Workflow to the format the device is expecting so they can be sent down to the device.</value>
+    <value>Define how workflow key-value pairs are translated into the format expected by the target device so they are delivered correctly.</value>
   </data>
   <data name="OutputTranslator_Help" xml:space="preserve">
-    <value>The Output Translator is used to Transform the Key Value Pairs that are created as part of the Workflow to the format the device is expecting so they can be sent down to the device.</value>
+    <value>Configure how workflow key-value pairs are translated into the format required by the device before they are sent.</value>
   </data>
   <data name="OutputTranslator_Title" xml:space="preserve">
     <value>Output Translator</value>
@@ -583,7 +583,7 @@
     <value>-select output translator-</value>
   </data>
   <data name="Planner_Description" xml:space="preserve">
-    <value>The Planner is used to identify the device that sent the message as well as the specific message that is being sent.  Based on those two peices of information, the Device Configuration can be used to create plan from the Route for that specific message as to how the message should be processed.</value>
+    <value>Planners identify which device sent a message and the message type. Device Configuration uses this information to create a processing plan from the Route for that message.</value>
   </data>
   <data name="Planner_DeviceIDParsers" xml:space="preserve">
     <value>Device ID Parsers</value>
@@ -594,7 +594,7 @@
 This is a list of parsers that are executed in the order they appear, if a match is not found with one parser, the next one is executed.  Once the first value response is identified, it will no longer search for additional matches.</value>
   </data>
   <data name="Planner_Help" xml:space="preserve">
-    <value>The Planner is used to identify the device that sent the message as well as the specific message that is being sent.  Based on those two peices of information, the Device Configuration can be used to create plan from the Route for that specific message as to how the message should be processed.</value>
+    <value>Identify the device that sent a message and the message type so Device Configuration can create a processing plan from the Route for that message.</value>
   </data>
   <data name="Planner_MessageTypeIDParsers" xml:space="preserve">
     <value>Message Type ID Parsers</value>
@@ -611,13 +611,13 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Planner</value>
   </data>
   <data name="Sentinel_Description" xml:space="preserve">
-    <value>The Sential Module provides security for your Device.  It will authenticate that the device that is sending the message is that which is claimed.</value>
+    <value>Improves security by authenticating that the device sending a message matches its claimed identity.</value>
   </data>
   <data name="Sentinel_Help" xml:space="preserve">
-    <value>The Sential Module provides security for your Device.  It will authenticate that the device that is sending the message is that which is claimed.</value>
+    <value>Enhances security by verifying that the device sending a message is the device it claims to be.</value>
   </data>
   <data name="Sentinel_Title" xml:space="preserve">
-    <value>Sentinel</value>
+    <value>Sentinel Security</value>
   </data>
   <data name="Translator_Type_Binary" xml:space="preserve">
     <value>Binary</value>
@@ -638,10 +638,10 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>XML</value>
   </data>
   <data name="Transmitter_Description" xml:space="preserve">
-    <value>The Transmitter is used to send messages back to the device.</value>
+    <value>Use this section to configure transmitters that send messages from the system to devices.</value>
   </data>
   <data name="Transmitter_Help" xml:space="preserve">
-    <value>The Transmitter is used to send messages back to the device.</value>
+    <value>Configure transmitters that send messages from the system to devices.</value>
   </data>
   <data name="Transmitter_Title" xml:space="preserve">
     <value>Transmitter</value>
@@ -806,7 +806,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Security Fields</value>
   </data>
   <data name="Sentinel_SecurityField_Help" xml:space="preserve">
-    <value>You can define a set of security field definitions that will be used to look in the message to find a value that can be used to authenticate your message.  </value>
+    <value>Configure how to locate authentication values in incoming device messages.</value>
   </data>
   <data name="Sentinel_SecurityField_Locator" xml:space="preserve">
     <value>Locators</value>
@@ -818,7 +818,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Security Field</value>
   </data>
   <data name="Sentinel_SecurityField_Description" xml:space="preserve">
-    <value>Security Fields are used to describe where authentication information should arrive in your device messages as well as how that information should be validated.</value>
+    <value>Define where authentication data is found in device messages and how it is used to verify message authenticity.</value>
   </data>
   <data name="Sentinel_SecurityField_Title_Help" xml:space="preserve">
     <value>Security Fields are used to describe where authentication information should arrive in your device messages as well as how that information should be validated. </value>
@@ -875,7 +875,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>The field name will be how the field will be identified in the output, this can be the name of the database column or the name of a JSON property</value>
   </data>
   <data name="DataStreamField_Help" xml:space="preserve">
-    <value>A data stream value defines a field that will be used as a data point within a data stream.</value>
+    <value>Set up how this field behaves in the data stream, including its identity, data type, validation rules, and how it is formatted or mapped in the output.</value>
   </data>
   <data name="DataStreamField_IsRequired" xml:space="preserve">
     <value>Is Required</value>
@@ -929,13 +929,13 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>If your data stream storage is not managed by NuvIoT, you will need to provide a connection string to your storage resource.  This storage string will not be stored in plain text.</value>
   </data>
   <data name="DataStream_Description" xml:space="preserve">
-    <value>A Data Stream is a predefined set of fields that can be used to produce time series data that can be then used by other analysis tools or machine learning algorithms.</value>
+    <value>A data stream is a predefined set of fields used to produce time-series data that can be consumed by analysis tools or machine learning models.</value>
   </data>
   <data name="DataStream_Fields" xml:space="preserve">
     <value>Fields</value>
   </data>
   <data name="DataStream_Help" xml:space="preserve">
-    <value>A Data Stream is a predefined set of fields that can be used to produce time series data that can be then used by other analysis tools or machine learning algorithms.</value>
+    <value>A data stream is a predefined set of fields used to produce time-series data for analysis tools or machine learning models.</value>
   </data>
   <data name="DataStream_StreamType" xml:space="preserve">
     <value>Stream Type</value>
@@ -1166,10 +1166,10 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>URI</value>
   </data>
   <data name="Dictionary_Description" xml:space="preserve">
-    <value>Provides a simple key value pair lookup dictionary</value>
+    <value>Use this model to store and access values by key. Passwords are stored securely and hidden after saving. If you enter a new password, it replaces the existing one.</value>
   </data>
   <data name="Dictionary_Help" xml:space="preserve">
-    <value>Provides a simple key value pair lookup dictionary</value>
+    <value>Store and retrieve values using key-based lookups.</value>
   </data>
   <data name="Dictionary_Title" xml:space="preserve">
     <value>Dictionary</value>
@@ -1220,10 +1220,10 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Redis</value>
   </data>
   <data name="AppCache_Description" xml:space="preserve">
-    <value>The Application Cache is a way that IoT applications can work with 3rd part or NuvIoT's native caching system.</value>
+    <value>Use the application cache to connect your IoT application to a third-party cache or NuvIoT’s built-in caching system.</value>
   </data>
   <data name="AppCache_Help" xml:space="preserve">
-    <value>The Application Cache is a way that IoT applications can work with 3rd part or NuvIoT's native caching system.</value>
+    <value>Configure how IoT applications use third-party or NuvIoT built-in caching systems.</value>
   </data>
   <data name="AppCache_Password" xml:space="preserve">
     <value>Password</value>
@@ -1331,10 +1331,10 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Initialization Values</value>
   </data>
   <data name="ApplicationCacheValue_Description" xml:space="preserve">
-    <value>Default values to be used to initialize the application cache with lookup values</value>
+    <value>Configure default values that initialize the application cache with lookup data when the application starts.</value>
   </data>
   <data name="ApplicationCacheValue_Help" xml:space="preserve">
-    <value>Default values to be used to initialize the application cache with lookup values</value>
+    <value>Default values used to pre-populate the application cache with lookup data.</value>
   </data>
   <data name="ApplicationCacheValue_Key" xml:space="preserve">
     <value>Key</value>
@@ -1415,10 +1415,10 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Connection Type</value>
   </data>
   <data name="SharedConnection_Description" xml:space="preserve">
-    <value>A Shared Connection is a common connection that be associated with a data stream writer or other external service.</value>
+    <value>Use a shared connection as a reusable connection that can be associated with a data stream writer or other external services.</value>
   </data>
   <data name="SharedConnection_Help" xml:space="preserve">
-    <value>A Shared Connection is a common connection that be associated with a data stream writer or other external service.</value>
+    <value>Reusable connections that can be linked to a data stream writer or other external services.</value>
   </data>
   <data name="SharedConnection_Title" xml:space="preserve">
     <value>Shared Connection</value>
@@ -1499,7 +1499,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Planners</value>
   </data>
   <data name="DataStreams_Title" xml:space="preserve">
-    <value>Data Stream Writers</value>
+    <value>Data Streams</value>
   </data>
   <data name="InputTranslators_Title" xml:space="preserve">
     <value>Input Translators</value>
@@ -1511,7 +1511,7 @@ This is a list of parsers that are executed in the order they appear, if a match
     <value>Output Translators</value>
   </data>
   <data name="Sentinels_Title" xml:space="preserve">
-    <value>Sentintels</value>
+    <value>Sentinel</value>
   </data>
   <data name="SharedConnections_Title" xml:space="preserve">
     <value>Shared Connections</value>

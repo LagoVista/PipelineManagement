@@ -12,7 +12,6 @@ namespace LagoVista.IoT.Pipeline.Admin
     public class PipelineAdminDomain
     {
         public const string PipelineAdmin = "Pipeline Execution Modules";
-
         [DomainDescription(PipelineAdmin)]
         public static DomainDescription PipelineModules
         {
@@ -20,7 +19,7 @@ namespace LagoVista.IoT.Pipeline.Admin
             {
                 return new DomainDescription()
                 {
-                    Description = "A set of classes that contains meta data for managing IoT Deployments.",
+                    Description = "Configuration and metadata for managing IoT data processing and device message workflows.",
                     DomainType = DomainDescription.DomainTypes.BusinessObject,
                     Name = "Pipeline Management",
                     CurrentVersion = new Core.Models.VersionInfo()
@@ -35,6 +34,5 @@ namespace LagoVista.IoT.Pipeline.Admin
                 };
             }
         }
-
     }
 }
