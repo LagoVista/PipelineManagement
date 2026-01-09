@@ -10,6 +10,7 @@ using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Interfaces;
+using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
@@ -17,8 +18,8 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
     {
         private bool _shouldConsolidateCollections;
 
-        public DataStreamRepo(IPipelineAdminRepoSettings repoSettings, IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyManager) : 
-            base(repoSettings.PipelineAdminDocDbStorage.Uri, repoSettings.PipelineAdminDocDbStorage.AccessKey, repoSettings.PipelineAdminDocDbStorage.ResourceName, logger, cacheProvider, dependencyManager)
+        public DataStreamRepo(IPipelineAdminRepoSettings repoSettings, IDocumentCloudCachedServices services) : 
+            base(repoSettings.PipelineAdminDocDbStorage.Uri, repoSettings.PipelineAdminDocDbStorage.AccessKey, repoSettings.PipelineAdminDocDbStorage.ResourceName, services)
         {
             _shouldConsolidateCollections = repoSettings.ShouldConsolidateCollections;
         }
