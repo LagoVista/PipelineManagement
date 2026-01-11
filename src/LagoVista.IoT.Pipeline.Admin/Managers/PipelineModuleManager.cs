@@ -18,6 +18,7 @@ using LagoVista.IoT.Pipeline.Admin.Resources;
 using LagoVista.AI;
 using System.Linq;
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.AI.Interfaces.Repos;
 
 namespace LagoVista.IoT.Pipeline.Admin.Managers
 {
