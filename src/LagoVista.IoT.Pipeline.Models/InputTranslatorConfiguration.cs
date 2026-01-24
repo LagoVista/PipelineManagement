@@ -59,7 +59,7 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public EntityHeader<Model> Model { get; set; }
 
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_ModelRevision, EnumType: (typeof(InputTranslatorTypes)), EntityHeaderPickerUrl: "/api/ml/model/{model.id}/revisions", FieldType: FieldTypes.EntityHeaderPicker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_ModelRevision_Select, IsRequired: false, IsUserEditable: true)]
-        public EntityHeader<ModelRevision> ModelRevision { get; set; }
+        public EntityHeader<AiModelRevision> ModelRevision { get; set; }
 
 
         public override string ModuleType => PipelineModuleType_InputTranslator;
