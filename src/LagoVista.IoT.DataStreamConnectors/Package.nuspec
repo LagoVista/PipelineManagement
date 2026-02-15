@@ -2,17 +2,17 @@
 <package>
   <metadata>
     <id>LagoVista.IoT.DataStreamConnectors</id>
-    <version>3.0.3099.1426</version>
+    <version>3.0.3196.0709</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Provides services to write data stream records from LagoVista IoT to Azure, AWS and other cloud storage mechanisms</description>
-    <copyright>Copyright Software Logistics - 2025</copyright>
+    <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT Cloud LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/10/2025 7:26:04 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 2/15/2026 12:09:07 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
@@ -26,13 +26,13 @@
         <dependency id="Azure.Storage.Blobs" version="12.25.0" />
         <dependency id="Elasticsearch.Net" version="7.17.4" />
         <dependency id="Elasticsearch.Net.Aws" version="7.2.2" />
-        <dependency id="LagoVista.IoT.Logging" version="3.0.3099.1426" />
+        <dependency id="LagoVista.IoT.Logging" version="3.0.3196.0709" />
         <dependency id="Microsoft.Data.SqlClient" version="6.1.1" />
         <dependency id="Microsoft.Spatial" version="8.4.0" />
         <dependency id="NEST" version="7.17.4" />
         <dependency id="StackExchange.Redis" version="2.9.17" />
-        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.3099.1426" />
-        <dependency id="LagoVista.IoT.Pipeline.Models" version="3.0.3099.1426" />
+        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.3196.0709" />
+        <dependency id="LagoVista.IoT.Pipeline.Models" version="3.0.3196.0709" />
       </group>
     </dependencies>
   </metadata>
