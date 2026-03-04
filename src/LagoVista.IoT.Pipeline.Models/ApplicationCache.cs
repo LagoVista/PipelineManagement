@@ -50,10 +50,6 @@ namespace LagoVista.IoT.Pipeline.Models
         [FormField(LabelResource: PipelineAdminResources.Names.AppCache_CacheType, EnumType: typeof(CacheTypes), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.AppCache_SelectCacheType, IsRequired: true)]
         public EntityHeader<CacheTypes> CacheType { get; set; }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
-        public string Icon { get; set; }
-
-
         [FormField(LabelResource: PipelineAdminResources.Names.AppCache_Uri, HelpResource: PipelineAdminResources.Names.AppCache_Uri_Help, FieldType: FieldTypes.Text, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public string Uri { get; set; }
 

@@ -44,10 +44,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             Icon = "icon-pz-translate-2";
         }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
-        public string Icon { get; set; }
-
-
         public override string ModuleType => PipelineModuleType_OutputTranslator;
 
         [FormField(LabelResource: PipelineAdminResources.Names.InputTranslator_TranslatorType, EnumType: (typeof(OutputTranslatorTypes)), FieldType: FieldTypes.Picker, ResourceType: typeof(PipelineAdminResources), WaterMark: PipelineAdminResources.Names.InputTranslator_TranslatorType_Select, IsRequired: true, IsUserEditable: true)]

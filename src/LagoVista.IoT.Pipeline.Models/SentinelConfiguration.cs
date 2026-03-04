@@ -23,10 +23,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             Icon = "icon-ae-coding-badge";
         }
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
-        public string Icon { get; set; }
-
-
         public override string ModuleType => PipelineModuleType_Sentinel;
 
         [FormField(LabelResource: PipelineAdminResources.Names.Sentinel_SecurityField, 

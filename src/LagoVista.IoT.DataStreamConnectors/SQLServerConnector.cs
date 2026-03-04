@@ -280,12 +280,12 @@ from sysobjects a
 
                 if (!String.IsNullOrEmpty(request.StartDate))
                 {
-                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.Value.ToDateTime());
                 }
 
                 if (!String.IsNullOrEmpty(request.EndDate))
                 {
-                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.Value.ToDateTime());
                 }
 
                 cmd.CommandType = System.Data.CommandType.Text;

@@ -151,7 +151,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
             else if (String.IsNullOrEmpty(request.StartDate))
             {
-                var endTicks = request.EndDate.ToDateTime().Ticks;
+                var endTicks = request.EndDate.Value.ToDateTime().Ticks;
                 result = await _client.SearchAsync<Dictionary<string, object>>(src => src.From(0)
                        .Index(_stream.ElasticSearchIndexName)
                      //.Type(_stream.ElasticSearchTypeName)
@@ -166,7 +166,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
             else if (String.IsNullOrEmpty(request.EndDate))
             {
-                var startTicks = request.StartDate.ToDateTime().Ticks;
+                var startTicks = request.StartDate.Value.ToDateTime().Ticks;
 
                 result = await _client.SearchAsync<Dictionary<string, object>>(src => src.From(0)
                        .Index(_stream.ElasticSearchIndexName)
@@ -182,8 +182,8 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
             else
             {
-                var startTicks = request.StartDate.ToDateTime().Ticks;
-                var endTicks = request.EndDate.ToDateTime().Ticks;
+                var startTicks = request.StartDate.Value.ToDateTime().Ticks;
+                var endTicks = request.EndDate.Value.ToDateTime().Ticks;
 
                 result = await _client.SearchAsync<Dictionary<string, object>>(src => src.From(0)
                        .Index(_stream.ElasticSearchIndexName)

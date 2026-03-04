@@ -476,13 +476,13 @@ WHERE table_schema = @dbschema
                 if (!String.IsNullOrEmpty(request.StartDate))
                 {
                     sql.AppendLine($"  and {_stream.TimestampFieldName} >= @startDateStamp");
-                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.Value.ToDateTime());
                 }
 
                 if (!String.IsNullOrEmpty(request.EndDate))
                 {
                     sql.AppendLine($"  and {_stream.TimestampFieldName} <= @endDateStamp");
-                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.Value.ToDateTime());
                 }
 
 
@@ -665,12 +665,12 @@ WHERE table_schema = @dbschema
 
                 if (!String.IsNullOrEmpty(listRequest.StartDate))
                 {
-                    cmd.Parameters.AddWithValue($"@startDateStamp", listRequest.StartDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@startDateStamp", listRequest.StartDate.Value.ToDateTime());
                 }
 
                 if (!String.IsNullOrEmpty(listRequest.EndDate))
                 {
-                    cmd.Parameters.AddWithValue($"@endDateStamp", listRequest.EndDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@endDateStamp", listRequest.EndDate.Value.ToDateTime());
                 }
 
                 foreach (var filterItem in request.Filter)
@@ -796,12 +796,12 @@ WHERE table_schema = @dbschema
 
                 if (!String.IsNullOrEmpty(request.StartDate))
                 {
-                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.Value.ToDateTime());
                 }
 
                 if (!String.IsNullOrEmpty(request.EndDate))
                 {
-                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.Value.ToDateTime());
                 }
 
                 foreach (var filterItem in filter)

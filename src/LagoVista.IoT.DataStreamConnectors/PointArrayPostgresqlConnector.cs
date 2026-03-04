@@ -85,13 +85,13 @@ namespace LagoVista.IoT.DataStreamConnectors
                 if (!String.IsNullOrEmpty(request.StartDate))
                 {
                     sql.AppendLine($"  and time_stamp >= @startDateStamp");
-                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@startDateStamp", request.StartDate.Value.ToDateTime());
                 }
 
                 if (!String.IsNullOrEmpty(request.EndDate))
                 {
                     sql.AppendLine($"  and time_stamp <= @endDateStamp");
-                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.ToDateTime());
+                    cmd.Parameters.AddWithValue($"@endDateStamp", request.EndDate.Value.ToDateTime());
                 }
 
                 foreach (var filterItem in filter)

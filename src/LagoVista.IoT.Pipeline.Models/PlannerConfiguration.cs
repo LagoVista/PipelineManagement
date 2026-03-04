@@ -26,11 +26,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
             Icon = "icon-pz-planner";
         }
 
-
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
-        public string Icon { get; set; }
-
-
         [FormField(LabelResource: PipelineAdminResources.Names.Planner_PipelineModules, FieldType: FieldTypes.ChildList, ResourceType: typeof(PipelineAdminResources))]
         public EntityHeader<PipelineModuleConfiguration> PipelineModules { get; set; }
 

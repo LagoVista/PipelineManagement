@@ -71,10 +71,6 @@ namespace LagoVista.IoT.Pipeline.Admin.Models
         public EntityHeader<UriAuthenticationTypes> AuthenticationType { get; set; }
 
 
-        [FormField(LabelResource: PipelineAdminResources.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(PipelineAdminResources), IsRequired: true)]
-        public string Icon { get; set; }
-
-
         [FormField(LabelResource: PipelineAdminResources.Names.Common_Script, FieldType: FieldTypes.NodeScript, ScriptTemplateName:"customPipelineModule", WaterMark: PipelineAdminResources.Names.CustomModule_Script_Watermark, ResourceType: typeof(PipelineAdminResources), IsRequired: false)]
         public String Script { get; set; }
 

@@ -131,8 +131,8 @@ namespace LagoVista.IoT.DataStreamConnectors
             /* FYI - less than and greater than are reversed because the data is inserted wiht row keys in descending order */
             if (!String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.EndDate))
             {
-                var startRowKey = request.StartDate.ToDateTime().ToInverseTicksRowKey();
-                var endRowKey = request.EndDate.ToDateTime().ToInverseTicksRowKey();
+                var startRowKey = request.StartDate.Value.ToDateTime().ToInverseTicksRowKey();
+                var endRowKey = request.EndDate.Value.ToDateTime().ToInverseTicksRowKey();
 
                 pageable = _cloudTable.QueryAsync<TableEntity>(tbl =>
                    String.Compare(tbl.RowKey, startRowKey.ToString()) < 0 &&
@@ -143,7 +143,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
             else if (String.IsNullOrEmpty(request.StartDate) && !String.IsNullOrEmpty(request.EndDate))
             {
-                var endRowKey = request.EndDate.ToDateTime().ToInverseTicksRowKey();
+                var endRowKey = request.EndDate.Value.ToDateTime().ToInverseTicksRowKey();
                 pageable = _cloudTable.QueryAsync<TableEntity>(tbl => String.Compare(tbl.RowKey, endRowKey.ToString()) > 0 &&
                      tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
 
@@ -151,7 +151,7 @@ namespace LagoVista.IoT.DataStreamConnectors
             }
             else if (String.IsNullOrEmpty(request.EndDate) && !String.IsNullOrEmpty(request.StartDate))
             {
-                var startRowKey = request.StartDate.ToDateTime().ToInverseTicksRowKey();
+                var startRowKey = request.StartDate.Value.ToDateTime().ToInverseTicksRowKey();
                 pageable = _cloudTable.QueryAsync<TableEntity>(tbl => String.Compare(tbl.RowKey, startRowKey.ToString()) < 0 &&
                      tbl.PartitionKey == deviceId, maxPerPage: request.PageSize);
 

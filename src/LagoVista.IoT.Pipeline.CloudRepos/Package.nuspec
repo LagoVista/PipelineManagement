@@ -2,23 +2,23 @@
 <package>
   <metadata>
     <id>LagoVista.IoT.Pipeline.CloudRepos</id>
-    <version>3.0.3099.1426</version>
+    <version>3.0.3212.1930</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Provides a Cloud Based Repository storing Pipeline Module Configurations for the LagoVista IoT and Devices Framework</description>
-    <copyright>Copyright Software Logistics - 2025</copyright>
+    <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT Cloud</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/10/2025 7:26:04 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 3/4/2026 12:30:11 AM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
         <dependency id="Npgsql" version="9.0.3" />
-        <dependency id="LagoVista.CloudStorage" version="3.0.3099.1426" />
-        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.3099.1426" />
+        <dependency id="LagoVista.CloudStorage" version="3.0.3212.1930" />
+        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.3212.1930" />
       </group>
     </dependencies>
   </metadata>
