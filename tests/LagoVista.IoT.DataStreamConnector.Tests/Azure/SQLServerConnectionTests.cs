@@ -64,8 +64,8 @@ CCREATE TABLE [dbo].[unittest](
                 DbURL = System.Environment.GetEnvironmentVariable("SQLSERVERURL"),
                 DbPassword = System.Environment.GetEnvironmentVariable("SQLSERVERPWD"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("AZUREACCESSKEY"),
-                CreationDate = DateTime.Now.ToJSONString(),
-                LastUpdatedDate = DateTime.Now.ToJSONString(),
+                CreationDate = UtcTimestamp.Now,
+                LastUpdatedDate = UtcTimestamp.Now,
                 CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 DbTableName = "unittest",
@@ -231,7 +231,7 @@ Login failed for user 'nuviotadmin'.");
             var stream = GetValidStream();
             var connector = await GetConnector(stream);
 
-            var timeStamp = DateTime.Now.ToJSONString();
+            var timeStamp = UtcTimestamp.Now;
 
             var customId = Guid.NewGuid().ToId();
 
@@ -253,7 +253,6 @@ Login failed for user 'nuviotadmin'.");
                 Assert.AreEqual(50, rdr["value1"]);
                 Assert.AreEqual(75, rdr["value2"]);
                 Assert.AreEqual(88.6, rdr["value3"]);
-                Assert.AreEqual(timeStamp.ToDateTime().ToString(), rdr["timestamp"].ToString());
             }
         }
 

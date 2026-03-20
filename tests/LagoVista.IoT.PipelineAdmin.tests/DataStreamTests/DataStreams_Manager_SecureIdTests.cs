@@ -62,8 +62,8 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.Id = "A8A087E53D2043538F32FB18C2CA67F7";
             stream.Name = "mystream";
             stream.Key = "streamkey";
-            stream.CreationDate = DateTime.Now.ToJSONString();
-            stream.LastUpdatedDate = DateTime.Now.ToJSONString();
+            stream.CreationDate = UtcTimestamp.Now;
+            stream.LastUpdatedDate = UtcTimestamp.Now;
             stream.CreatedBy = _user;
             stream.LastUpdatedBy = _user;
             stream.OwnerOrganization = _org;

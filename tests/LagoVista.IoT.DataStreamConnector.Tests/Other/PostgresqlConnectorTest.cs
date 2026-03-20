@@ -42,8 +42,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
                 Key = "mykey",
                 Name = "My Name",
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.Postgresql),
-                CreationDate = DateTime.Now.ToJSONString(),
-                LastUpdatedDate = DateTime.Now.ToJSONString(),
+                CreationDate = UtcTimestamp.Now,
+                LastUpdatedDate = UtcTimestamp.Now,
                 DeviceIdFieldName = "deviceId",
                 TimestampFieldName = "timeStamp",
                 DbValidateSchema = true,
@@ -248,10 +248,10 @@ SELECT create_hypertable('information','timestamp');"
 
         private async Task<InvokeResult> AddRecord(PostgresqlConnector connector, DataStream stream, String deviceId, int int1, int int2, string dateStamp = "")
         {
-            var record = GetRecord(stream, deviceId, String.IsNullOrEmpty(dateStamp) ? DateTime.Now.ToJSONString() : dateStamp,
+            var record = GetRecord(stream, deviceId, String.IsNullOrEmpty(dateStamp) ? UtcTimestamp.Now : dateStamp,
                 new System.Collections.Generic.KeyValuePair<string, object>("int1", int1),
                 new System.Collections.Generic.KeyValuePair<string, object>("int2", int2),
-                new System.Collections.Generic.KeyValuePair<string, object>("datetime1", DateTime.Now.ToJSONString()),
+                new System.Collections.Generic.KeyValuePair<string, object>("datetime1", UtcTimestamp.Now),
                 new System.Collections.Generic.KeyValuePair<string, object>("dec1", 12.2),
                 new System.Collections.Generic.KeyValuePair<string, object>("str1", "value"),
                 new System.Collections.Generic.KeyValuePair<string, object>("local1", "22.34234,-82.2342342"),

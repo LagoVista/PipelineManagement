@@ -144,7 +144,7 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Other
 
         DataStream GetStream()
         {
-            var timeStamp = DateTime.UtcNow.ToJSONString();
+            var timeStamp = UtcTimestamp.Now;
 
             return new DataStream()
             {

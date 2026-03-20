@@ -13,7 +13,7 @@
     <PackageReference Include="Azure.Storage.Blobs" Version="12.27.0" />
     <PackageReference Include="Elasticsearch.Net" Version="7.17.4" />
     <PackageReference Include="Elasticsearch.Net.Aws" Version="7.2.2" />
-    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.3212.1930" />
+    <PackageReference Include="LagoVista.IoT.Logging" Version="3.0.3228.2035" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
     <PackageReference Include="Microsoft.Spatial" Version="8.4.0" />
     <PackageReference Include="NEST" Version="7.17.4" />

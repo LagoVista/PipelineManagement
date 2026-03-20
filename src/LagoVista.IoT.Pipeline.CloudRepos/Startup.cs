@@ -1,11 +1,10 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: bfee15dea1a7480fa2058e3b700ee3cc93e18c0ff624faa0603d61283facc330
-// IndexVersion: 2
-// --- END CODE INDEX META ---
-using LagoVista.Core.Interfaces;
+using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Interfaces;
+using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.CloudRepos.Repos;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LagoVista.IoT.Pipeline.CloudRepos
 {
@@ -24,6 +23,19 @@ namespace LagoVista.IoT.Pipeline.CloudRepos
             services.AddTransient<IPlannerConfigurationRepo, PlannerConfigurationRepo>();
             services.AddTransient<ITransmitterConfigurationRepo, TransmitterConfigurationRepo>();
             services.AddTransient<IPostgresqlServices, PostgresqlServices>();
+        }
+    }
+}
+
+namespace LagoVista.DependencyInjection
+{
+    public static class PipelineModule
+    {
+        public static void AddPipelineModule(this IServiceCollection services, IConfigurationRoot configRoot, IAdminLogger logger)
+        {
+            LagoVista.IoT.Pipeline.CloudRepos.Startup.ConfigureServices(services);
+            LagoVista.IoT.Pipeline.Admin.Startup.ConfigureServices(services);
+            services.AddMetaDataHelper<DataStream>();
         }
     }
 }

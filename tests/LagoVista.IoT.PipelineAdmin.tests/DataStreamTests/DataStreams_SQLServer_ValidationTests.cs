@@ -55,8 +55,8 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.DbUserName = "myusername";
             stream.DbPassword = "mypassword";
             stream.DbTableName = "users";
-            stream.CreationDate = DateTime.Now.ToJSONString();
-            stream.LastUpdatedDate = DateTime.Now.ToJSONString();
+            stream.CreationDate = UtcTimestamp.Now;
+            stream.LastUpdatedDate = UtcTimestamp.Now;
             stream.CreatedBy = Core.Models.EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
             stream.StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.SQLServer);

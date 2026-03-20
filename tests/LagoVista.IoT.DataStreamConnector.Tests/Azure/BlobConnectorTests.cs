@@ -36,8 +36,8 @@ namespace LagoVista.IoT.DataStreamConnector.Tests.Azure
                 StreamType = Core.Models.EntityHeader<DataStreamTypes>.Create(DataStreamTypes.AzureBlob),
                 AzureStorageAccountName = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCOUNTID"),
                 AzureAccessKey = System.Environment.GetEnvironmentVariable("TEST_AZURESTORAGE_ACCESSKEY"),
-                CreationDate = DateTime.Now.ToJSONString(),
-                LastUpdatedDate = DateTime.Now.ToJSONString(),
+                CreationDate = UtcTimestamp.Now,
+                LastUpdatedDate = UtcTimestamp.Now,
                 CreatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
                 LastUpdatedBy = EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user"),
 

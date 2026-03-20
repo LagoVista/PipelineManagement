@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.IoT.Pipeline.Models</id>
-    <version>3.0.3212.1930</version>
+    <version>3.0.3228.2035</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,13 +12,13 @@
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT Cloud LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 3/4/2026 12:30:11 AM UTC</releaseNotes>
+    <releaseNotes>Build Date: 3/20/2026 12:35:45 AM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.AI.Models" version="3.0.3212.1930" />
-        <dependency id="LagoVista.IoT.DeviceAdmin.Models" version="3.0.3212.1930" />
-        <dependency id="LagoVista.IoT.DeviceMessaging.Models" version="3.0.3212.1930" />
+        <dependency id="LagoVista.AI.Models" version="3.0.3228.2035" />
+        <dependency id="LagoVista.IoT.DeviceAdmin.Models" version="3.0.3228.2035" />
+        <dependency id="LagoVista.IoT.DeviceMessaging.Models" version="3.0.3228.2035" />
       </group>
     </dependencies>
   </metadata>

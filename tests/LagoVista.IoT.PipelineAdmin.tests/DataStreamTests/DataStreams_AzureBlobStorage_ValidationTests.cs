@@ -22,8 +22,8 @@ namespace LagoVista.IoT.PipelineAdmin.tests.DataStreamTests
             stream.AzureAccessKey = "accesskey";
             stream.AzureStorageAccountName = "nuviotdev";
             stream.AzureBlobStorageContainerName = "blobstorage-name";
-            stream.CreationDate = DateTime.Now.ToJSONString();
-            stream.LastUpdatedDate = DateTime.Now.ToJSONString();
+            stream.CreationDate = UtcTimestamp.Now;
+            stream.LastUpdatedDate = UtcTimestamp.Now;
             stream.CreatedBy = Core.Models.EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "user");
             stream.LastUpdatedBy = stream.CreatedBy;
             stream.OwnerOrganization = Core.Models.EntityHeader.Create("A8A087E53D2043538F32FB18C2CA67F7", "owner");
