@@ -1,5 +1,6 @@
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Pipeline.Admin.Interfaces;
+using LagoVista.IoT.Pipeline.Admin.Managers;
 using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.CloudRepos.Repos;
@@ -23,6 +24,8 @@ namespace LagoVista.IoT.Pipeline.CloudRepos
             services.AddTransient<IPlannerConfigurationRepo, PlannerConfigurationRepo>();
             services.AddTransient<ITransmitterConfigurationRepo, TransmitterConfigurationRepo>();
             services.AddTransient<IPostgresqlServices, PostgresqlServices>();
+            services.AddTransient<IPipelineAdminRepoSettings, PipelineAdminRepoSettings>();
+            services.AddTransient<IDefaultInternalDataStreamConnectionSettings, DefaultInternalDataStreamConnectionSettings>();
         }
     }
 }
