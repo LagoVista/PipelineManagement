@@ -16,15 +16,10 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class OutputTranslatorConfigurationRepo : DocumentDBRepoBase<OutputTranslatorConfiguration>, IOutputTranslatorConfigurationRepo
     {
-        private bool _shouldConsolidateCollections;
-
         public OutputTranslatorConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) :
             base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections { get { return _shouldConsolidateCollections; } }
 
         public Task AddOutputTranslatorConfigurationAsync(OutputTranslatorConfiguration listener)
         {

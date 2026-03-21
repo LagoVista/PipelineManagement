@@ -16,15 +16,10 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class TransmitterConfigurationRepo : DocumentDBRepoBase<TransmitterConfiguration>, ITransmitterConfigurationRepo
     {
-        private bool _shouldConsolidateCollections;
-
         public TransmitterConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) : 
             base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections { get { return _shouldConsolidateCollections; } }
 
         public Task AddTransmitterConfigurationAsync(TransmitterConfiguration listener)
         {

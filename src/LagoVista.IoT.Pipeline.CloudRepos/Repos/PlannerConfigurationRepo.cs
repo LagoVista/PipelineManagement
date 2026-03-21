@@ -16,15 +16,10 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class PlannerConfigurationRepo : DocumentDBRepoBase<PlannerConfiguration>, IPlannerConfigurationRepo
     {
-        private bool _shouldConsolidateCollections;
-
         public PlannerConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) : 
             base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections { get { return _shouldConsolidateCollections; } }
 
         public Task AddPlannerConfigurationAsync(PlannerConfiguration sentinalConfiguration)
         {

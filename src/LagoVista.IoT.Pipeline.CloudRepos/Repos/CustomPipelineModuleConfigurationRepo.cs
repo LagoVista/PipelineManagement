@@ -19,15 +19,10 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
     public class CustomPipelineModuleConfigurationRepo : DocumentDBRepoBase<CustomModuleConfiguration>, 
         ICustomPipelineConfigurationRepo
     {
-        private bool _shouldConsolidateCollections;
-
         public CustomPipelineModuleConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) : 
             base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections { get { return _shouldConsolidateCollections; } }
 
         public Task AddCustomPipelineModuleConfigurationAsync(CustomModuleConfiguration pipelineModuleConfiguration)
         {

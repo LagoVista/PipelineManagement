@@ -16,15 +16,10 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class DataStreamRepo : DocumentDBRepoBase<DataStream>, IDataStreamRepo
     {
-        private bool _shouldConsolidateCollections;
-
         public DataStreamRepo(IPipelineAdminRepoSettings repoSettings, IDocumentCloudCachedServices services) : 
             base(repoSettings.PipelineAdminDocDbStorage.Uri, repoSettings.PipelineAdminDocDbStorage.AccessKey, repoSettings.PipelineAdminDocDbStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = repoSettings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
 
 
         public Task AddDataStreamAsync(DataStream dataStream)

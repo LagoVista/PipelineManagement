@@ -15,15 +15,10 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class ListenerConfigurationRepo : DocumentDBRepoBase<ListenerConfiguration>, IListenerConfigurationRepo
     {
-        private bool _shouldConsolidateCollections;
-
         public ListenerConfigurationRepo(IPipelineAdminRepoSettings settings,  IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyManager) :
             base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, logger, cacheProvider, dependencyManager)
         {
-            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections { get { return _shouldConsolidateCollections; } }
 
         public Task AddListenerConfigurationAsync(ListenerConfiguration listener)
         {

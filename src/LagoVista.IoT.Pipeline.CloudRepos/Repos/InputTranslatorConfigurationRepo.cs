@@ -7,24 +7,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using LagoVista.IoT.Pipeline.Admin.Repos;
 using LagoVista.IoT.Pipeline.Admin.Models;
-using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Models.UIMetaData;
-using LagoVista.Core.Interfaces;
 using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class InputTranslatorConfigurationRepo : DocumentDBRepoBase<InputTranslatorConfiguration>, IInputTranslatorConfigurationRepo
     {
-        private bool _shouldConsolidateCollections;
-
         public InputTranslatorConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) : 
             base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = settings.ShouldConsolidateCollections;
         }
 
-        protected override bool ShouldConsolidateCollections { get { return _shouldConsolidateCollections; } }
         public Task AddInputTranslatorConfigurationAsync(InputTranslatorConfiguration listener)
         {
             return CreateDocumentAsync(listener);

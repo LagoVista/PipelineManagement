@@ -16,16 +16,11 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class SharedDataStreamConnectionRepo : DocumentDBRepoBase<SharedConnection>, ISharedConnectionRepo
     {
-        private bool _shouldConsolidateCollections;
-
         public SharedDataStreamConnectionRepo(IPipelineAdminRepoSettings repoSettings, IDocumentCloudCachedServices services) :
             base(repoSettings.PipelineAdminDocDbStorage.Uri, repoSettings.PipelineAdminDocDbStorage.AccessKey, 
                  repoSettings.PipelineAdminDocDbStorage.ResourceName, services)
         {
-            _shouldConsolidateCollections = repoSettings.ShouldConsolidateCollections;
         }
-
-        protected override bool ShouldConsolidateCollections => _shouldConsolidateCollections;
         
         public Task AddSharedConnectionAsync(SharedConnection connection)
         {
