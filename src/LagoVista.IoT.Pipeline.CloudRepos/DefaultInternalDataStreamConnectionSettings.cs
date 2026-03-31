@@ -20,7 +20,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos
 
         public DefaultInternalDataStreamConnectionSettings(IConfiguration configuration)
         {
-            var paSection = configuration.GetRequiredSection("PointArrayStorage");
+            var paSection = configuration.GetSection("PointArrayStorage");
             PointArrayConnectionSettings = new ConnectionSettings()
             {
                 Uri = paSection.Require("Uri"),
@@ -28,7 +28,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos
                 Password = paSection.Require("Password")
             };
 
-            var geoSection = configuration.GetRequiredSection("GeoStorage");
+            var geoSection = configuration.GetSection("GeoStorage");
             GeoSpatialConnectionSettings = new ConnectionSettings()
             {
                 Uri = geoSection.Require("Uri"),
