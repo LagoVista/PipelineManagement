@@ -19,8 +19,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
     public class CustomPipelineModuleConfigurationRepo : DocumentDBRepoBase<CustomModuleConfiguration>, 
         ICustomPipelineConfigurationRepo
     {
-        public CustomPipelineModuleConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) : 
-            base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
+        public CustomPipelineModuleConfigurationRepo(IDocumentCloudCachedServices services) : base(services)
         {
         }
 

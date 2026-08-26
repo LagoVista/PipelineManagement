@@ -14,8 +14,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class InputTranslatorConfigurationRepo : DocumentDBRepoBase<InputTranslatorConfiguration>, IInputTranslatorConfigurationRepo
     {
-        public InputTranslatorConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) : 
-            base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
+        public InputTranslatorConfigurationRepo(IDocumentCloudCachedServices services) : base(services)
         {
         }
 

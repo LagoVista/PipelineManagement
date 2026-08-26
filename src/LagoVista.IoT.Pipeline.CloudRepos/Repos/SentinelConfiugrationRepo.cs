@@ -16,8 +16,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class SentinelConfigurationRepo : DocumentDBRepoBase<SentinelConfiguration>, ISentinelConfigurationRepo
     {
-        public SentinelConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) :
-            base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
+        public SentinelConfigurationRepo(IDocumentCloudCachedServices services) : base(services)
         {
         }
 

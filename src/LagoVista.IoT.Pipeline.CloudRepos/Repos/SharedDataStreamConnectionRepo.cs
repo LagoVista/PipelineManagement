@@ -16,9 +16,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class SharedDataStreamConnectionRepo : DocumentDBRepoBase<SharedConnection>, ISharedConnectionRepo
     {
-        public SharedDataStreamConnectionRepo(IPipelineAdminRepoSettings repoSettings, IDocumentCloudCachedServices services) :
-            base(repoSettings.PipelineAdminDocDbStorage.Uri, repoSettings.PipelineAdminDocDbStorage.AccessKey, 
-                 repoSettings.PipelineAdminDocDbStorage.ResourceName, services)
+        public SharedDataStreamConnectionRepo(IDocumentCloudCachedServices services) : base(services)
         {
         }
         

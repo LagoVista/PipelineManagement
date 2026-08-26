@@ -10,13 +10,13 @@ using LagoVista.IoT.Pipeline.Admin.Models;
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Interfaces;
+using LagoVista.CloudStorage.Interfaces;
 
 namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class ListenerConfigurationRepo : DocumentDBRepoBase<ListenerConfiguration>, IListenerConfigurationRepo
     {
-        public ListenerConfigurationRepo(IPipelineAdminRepoSettings settings,  IAdminLogger logger, ICacheProvider cacheProvider, IDependencyManager dependencyManager) :
-            base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, logger, cacheProvider, dependencyManager)
+        public ListenerConfigurationRepo(IDocumentCloudCachedServices services) : base(services)
         {
         }
 

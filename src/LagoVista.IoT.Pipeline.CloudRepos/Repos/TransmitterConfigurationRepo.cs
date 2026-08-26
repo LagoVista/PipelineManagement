@@ -16,8 +16,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class TransmitterConfigurationRepo : DocumentDBRepoBase<TransmitterConfiguration>, ITransmitterConfigurationRepo
     {
-        public TransmitterConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) : 
-            base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
+        public TransmitterConfigurationRepo(IDocumentCloudCachedServices services) : base(services)
         {
         }
 

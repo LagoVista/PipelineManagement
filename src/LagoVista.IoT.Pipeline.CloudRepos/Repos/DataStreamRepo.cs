@@ -16,8 +16,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class DataStreamRepo : DocumentDBRepoBase<DataStream>, IDataStreamRepo
     {
-        public DataStreamRepo(IPipelineAdminRepoSettings repoSettings, IDocumentCloudCachedServices services) : 
-            base(repoSettings.PipelineAdminDocDbStorage.Uri, repoSettings.PipelineAdminDocDbStorage.AccessKey, repoSettings.PipelineAdminDocDbStorage.ResourceName, services)
+        public DataStreamRepo(IDocumentCloudCachedServices services) : base(services)
         {
         }
 

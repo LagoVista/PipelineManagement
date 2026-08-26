@@ -16,8 +16,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class PlannerConfigurationRepo : DocumentDBRepoBase<PlannerConfiguration>, IPlannerConfigurationRepo
     {
-        public PlannerConfigurationRepo(IPipelineAdminRepoSettings settings, IDocumentCloudCachedServices services) : 
-            base(settings.PipelineAdminDocDbStorage.Uri, settings.PipelineAdminDocDbStorage.AccessKey, settings.PipelineAdminDocDbStorage.ResourceName, services)
+        public PlannerConfigurationRepo(IDocumentCloudCachedServices services) : base(services)
         {
         }
 

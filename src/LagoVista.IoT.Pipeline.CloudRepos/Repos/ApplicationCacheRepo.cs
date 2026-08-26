@@ -16,8 +16,7 @@ namespace LagoVista.IoT.Pipeline.CloudRepos.Repos
 {
     public class ApplicationCacheRepo : DocumentDBRepoBase<ApplicationCache>, IApplicationCacheRepo
     {
-        public ApplicationCacheRepo(IPipelineAdminRepoSettings repoSettings, IDocumentCloudCachedServices services) :
-            base(repoSettings.PipelineAdminDocDbStorage.Uri, repoSettings.PipelineAdminDocDbStorage.AccessKey, repoSettings.PipelineAdminDocDbStorage.ResourceName, services)
+        public ApplicationCacheRepo(IDocumentCloudCachedServices services) : base(services)
         {
         }
 
