@@ -4,10 +4,10 @@
     <DebugType>portable</DebugType>
     <AssemblyName>LagoVista.IoT.DeviceAdmin.Tests</AssemblyName>
     <PackageId>LagoVista.IoT.DeviceAdmin.Tests</PackageId>
-   </PropertyGroup>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core.TestBase" Version="3.0.3387.2032" />
-    <PackageReference Include="Npgsql" Version="9.0.3" />
+    <PackageReference Include="LagoVista.Core.TestBase" />
+    <PackageReference Include="Npgsql" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System" />

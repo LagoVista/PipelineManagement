@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.IoT.Pipeline.CloudRepos</id>
-    <version>3.0.3387.2032</version>
+    <version>6.0.0</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,16 +16,16 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
+        <dependency id="LagoVista.CloudStorage" version="6.0.2" />
+        <dependency id="LagoVista.Core.Configuration" version="6.0.10" />
+        <dependency id="LagoVista.IoT.Pipeline.Admin" version="6.0.0" />
         <dependency id="Npgsql" version="9.0.3" />
-        <dependency id="LagoVista.CloudStorage" version="3.0.3387.2032" />
-        <dependency id="LagoVista.Core.Configuration" version="3.0.3387.2032" />
-        <dependency id="LagoVista.IoT.Pipeline.Admin" version="3.0.3387.2032" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\net9.0\LagoVista.IoT.Pipeline.CloudRepos.dll" target="lib\net9.0\LagoVista.IoT.Pipeline.CloudRepos.dll" />
-    <file src="bin\release\net9.0\LagoVista.IoT.Pipeline.CloudRepos.pdb" target="lib\net9.0\LagoVista.IoT.Pipeline.CloudRepos.pdb" />
+    <file src="bin/Release/net9.0/LagoVista.IoT.Pipeline.CloudRepos.dll" target="lib/net9.0/LagoVista.IoT.Pipeline.CloudRepos.dll" />
+    <file src="bin/Release/net9.0/LagoVista.IoT.Pipeline.CloudRepos.pdb" target="lib/net9.0/LagoVista.IoT.Pipeline.CloudRepos.pdb" />
   </files>
 </package>

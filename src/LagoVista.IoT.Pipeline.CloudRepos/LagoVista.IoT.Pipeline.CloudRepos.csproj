@@ -3,9 +3,9 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Npgsql" Version="9.0.3" />
-    <PackageReference Include="LagoVista.CloudStorage" Version="3.0.3387.2032" />
-    <PackageReference Include="LagoVista.Core.Configuration" Version="3.0.3387.2032" />
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="LagoVista.CloudStorage" />
+    <PackageReference Include="LagoVista.Core.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.IoT.Pipeline.Admin\LagoVista.IoT.Pipeline.Admin.csproj" />
